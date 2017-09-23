@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
+  require_login! only: [ :destroy ]
   skip_before_action :verify_authenticity_token, only: :create
-  skip_before_action :require_login, only: :create
 
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
   def create
@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     # TODO: Handle not found
     self.current_user = @auth.user
 
-    redirect_to request.env['omniauth.origin'] || home_url
+    redirect_to request.env["omniauth.origin"] || home_url
   end
 
   def destroy
@@ -20,6 +20,6 @@ class SessionsController < ApplicationController
   protected
 
   def auth_hash
-    request.env['omniauth.auth']
+    request.env["omniauth.auth"]
   end
 end

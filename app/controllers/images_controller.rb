@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
-  require_login! only: [:new, :edit, :create, :update, :destroy]
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  require_login! only: [ :new, :edit, :create, :update, :destroy ]
+  before_action :set_image, only: [ :show, :edit, :update, :destroy ]
 
   # GET /images
   # GET /images.json
