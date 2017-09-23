@@ -5,10 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem "rails", "~> 5.1.3"
+gem "rails", "~> 5.2.0.alpha", github: "rails/rails"
+gem "arel", "~> 9.0.0.alpha",  github: "rails/arel"
 
 gem "pg", "~> 0.18"
 gem "chewy"
+gem "aws-sdk-s3", "~> 1"
 
 gem "puma", "~> 3.7"
 
@@ -58,7 +60,7 @@ gem "addressable"
 # gem "loofah"
 # gem "ruby-readability"
 # gem "stopwords-filter"
-# gem "robotstxt-parser", require: "robotstxt"
+gem "robotstxt-parser", require: "robotstxt"
 
 gem "foreman"
 
@@ -72,6 +74,7 @@ group :development, :test do
   gem "byebug"
   gem "pry"
   gem "pry-byebug"
+  gem "pry-rails"
   gem "better_errors"
   gem "binding_of_caller"
   gem "guard"

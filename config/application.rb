@@ -16,5 +16,7 @@ module TransientBug
     # -- all .rb files in that directory are automatically loaded.
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.active_storage.service = :local
   end
 end

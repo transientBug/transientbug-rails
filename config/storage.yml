@@ -1,0 +1,12 @@
+local:
+  service: Disk
+  root: <%= Rails.root.join("storaged") %>
+
+s3:
+  service: S3
+  access_key_id: <%= ENV["S3_KEY"] %>
+  secret_access_key: <%= ENV["S3_SECRET"] %>
+  region: nyc3
+  endpoint: https://nyc3.digitaloceanspaces.com
+  force_path_style: true
+  bucket: "transientbug"

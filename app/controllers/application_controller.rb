@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  before_action :require_login
+  def self.require_login! **opts
+    before_action :require_login, **opts
+  end
 
   protected
 

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root "pages#main"
 
   get "/home", to: "pages#home"
-  resources :bookmarks
+  resources :images
 
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
   match "/logout", to: "sessions#destroy", via: [:get, :delete]

@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
-  skip_before_action :require_login, only: [ :main ]
+  require_login! only: [ :home ]
+
   before_action :login_redirect, only: [ :main ]
 
   def main
