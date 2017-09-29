@@ -1,3 +1,5 @@
-= link_to "Images", images_path
-\|
-= link_to "New Image", new_image_path
+- content_for :page_title do
+  Home
+
+- content_for :body do
+  Hia #{ current_user.username }!

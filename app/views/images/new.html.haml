@@ -1,5 +1,6 @@
-%h1 New image
+- content_for :body do
+  %h1 New image
 
-= render 'form'
+  = render "form"
 
-= link_to 'Back', images_path
+  = link_to "Back", images_path

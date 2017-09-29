@@ -1,19 +1,31 @@
-%h1 Listing images
+- content_for :page_title do
+  Images
 
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th
+- content_for :navbar do
+  %ul.navbar-nav.mr-2
+    = active_link_to "New Image", new_image_path, class: "btn btn-outline-success align-middle", wrap_tag: :li, wrap_class: "nav-item"
 
-  %tbody
-    - @images.each do |image|
+  %form.form-inline.mr-3
+    .input-group
+      %input.form-control{ type: "text", placeholder: "Search Images ...", aria: { label: "Search" } }
+      %span.input-group-btn
+        %button.btn.btn-secondary{ type: "submit" } Search
+
+- content_for :body do
+  %h1 Listing images
+
+  %table.table
+    %thead
       %tr
-        %td= link_to 'Show', image
-        %td= link_to 'Edit', edit_image_path(image)
-        %td= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' }
+        %th
+        %th
+        %th
+        %th
 
-%br
-
-= link_to 'New Image', new_image_path
+    %tbody
+      - @images.each do |image|
+        %tr
+          %td= image.title
+          %td= link_to "Show", image
+          %td= link_to "Edit", edit_image_path(image)
+          %td= link_to "Destroy", image, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger"

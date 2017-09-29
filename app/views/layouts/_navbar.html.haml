@@ -1,0 +1,23 @@
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  = link_to "TransientBug", root_path, class: "navbar-brand"
+
+  %button.navbar-toggler{type: "button", data: { toggle: "collapse", target: "#navbarSupportedContent" }, aria: { controls: "navbarSupportedContent", expanded: "false", label: "Toggle navigation" }}
+    %span.navbar-toggler-icon
+
+  .collapse.navbar-collapse#navbarSupportedContent
+    %ul.navbar-nav.mr-auto
+      = active_link_to "Home", home_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
+
+      - if signed_in?
+        = active_link_to "Images", images_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
+
+      = content_for :navbar_links
+
+    = content_for :navbar
+
+    %ul.navbar-nav
+      - if signed_in?
+        = link_to "Logout", logout_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
+      - else
+        %li.nav-item
+          = link_to "Login", login_path(:developer), class: "nav-link"

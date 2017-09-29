@@ -17,6 +17,10 @@ gem "puma", "~> 3.7"
 # Views
 gem "haml"
 gem "haml-rails"
+gem "bootstrap", "~> 4.0.0.beta"
+gem "jquery-rails"
+gem "active_link_to"
+gem "coffee-rails"
 
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
@@ -41,7 +45,7 @@ gem "connection_pool"
 gem "tzinfo-data"
 
 # Admin
-gem "trestle"
+gem "trestle", github: "TrestleAdmin/trestle", branch: "master"
 gem "pundit", github: "elabs/pundit"
 
 # Auth

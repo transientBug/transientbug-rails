@@ -1,7 +1,8 @@
-%p#notice= notice
+- content_for :body do
+  %p#notice= notice
 
-= image_tag @image.image
+  = image_tag @image.image
 
-= link_to 'Edit', edit_image_path(@image)
-\|
-= link_to 'Back', images_path
+  = link_to "Edit", edit_image_path(@image)
+  \|
+  = link_to "Back", images_path

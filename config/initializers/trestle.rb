@@ -70,7 +70,7 @@ Trestle.configure do |config|
   # config.around_action do |controller, block|
   #   Rails.logger.debug("Around action (before)")
   #   block.call
-  #   Rails.logger.debug("Around ation (after)")
+  #   Rails.logger.debug("Around action (after)")
   # end
 
   # Specify a custom hook to be injected into the admin.
@@ -93,7 +93,8 @@ Trestle.configure do |config|
   # See the documentation on Trestle::Adapters::Adapter for details on
   # the adapter methods that can be customized.
   #
-  # config.default_adapter.extend MyAdapterExtensions
+  # config.default_adapter = Trestle::Adapters.compose(Trestle::Adapters::SequelAdapter)
+  # config.default_adapter.include MyAdapterExtensions
 
   # Register a form field type to be made available to the Trestle form builder.
   # Field types should conform to the following method definition:
@@ -104,4 +105,10 @@ Trestle.configure do |config|
   # end
   #
   # config.form_field :custom, CustomFormField
+
+  # == Debugging Options
+  #
+  # Enable debugging of form errors. Defaults to true in development mode.
+  #
+  # config.debug_form_errors = true
 end

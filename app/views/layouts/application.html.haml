@@ -1,15 +1,9 @@
-!!!
+!!! 5
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
-
-    %title TransientBug
-
-    = csrf_meta_tags
-
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = render partial: "layouts/head"
 
   %body
-    = yield
+    = render partial: "layouts/body"
 
-  = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  = render partial: "layouts/footer"
