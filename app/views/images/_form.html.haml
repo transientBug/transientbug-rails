@@ -6,17 +6,21 @@
         - @image.errors.full_messages.each do |message|
           %li= message
 
-  .field
-    = f.text_field :title
+  .form-group
+    = f.label :title
+    = f.text_field :title, class: "form-control", aria: { describedby: "Image title" }
 
-  .field
-    = f.text_field :tags
+  .form-group
+    = f.label :tags
+    = f.text_field :tags, class: "form-control", aria: { describedby: "Image tags" }
 
-  .field
-    = f.text_field :source
+  .form-group
+    = f.label :source
+    = f.text_field :source, class: "form-control", aria: { describedby: "Image source" }
 
-  .field
-  = f.file_field :image
+  .form-group
+    = f.label :image, class: "custom-file" do
+      = f.file_field :image, class: "custom-file-input", aria: { describedby: "Image file" }
+      %span.custom-file-control
 
-  .actions
-    = f.submit "Save"
+  = f.submit "Save", class: "btn btn-primary"

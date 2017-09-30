@@ -1,5 +1,5 @@
 - content_for :page_title do
-  Images
+  Images Search
 
 - content_for :navbar do
   %ul.navbar-nav.mr-2
@@ -7,12 +7,12 @@
 
   = form_tag search_images_path, method: :get, class: "form-inline mr-3" do
     .input-group
-      = search_field_tag "q", "", class: "form-control", placeholder: "Search Images ...", aria: { label: "Search" }
+      = search_field_tag "q", params[:q], class: "form-control", placeholder: "Search Images ...", aria: { label: "Search" }
       %span.input-group-btn
         = submit_tag "Search", class: "btn btn-secondary"
 
 - content_for :body do
-  %h1 Listing images
+  %h1 Image Search Results
 
   %table.table
     %thead

@@ -13,6 +13,18 @@ class ImagesController < ApplicationController
   def show
   end
 
+  def search
+    @images = ImagesIndex.type_hash["image"]
+      .query(
+        bool: {
+          should: [
+            { term: { title: params[:q] } },
+            { term: { tags: params[:q] } }
+          ]
+        }
+      ).objects
+  end
+
   # GET /images/new
   def new
     @image = current_user.images.new
@@ -31,7 +43,7 @@ class ImagesController < ApplicationController
     respond_to do |format|
       if @image.save && image
         @image.image.attach image if image
-        format.html { redirect_to @image, notice: 'Image was successfully created.' }
+        format.html { redirect_to @image, notice: "Image was successfully created." }
         format.json { render :show, status: :created, location: @image }
       else
         format.html { render :new }
@@ -48,7 +60,7 @@ class ImagesController < ApplicationController
     respond_to do |format|
       if @image.update(image_params)
         @image.image.attach image if image
-        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
+        format.html { redirect_to @image, notice: "Image was successfully updated." }
         format.json { render :show, status: :ok, location: @image }
       else
         format.html { render :edit }
@@ -62,19 +74,20 @@ class ImagesController < ApplicationController
   def destroy
     @image.destroy
     respond_to do |format|
-      format.html { redirect_to images_url, notice: 'Image was successfully destroyed.' }
+      format.html { redirect_to images_url, notice: "Image was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_image
-      @image = policy_scope(Image).find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def image_params
-      permitted_attributes(@image || Image)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_image
+    @image = policy_scope(Image).with_attached_image.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def image_params
+    permitted_attributes(@image || Image)
+  end
 end
