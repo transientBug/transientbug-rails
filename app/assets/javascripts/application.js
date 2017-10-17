@@ -15,3 +15,7 @@
 //= require jquery3
 //= require semantic-ui
 //= require_tree .
+
+$.fn.api.settings.api = {
+  "search tags": "/images/search.json?t=tags&q={query}"
+}

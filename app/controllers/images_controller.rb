@@ -15,7 +15,15 @@ class ImagesController < ApplicationController
   def show
   end
 
+  # GET /images/search
+  # GET /images/search.json
   def search
+    return tags_search if params[:t] == "tags"
+
+    images_search
+  end
+
+  def images_search
     @images = ImagesIndex.type_hash["image"]
       .query(
         bool: {
@@ -25,6 +33,32 @@ class ImagesController < ApplicationController
           ]
         }
       ).objects
+  end
+
+  def tags_search
+    @tags = ImagesIndex.type_hash["tag"]
+      .suggest(
+        "tag-suggest" => {
+          text: params[:q],
+          completion: {
+            field: :suggest
+          }
+        }
+      )
+      .suggest["tag-suggest"]
+      .first["options"]
+      .map { |row| row["text" ] }
+
+    @tags << params[:q]
+
+    res = {
+      success: true,
+      results: @tags.map { |tag| { name: tag } }
+    }
+
+    respond_to do |format|
+      format.json { render json: res, status: :ok }
+    end
   end
 
   # GET /images/new
