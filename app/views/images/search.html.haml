@@ -1,15 +1,7 @@
 - content_for :page_title do
-  Images Search
+  Image search
 
-- content_for :navbar do
-  %ul.navbar-nav.mr-2
-    = active_link_to "New Image", new_image_path, class: "btn btn-outline-success align-middle", wrap_tag: :li, wrap_class: "nav-item"
-
-  = form_tag search_images_path, method: :get, class: "form-inline mr-3" do
-    .input-group
-      = search_field_tag "q", params[:q], class: "form-control", placeholder: "Search Images ...", aria: { label: "Search" }
-      %span.input-group-btn
-        = submit_tag "Search", class: "btn btn-secondary"
+= render "navbar"
 
 - content_for :body do
   %h1 Image Search Results

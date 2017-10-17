@@ -13,4 +13,14 @@
  *= require_tree .
  *= require_self
  */
-@import "bootstrap";
+@import "semantic-ui";
+
+@import url("//fonts.googleapis.com/css?family=Maven+Pro:300italic,400italic,700italic,400,300,700");
+
+.main.container {
+  margin-top: 7em;
+}
+
+.ui.header {
+  font-family: "Maven Pro", $font-family;
+}

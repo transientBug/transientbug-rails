@@ -1,8 +1,13 @@
+- content_for :page_title do
+  = @image.title
+
+= render "navbar"
+
 - content_for :body do
-  %p#notice= notice
+  = image_tag @image.image, class: "ui top attached centered image"
 
-  = image_tag @image.image
+  .ui.bottom.attached.menu
+    = link_to "Edit", edit_image_path(@image), class: "item"
 
-  = link_to "Edit", edit_image_path(@image)
-  \|
-  = link_to "Back", images_path
+  - @image.tags.each do |tag|
+    .ui.label= tag

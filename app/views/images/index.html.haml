@@ -1,29 +1,27 @@
 - content_for :page_title do
   Images
 
-- content_for :navbar do
-  %ul.navbar-nav.mr-2
-    = active_link_to "New Image", new_image_path, class: "btn btn-outline-success align-middle", wrap_tag: :li, wrap_class: "nav-item"
-
-  = form_tag search_images_path, method: :get, class: "form-inline mr-3" do
-    .input-group
-      = search_field_tag "q", "", class: "form-control", placeholder: "Search Images ...", aria: { label: "Search" }
-      %span.input-group-btn
-        = submit_tag "Search", class: "btn btn-secondary"
+= render "navbar"
 
 - content_for :body do
-  %h1 Listing images
+  %h1 Images
 
-  %table.table
-    %thead
-      %tr
-        %th Title
-        %th Tags
-        %th Action
-
-    %tbody
+  .ui.equal.width.grid
+    .ui.cards
       - @images.each do |image|
-        %tr
-          %td= image.title
-          %td= image.tags.join ", "
-          %td= link_to "Show", image
+        .fluid.card
+          .image
+            = image_tag image.image
+
+          .content
+            .header
+              = image.title
+            .meta
+              Added #{ image.created_at.to_date.to_s(:long) }
+
+            .description
+              - image.tags.each do |tag|
+                .ui.label= tag
+
+          .extra.content
+            = link_to "View", image, class: "ui button"

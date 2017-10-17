@@ -1,23 +1,19 @@
-%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
-  = link_to "TransientBug", root_path, class: "navbar-brand"
+%nav.ui.top.fixed.inverted.menu
+  .ui.container
+    = link_to root_path, class: "header item" do
+      = image_tag "bug_logo.png", class: "logo"
+      TransientBug
 
-  %button.navbar-toggler{type: "button", data: { toggle: "collapse", target: "#navbarSupportedContent" }, aria: { controls: "navbarSupportedContent", expanded: "false", label: "Toggle navigation" }}
-    %span.navbar-toggler-icon
+    = active_link_to "Home", home_path, class: "item"
 
-  .collapse.navbar-collapse#navbarSupportedContent
-    %ul.navbar-nav.mr-auto
-      = active_link_to "Home", home_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
-
-      - if signed_in?
-        = active_link_to "Images", images_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
-
-      = content_for :navbar_links
+    - if signed_in?
+      = active_link_to "Images", images_path, class: "item"
 
     = content_for :navbar
 
-    %ul.navbar-nav
+    .right.menu
+      = content_for :navbar_right
       - if signed_in?
-        = link_to "Logout", logout_path, class: "nav-link", wrap_tag: :li, wrap_class: "nav-item"
+        = link_to "Logout", logout_path, class: "item"
       - else
-        %li.nav-item
-          = link_to "Login", login_path(:developer), class: "nav-link"
+        = link_to "Login", login_path(:developer), class: "item"

@@ -1,26 +1,24 @@
-= form_for @image do |f|
+= form_for @image, html: { class: "ui form" } do |f|
   - if @image.errors.any?
-    #error_explanation
+    .ui.message.error 
       %h2= "#{pluralize(@image.errors.count, "error")} prohibited this image from being saved:"
       %ul
         - @image.errors.full_messages.each do |message|
           %li= message
 
-  .form-group
+  .required.field
     = f.label :title
-    = f.text_field :title, class: "form-control", aria: { describedby: "Image title" }
+    = f.text_field :title, aria: { describedby: "Image title" }
 
-  .form-group
+  .field
     = f.label :tags
-    = f.text_field :tags, class: "form-control", aria: { describedby: "Image tags" }
+    = f.select :tags, @image.tags.map { |t| [ t, t ] }, {}, { multiple: true, id: "tags-input" }
 
-  .form-group
+  .field
     = f.label :source
-    = f.text_field :source, class: "form-control", aria: { describedby: "Image source" }
+    = f.text_field :source, aria: { describedby: "Image source" }
 
-  .form-group
-    = f.label :image, class: "custom-file" do
-      = f.file_field :image, class: "custom-file-input", aria: { describedby: "Image file" }
-      %span.custom-file-control
+  .field
+    = f.file_field :image, aria: { describedby: "Image file" }
 
-  = f.submit "Save", class: "btn btn-primary"
+  = f.submit "Save", class: "ui submit button"

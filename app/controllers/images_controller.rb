@@ -2,6 +2,8 @@ class ImagesController < ApplicationController
   require_login! only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_image, only: [ :show, :edit, :update, :destroy ]
 
+  decorates_assigned :image
+
   # GET /images
   # GET /images.json
   def index
@@ -37,8 +39,9 @@ class ImagesController < ApplicationController
   # POST /images
   # POST /images.json
   def create
-    @image = current_user.images.new(image_params)
+    @image = current_user.images.new(image_params.merge(tags: tags))
     image = params.dig(:image, :image)
+    tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
 
     respond_to do |format|
       if @image.save && image
@@ -56,9 +59,10 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1.json
   def update
     image = params.dig(:image, :image)
+    tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
 
     respond_to do |format|
-      if @image.update(image_params)
+      if @image.update(image_params.merge(tags: tags))
         @image.image.attach image if image
         format.html { redirect_to @image, notice: "Image was successfully updated." }
         format.json { render :show, status: :ok, location: @image }

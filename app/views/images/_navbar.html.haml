@@ -1,0 +1,11 @@
+- content_for :navbar_right do
+  .right.menu
+    .ui.item
+      = active_link_to new_image_path, class: "ui positive basic icon button" do
+        %i.cloud.upload.icon
+
+    .ui.search.item
+      .ui.icon.input
+        = search_field_tag "q", "", class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
+        %i.search.icon
+      .results

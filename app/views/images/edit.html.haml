@@ -1,8 +1,9 @@
+- content_for :page_title do
+  = @image.title
+
+= render "navbar"
+
 - content_for :body do
   %h1 Editing image
 
   = render "form"
-
-  = link_to "Show", @image
-  \|
-  = link_to "Back", images_path
