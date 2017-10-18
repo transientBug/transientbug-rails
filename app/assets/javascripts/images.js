@@ -1,20 +1,17 @@
-$(".message .close")
-  .on("click", function() {
-    $(this)
-      .closest(".message")
-      .transition("fade")
-  })
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".images.edit").length > 0)) {
+    return
+  }
 
-$("#tags-input").dropdown(
-  {
+  $("#tags-input").dropdown({
     apiSettings: {
       action: "search tags",
-      onResponse: function(apiResponse) {
+      onResponse: (apiResponse) => {
         var response = {
           results: []
         }
 
-        $.each(apiResponse["results"], function(index, hash) {
+        $.each(apiResponse["results"], (index, hash) => {
           response.results.push({
             name: hash.name,
             text: hash.name,
@@ -25,5 +22,5 @@ $("#tags-input").dropdown(
         return response
       }
     }
-  }
-)
+  })
+})
