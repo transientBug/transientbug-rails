@@ -1,6 +1,6 @@
 = form_for @image, html: { class: "ui form" } do |f|
   - if @image.errors.any?
-    .ui.message.error 
+    .ui.message.error
       %h2= "#{pluralize(@image.errors.count, "error")} prohibited this image from being saved:"
       %ul
         - @image.errors.full_messages.each do |message|

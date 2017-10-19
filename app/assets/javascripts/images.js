@@ -1,10 +1,11 @@
 document.addEventListener("turbolinks:load", () => {
-  if (!($(".images.edit").length > 0)) {
+  if (!($(".images").length > 0)) {
     return
   }
 
   $("#tags-input").dropdown({
     apiSettings: {
+      cache: false,
       action: "search tags",
       onResponse: (apiResponse) => {
         var response = {

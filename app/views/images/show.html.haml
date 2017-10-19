@@ -4,10 +4,16 @@
 = render "navbar"
 
 - content_for :body do
-  = image_tag @image.image, class: "ui top attached centered image"
+  .ui.grid.container
+    .row
+      %h1= @image.title
 
-  .ui.bottom.attached.menu
-    = link_to "Edit", edit_image_path(@image), class: "item"
+    .row
+      = image_tag @image.image, class: "ui top attached centered image"
 
-  - @image.tags.each do |tag|
-    .ui.label= tag
+      - if policy(@image).update?
+        .ui.bottom.attached.menu
+          = link_to "Edit", edit_image_path(@image), class: "item"
+
+    .row
+      = render partial: "tags", locals: { tags: @image.tags }

@@ -1,0 +1,4 @@
+.ui.equal.width.grid
+  .ui.cards
+    - images.each do |image|
+      = render partial: "card", locals: { image: image }

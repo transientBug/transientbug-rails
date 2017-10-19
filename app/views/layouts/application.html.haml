@@ -3,7 +3,7 @@
   %head
     = render partial: "layouts/head"
 
-  %body
+  %body{ class: [  controller_name, action_name ] }
     = render partial: "layouts/body"
 
   = render partial: "layouts/footer"

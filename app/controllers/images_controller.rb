@@ -2,12 +2,14 @@ class ImagesController < ApplicationController
   require_login! only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_image, only: [ :show, :edit, :update, :destroy ]
 
-  decorates_assigned :image
-
   # GET /images
   # GET /images.json
   def index
     @images = policy_scope(Image).with_attached_image
+  end
+
+  def tag
+    @images = policy_scope(Image).with_attached_image.where("? = ANY(tags)", params[:tag])
   end
 
   # GET /images/1
@@ -19,6 +21,7 @@ class ImagesController < ApplicationController
   # GET /images/search.json
   def search
     return tags_search if params[:t] == "tags"
+    return images_search if params[:t] == "images"
 
     images_search
   end
@@ -37,23 +40,18 @@ class ImagesController < ApplicationController
 
   def tags_search
     @tags = ImagesIndex.type_hash["tag"]
-      .suggest(
-        "tag-suggest" => {
-          text: params[:q],
-          completion: {
-            field: :suggest
-          }
-        }
-      )
+      .suggest( "tag-suggest" => { text: params[:q], completion: { field: :suggest } } )
       .suggest["tag-suggest"]
       .first["options"]
-      .map { |row| row["text" ] }
-
-    @tags << params[:q]
+      .map { |row| row.dig("_source", "tag") }
+      .take(params.fetch(:c, 5))
+      .tap { |arr| arr.unshift params[:q] }
+      .uniq
+      .map { |tag| { name: tag } }
 
     res = {
       success: true,
-      results: @tags.map { |tag| { name: tag } }
+      results: @tags
     }
 
     respond_to do |format|
@@ -73,13 +71,14 @@ class ImagesController < ApplicationController
   # POST /images
   # POST /images.json
   def create
-    @image = current_user.images.new(image_params.merge(tags: tags))
-    image = params.dig(:image, :image)
+    image_param = params.dig(:image, :image)
     tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
 
+    @image = current_user.images.new(image_params.merge(tags: tags))
+
     respond_to do |format|
-      if @image.save && image
-        @image.image.attach image if image
+      if @image.save && image_param
+        @image.image.attach image_param
         format.html { redirect_to @image, notice: "Image was successfully created." }
         format.json { render :show, status: :created, location: @image }
       else
@@ -92,12 +91,12 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1
   # PATCH/PUT /images/1.json
   def update
-    image = params.dig(:image, :image)
+    image_param = params.dig(:image, :image)
     tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
 
     respond_to do |format|
       if @image.update(image_params.merge(tags: tags))
-        @image.image.attach image if image
+        @image.image.attach image_param if image_param
         format.html { redirect_to @image, notice: "Image was successfully updated." }
         format.json { render :show, status: :ok, location: @image }
       else

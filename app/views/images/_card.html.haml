@@ -1,0 +1,19 @@
+.fluid.card
+  = link_to image_path(image), class: "image" do
+    = image_tag image.image
+
+  .content
+    = link_to image.title, image_path(image), class: "header"
+
+    .meta
+      Added #{ image.created_at.to_date.to_s(:long) }
+
+    .description
+      = render partial: "tags", locals: { tags: image.tags.take(3) }
+
+  .ui.buttons.bottom.attached
+    = link_to "View", image, class: "ui button"
+
+    - if policy(image).update?
+      .or
+      = link_to "Edit", edit_image_path(image), class: "ui primary button"

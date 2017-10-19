@@ -6,5 +6,5 @@ class Image < ApplicationRecord
   has_one_attached :image
 
   update_index("images#image") { self }
-  update_index("images#tag") { self.tags }
+  update_index("images#tag") { self.tags.map(&ImagesIndex::TagStruct.method(:from)) }
 end

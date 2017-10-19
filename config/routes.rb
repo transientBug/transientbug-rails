@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :images do
     collection do
       get "search"
+      get "tag/:tag", action: :tag, as: "tag"
     end
   end
 

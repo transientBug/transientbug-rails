@@ -4,24 +4,9 @@
 = render "navbar"
 
 - content_for :body do
-  %h1 Images
+  .ui.grid.container
+    .row
+      %h1 All Images
 
-  .ui.equal.width.grid
-    .ui.cards
-      - @images.each do |image|
-        .fluid.card
-          .image
-            = image_tag image.image
-
-          .content
-            .header
-              = image.title
-            .meta
-              Added #{ image.created_at.to_date.to_s(:long) }
-
-            .description
-              - image.tags.each do |tag|
-                .ui.label= tag
-
-          .extra.content
-            = link_to "View", image, class: "ui button"
+    .row
+      = render partial: "cards", locals: { images: @images }

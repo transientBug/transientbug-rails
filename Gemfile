@@ -21,7 +21,6 @@ gem "semantic-ui-sass"
 gem "jquery-rails"
 gem "active_link_to"
 gem "coffee-rails"
-gem "draper"
 
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"

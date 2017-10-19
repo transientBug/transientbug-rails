@@ -1,12 +1,14 @@
 - content_for :page_title do
-  Image search
+  Images
 
 = render "navbar"
 
 - content_for :body do
   .ui.grid.container
     .row
-      %h1 Image Search Results
+      %h1
+        Images in Tag
+        .ui.label.tag= params[:tag]
 
     .row
       = render partial: "cards", locals: { images: @images }

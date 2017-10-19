@@ -4,6 +4,9 @@
 = render "navbar"
 
 - content_for :body do
-  %h1 Editing image
+  .ui.grid.container
+    .row
+      %h1 Editing Image
 
-  = render "form"
+    .row
+      = render "form"

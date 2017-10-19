@@ -1,0 +1,4 @@
+.ui.tag.labels
+  - tags.each do |tag|
+    = link_to tag_images_path(tag) do
+      .ui.label= tag

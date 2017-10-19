@@ -11,14 +11,22 @@ class ImagePolicy < ApplicationPolicy
   # end
 
   def update?
+    return false unless user
+    user.owner_of? record
+  end
+
+  def new?
+    return false unless user
     user.owner_of? record
   end
 
   def edit?
+    return false unless user
     user.owner_of? record
   end
 
   def destroy?
+    return false unless user
     user.owner_of? record
   end
 
