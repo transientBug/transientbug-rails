@@ -1,9 +1,9 @@
-= form_for @image, html: { class: "ui form" } do |f|
-  - if @image.errors.any?
+= form_for image, html: { class: "ui form" } do |f|
+  - if image.errors.any?
     .ui.message.error
-      %h2= "#{pluralize(@image.errors.count, "error")} prohibited this image from being saved:"
+      %h2= "#{pluralize(image.errors.count, "error")} prohibited this image from being saved:"
       %ul
-        - @image.errors.full_messages.each do |message|
+        - image.errors.full_messages.each do |message|
           %li= message
 
   .required.field
@@ -12,13 +12,14 @@
 
   .field
     = f.label :tags
-    = f.select :tags, @image.tags.map { |t| [ t, t ] }, {}, { multiple: true, id: "tags-input", class: "ui multiple search selection dropdown" }
+    = f.select :tags, image.tags.map { |t| [ t, t ] }, {}, { multiple: true, id: "tags-input", class: "ui multiple search selection dropdown" }
 
   .field
     = f.label :source
     = f.text_field :source, aria: { describedby: "Image source" }
 
-  .field
-    = f.file_field :image, aria: { describedby: "Image file" }
+  - if image.new_record?
+    .field
+      = f.file_field :image, aria: { describedby: "Image file" }
 
-  = f.submit "Save", class: "ui submit button"
+  = f.submit "Save", class: "ui positive right floated submit button"

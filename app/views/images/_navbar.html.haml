@@ -1,6 +1,6 @@
 - content_for :navbar_right do
   .right.menu
-    - if policy(Image).new?
+    - if policy(Image).create?
       .ui.item
-        = active_link_to new_image_path, class: "ui positive basic icon button" do
+        = active_link_to new_image_path, class: "ui inverted green icon button", class_active: "active" do
           %i.cloud.upload.icon

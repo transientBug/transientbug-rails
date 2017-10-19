@@ -6,27 +6,27 @@ class ImagePolicy < ApplicationPolicy
     end
   end
 
+  def create?
+    return false unless user.present?
+    true
+  end
+
   # def show?
   #   user.owner_of? record
   # end
 
   def update?
-    return false unless user
-    user.owner_of? record
-  end
-
-  def new?
-    return false unless user
+    return false unless user.present?
     user.owner_of? record
   end
 
   def edit?
-    return false unless user
+    return false unless user.present?
     user.owner_of? record
   end
 
   def destroy?
-    return false unless user
+    return false unless user.present?
     user.owner_of? record
   end
 

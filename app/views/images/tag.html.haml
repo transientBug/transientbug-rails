@@ -4,11 +4,11 @@
 = render "navbar"
 
 - content_for :body do
-  .ui.grid.container
+  .ui.fluid.grid.container
     .row
       %h1
         Images in Tag
-        .ui.label.tag= params[:tag]
+        .ui.label.tag{ class: [color_for(params[:tag])] }= params[:tag]
 
     .row
       = render partial: "cards", locals: { images: @images }
