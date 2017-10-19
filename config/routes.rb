@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :images do
     collection do
       get "search"
+      get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
       get "tag/:tag", action: :tag, as: "tag"
     end
   end

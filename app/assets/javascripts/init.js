@@ -2,9 +2,8 @@ window.App || (window.App = {})
 
 App.init = () => {
   $.fn.api.settings.api = {
-    "search tags": "/images/search.json?t=tags&q={query}",
-    "search images": "/images/search.json?t=images&q={query}",
-    "search": "/images/search.json?q={query}"
+    "autocomplete tags": "/images/tags/autocomplete.json?q={query}",
+    "search images": "/images/search.json?q={query}"
   }
 
   $.fn.api.settings.cache = false
@@ -16,6 +15,22 @@ App.init = () => {
   })
 
   this.cable || (this.cable = ActionCable.createConsumer())
+
+  $("[data-behavior~=search-images]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search images"
+    },
+    fields: {
+      url: "view"
+    }
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {

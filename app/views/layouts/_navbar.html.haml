@@ -12,7 +12,7 @@
     .right.menu
       = content_for :navbar_right
 
-      .ui.search.item
+      .ui.category.search.item{ data: { behavior: "search-images" } }
         .ui.icon.input
           = search_field_tag "q", "", class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
           %i.search.icon

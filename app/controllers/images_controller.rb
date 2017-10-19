@@ -17,45 +17,26 @@ class ImagesController < ApplicationController
   def show
   end
 
+  # GET /images/tags/autocomplete.json
+  def autocomplete
+    @tags = tags_search.take(params.fetch(:c, 5))
+      .tap { |arr| arr.unshift params[:q] }
+      .uniq
+
+    respond_to do |format|
+      format.json { render :autocomplete, status: :ok }
+    end
+  end
+
   # GET /images/search
   # GET /images/search.json
   def search
-    return tags_search if params[:t] == "tags"
-    return images_search if params[:t] == "images"
-
-    images_search
-  end
-
-  def images_search
-    @images = ImagesIndex.type_hash["image"]
-      .query(
-        bool: {
-          should: [
-            { term: { title: params[:q] } },
-            { term: { tags: params[:q] } }
-          ]
-        }
-      ).objects
-  end
-
-  def tags_search
-    @tags = ImagesIndex.type_hash["tag"]
-      .suggest( "tag-suggest" => { text: params[:q], completion: { field: :suggest } } )
-      .suggest["tag-suggest"]
-      .first["options"]
-      .map { |row| row.dig("_source", "tag") }
-      .take(params.fetch(:c, 5))
-      .tap { |arr| arr.unshift params[:q] }
-      .uniq
-      .map { |tag| { name: tag } }
-
-    res = {
-      success: true,
-      results: @tags
-    }
+    @images = images_search
+    @tags = tags_search
 
     respond_to do |format|
-      format.json { render json: res, status: :ok }
+      format.html { render :search }
+      format.json { render :search, status: :ok }
     end
   end
 
@@ -126,5 +107,47 @@ class ImagesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def image_params
     permitted_attributes(@image || Image)
+  end
+
+  def images_search
+    res = ImagesIndex.suggest(
+      "image-suggest" => {
+        text: params[:q],
+        completion: {
+          field: :suggest,
+          fuzzy: {
+            fuzziness: 2
+          },
+          contexts: {
+            type: [ :image ]
+          }
+        }
+      }
+    )
+    .suggest["image-suggest"]
+    .first["options"]
+    .map { |row| row.dig("_id") }
+
+    Image.where id: res
+  end
+
+  def tags_search
+    ImagesIndex.suggest(
+      "tag-suggest" => {
+        text: params[:q],
+        completion: {
+          field: :suggest,
+          fuzzy: {
+            fuzziness: 2
+          },
+          contexts: {
+            type: [ :tag ]
+          }
+        }
+      }
+    )
+    .suggest["tag-suggest"]
+    .first["options"]
+    .map { |row| row.dig("_source", "tag") }
   end
 end
