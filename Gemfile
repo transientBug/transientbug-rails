@@ -52,10 +52,11 @@ gem "omniauth-twitter"
 gem "omniauth-github"
 
 # Request making
-gem "faraday"
-gem "faraday-encoding"
-gem "faraday_middleware"
-gem "excon"
+# gem "faraday"
+# gem "faraday-encoding"
+# gem "faraday_middleware"
+# gem "excon"
+gem "http"
 gem "addressable"
 
 # Parsing/HTML handling
