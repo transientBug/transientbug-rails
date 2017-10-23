@@ -1,7 +1,7 @@
 = form_for image, html: { class: "ui form" } do |f|
   - if image.errors.any?
     .ui.message.error
-      %h2= "#{pluralize(image.errors.count, "error")} prohibited this image from being saved:"
+      %h2= "#{ pluralize image.errors.count, "error" } prohibited this image from being saved:"
       %ul
         - image.errors.full_messages.each do |message|
           %li= message
@@ -17,6 +17,11 @@
   .field
     = f.label :source
     = f.text_field :source, aria: { describedby: "Image source" }
+
+  .field
+    .ui.toggle.checkbox
+      = f.label :disabled
+      = f.check_box :disabled, aria: { describedby: "Disable Image" }
 
   - if image.new_record?
     .field

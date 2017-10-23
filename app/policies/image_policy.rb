@@ -1,8 +1,8 @@
 class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
-      # scope.where(user: user)
+      return scope.all if user.present?
+      scope.where(disabled: false)
     end
   end
 
@@ -11,9 +11,11 @@ class ImagePolicy < ApplicationPolicy
     true
   end
 
-  # def show?
-  #   user.owner_of? record
-  # end
+  def show?
+    return scope.where(id: record.id).exists? if user.present?
+
+    scope.where(id: record.id, disabled: false).exists?
+  end
 
   def update?
     return false unless user.present?
@@ -31,6 +33,6 @@ class ImagePolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:title, :tags, :source]
+    [:title, :tags, :source, :disabled]
   end
 end

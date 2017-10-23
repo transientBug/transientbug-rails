@@ -68,6 +68,8 @@ gem "robotstxt-parser", require: "robotstxt"
 
 gem "foreman"
 
+gem "mustermann"
+
 group :doc do
   gem "yard"
 end
