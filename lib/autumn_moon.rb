@@ -1,4 +1,6 @@
 module AutumnMoon
+  VERSION = "v0.0.1".freeze
+
   autoload :Bot, "autumn_moon/bot"
 
   autoload :ShadowRidge, "autumn_moon/shadow_ridge"

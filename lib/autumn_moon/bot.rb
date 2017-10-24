@@ -1,57 +1,18 @@
 module AutumnMoon
   class Bot
     class Route
-      attr_reader :pattern, :method_name, :conditions
+      attr_reader :pattern, :method_name, :unbound_method, :conditions, :options
 
-      def initialize pattern, method_name:, conditions: []
+      def initialize pattern, method_name, unbound_method, conditions: [], **options
         @raw_pattern = pattern
-        @conditions = Array(conditions)
         @method_name = method_name
+        @unbound_method = unbound_method
+        @conditions = Array(conditions)
+        @options = options
       end
 
       def pattern
-        @pattern ||= Mustermann.new @raw_pattern
-      end
-
-      def match params
-        return false unless should_match? params
-        return false unless pattern.match match_text_for(params)
-
-        conditions.all? { |condition| condition.call params }
-      end
-
-      protected
-
-      def should_match? params
-        fail NotImplementedError
-      end
-
-      def match_text_for params
-        fail NotImplementedError
-      end
-    end
-
-    # class CommandRoute < Route
-    #   def pattern
-    #     @pattern ||= Mustermann.new @raw_pattern
-    #   end
-
-    #   def should_match? params
-    #     params[:entities][:bot_command].present?
-    #   end
-
-    #   def match_text_for params
-    #     params[:entities][:bot_command]
-    #   end
-    # end
-
-    class HandlerRoute < Route
-      def should_match? params
-        true
-      end
-
-      def match_text_for params
-        params[:text]
+        @pattern ||= Mustermann.new @raw_pattern, **options
       end
     end
 
@@ -60,58 +21,120 @@ module AutumnMoon
         @routes ||= []
       end
 
-      def default_route
-        @default_route ||= nil
+      def settings
+        @settings ||= {
+          cache_store: ActiveSupport::Cache::MemoryStore,
+          cache_options: []
+        }
       end
 
-      def default to:
-        @default_route = to
+      def cache
+        @cache ||= settings[:cache_store].new(*settings[:cache_options])
       end
 
-      # def command pattern, to:, on: []
-      #   routes << CommandRoute.new(pattern, method_name: to, conditions: on)
-      # end
-
-      def handle pattern, to:, on: []
-        routes << HandlerRoute.new(pattern, method_name: to, conditions: on)
+      def filters
+        @filters ||= Hash.new { |hash, key| hash[key] = { before: [], after: [] } }
       end
 
-      def route payload
-        entities = payload[:entities].map do |entity|
-          entity[:type] = entity[:type].to_sym
-          entity[:text] = payload[:text][entity[:offset], entity[:length]]
-          entity
-        end.group_by { |entity| entity[:type] }
+      def generate_method method_name, &block
+        define_method method_name, &block
+        method = instance_method method_name
+        remove_method method_name
+        method
+      end
 
-        if entities[:bot_command]
-          entities[:bot_command] = entities[:bot_command].first[:text]
+      def add_filter type, pattern, **options, &block
+        block = -> { self.method(options.delete(:use)).call } unless block_given?
+
+        unbound_method = generate_method "unbound_#{ type }", &block
+
+        filters[pattern][type] << [ options, unbound_method ]
+      end
+
+      def before pattern, **options, &block
+        add_filter :before, pattern, **options, &block
+      end
+
+      def after pattern, **options, &block
+        add_filter :after, pattern, **options, &block
+      end
+
+      def route pattern, to:, on: [], **options
+        block = -> { method(to).call }
+
+        unbound_method = generate_method "unbound_route", &block
+
+        conditions = Array(on).map do |condition|
+          generate_method "unbound_condition", &condition
         end
 
-        timestamp = Time.at payload[:date]
+        routes << Route.new(pattern, to, unbound_method, conditions: conditions, **options)
+      end
 
-        params = {
-          entities: entities,
-          text: payload[:text],
-          timestamp: timestamp
-        }.merge(payload.slice(:message_id, :from, :chat))
+      def build_params_from payload:
+        fail NotImplementedError
+      end
 
-        # TODO: Handle conditionals that are methods? (maybe class methods?)
-        route_handler = routes.find { |route| route.match(params) }.method_name
-        route_handler ||= default_route
+      def call payload
+        params = build_params_from payload: payload
 
-        new(params).route route_handler
+        new.call params
       end
     end
 
     attr_reader :params
 
-    def initialize params
-      @params = params
+    def settings
+      self.class.settings
     end
 
-    def route method
-      # TODO: Before, Around, After callbacks
-      public_send method
+    def cache
+      self.class.cache
+    end
+
+    def cache_key
+      @cache_key ||= "#{ params[:chat][:id] }#{ params[:from][:id] }"
+    end
+
+    def session
+      @session ||= cache.fetch cache_key do
+        {}
+      end
+    end
+
+    def bot_name
+      fail NotImplementedError
+    end
+
+    def pass
+      throw :pass
+    end
+
+    def halt
+      throw :halt
+    end
+
+    def call params
+      @params = params
+
+      catch :halt do
+        self.class.routes.each do |route|
+          next unless route.pattern.match(params[:text])
+          next unless route.conditions.all? do |condition|
+            condition.bind(self).call
+          end
+
+          catch :pass do
+            self.class.filters.dig(route.method_name, :before).each { |o, c| c.bind(self).call }
+            route.unbound_method.bind(self).call
+            self.class.filters.dig(route.method_name, :after).each { |o, c| c.bind(self).call }
+
+            halt
+          end
+        end
+      end
+
+      cache.write cache_key, session
     end
   end
 end

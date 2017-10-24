@@ -94,8 +94,8 @@ module AutumnMoon
 
       error_message = parsed_response.fetch :description, "N/A"
 
-      fail TelegramForbidden, error_message if status == 403
-      fail TelegramNotFound, error_message if status == 404
+      fail TelegramForbiddenError, error_message if status == 403
+      fail TelegramNotFoundError, error_message if status == 404
       fail TelegramAPIError, "#{ res.status }: #{ error_message }"
     end
 

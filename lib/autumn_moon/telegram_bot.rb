@@ -10,13 +10,34 @@ module AutumnMoon
       end
 
       def me
-        @me ||= {}
+        @me ||= client.get_me
       end
 
       def [] token:
         @token = token
-        @me = client.get_me
         self
+      end
+
+      def build_params_from payload:
+        entities = payload.fetch(:entities, []).map do |entity|
+          entity[:type] = entity[:type].to_sym
+          entity[:text] = payload[:text][entity[:offset], entity[:length]]
+          entity
+        end.group_by { |entity| entity[:type] }
+
+        timestamp = Time.at payload[:date]
+
+        params = {
+          entities: entities,
+          text: payload[:text],
+          timestamp: timestamp
+        }.merge(payload.slice(:message_id, :from, :chat))
+
+        if entities[:bot_command]
+          params[:command] = entities[:bot_command].min { |c| c[:offset] }[:text]
+        end
+
+        params
       end
     end
 
