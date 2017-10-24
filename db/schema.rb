@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2017_10_23_141253) do
+ActiveRecord::Schema.define(version: 2017_10_23_143042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,25 @@ ActiveRecord::Schema.define(version: 2017_10_23_141253) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
+  create_table "questionnaires", force: :cascade do |t|
+    t.bigint "user_id"
+    t.text "title"
+    t.boolean "disabled"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_questionnaires_on_user_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.bigint "questionnaire_id"
+    t.text "title"
+    t.text "question"
+    t.integer "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -72,4 +91,6 @@ ActiveRecord::Schema.define(version: 2017_10_23_141253) do
 
   add_foreign_key "authorizations", "users"
   add_foreign_key "images", "users"
+  add_foreign_key "questionnaires", "users"
+  add_foreign_key "questions", "questionnaires"
 end
