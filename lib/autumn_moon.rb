@@ -2,7 +2,9 @@ module AutumnMoon
   VERSION = "v0.0.1".freeze
 
   autoload :Bot, "autumn_moon/bot"
+  autoload :Cache, "autumn_moon/cache"
 
+  # Telegram specific classes
   autoload :ShadowRidge, "autumn_moon/shadow_ridge"
   autoload :TelegramClient, "autumn_moon/telegram_client"
   autoload :TelegramBot, "autumn_moon/telegram_bot"

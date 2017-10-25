@@ -3,74 +3,93 @@ module AutumnMoon
     class Route
       attr_reader :pattern, :method_name, :unbound_method, :conditions, :options
 
-      def initialize pattern, method_name, unbound_method, conditions: [], **options
+      def initialize pattern, method_name, conditions: [], **options
         @raw_pattern = pattern
         @method_name = method_name
-        @unbound_method = unbound_method
         @conditions = Array(conditions)
         @options = options
       end
 
       def pattern
-        @pattern ||= Mustermann.new @raw_pattern, **options
+        @pattern ||= Mustermann.new @raw_pattern, **options.fetch(:mustermann_options, {})
       end
     end
 
     class << self
-      def routes
-        @routes ||= []
-      end
-
+      # Settings handling
       def settings
-        @settings ||= {
-          cache_store: ActiveSupport::Cache::MemoryStore,
-          cache_options: []
-        }
+        @settings ||= {}
+        return superclass.settings.merge @settings if superclass.respond_to?(:settings)
+        @settings
       end
 
-      def cache
-        @cache ||= settings[:cache_store].new(*settings[:cache_options])
+      def set **options
+        @settings ||= settings.merge options
       end
 
+      # Extension handling
+      def extensions
+        @extensions ||=  []
+        return (@extensions + superclass.extensions).uniq if superclass.respond_to?(:extensions)
+        @extensions
+      end
+
+      def register *extension_modules, &block
+        extension_modules << Module.new(&block) if block_given?
+
+        extensions
+        @extensions += extension_modules
+
+        extensions.each do |extension|
+          extension.registered self if extension.respond_to? :registered
+        end
+      end
+
+      def invoke_hook name, *args
+        extensions.each { |e| e.send(name, self, *args) if e.respond_to? name }
+      end
+
+      # Filter handling
       def filters
         @filters ||= Hash.new { |hash, key| hash[key] = { before: [], after: [] } }
       end
 
-      def generate_method method_name, &block
-        define_method method_name, &block
-        method = instance_method method_name
-        remove_method method_name
-        method
-      end
-
-      def add_filter type, pattern, **options, &block
+      def add_filter type, method_name, **options, &block
         block = -> { self.method(options.delete(:use)).call } unless block_given?
 
-        unbound_method = generate_method "unbound_#{ type }", &block
+        unbound_method = generate_unbound_method "unbound_#{ type }", &block
 
-        filters[pattern][type] << [ options, unbound_method ]
+        filters[method_name][type] << [ options, unbound_method ]
+        invoke_hook :filter_added, method_name, type, options, unbound_method
       end
 
-      def before pattern, **options, &block
-        add_filter :before, pattern, **options, &block
+      def before method_name, **options, &block
+        add_filter :before, method_name, **options, &block
       end
 
-      def after pattern, **options, &block
-        add_filter :after, pattern, **options, &block
+      def after method_name, **options, &block
+        add_filter :after, method_name, **options, &block
+      end
+
+      # Route handling
+      def routes
+        @routes ||= []
       end
 
       def route pattern, to:, on: [], **options
-        block = -> { method(to).call }
-
-        unbound_method = generate_method "unbound_route", &block
+        method_name = to
 
         conditions = Array(on).map do |condition|
-          generate_method "unbound_condition", &condition
+          generate_unbound_method "unbound_condition", &condition
         end
 
-        routes << Route.new(pattern, to, unbound_method, conditions: conditions, **options)
+        route = Route.new(pattern, method_name, conditions: conditions, **options)
+
+        routes << route
+        invoke_hook :route_added, pattern, method_name, conditions, options, route
       end
 
+      # Message handling
       def build_params_from payload:
         fail NotImplementedError
       end
@@ -79,6 +98,15 @@ module AutumnMoon
         params = build_params_from payload: payload
 
         new.call params
+
+        nil
+      end
+
+      def generate_unbound_method method_name, &block
+        define_method method_name, &block
+        method = instance_method method_name
+        remove_method method_name
+        method
       end
     end
 
@@ -88,18 +116,8 @@ module AutumnMoon
       self.class.settings
     end
 
-    def cache
-      self.class.cache
-    end
-
-    def cache_key
-      @cache_key ||= "#{ params[:chat][:id] }#{ params[:from][:id] }"
-    end
-
     def session
-      @session ||= cache.fetch cache_key do
-        {}
-      end
+      @session ||= {}
     end
 
     def bot_name
@@ -126,15 +144,13 @@ module AutumnMoon
 
           catch :pass do
             self.class.filters.dig(route.method_name, :before).each { |o, c| c.bind(self).call }
-            route.unbound_method.bind(self).call
+            send route.method_name
             self.class.filters.dig(route.method_name, :after).each { |o, c| c.bind(self).call }
 
             halt
           end
         end
       end
-
-      cache.write cache_key, session
     end
   end
 end

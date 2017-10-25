@@ -1,15 +1,53 @@
 require "autumn_moon"
 
+module BotContext
+  def self.registered klass
+    # klass.set({})
+    # klass.extend ClassMethods
+    klass.prepend InstanceMethods
+  end
+
+  def self.route_added klass, pattern, method_name, conditions, options, route
+    context = options[:context]
+    return unless context
+
+    unbound_method = klass.generate_unbound_method "unbound_condition" do
+      session[:context] == context
+    end
+
+    route.conditions << unbound_method
+
+    klass.before method_name do
+      clear_context
+    end
+  end
+
+  module InstanceMethods
+    def clear_context
+      session.delete :context
+    end
+
+    def set_context value
+      session[:context] = value
+    end
+  end
+end
+
 class SampleBot < AutumnMoon::TelegramBot
   VERSION = "v0.0.0".freeze
 
-  route "/help", to: :testing_topic_help, on: [ ->{ session[:context] == nil } ]
+  register AutumnMoon::Cache
+  register BotContext
+
+  route "/help", to: :testing_topic_help
   def testing_topic_help
+    set_context :help
+
     body = <<~MSG
-      Please choose an topic for more information
+      Please choose a topic for more information
     MSG
 
-    reply_with text: body, reply_markup: {
+    respond_with text: body, reply_markup: {
       keyboard: [
         [
           "Commands"
@@ -21,27 +59,21 @@ class SampleBot < AutumnMoon::TelegramBot
       resize_keyboard: true,
       one_time_keyboard: true,
     }
-
-    session[:context] = :help
   end
 
-  route "Commands", to: :help_commands, on: [ ->{ session[:context] == :help } ]
+  route "Commands", to: :help_commands, context: :help
   def help_commands
-    session.delete :context
-
     body = <<~MSG
       Available commands:
 
       /help
     MSG
 
-    reply_with text: body, reply_markup: { remove_keyboard: true }
+    respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
-  route "About", to: :help_about, on: [ ->{ session[:context] == :help } ]
+  route "About", to: :help_about, context: :help
   def help_about
-    session.delete :context
-
     body = <<~MSG
       #{ bot_name } - #{ VERSION }
       AutumnMoon Framework - Version #{ AutumnMoon::VERSION }
@@ -49,11 +81,11 @@ class SampleBot < AutumnMoon::TelegramBot
       Author: @JoshAshby
     MSG
 
-    reply_with text: body, reply_markup: { remove_keyboard: true }
+    respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
   route "*", to: :default_route
   def default_route
-    reply_with text: "I'm sorry, I don't know what to say"
+    respond_with text: "I'm sorry, I don't know what to say"
   end
 end
