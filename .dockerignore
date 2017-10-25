@@ -1,0 +1,9 @@
+.git
+.dockerignore
+.byebug_history
+log/*
+tmp/*
+*.swp
+node_modules/*
+storaged/*
+spec/*

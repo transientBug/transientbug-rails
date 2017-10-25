@@ -70,10 +70,6 @@ gem "foreman"
 
 gem "mustermann"
 
-group :doc do
-  gem "yard"
-end
-
 group :development, :test do
   gem "dotenv-rails"
   gem "awesome_print"
@@ -86,7 +82,16 @@ group :development, :test do
   gem "guard"
   gem "guard-yard"
 
+  gem "yard"
+
   gem "mailcatcher"
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  gem "web-console", ">= 3.3.0"
+  gem "listen", ">= 3.0.5", "< 3.2"
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem "spring"
+  gem "spring-watcher-listen", "~> 2.0.0"
 end
 
 group :test do
@@ -103,9 +108,7 @@ group :test do
   gem "timecop"
   gem "webmock"
   gem "simplecov", require: false
-end
 
-group :pronto do
   gem "flay"
   gem "reek"
   gem "rubocop"
@@ -114,14 +117,4 @@ group :pronto do
   gem "pronto-flay", require: false
   gem "pronto-reek", require: false
   gem "pronto-rubocop", require: false
-end
-
-group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "web-console", ">= 3.3.0"
-  gem "listen", ">= 3.0.5", "< 3.2"
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
 end

@@ -7,3 +7,7 @@ test:
 development:
   host: 'localhost:9200'
   prefix: 'transientbug'
+
+production:
+  host: <%= ENV["ELASTICSEARCH_URL"] %>
+  prefix: "transientbug_prod"

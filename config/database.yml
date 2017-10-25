@@ -80,6 +80,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
   database: transientbug_production
   username: transientbug
-  password: <%= ENV['TRANSIENTBUG_DATABASE_PASSWORD'] %>
+  password: <%= ENV.fetch 'TRANSIENTBUG_DATABASE_PASSWORD', "yourpassword" %>
