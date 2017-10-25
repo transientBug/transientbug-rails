@@ -66,12 +66,16 @@ gem "addressable"
 # gem "stopwords-filter"
 gem "robotstxt-parser", require: "robotstxt"
 
-gem "foreman"
-
+# Utils
 gem "mustermann"
+gem 'lru_redux'
 
 group :development, :test do
+  # Runner & Environment
+  gem "foreman"
   gem "dotenv-rails"
+
+  # Debugging
   gem "awesome_print"
   gem "byebug"
   gem "pry"
@@ -79,19 +83,24 @@ group :development, :test do
   gem "pry-rails"
   gem "better_errors"
   gem "binding_of_caller"
+
+  # Auto-runners for tests and docs
   gem "guard"
   gem "guard-yard"
 
+  # Document everything
   gem "yard"
 
+  # Handle mail intercepting in development
   gem "mailcatcher"
+
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem "web-console", ">= 3.3.0"
   gem "listen", ">= 3.0.5", "< 3.2"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
+  # gem "spring"
+  # gem "spring-watcher-listen", "~> 2.0.0"
 end
 
 group :test do
