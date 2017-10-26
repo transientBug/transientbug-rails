@@ -39,7 +39,7 @@ class SampleBot < AutumnMoon::TelegramBot
   register AutumnMoon::Cache
   register BotContext
 
-  route "/help", to: :testing_topic_help
+  command "/help", to: :testing_topic_help
   def testing_topic_help
     set_context :help
 
@@ -61,7 +61,7 @@ class SampleBot < AutumnMoon::TelegramBot
     }
   end
 
-  route "Commands", to: :help_commands, context: :help
+  message "Commands", to: :help_commands, context: :help
   def help_commands
     body = <<~MSG
       Available commands:
@@ -72,7 +72,7 @@ class SampleBot < AutumnMoon::TelegramBot
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
-  route "About", to: :help_about, context: :help
+  message "About", to: :help_about, context: :help
   def help_about
     body = <<~MSG
       #{ bot_name } - #{ VERSION }
@@ -84,7 +84,13 @@ class SampleBot < AutumnMoon::TelegramBot
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
-  route "*", to: :default_route
+  inline_query "*", to: :inline
+  def inline
+    inline_reply_with results: [
+    ]
+  end
+
+  default to: :default_route
   def default_route
     reply_with text: "I'm sorry, I don't know what to say"
   end

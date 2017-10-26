@@ -22,7 +22,7 @@ module AutumnMoon
       end
 
       def cache_key
-        @cache_key ||= "#{ params[:chat][:id] }#{ params[:from][:id] }"
+        @cache_key ||= "#{ params[:chat_id] }#{ params[:user_id] }"
       end
 
       def session

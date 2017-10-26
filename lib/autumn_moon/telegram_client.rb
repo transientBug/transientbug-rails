@@ -54,6 +54,7 @@ module AutumnMoon
       deleteChatStickerSet
 
       answerCallbackQuery
+      answerInlineQuery
     }.freeze
 
     API_MAPPINGS = {

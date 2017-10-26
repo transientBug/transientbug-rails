@@ -3,7 +3,8 @@ module AutumnMoon
     class Route
       attr_reader :pattern, :method_name, :unbound_method, :conditions, :options
 
-      def initialize pattern, method_name, conditions: [], **options
+      def initialize verb, pattern, method_name, conditions: [], **options
+        @verb = verb
         @raw_pattern = pattern
         @method_name = method_name
         @conditions = Array(conditions)
@@ -12,6 +13,12 @@ module AutumnMoon
 
       def pattern
         @pattern ||= Mustermann.new @raw_pattern, **options.fetch(:mustermann_options, {})
+      end
+
+      def match params
+        return false unless pattern.match(params[:text])
+        return true if @verb == :all
+        params[:verb] == @verb
       end
     end
 
@@ -76,14 +83,14 @@ module AutumnMoon
         @routes ||= []
       end
 
-      def route pattern, to:, on: [], **options
+      def route verb, pattern, to:, on: [], **options
         method_name = to
 
         conditions = Array(on).map do |condition|
           generate_unbound_method "unbound_condition", &condition
         end
 
-        route = Route.new(pattern, method_name, conditions: conditions, **options)
+        route = Route.new(verb, pattern, method_name, conditions: conditions, **options)
 
         routes << route
         invoke_hook :route_added, pattern, method_name, conditions, options, route
@@ -137,7 +144,7 @@ module AutumnMoon
 
       catch :halt do
         self.class.routes.each do |route|
-          next unless route.pattern.match(params[:text])
+          next unless route.match(params)
           next unless route.conditions.all? do |condition|
             condition.bind(self).call
           end
