@@ -249,7 +249,6 @@ GEM
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    lru_redux (1.1.0)
     lumberjack (1.0.12)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
@@ -531,7 +530,6 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
-  lru_redux
   mailcatcher
   mustermann
   omniauth-github

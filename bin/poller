@@ -10,12 +10,17 @@ APP_PATH = File.expand_path('../config/application', __dir__)
 require_relative '../config/boot'
 require_relative '../config/environment'
 
-seen = []
-
 loop do
-  msg = SampleBot.client.get_updates.last
-  next if seen.include? msg[:update_id]
-  seen << msg[:update_id]
-  SampleBot.call msg[:message]
+  AutumnMoon.bots.each do |id, bot|
+    msg = bot.client.get_updates.last
+
+    next unless msg
+    next if Redis.current.get msg[:update_id]
+
+    Redis.current.setex msg[:update_id], 1800, true
+
+    HTTP.post "http://localhost:3000/telegram/#{ id }", json: msg
+  end
+
   sleep 5
 end

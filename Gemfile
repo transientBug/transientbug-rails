@@ -68,7 +68,6 @@ gem "robotstxt-parser", require: "robotstxt"
 
 # Utils
 gem "mustermann"
-gem 'lru_redux'
 
 group :development, :test do
   # Runner & Environment

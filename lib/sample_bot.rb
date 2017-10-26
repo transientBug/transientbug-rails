@@ -86,6 +86,6 @@ class SampleBot < AutumnMoon::TelegramBot
 
   route "*", to: :default_route
   def default_route
-    respond_with text: "I'm sorry, I don't know what to say"
+    reply_with text: "I'm sorry, I don't know what to say"
   end
 end

@@ -47,7 +47,7 @@ services:
       - "exposed"
       - "services"
     env_file:
-      - ".env"
+      - ".env.production"
 
   sidekiq:
     depends_on:
@@ -64,7 +64,7 @@ services:
     networks:
       - "services"
     env_file:
-      - ".env"
+      - ".env.production"
 
   cable:
     depends_on:
@@ -82,7 +82,7 @@ services:
       - "exposed"
       - "services"
     env_file:
-      - ".env"
+      - ".env.production"
 
 volumes:
   redis:
