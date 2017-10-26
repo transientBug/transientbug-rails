@@ -125,10 +125,11 @@ class ImagesController < ApplicationController
       }
     )
     .suggest["image-suggest"]
-    .first["options"]
-    .map { |row| row.dig("_id") }
 
-    Image.where id: res
+    ids ||= []
+    ids += res.first["options"].map { |row| row.dig("_id") } if res.present?
+
+    Image.where id: ids
   end
 
   def tags_search
@@ -147,7 +148,10 @@ class ImagesController < ApplicationController
       }
     )
     .suggest["tag-suggest"]
-    .first["options"]
-    .map { |row| row.dig("_source", "tag") }
+
+    tags ||= []
+    tags += res.first["options"].map { |row| row.dig("_source", "tag") } if res.present?
+
+    tags
   end
 end
