@@ -1,6 +1,10 @@
 local:
   service: Disk
-  root: <%= Rails.root.join("storaged") %>
+  root: <%= Rails.root.join("storage") %>
+
+dropzone:
+  service: Disk
+  root: /dropzone
 
 s3:
   service: S3

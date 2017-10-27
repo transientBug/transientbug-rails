@@ -18,10 +18,10 @@ services:
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
-      interval: 1m30s
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
+      interval: 30m
       timeout: 10s
-      retries: 3
+      retries: 5
 
   redis:
     image: "redis:4-alpine"
@@ -29,25 +29,6 @@ services:
       - "services"
     volumes:
       - "redis:/data"
-
-  website:
-    depends_on:
-      - "postgres"
-      - "elasticsearch"
-      - "redis"
-    build:
-      context: .
-      args:
-        rails_master_key: ${RAILS_MASTER_KEY}
-    ports:
-      - "3000:3000"
-    volumes:
-      - ".:/app"
-    networks:
-      - "exposed"
-      - "services"
-    env_file:
-      - ".env.production"
 
   sidekiq:
     depends_on:
@@ -59,12 +40,37 @@ services:
       args:
         rails_master_key: ${RAILS_MASTER_KEY}
     command: bundle exec sidekiq -C config/sidekiq.yml
-    volumes:
-      - ".:/app"
+    #volumes:
+      #- ".:/app"
     networks:
       - "services"
     env_file:
       - ".env.production"
+
+  rails:
+    depends_on:
+      - "postgres"
+      - "elasticsearch"
+      - "redis"
+    build:
+      context: .
+      args:
+        rails_master_key: ${RAILS_MASTER_KEY}
+    ports:
+      - "8000:3000"
+    volumes:
+      #- ".:/app"
+      - "./storage:/dropzone"
+    networks:
+      - "exposed"
+      - "services"
+    env_file:
+      - ".env.production"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost", "||", "exit", "1"]
+      interval: 30m
+      timeout: 10s
+      retries: 5
 
   cable:
     depends_on:
@@ -76,8 +82,8 @@ services:
     command: bundle exec puma -p 28080 cable/config.ru
     ports:
       - "28080:28080"
-    volumes:
-      - ".:/app"
+    #volumes:
+      #- ".:/app"
     networks:
       - "exposed"
       - "services"

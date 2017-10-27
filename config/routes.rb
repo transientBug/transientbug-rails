@@ -18,5 +18,5 @@ Rails.application.routes.draw do
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 
-  mount Sidekiq::Web => "/sidekiq"
+  mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 end

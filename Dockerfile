@@ -7,6 +7,7 @@ RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpin
     apk add --no-cache nodejs-current yarn
 
 RUN mkdir /app
+RUN mkdir /dropzone
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
@@ -18,6 +19,6 @@ COPY . .
 ARG rails_master_key
 RUN bundle exec rake RAILS_ENV=production RAILS_MASTER_KEY=$rails_master_key DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname assets:precompile
 
-VOLUME ["/app/public"]
+VOLUME ["/app/public", "/dropzone"]
 
 CMD bundle exec puma -C config/puma.rb

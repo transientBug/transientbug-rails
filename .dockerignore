@@ -3,7 +3,7 @@
 .byebug_history
 log/*
 tmp/*
-*.swp
+.*.swp
 node_modules/*
-storaged/*
+storage/*
 spec/*
