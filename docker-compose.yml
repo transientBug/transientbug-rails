@@ -19,7 +19,7 @@ services:
       - "elasticsearch:/usr/share/elasticsearch/data"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
-      interval: 30m
+      interval: 1m
       timeout: 10s
       retries: 5
 
@@ -68,7 +68,7 @@ services:
       - ".env.production"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost", "||", "exit", "1"]
-      interval: 30m
+      interval: 1m
       timeout: 10s
       retries: 5
 
