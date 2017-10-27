@@ -19,8 +19,10 @@ gem "haml"
 gem "haml-rails"
 gem "semantic-ui-sass"
 gem "jquery-rails"
+gem "coffee-rails" # uuuuuuugh
+
 gem "active_link_to"
-gem "coffee-rails"
+gem "kaminari"
 
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
@@ -50,6 +52,7 @@ gem "pundit", github: "elabs/pundit"
 # Auth
 gem "omniauth-twitter"
 gem "omniauth-github"
+gem "omniauth-identity"
 
 # Request making
 # gem "faraday"

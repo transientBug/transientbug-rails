@@ -2,3 +2,5 @@
   .ui.cards
     - images.each do |image|
       = render partial: "card", locals: { image: image }
+
+  = paginate images

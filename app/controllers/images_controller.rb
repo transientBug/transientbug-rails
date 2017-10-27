@@ -5,11 +5,11 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @images = policy_scope(Image).with_attached_image
+    @images = policy_scope(Image).with_attached_image.page params[:page]
   end
 
   def tag
-    @images = policy_scope(Image).with_attached_image.where("? = ANY(tags)", params[:tag])
+    @images = policy_scope(Image).with_attached_image.where("? = ANY(tags)", params[:tag]).page params[:page]
   end
 
   # GET /images/1
@@ -31,7 +31,7 @@ class ImagesController < ApplicationController
   # GET /images/search
   # GET /images/search.json
   def search
-    @images = images_search
+    @images = images_search.page params[:page]
     @tags = tags_search
 
     respond_to do |format|
