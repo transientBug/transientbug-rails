@@ -7,7 +7,7 @@ class ImagesIndex < Chewy::Index
     end
   end
 
-  define_type Image do
+  define_type Image.where(disabled: false) do
     field :title, type: "text", term_vector: "yes"
     field :tags, type: "keyword"
 
@@ -30,7 +30,7 @@ class ImagesIndex < Chewy::Index
   end
 
   def self.numbered_tags
-    ActiveRecord::Base.connection.execute("SELECT DISTINCT UNNEST(tags) AS tag FROM images").to_a
+    ActiveRecord::Base.connection.execute("SELECT DISTINCT UNNEST(tags) AS tag FROM images WHERE disabled = FALSE").to_a
       .map { |row| TagStruct.from row["tag"] }
   end
 

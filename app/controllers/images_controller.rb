@@ -133,7 +133,7 @@ class ImagesController < ApplicationController
   end
 
   def tags_search
-    ImagesIndex.suggest(
+    res = ImagesIndex.suggest(
       "tag-suggest" => {
         text: params[:q],
         completion: {

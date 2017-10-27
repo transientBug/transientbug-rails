@@ -8,7 +8,7 @@ class Authorization < ApplicationRecord
     auth = find_by provider: auth_hash['provider'], uid: auth_hash['uid']
     return auth if auth
 
-    user ||= User.create_from_auth_hash! auth_hash
+    user ||= User.find_or_create_from_auth_hash! auth_hash
 
     info = auth_hash['info']
     creds = auth_hash['credentials']

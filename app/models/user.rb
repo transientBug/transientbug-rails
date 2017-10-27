@@ -2,12 +2,17 @@ class User < ApplicationRecord
   has_many :authorizations
   has_many :images
 
-  def self.create_from_auth_hash! auth_hash
-    username = auth_hash.dig 'info', 'name'
+  validates :username, presence: true
+  validates :email, presence: true
 
-    username ||= "test"
+  def self.find_or_create_from_auth_hash! auth_hash
+    email = auth_hash.dig 'info', 'email'
 
-    create username: username
+    fail "Provider #{ auth_hash['provider'] } does not provide an email!" unless email.present?
+
+    find_or_create_by email: email do |user|
+      user.username = auth_hash.dig 'info', 'name'
+    end
   end
 
   def owner_of? record
