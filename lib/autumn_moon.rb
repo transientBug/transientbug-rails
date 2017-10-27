@@ -3,6 +3,7 @@ module AutumnMoon
 
   autoload :Bot, "autumn_moon/bot"
   autoload :Cache, "autumn_moon/cache"
+  autoload :ContextRouter, "autumn_moon/context_router"
 
   # Telegram specific classes
   autoload :ShadowRidge, "autumn_moon/shadow_ridge"
