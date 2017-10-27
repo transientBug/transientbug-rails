@@ -16,6 +16,10 @@ class Importer
     @dump = dump
   end
 
+  def dump_path
+    @dump_path ||= Pathname.new dump
+  end
+
   def images_tar_handle
     @images_tar_handle ||= Zlib::GzipReader .open images
   end
@@ -33,7 +37,7 @@ class Importer
   end
 
   def images_data
-    @images_data ||= dump_tar_reader.seek "rethinkdb_dump_2016-03-24T18:18:35/app/phots.json" do |entry|
+    @images_data ||= dump_tar_reader.seek "#{ dump_path.sub_ext "" }/app/phots.json" do |entry|
       JSON.parse entry.read, symbolize_names: true
     end
   end

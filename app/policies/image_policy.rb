@@ -2,7 +2,7 @@ class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.all if user.present?
-      scope.where(disabled: false)
+      scope.where(disabled: false).order_by(:title)
     end
   end
 
