@@ -23,7 +23,7 @@
       - else
         = link_to "Login", login_path(:developer), class: "item"
 
-.mobile.only.ui.top.fixed.inverted.menu
+-#.mobile.only.ui.top.fixed.inverted.menu
   .ui.container
     .item
       %button.ui.icon.button{ data: { behavior: "open-sidebar" } }
@@ -33,7 +33,7 @@
       = image_tag "bug_logo.png", class: "logo"
       transientBug
 
-.ui.main.sidebar.inverted.vertical.menu#mobile-sidebar
+-#.ui.main.sidebar.inverted.vertical.menu#mobile-sidebar
   .item.padder
   = active_link_to "Home", home_path, class: "item"
   = active_link_to "Images", images_path, class: "item"

@@ -1,25 +1,31 @@
 .ui.inverted.vertical.footer.segment
   .ui.center.aligned.container
     .ui.stackable.inverted.divided.grid
-      .eight.wide.column
-        %h4.ui.inverted.header All the things!
+      .three.wide.column
+        %h4.ui.inverted.header All the Links!
         .ui.inverted.link.list
-          .item Home
-          .item Images
-          .item Search
-      -#.three.wide.column
-        -#%h4.ui.inverted.header Group 2
-        -#.ui.inverted.link.list
-          -#.item one
-          -#.item two
-          -#.item three
-      -#.three.wide.column
-        -#%h4.ui.inverted.header Group 3
-        -#.ui.inverted.link.list
-          -#.item one
-          -#.item two
-          -#.item three
-      .eight.wide.column
+          .item= link_to "Home", home_url
+          .item= link_to "Images", images_url
+
+      .three.wide.column
+        %h4.ui.inverted.header All the Love!
+        %p
+          Made with
+          %i.heart.icon
+          in Colorado
+
+
+      .three.wide.column
+        %h4.ui.inverted.header All the Credits!
+        .ui.inverted.link.list
+          .item=link_to "Semantic UI", "https://semantic-ui.com/"
+          .item= link_to "Rails 5.2", "https://github.com/rails/rails"
+          -#.item
+            -#= link_to "https://github.com" do
+              -#%i.github.icon
+                -#The codez
+
+      .seven.wide.column
         %h4.ui.inverted.header transientBug
         %p Dedicated to being the personal storagemahjigger for these newfangled anima-motion stillframes called "gah-iffs"
 
@@ -29,6 +35,6 @@
 
     .ui.horizontal.inverted.small.divided.link.list
       -#.item Site Map
-      .item Contact Us
+      .item me (at) transientbug.ninja
       -#.item Terms and Conditions
       -#.item Privacy Policy
