@@ -4,9 +4,8 @@
 = render "navbar"
 
 - content_for :body do
-  .ui.fluid.grid.container
-    .row
+  .ui.fluid.grid
+    .ui.centered.row
       %h1 Image Search Results
 
-    .row
-      = render partial: "cards", locals: { images: @images }
+    = render partial: "cards", locals: { images: @images }

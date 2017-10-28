@@ -6,6 +6,8 @@ class SessionsController < ApplicationController
   def create
     @auth = Authorization.find_or_create_from_auth_hash(auth_hash, user: current_user)
 
+    return redirect_to home_url, notice: "Unable to log you in!" unless @auth.present?
+
     # TODO: Handle not found
     self.current_user = @auth.user
 

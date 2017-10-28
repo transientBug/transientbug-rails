@@ -1,8 +1,7 @@
-.fluid.card
-  - if image.disabled?
-    .ui.red.ribbon.label Disabled
-
-  = link_to image_path(image), class: "image" do
+.card
+  = link_to image_path(image), class: "ui fluid image" do
+    - if image.disabled?
+      .ui.red.ribbon.label Disabled
     = image_tag image.image
 
   .content

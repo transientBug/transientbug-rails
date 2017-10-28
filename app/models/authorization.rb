@@ -10,6 +10,8 @@ class Authorization < ApplicationRecord
 
     user ||= User.find_or_create_from_auth_hash! auth_hash
 
+    return unless user
+
     info = auth_hash['info']
     creds = auth_hash['credentials']
 

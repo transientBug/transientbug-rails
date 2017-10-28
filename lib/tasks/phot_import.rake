@@ -37,7 +37,7 @@ class Importer
   end
 
   def images_data
-    @images_data ||= dump_tar_reader.seek "#{ dump_path.sub_ext "" }/app/phots.json" do |entry|
+    @images_data ||= dump_tar_reader.seek "#{ dump_path.basename.sub_ext("").sub_ext("").to_s }/app/phots.json" do |entry|
       JSON.parse entry.read, symbolize_names: true
     end
   end
@@ -51,7 +51,7 @@ class Importer
       images_tar_reader.seek "var/www/bug/html/i/#{ phot[:filename] }" do |entry|
         tags = phot[:tags].map { |tag| tag.gsub("_", " ") }
 
-        image = user.images.new title: phot[:title], tags: tags, source: phot[:url], disabled: !!phot[:disabled]
+        image = user.images.new title: phot[:title], tags: tags, source: phot[:url], disabled: !!phot[:disable]
 
         puts "failed on #{ phot[:filename] }" unless image.save
 

@@ -4,14 +4,15 @@
 = render "navbar"
 
 - content_for :body do
-  .ui.fluid.grid.container
+  .ui.fluid.grid
     .row
       %h1= @image.title
 
     .row
       = image_tag @image.image, class: "ui top attached centered image"
 
-      .ui.bottom.attached.menu
+    .row
+      .ui.fluid.menu
         - if policy(@image).update?
           = link_to "Edit", edit_image_path(@image), class: "item"
 

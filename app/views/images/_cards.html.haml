@@ -1,6 +1,7 @@
-.ui.equal.width.grid
-  .ui.cards
+.row
+  .ui.centered.cards
     - images.each do |image|
       = render partial: "card", locals: { image: image }
 
+.ui.centered.row
   = paginate images

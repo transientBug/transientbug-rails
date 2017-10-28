@@ -12,9 +12,10 @@ class User < ApplicationRecord
 
     fail "Provider #{ auth_hash['provider'] } does not provide an email!" unless email.present?
 
-    find_or_create_by email: email do |user|
-      user.username = auth_hash.dig 'info', 'name'
-    end
+    find_by email: email
+    # find_or_create_by email: email do |user|
+      # user.username = auth_hash.dig 'info', 'name'
+    # end
   end
 
   def owner_of? record

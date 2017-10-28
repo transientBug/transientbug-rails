@@ -4,9 +4,9 @@
 = render "navbar"
 
 - content_for :body do
-  .ui.fluid.grid.container
+  .ui.fluid.grid
     .row
       %h1 New Image
 
-    .row
+    .ui.centered.row
       = render partial: "form", locals: { image: @image }
