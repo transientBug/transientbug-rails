@@ -1,8 +1,8 @@
-%nav.ui.top.fixed.inverted.menu
+.computer.only.ui.top.fixed.inverted.menu
   .ui.container
     = link_to root_path, class: "header item" do
       = image_tag "bug_logo.png", class: "logo"
-      TransientBug
+      transientBug
 
     = active_link_to "Home", home_path, class: "item"
     = active_link_to "Images", images_path, class: "item"
@@ -22,3 +22,34 @@
         = link_to "Logout", logout_path, class: "item"
       - else
         = link_to "Login", login_path(:developer), class: "item"
+
+.mobile.only.ui.top.fixed.inverted.menu
+  .ui.container
+    .item
+      %button.ui.icon.button{ data: { behavior: "open-sidebar" } }
+        %i.sidebar.icon
+
+    = link_to root_path, class: "header item" do
+      = image_tag "bug_logo.png", class: "logo"
+      transientBug
+
+.ui.main.sidebar.inverted.vertical.menu#mobile-sidebar
+  .item.padder
+  = active_link_to "Home", home_path, class: "item"
+  = active_link_to "Images", images_path, class: "item"
+
+  = content_for :navbar
+
+  .right.menu
+    = content_for :navbar_right
+
+    .ui.category.search.item{ data: { behavior: "search-images" } }
+      .ui.icon.input
+        = search_field_tag "q", "", class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
+        %i.search.icon
+      .results
+
+    - if signed_in?
+      = link_to "Logout", logout_path, class: "item"
+    - else
+      = link_to "Login", login_path(:developer), class: "item"

@@ -10,11 +10,17 @@ App.init = () => {
   $.fn.api.settings.debug = true
   $.fn.api.settings.verbose = true
 
+  this.cable || (this.cable = ActionCable.createConsumer())
+
   $(".message .close").on("click", () => {
     $(this).closest(".message").transition("fade")
   })
 
-  this.cable || (this.cable = ActionCable.createConsumer())
+  $("[data-behavior~=open-sidebar]").on("click", () => {
+    $("#mobile-sidebar")
+      .sidebar('setting', 'transition', 'overlay')
+      .sidebar("toggle")
+  })
 
   $("[data-behavior~=search-images]").search({
     type: "category",
