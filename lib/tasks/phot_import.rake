@@ -2,7 +2,7 @@ require "zlib"
 require "rubygems/package"
 
 namespace :phots do
-  task :import, [:user_id, :images, :dump] => [ :environment ] do |t, args|
+  task :import, [ :user_id, :images, :dump ] => [ :environment ] do |t, args|
     Importer.new(args[:user_id], args[:images], args[:dump]).run
   end
 end

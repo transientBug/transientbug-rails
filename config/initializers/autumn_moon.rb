@@ -1,4 +1,6 @@
 require "autumn_moon"
 require "sample_bot"
 
-AutumnMoon.register_bot ENV["BOT_TOKEN"], klass: SampleBot[token: ENV["BOT_TOKEN"]]
+Rails.application.credentials.bot_tokens.each do |name, token|
+  AutumnMoon.register_bot token, klass: SampleBot[token: token]
+end
