@@ -1,0 +1,17 @@
+default: &default
+  transientbug_bot:
+    token: <%= Rails.application.credentials.bot_tokens[:transientbug_bot] %>
+    klass: SampleBot
+
+  transientbugDev_bot:
+    token: <%= Rails.application.credentials.bot_tokens[:transientbugDev_bot] %>
+    klass: SampleBot
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
