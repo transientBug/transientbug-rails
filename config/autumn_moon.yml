@@ -3,12 +3,12 @@ default: &default
     token: <%= Rails.application.credentials.bot_tokens[:transientbug_bot] %>
     klass: SampleBot
 
+development:
+  <<: *default
+
   transientbugDev_bot:
     token: <%= Rails.application.credentials.bot_tokens[:transientbugDev_bot] %>
     klass: SampleBot
-
-development:
-  <<: *default
 
 test:
   <<: *default

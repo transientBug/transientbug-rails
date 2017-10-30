@@ -14,8 +14,9 @@ module AutumnMoon
       end
 
       def [] token:
-        @token = token
-        self
+        Class.new self do
+          @token = token
+        end
       end
 
       def command *args

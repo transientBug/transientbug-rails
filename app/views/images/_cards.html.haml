@@ -3,5 +3,6 @@
     - images.each do |image|
       = render partial: "card", locals: { image: image }
 
-.ui.centered.row
-  = paginate images
+.row
+  .ui.centered
+    = paginate images
