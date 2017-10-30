@@ -101,6 +101,8 @@ module AutumnMoon
         chat_id: params[:chat_id]
       )
 
+      Rails.logger.debug "Responding to chat #{ params[:chat_id] }, message #{ params[:message_id] }"
+
       client.send_message message
     end
 
@@ -110,6 +112,8 @@ module AutumnMoon
         reply_to_message_id: params[:message_id]
       )
 
+      Rails.logger.debug "Replying to message #{ params[:message_id] } in chat #{ params[:chat_id] }"
+
       client.send_message message
     end
 
@@ -117,6 +121,8 @@ module AutumnMoon
       message = options.merge(
         inline_query_id: params[:chat_id]
       )
+
+      Rails.logger.debug "Replying to inline query #{ params[:chat_id] }"
 
       client.answer_inline_query message
     end
