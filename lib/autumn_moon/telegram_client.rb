@@ -64,6 +64,8 @@ module AutumnMoon
     class TelegramNotFoundError < StandardError; end
     class TelegramAPIError < StandardError; end
 
+    attr_reader :token
+
     def initialize token:
       @token        = token
       @url_template = Addressable::Template.new(URL_TEMPLATE).partial_expand(token: token)

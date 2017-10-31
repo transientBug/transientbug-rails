@@ -1,22 +1,8 @@
 module AutumnMoon
   class TelegramBot < Bot
     class << self
-      def token
-        @token ||= ""
-      end
-
-      def client
-        @client ||= TelegramClient.new token: token
-      end
-
-      def me
-        @me ||= client.get_me
-      end
-
       def [] token:
-        Class.new self do
-          @token = token
-        end
+        method(:call).curry.call TelegramClient.new(token: token)
       end
 
       def command *args
@@ -88,12 +74,12 @@ module AutumnMoon
       end
     end
 
-    def client
-      self.class.client
+    def me
+      @me ||= client.get_me
     end
 
     def bot_name
-      self.class.me[:username]
+      me[:username]
     end
 
     def respond_with **options

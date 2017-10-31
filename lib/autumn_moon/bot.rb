@@ -1,7 +1,14 @@
 module AutumnMoon
+  # Base Bot "Controller" class with minimal routing, setting and extension
+  # patterns borrowed/inspired from Sinatra. Inherit, override
+  # +build_params_from+ and use the route DSL to create a new controller which
+  # can be routed to with <klass>.call(payload).
   class Bot
+    # Container for representing a single route. Takes the methods name and
+    # pattern that matches, along with an array of conditions that should allow
+    # this route to match.
     class Route
-      attr_reader :pattern, :method_name, :unbound_method, :conditions, :options
+      attr_reader :pattern, :method_name, :conditions, :options
 
       def initialize verb, pattern, method_name, conditions: [], **options
         @verb = verb
@@ -15,14 +22,24 @@ module AutumnMoon
         @pattern ||= Mustermann.new @raw_pattern, **options.fetch(:mustermann_options, {})
       end
 
-      def match params
+      def match klass, params
         return false unless pattern.match(params[:text])
         return true if @verb == :all
-        params[:verb] == @verb
+        return false unless params[:verb] == @verb
+
+        conditions.all? do |condition|
+          condition.bind(klass).call
+        end
       end
     end
 
     class << self
+      # Settings and extensions we want to share across inherited classes which
+      # is what the superclass merging is for. Routes and action callbacks
+      # however are not shared, to avoid issues around methods or unbound
+      # callbacks and allowing a base Bot class to exist within a larger set of
+      # bot "controllers"
+
       # Settings handling
       def settings
         @settings ||= {}
@@ -56,26 +73,32 @@ module AutumnMoon
         extensions.each { |e| e.send(name, self, *args) if e.respond_to? name }
       end
 
-      # Filter handling
-      def filters
-        @filters ||= Hash.new { |hash, key| hash[key] = { before: [], after: [] } }
+      # Before/After callback handling
+      def action_callbacks
+        @action_callbacks ||= { before: [], after: [] }
       end
 
-      def add_filter type, method_name, **options, &block
-        block = -> { self.method(options.delete(:use)).call } unless block_given?
+      # Generates an unbound method for the given block or +use+ parameter
+      # which will be bound to the specific instance of the Bot that is
+      # handling the current request.
+      def add_callback type, method_name, **options, &block
+        # If a +use+ option was passed along instead of a block, assume that it
+        # is the name of an instance method that should be called instead of a
+        # block.
+        block = -> { self.send options.delete(:use) } unless block_given?
 
         unbound_method = generate_unbound_method "unbound_#{ type }", &block
 
-        filters[method_name][type] << [ options, unbound_method ]
+        action_callbacks[type] << [ method_name, options, unbound_method ]
         invoke_hook :filter_added, method_name, type, options, unbound_method
       end
 
       def before method_name, **options, &block
-        add_filter :before, method_name, **options, &block
+        add_callback :before, method_name, **options, &block
       end
 
       def after method_name, **options, &block
-        add_filter :after, method_name, **options, &block
+        add_callback :after, method_name, **options, &block
       end
 
       # Route handling
@@ -97,14 +120,28 @@ module AutumnMoon
       end
 
       # Message handling
+
+      # Builds out the params hash from a chat network payload object. This
+      # should be overriden when this class is inherited. Should return a hash
+      # with the following key/values:
+      #   Hash{
+      #     verb: Symbol
+      #     message_id: String/Int
+      #     chat_id: String/Int
+      #     user_id: String/Int
+      #     timestamp: Time
+      #     text: String
+      #     entities: Array(Hash{ type: Symbol, text: String })
+      #     metadata: Hash
+      #   }
       def build_params_from payload:
         fail NotImplementedError
       end
 
-      def call payload
+      def call client, payload
         params = build_params_from payload: payload
 
-        new.call params
+        new.call client, params
 
         nil
       end
@@ -117,7 +154,7 @@ module AutumnMoon
       end
     end
 
-    attr_reader :params
+    attr_reader :client, :params
 
     def settings
       self.class.settings
@@ -125,10 +162,6 @@ module AutumnMoon
 
     def session
       @session ||= {}
-    end
-
-    def bot_name
-      fail NotImplementedError
     end
 
     def pass
@@ -139,20 +172,24 @@ module AutumnMoon
       throw :halt
     end
 
-    def call params
+    def call client, params
+      @client = client
       @params = params
 
       catch :halt do
         self.class.routes.each do |route|
-          next unless route.match(params)
-          next unless route.conditions.all? do |condition|
-            condition.bind(self).call
-          end
+          next unless route.match(self, params)
 
           catch :pass do
-            self.class.filters.dig(route.method_name, :before).each { |o, c| c.bind(self).call }
+            self.class.action_callbacks[:before]
+              .select { |n, o, c| n == route.method_name }
+              .each { |n, o, c| c.bind(self).call }
+
             send route.method_name
-            self.class.filters.dig(route.method_name, :after).each { |o, c| c.bind(self).call }
+
+            self.class.action_callbacks[:after]
+              .select { |n, o, c| n == route.method_name }
+              .each { |n, o, c| c.bind(self).call }
 
             halt
           end
