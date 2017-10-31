@@ -24,9 +24,9 @@ loop do
     msg = client.get_updates.last
 
     next unless msg
-    next if Redis.current.get msg[:update_id]
+    next if Redis.current.get(:last_seen) == msg[:update_id].to_s
 
-    Redis.current.setex msg[:update_id], 1800, true
+    Redis.current.set :last_seen, msg[:update_id]
 
     HTTP.post "http://localhost:3000/telegram/#{ client.token }", json: msg
   end

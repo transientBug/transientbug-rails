@@ -60,16 +60,20 @@ module AutumnMoon
     API_MAPPINGS = {
     }.freeze
 
-    class TelegramForbiddenError < StandardError; end
-    class TelegramNotFoundError < StandardError; end
-    class TelegramAPIError < StandardError; end
+    class ForbiddenError < StandardError; end
+    class NotFoundError < StandardError; end
+    class APIError < StandardError; end
 
     attr_reader :token
 
     def initialize token:
       @token        = token
       @url_template = Addressable::Template.new(URL_TEMPLATE).partial_expand(token: token)
-      @client       = ShadowRidge.new
+      @client       = HTTP.headers(
+        user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:57.0) Gecko/20100101 Firefox/57.0",
+        accept_language: "en-US,en;q=0.5",
+        accept: "application/json;q=0.9,*/*;q=0.8; charset=utf-8"
+      )
     end
 
     API_METHODS.each do |func_name|
@@ -97,9 +101,9 @@ module AutumnMoon
 
       error_message = parsed_response.fetch :description, "N/A"
 
-      fail TelegramForbiddenError, error_message if status == 403
-      fail TelegramNotFoundError, error_message if status == 404
-      fail TelegramAPIError, "#{ res.status }: #{ error_message }"
+      fail ForbiddenError, error_message if status == 403
+      fail NotFoundError, error_message if status == 404
+      fail APIError, "#{ res.status }: #{ error_message }"
     end
 
     def url for_action:

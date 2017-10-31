@@ -5,7 +5,7 @@ class TelegramWebhooksController < ApplicationController
     bot = AutumnMoon.bots[params[:token]]
     render json: { status: "not_found", message: "we ain't found shit!" }, status: :not_found unless bot.present?
 
-    bot.call params[:telegram_webhook].to_unsafe_h.deep_symbolize_keys
+    AsyncMoonJob.perform_later params[:token], params[:telegram_webhook].to_unsafe_h
     render json: { status: "ok", message: "loud and clear, capcom" }, status: :ok
   end
 end
