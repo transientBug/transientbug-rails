@@ -1,5 +1,22 @@
 class ImagesIndex < Chewy::Index
-  METHODS = [:itself, :downcase, :capitalize, :titleize].freeze
+   settings analysis: {
+    analyzer: {
+      title: {
+        tokenizer: :standard,
+        filter: [:lowercase, :english_stop, :trim, :edgeNGram]
+      },
+      tag: {
+        tokenizer: :standard,
+        filter: [:lowercase, :edgeNGram]
+      }
+    },
+    filter: {
+      english_stop: {
+        type: :stop,
+        stopwords: :_english_
+      }
+    }
+  }
 
   TagStruct = Struct.new(:id, :tag) do
     def self.from tag
@@ -8,16 +25,15 @@ class ImagesIndex < Chewy::Index
   end
 
   define_type Image.where(disabled: false) do
-    field :title, type: "text", term_vector: "yes"
-    field :tags, type: "keyword"
+    field :title, type: "text", term_vector: "yes", analyzer: :title
+    field :tags, type: "text", analyzer: :tag
+    field :raw_tags, type: "text", value: ->(image) { image.tags }
 
     field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(image) {
-      tags = image.tags.flat_map do |tag|
-        METHODS.map(&tag.method(:public_send))
-      end
+      tags = image.tags.map(&:downcase)
 
       {
-        input: METHODS.map(&image.title.method(:public_send)).concat(tags).uniq,
+        input: [image.title.downcase].concat(tags),
         contexts: {
           type: [:image]
         }
@@ -35,10 +51,11 @@ class ImagesIndex < Chewy::Index
   end
 
   define_type -> { numbered_tags }, name: :tag do
-    field :tag, type: "keyword", value: ->(tag_struct) { tag_struct.tag }
+    field :tag, type: "text", value: ->(tag_struct) { tag_struct.tag }, analyzer: :tag
+    field :raw_tag, type: "keyword", value: ->(tag_struct) { tag_struct.tag }
     field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(tag_struct) {
       {
-        input: METHODS.map(&tag_struct.tag.method(:public_send)).uniq,
+        input: tag_struct.tag.downcase,
         contexts: {
           type: [:tag]
         }
