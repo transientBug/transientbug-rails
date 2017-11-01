@@ -55,6 +55,11 @@ module AutumnMoon
 
       answerCallbackQuery
       answerInlineQuery
+
+      editMessageText
+      editMessageCaption
+      editMessageReplyMarkup
+      deleteMessage
     }.freeze
 
     API_MAPPINGS = {

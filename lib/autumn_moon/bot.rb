@@ -23,7 +23,10 @@ module AutumnMoon
       end
 
       def match klass, params
-        return false unless pattern.match(params[:text])
+        unless @raw_pattern.nil?
+          return false unless pattern.match(params[:text])
+        end
+
         return true if @verb == :all
         return false unless params[:verb] == @verb
 

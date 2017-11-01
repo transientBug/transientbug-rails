@@ -17,6 +17,14 @@ module AutumnMoon
         route :inline_query, *args
       end
 
+      def location *args
+        route :location, nil, *args
+      end
+
+      def callback_query *args
+        route :callback_query, nil, *args
+      end
+
       def default *args
         route :all, "*", *args
       end
@@ -24,7 +32,44 @@ module AutumnMoon
       def build_params_from payload:
         params = {}
 
-        if payload[:message]
+        if payload[:callback_query]
+          payload = payload[:callback_query]
+
+          params = {
+            verb: :callback_query,
+            message_id: payload[:message][:message_id],
+            chat_id: payload[:message][:chat][:id],
+            user_id: payload[:from][:id],
+            timestamp: Time.at(payload[:message][:date]),
+            text: "",
+            entities: [],
+            metadata: {
+              data: payload[:data],
+              telegram: {
+                user: payload[:from]
+              }
+            }
+          }
+        elsif payload.dig(:message, :location)
+          payload = payload[:message]
+
+          params = {
+            verb: :location,
+            message_id: payload[:message_id],
+            chat_id: payload[:chat][:id],
+            user_id: payload[:from][:id],
+            timestamp: Time.at(payload[:date]),
+            text: "",
+            entities: [],
+            metadata: {
+              location: payload[:location],
+              telegram: {
+                user: payload[:from]
+              }
+            }
+
+          }
+        elsif payload[:message]
           payload = payload[:message]
           entities = payload.fetch(:entities, []).map do |entity|
             entity[:type] = entity[:type].to_sym
@@ -32,14 +77,12 @@ module AutumnMoon
             entity
           end.group_by { |entity| entity[:type] }
 
-          timestamp = Time.at payload[:date]
-
           params = {
             verb: :message,
             message_id: payload[:message_id],
             chat_id: payload[:chat][:id],
             user_id: payload[:from][:id],
-            timestamp: timestamp,
+            timestamp: Time.at(payload[:date]),
             text: payload[:text],
             entities: entities,
             metadata: {
@@ -113,10 +156,8 @@ module AutumnMoon
       client.answer_inline_query message
     end
 
-    # def answer_callback_query text, params: {}
-    # end
-
-    # def edit_message type, params: {}
-    # end
+    def edit_message_reply_markup **options
+      client.edit_message_reply_markup chat_id: params[:chat_id], message_id: params[:message_id], reply_markup: options
+    end
   end
 end
