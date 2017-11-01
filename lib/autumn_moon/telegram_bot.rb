@@ -132,7 +132,11 @@ module AutumnMoon
 
       Rails.logger.debug "Responding to chat #{ params[:chat_id] }, message #{ params[:message_id] }"
 
-      client.send_message message
+      res = client.send_message message
+
+      session[:previous_message_id] = res[:message_id]
+
+      res
     end
 
     def reply_with **options
@@ -143,7 +147,11 @@ module AutumnMoon
 
       Rails.logger.debug "Replying to message #{ params[:message_id] } in chat #{ params[:chat_id] }"
 
-      client.send_message message
+      res = client.send_message message
+
+      session[:previous_message_id] = res[:message_id]
+
+      res
     end
 
     def inline_reply_with **options
@@ -153,11 +161,21 @@ module AutumnMoon
 
       Rails.logger.debug "Replying to inline query #{ params[:chat_id] }"
 
-      client.answer_inline_query message
+      res = client.answer_inline_query message
+      # binding.pry
+
+      # session[:previous_message_id] = res[:message_id]
+
+      res
     end
 
     def edit_message_reply_markup **options
-      client.edit_message_reply_markup chat_id: params[:chat_id], message_id: params[:message_id], reply_markup: options
+      res = client.edit_message_reply_markup chat_id: params[:chat_id], message_id: params[:message_id], reply_markup: options
+      # binding.pry
+
+      # session[:previous_message_id] = res[:message_id]
+
+      res
     end
   end
 end
