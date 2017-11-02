@@ -4,6 +4,7 @@ class PagesController < ApplicationController
   before_action :login_redirect, only: [ :main ]
 
   def main
+    redirect_to images_path
   end
 
   def home
@@ -12,6 +13,6 @@ class PagesController < ApplicationController
   protected
 
   def login_redirect
-    redirect_to "/home" if signed_in?
+    redirect_to home_path if signed_in?
   end
 end

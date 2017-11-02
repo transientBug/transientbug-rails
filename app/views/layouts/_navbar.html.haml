@@ -22,7 +22,7 @@
       - if signed_in?
         = link_to "Logout", logout_path, class: "item"
       - else
-        = link_to "Login", login_path(:developer), class: "item"
+        = link_to "Login", login_path(Rails.env.development? ? :developer : :identity), class: "item"
 
 -#.mobile.only.ui.top.fixed.inverted.menu
   .ui.container
