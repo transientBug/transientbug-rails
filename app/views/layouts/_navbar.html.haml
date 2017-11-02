@@ -14,7 +14,8 @@
 
       .ui.category.search.item{ data: { behavior: "search-images" } }
         .ui.icon.input
-          = search_field_tag "q", "", class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
+          = form_tag search_images_path, method: :get do
+            = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
           %i.search.icon
         .results
 

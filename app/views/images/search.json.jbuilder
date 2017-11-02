@@ -14,3 +14,7 @@ json.results do
     end
   end
 end
+json.action do
+  json.url search_images_path(q: params[:q])
+  json.text "See all results"
+end

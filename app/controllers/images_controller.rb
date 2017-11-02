@@ -31,7 +31,14 @@ class ImagesController < ApplicationController
   # GET /images/search
   # GET /images/search.json
   def search
-    @images = images_search.page params[:page]
+    @images = ImagesIndex::Image.query(
+      bool: {
+        should: [
+          { match: { title: params[:q] } },
+          { match: { tags: params[:q] } }
+        ]
+      }
+    ).objects.page params[:page]
     @tags = tags_search
 
     respond_to do |format|

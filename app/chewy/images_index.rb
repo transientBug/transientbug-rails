@@ -3,17 +3,22 @@ class ImagesIndex < Chewy::Index
     analyzer: {
       title: {
         tokenizer: :standard,
-        filter: [:lowercase, :english_stop, :trim, :edgeNGram]
+        filter: [:lowercase, :trim, :edgeNGram3x6]
       },
       tag: {
         tokenizer: :standard,
-        filter: [:lowercase, :edgeNGram]
+        filter: [:lowercase, :trim, :edgeNGram3x6]
       }
     },
     filter: {
       english_stop: {
         type: :stop,
         stopwords: :_english_
+      },
+      edgeNGram3x6: {
+        type: :edgeNGram,
+        min_gram: 3,
+        max_gram: 6
       }
     }
   }

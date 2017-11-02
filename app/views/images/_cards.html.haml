@@ -1,8 +1,14 @@
-.row
-  .ui.centered.cards
-    - images.each do |image|
-      = render partial: "card", locals: { image: image }
+- if images.any?
+  .row
+    .ui.centered.cards
+      - images.each do |image|
+        = render partial: "card", locals: { image: image }
 
-.row
-  .ui.centered
+  .row.centered
     = paginate images
+
+- else
+  .row.centered
+    %i.massive.warning.sign.icon
+  .row.centered
+    %h1.huge.header Uh oh, nothing found!
