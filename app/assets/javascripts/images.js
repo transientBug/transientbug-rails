@@ -13,4 +13,8 @@ document.addEventListener("turbolinks:load", () => {
       value: "title"
     }
   })
+
+  $("[data-behavior~=tag-popup]").popup({
+    inline: true
+  })
 })

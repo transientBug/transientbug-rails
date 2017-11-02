@@ -11,7 +11,11 @@
       Added #{ image.created_at.to_date.to_s(:long) }
 
     .description
-      = render partial: "tags", locals: { tags: image.tags.take(3) }
+      .ui.label{ data: { behavior: "tag-popup" } }
+        %i.tag.icon
+        = image.tags.length
+      .ui.fluid.popup.top.left.transition.hidden
+        = render partial: "tags", locals: { tags: image.tags }
 
   .ui.buttons.bottom.attached
     = link_to "View", image, class: "ui button"
