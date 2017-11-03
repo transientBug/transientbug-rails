@@ -6,6 +6,8 @@
         .ui.inverted.link.list
           .item= link_to "Home", home_url
           .item= link_to "Images", images_url
+          - if Rails.env.development?
+            .item= link_to "Dev Auth", auth_path(:developer)
 
       .three.wide.column
         %h4.ui.inverted.header All the Love!

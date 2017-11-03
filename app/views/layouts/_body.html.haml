@@ -1,6 +1,9 @@
 = render partial: "layouts/navbar"
 
-.ui.pusher.main.container
-  = semantic_flash
+.ui.pusher
+  .ui.main.container
+    = semantic_flash
 
-  = content_for :body
+    = content_for :body
+
+  = content_for :non_fluid_body

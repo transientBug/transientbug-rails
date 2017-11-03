@@ -20,7 +20,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress JavaScripts and CSS.
   # config.assets.js_compressor = :uglifier
@@ -55,6 +55,13 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  config.cache_store = :redis_store, ENV["REDIS_URL"], { expires_in: 90.minutes }
+  config.action_dispatch.rack_cache = {
+    metastore: "#{ ENV['REDIS_URL'] }/metastore",
+    entitystore: "#{ ENV['REDIS_URL'] }/entitystore"
+  }
+
+  config.session_store :redis_store, servers: ["#{ ENV['REDIS_URL'] }/session"]
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque

@@ -2,7 +2,7 @@
   = link_to image_path(image), class: "ui fluid image" do
     - if image.disabled?
       .ui.red.ribbon.label Disabled
-    = image_tag image.image
+    = image_tag image.image.service_url
 
   .content
     = link_to image.title, image_path(image), class: "header"
@@ -13,8 +13,8 @@
     .description
       .ui.label{ data: { behavior: "tag-popup" } }
         %i.tag.icon
-        = image.tags.length
-      .ui.fluid.popup.top.left.transition.hidden
+        #{ image.tags.length } #{ "tag".pluralize(image.tags.length) }
+      .ui.fluid.popup.bottom.left.hidden
         = render partial: "tags", locals: { tags: image.tags }
 
   .ui.buttons.bottom.attached

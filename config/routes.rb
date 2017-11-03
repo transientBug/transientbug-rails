@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     end
   end
 
+  match "/login", to: "sessions#index", via: [:get]
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
   match "/logout", to: "sessions#destroy", via: [:get, :delete]
 

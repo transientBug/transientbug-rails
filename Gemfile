@@ -5,14 +5,13 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Base Rails stuff
 gem "rails", "~> 5.2.0.alpha", github: "rails/rails"
 gem "arel", "~> 9.0.0.alpha",  github: "rails/arel"
 
+# Data Stores
 gem "pg", "~> 0.18"
 gem "chewy"
-gem "aws-sdk-s3", "~> 1"
-
-gem "puma", "~> 3.7"
 
 # Views
 gem "haml"
@@ -20,6 +19,7 @@ gem "haml-rails"
 gem "semantic-ui-sass"
 gem "jquery-rails"
 gem "coffee-rails" # uuuuuuugh
+gem "turbolinks", "~> 5"
 
 gem "active_link_to"
 gem "kaminari"
@@ -30,29 +30,20 @@ gem "webpacker"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 
-gem "turbolinks", "~> 5"
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.5"
 
-# Jobs and utils
+# Jobs
 gem "redis", "~> 3.0"
 gem "hiredis"
-gem "redis-activesupport"
 gem "sidekiq"
-
-gem "connection_pool"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data"
-
-# Admin
-gem "pundit", github: "elabs/pundit"
 
 # Auth
 gem "omniauth-twitter"
 gem "omniauth-github"
-gem "omniauth-identity"
+
+# Admin & Permissions
+gem "pundit", github: "elabs/pundit"
 
 # Request making
 # gem "faraday"
@@ -71,6 +62,21 @@ gem "robotstxt-parser", require: "robotstxt"
 
 # Utils
 gem "mustermann"
+
+gem "connection_pool"
+
+gem "redis-rails"
+gem "redis-rack-cache"
+
+gem "aws-sdk-s3", "~> 1"
+
+gem "bcrypt"
+
+# Server
+gem "puma", "~> 3.7"
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data"
 
 group :development, :test do
   # Runner & Environment

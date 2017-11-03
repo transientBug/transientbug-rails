@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def login_path provider
-    "/auth/#{ provider.to_s }"
+  def auth_path provider, *args
+    [ "auth", provider.to_s, args ].flatten.compact.join "/"
   end
 end

@@ -2,6 +2,9 @@ class SessionsController < ApplicationController
   require_login! only: [ :destroy ]
   skip_before_action :verify_authenticity_token, only: :create
 
+  def index
+  end
+
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
   def create
     @auth = Authorization.find_or_create_from_auth_hash(auth_hash, user: current_user)
