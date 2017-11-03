@@ -1,3 +1,17 @@
+- content_for :meta do
+  %meta{ property: "og:type", content: "website" }
+  %meta{ property: "og:url", content: request.original_url }
+  %meta{ property: "og:title", content: @image.title }
+  %meta{ property: "og:description", content: @image.tags.join(", ") }
+  %meta{ property: "og:image", content: (request.base_url + @image.image.service_url) }
+
+  %meta{ name: "twitter:card", content: "summary_large_image" }
+  %meta{ name: "twitter:domain", content: "https://transientbug.ninja/" }
+  %meta{ name: "twitter:title", content: @image.title }
+  %meta{ name: "twitter:description", content: @image.tags.join(", ") }
+  %meta{ name: "twitter:image", content: (request.base_url + @image.image.service_url) }
+  %meta{ name: "twitter:url", content: request.original_url }
+
 - content_for :page_title do
   = @image.title
 
@@ -9,7 +23,7 @@
       %h1= @image.title
 
     .row
-      = image_tag @image.image, class: "ui top attached centered image"
+      = image_tag @image.image.service_url, class: "ui top attached centered image"
 
     .row
       .ui.fluid.menu
