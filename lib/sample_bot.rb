@@ -2,6 +2,101 @@ require "autumn_moon"
 require "dark_sky"
 require "mapzen"
 
+class Rose
+  def initialize partitions:, range:, rollover: false
+    @partitions = partitions
+    @range = range
+    @rollover = rollover
+
+    range_diff = range.max - range.min
+
+    @divisions = range_diff.to_f / partitions.length
+  end
+
+  def partition num
+    normalized = num - @range.min
+
+    if normalized < 0
+      return @partitions.last if @rollover
+      return @partitions.first
+    end
+
+    partition = @partitions[ (normalized / @divisions).round ]
+
+    return partition unless partition.nil?
+    return @partitions.last unless @rollover
+    @partitions.first
+  end
+
+  def to_s
+    @partitions.map.with_index do |section, idx|
+      "#{ @divisions * idx }:#{ section }"
+    end.join " "
+  end
+end
+
+class CompassRose
+  COMPASS_DIRECTIONS = [
+    "NORTH",
+    "NORTH NORTH EAST",
+    "NORTH EAST",
+    "EAST NORTH EAST",
+    "EAST",
+    "EAST SOUTH EAST",
+    "SOUTH EAST",
+    "SOUTH SOUTH EAST",
+    "SOUTH",
+    "SOUTH SOUTH WEST",
+    "SOUTH WEST",
+    "WEST SOUTH WEST",
+    "WEST",
+    "WEST NORTH WEST",
+    "NORTH WEST",
+    "NORTH NORTH WEST"
+  ].freeze
+
+  ROSE = Rose.new(partitions: COMPASS_DIRECTIONS, range: 0..360, rollover: true)
+
+  def self.direction bearing
+    ROSE.partition bearing
+  end
+end
+
+class TempRose
+  WORDING = [
+    "COLD AS BALLS",
+    "COLD",
+    "CHILLY",
+    "FAIRLY OKAY",
+    "WARM",
+    "HOT",
+    "HOT AS FUCK"
+  ].freeze
+
+  ROSE = Rose.new(partitions: WORDING, range: 32..110, rollover: false)
+
+  def self.word temp
+    ROSE.partition temp
+  end
+end
+
+class PrecipRose
+  WORDING = [
+    "MOST LIKELY DRY",
+    "PROBABLY DRY",
+    "QUESTIONABLY DRY",
+    "QUESTIONABLY WET",
+    "PROBABLY WET",
+    "SUPAWET",
+  ].freeze
+
+  ROSE = Rose.new(partitions: WORDING, range: 0..1, rollover: false)
+
+  def self.word amount
+    ROSE.partition amount
+  end
+end
+
 class SampleBot < AutumnMoon::TelegramBot
   VERSION = "v0.0.0".freeze
 
@@ -136,28 +231,20 @@ class SampleBot < AutumnMoon::TelegramBot
   def weather_check
     weather = DARK_SKY_CLIENT.forecast(**session[:user_location].symbolize_keys)
 
-    temp_wording = case weather[:currently][:temperature]
-                   when -Float::INFINITY..40 then "COLD"
-                   when 40..65 then "CHILLY"
-                   when 65..80 then "NICE"
-                   when 80..110 then "HOT"
-                   else "¯\_(ツ)_/¯"
-                   end
-
-    precip_wording = case weather[:currently][:precipProbability]
-                     when 0.0..0.15 then "PROBABLY DRY"
-                     when 0.15..40 then "QUESTIONABLY WET"
-                     when 0.40..0.60 then "PROBABLY WET"
-                     when 0.60..1.0 then "SUPAWET"
-                     else "NOAP"
-                     end
+    temp_wording = TempRose.word weather[:currently][:temperature]
+    precip_wording = PrecipRose.word weather[:currently][:precipIntensity]
+    wind_direction_wording = CompassRose.direction weather[:currently][:windBearing]
 
     body = <<~MSG
-      #{ weather[:currently][:icon] }
-      WEATHER: #{ weather[:currently][:summary] }
+      It's currently a #{ temp_wording } #{ weather[:currently][:temperature] }˚F with #{ precip_wording } precipitation
+      #{ weather[:currently][:windSpeed] } mph winds from the #{ wind_direction_wording }
 
-      Temp: #{ temp_wording }
-      Precip: #{ precip_wording }
+      Summary: #{ weather[:minutely][:summary] }
+
+      Temperature: #{ weather[:currently][:temperature] }˚F
+      Possibility of Precipitation: #{ weather[:currently][:precipProbability] * 100.0 }%
+
+      Next Hour: #{ weather[:hourly][:summary] }
     MSG
 
     respond_with text: body
