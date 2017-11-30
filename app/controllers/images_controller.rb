@@ -15,6 +15,13 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render :show, status: :ok }
+      format.gif do
+        send_data @image.image.blob.download, type: @image.image.blob.content_type, disposition: 'inline'
+      end
+    end
   end
 
   # GET /images/tags/autocomplete.json
