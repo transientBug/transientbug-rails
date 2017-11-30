@@ -19,7 +19,8 @@ class ImagesController < ApplicationController
       format.html { render :show }
       format.json { render :show, status: :ok }
       format.gif do
-        send_data @image.image.blob.download, type: @image.image.blob.content_type, disposition: 'inline'
+        type = @image.image.blob.content_type || 'image/gif'
+        send_data @image.image.blob.download, type: type, disposition: 'inline'
       end
     end
   end
