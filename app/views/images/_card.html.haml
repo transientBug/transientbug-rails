@@ -2,7 +2,7 @@
   = link_to image_path(image), class: "ui fluid image" do
     - if image.disabled?
       .ui.red.ribbon.label Disabled
-    = image_tag image.image.service_url
+    = image_tag image_path(image, format: :gif)
 
   .content
     = link_to image.title, image_path(image), class: "header"

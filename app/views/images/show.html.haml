@@ -24,7 +24,7 @@
 
     .row
       = link_to image_path(@image, format: :gif), class: "ui top attached centered image" do
-        = image_tag @image.image.service_url
+        = image_tag image_path(@image, format: :gif)
 
     .row
       .ui.fluid.menu
