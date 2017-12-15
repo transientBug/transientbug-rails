@@ -1,101 +1,7 @@
 require "autumn_moon"
 require "dark_sky"
 require "mapzen"
-
-class Rose
-  def initialize partitions:, range:, rollover: false
-    @partitions = partitions
-    @range = range
-    @rollover = rollover
-
-    range_diff = range.max - range.min
-
-    @divisions = range_diff.to_f / partitions.length
-  end
-
-  def partition num
-    normalized = num - @range.min
-
-    if normalized < 0
-      return @partitions.last if @rollover
-      return @partitions.first
-    end
-
-    partition = @partitions[ (normalized / @divisions).round ]
-
-    return partition unless partition.nil?
-    return @partitions.last unless @rollover
-    @partitions.first
-  end
-
-  def to_s
-    @partitions.map.with_index do |section, idx|
-      "#{ @divisions * idx }:#{ section }"
-    end.join " "
-  end
-end
-
-class CompassRose
-  COMPASS_DIRECTIONS = [
-    "NORTH",
-    "NORTH NORTH EAST",
-    "NORTH EAST",
-    "EAST NORTH EAST",
-    "EAST",
-    "EAST SOUTH EAST",
-    "SOUTH EAST",
-    "SOUTH SOUTH EAST",
-    "SOUTH",
-    "SOUTH SOUTH WEST",
-    "SOUTH WEST",
-    "WEST SOUTH WEST",
-    "WEST",
-    "WEST NORTH WEST",
-    "NORTH WEST",
-    "NORTH NORTH WEST"
-  ].freeze
-
-  ROSE = Rose.new(partitions: COMPASS_DIRECTIONS, range: 0..360, rollover: true)
-
-  def self.direction bearing
-    ROSE.partition bearing
-  end
-end
-
-class TempRose
-  WORDING = [
-    "COLD AS BALLS",
-    "COLD",
-    "CHILLY",
-    "FAIRLY OKAY",
-    "WARM",
-    "HOT",
-    "HOT AS FUCK"
-  ].freeze
-
-  ROSE = Rose.new(partitions: WORDING, range: 32..110, rollover: false)
-
-  def self.word temp
-    ROSE.partition temp
-  end
-end
-
-class PrecipRose
-  WORDING = [
-    "MOST LIKELY DRY",
-    "PROBABLY DRY",
-    "QUESTIONABLY DRY",
-    "QUESTIONABLY WET",
-    "PROBABLY WET",
-    "SUPAWET",
-  ].freeze
-
-  ROSE = Rose.new(partitions: WORDING, range: 0..1, rollover: false)
-
-  def self.word amount
-    ROSE.partition amount
-  end
-end
+require "rose"
 
 class SampleBot < AutumnMoon::TelegramBot
   VERSION = "v0.0.0".freeze
@@ -124,7 +30,7 @@ class SampleBot < AutumnMoon::TelegramBot
         ]
       ],
       resize_keyboard: true,
-      one_time_keyboard: true,
+      one_time_keyboard: true
     }
   end
 
