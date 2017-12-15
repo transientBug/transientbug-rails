@@ -37,11 +37,21 @@ services:
       - "redis"
     build:
       context: .
-      args:
-        rails_master_key: ${RAILS_MASTER_KEY}
     command: bundle exec sidekiq -C config/sidekiq.yml
-    #volumes:
-      #- ".:/app"
+    networks:
+      - "services"
+    env_file:
+      - ".env.production"
+
+  clockwork:
+    depends_on:
+      - "postgres"
+      - "elasticsearch"
+      - "redis"
+      - "sidekiq"
+    build:
+      context: .
+    command: bundle exec clockwork clock.rb
     networks:
       - "services"
     env_file:
@@ -54,12 +64,9 @@ services:
       - "redis"
     build:
       context: .
-      args:
-        rails_master_key: ${RAILS_MASTER_KEY}
     ports:
       - "8000:3000"
     volumes:
-      #- ".:/app"
       - "./storage:/dropzone"
     networks:
       - "exposed"
@@ -77,8 +84,6 @@ services:
       - "redis"
     build:
       context: .
-      args:
-        rails_master_key: ${RAILS_MASTER_KEY}
     command: bundle exec puma -p 28080 cable/config.ru
     ports:
       - "28080:28080"
