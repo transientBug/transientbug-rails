@@ -29,20 +29,86 @@ module AutumnMoon
     end
   end
 
+  class Chat
+    attr_reader :id
+
+    def initialize id:
+      @id = id
+    end
+  end
+
+  class User
+    attr_reader :id
+
+    def initialize id:
+      @id = id
+    end
+  end
+
+  class Message
+    attr_reader :chat, :user, :body
+
+    attr_accessor :decompositions
+
+    def initialize chat:, user: nil, body:
+      @chat = chat
+      @user = user
+      @body = body
+    end
+
+    def decompositions
+      @decompositions ||= {}
+    end
+
+    def intent
+      @decompositions[:IntentDecomposer]
+    end
+  end
+
+  class Reply
+    attr_reader :chat, :user, :body
+
+    def initialize chat:, user: nil, body:
+      @chat = chat
+      @user = user
+      @body = body
+    end
+  end
+
+  class Controller
+    attr_reader :session
+
+    def initialize session:
+      @session = session
+    end
+  end
+
   class Decomposer
     def self.call message_obj
       new(message: message_obj).call
     end
 
-    def call message:
+    attr_reader :message
+
+    def initialize message:
+      @message = message
+    end
+
+    def call
+      result = handle
+      message.decompositions[ self.class.name.to_sym ] = result
+      message
+    end
+
+    def handle
       fail NotImplementedError
     end
   end
 
-  class EntityDecomposer
-  end
-
   class IntentDecomposer
+    def handle
+      return :command if message.body.match?(%r{^/.*})
+    end
   end
 
   class Router
@@ -51,7 +117,6 @@ module AutumnMoon
     def initialize
       @routes = []
       @decomposers = [
-        EntityDecomposer,
         IntentDecomposer
       ]
     end
@@ -62,6 +127,10 @@ module AutumnMoon
       end
 
       routes.find { |route| route.match? decomposed_message_obj }.call decomposed_message_obj
+    end
+
+    def dispatch_action action:
+      routes.find { |route| route.action == action }.call
     end
   end
 
@@ -75,7 +144,7 @@ module AutumnMoon
 
         fail "Chat required" unless chat
 
-        session = Session.new bot: self, chat: chat, user: user
+        session ||= Session.new bot: self, chat: chat, user: user
 
         new(session: session, message: message)
       end
@@ -90,10 +159,11 @@ module AutumnMoon
       end
     end
 
-    attr_reader :session
+    attr_reader :session, :message
 
-    def initialize session:
+    def initialize session:, message:
       @session = session
+      @message = message
     end
 
     def router
@@ -101,7 +171,7 @@ module AutumnMoon
     end
 
     def run_action action_name
-      result = router.dispatch action_name
+      result = router.dispatch_action action: action_name
 
       session.persist
 
@@ -125,41 +195,6 @@ module AutumnMoon
     end
 
     def persist!
-    end
-  end
-
-  class Chat
-    attr_reader :id
-
-    def initialize id:
-      @id = id
-    end
-  end
-
-  class User
-    attr_reader :id
-
-    def initialize id:
-      @id = id
-    end
-  end
-
-  class Message
-    attr_reader :chat, :user, :body
-
-    def initialize chat:, user: nil, body:
-    end
-  end
-
-  class Reply
-    attr_reader :chat, :user, :body
-
-    def initialize chat:, user: nil, body:
-    end
-  end
-
-  class Controller
-    def initialize session:
     end
   end
 end
