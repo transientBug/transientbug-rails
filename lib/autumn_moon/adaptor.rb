@@ -1,0 +1,2 @@
+module AutumnMoon
+end

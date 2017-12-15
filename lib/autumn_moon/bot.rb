@@ -1,203 +1,177 @@
 module AutumnMoon
-  # Base Bot "Controller" class with minimal routing, setting and extension
-  # patterns borrowed/inspired from Sinatra. Inherit, override
-  # +build_params_from+ and use the route DSL to create a new controller which
-  # can be routed to with <klass>.call(payload).
+  class Adaptor
+    def initialize *data
+      @args = data
+    end
+
+    def send reply_obj
+      fail NotImplementedError
+    end
+
+    def parse raw_payload
+      #fail NotImplementedError
+
+      chat_obj = Chat.new id: raw_payload[:chat][:id]
+      user_obj = User.new id: raw_payload[:user][:id]
+
+      message_obj = Message.new text: raw_payload[:text], chat: chat_obj, user: user_obj
+
+      message_obj
+    end
+
+    def receive with_bot:
+      fail NotImplementedError
+
+      payload = fetch
+      message_obj = parse payload
+      with_bot.dispatch message_obj
+      send result
+    end
+  end
+
+  class Decomposer
+    def self.call message_obj
+      new(message: message_obj).call
+    end
+
+    def call message:
+      fail NotImplementedError
+    end
+  end
+
+  class EntityDecomposer
+  end
+
+  class IntentDecomposer
+  end
+
+  class Router
+    attr_reader :routes, :decomposers
+
+    def initialize
+      @routes = []
+      @decomposers = [
+        EntityDecomposer,
+        IntentDecomposer
+      ]
+    end
+
+    def dispatch message:
+      decomposed_message_obj = decomposers.each_with_object(message) do |decomposer, memo|
+        decomposer.call memo
+      end
+
+      routes.find { |route| route.match? decomposed_message_obj }.call decomposed_message_obj
+    end
+  end
+
+  class Route
+  end
+
   class Bot
-    # Container for representing a single route. Takes the methods name and
-    # pattern that matches, along with an array of conditions that should allow
-    # this route to match.
-    class Route
-      attr_reader :pattern, :method_name, :conditions, :options
-
-      def initialize verb, pattern, method_name, conditions: [], **options
-        @verb = verb
-        @raw_pattern = pattern
-        @method_name = method_name
-        @conditions = Array(conditions)
-        @options = options
-      end
-
-      def pattern
-        @pattern ||= Mustermann.new @raw_pattern, **options.fetch(:mustermann_options, {})
-      end
-
-      def match klass, params
-        unless @raw_pattern.nil?
-          return false unless pattern.match(params[:text])
-        end
-
-        return true if @verb == :all
-        return false unless params[:verb] == @verb
-
-        conditions.all? do |condition|
-          condition.bind(klass).call
-        end
-      end
-    end
-
     class << self
-      # Settings and extensions we want to share across inherited classes which
-      # is what the superclass merging is for. Routes and action callbacks
-      # however are not shared, to avoid issues around methods or unbound
-      # callbacks and allowing a base Bot class to exist within a larger set of
-      # bot "controllers"
+      def with_session_for chat: nil, user: nil, message: nil
+        session = Session.new chat: message.chat, user: message.user if message
 
-      # Settings handling
-      def settings
-        @settings ||= {}
-        return superclass.settings.merge @settings if superclass.respond_to?(:settings)
-        @settings
+        fail "Chat required" unless chat
+
+        session = Session.new bot: self, chat: chat, user: user
+
+        new(session: session, message: message)
       end
 
-      def set **options
-        @settings ||= settings.merge options
+      def dispatch message:
+        instance = with_session_for message: message
+        router.dispatch message: message, instance: instance
       end
 
-      # Extension handling
-      def extensions
-        @extensions ||=  []
-        return (@extensions + superclass.extensions).uniq if superclass.respond_to?(:extensions)
-        @extensions
-      end
-
-      def register *extension_modules, &block
-        extension_modules << Module.new(&block) if block_given?
-
-        extensions
-        @extensions += extension_modules
-
-        extensions.each do |extension|
-          extension.registered self if extension.respond_to? :registered
-        end
-      end
-
-      def invoke_hook name, *args
-        extensions.each { |e| e.send(name, self, *args) if e.respond_to? name }
-      end
-
-      # Before/After callback handling
-      def action_callbacks
-        @action_callbacks ||= { before: [], after: [] }
-      end
-
-      # Generates an unbound method for the given block or +use+ parameter
-      # which will be bound to the specific instance of the Bot that is
-      # handling the current request.
-      def add_callback type, method_name, **options, &block
-        # If a +use+ option was passed along instead of a block, assume that it
-        # is the name of an instance method that should be called instead of a
-        # block.
-        block = -> { self.send options.delete(:use) } unless block_given?
-
-        unbound_method = generate_unbound_method "unbound_#{ type }", &block
-
-        action_callbacks[type] << [ method_name, options, unbound_method ]
-        invoke_hook :filter_added, method_name, type, options, unbound_method
-      end
-
-      def before method_name, **options, &block
-        add_callback :before, method_name, **options, &block
-      end
-
-      def after method_name, **options, &block
-        add_callback :after, method_name, **options, &block
-      end
-
-      # Route handling
-      def routes
-        @routes ||= []
-      end
-
-      def route verb, pattern, to:, on: [], **options
-        method_name = to
-
-        conditions = Array(on).map do |condition|
-          generate_unbound_method "unbound_condition", &condition
-        end
-
-        route = Route.new(verb, pattern, method_name, conditions: conditions, **options)
-
-        routes << route
-        invoke_hook :route_added, pattern, method_name, conditions, options, route
-      end
-
-      # Message handling
-
-      # Builds out the params hash from a chat network payload object. This
-      # should be overriden when this class is inherited. Should return a hash
-      # with the following key/values:
-      #   Hash{
-      #     verb: Symbol
-      #     message_id: String/Int
-      #     chat_id: String/Int
-      #     user_id: String/Int
-      #     timestamp: Time
-      #     text: String
-      #     entities: Array(Hash{ type: Symbol, text: String })
-      #     metadata: Hash
-      #   }
-      def build_params_from payload:
-        fail NotImplementedError
-      end
-
-      def call client, payload
-        params = build_params_from payload: payload
-
-        new.call client, params
-
-        nil
-      end
-
-      def generate_unbound_method method_name, &block
-        define_method method_name, &block
-        method = instance_method method_name
-        remove_method method_name
-        method
+      def router
+        @router ||= Router.new
       end
     end
 
-    attr_reader :client, :params
+    attr_reader :session
 
-    def settings
-      self.class.settings
+    def initialize session:
+      @session = session
     end
 
-    def session
-      @session ||= {}
+    def router
+      self.class.router
     end
 
-    def pass
-      throw :pass
+    def run_action action_name
+      result = router.dispatch action_name
+
+      session.persist
+
+      result
+    end
+  end
+
+  class Session
+    attr_reader :bot, :chat, :user
+
+    def initialize bot:, chat:, user: nil
+      @bot = bot
+      @chat = chat
+      @user = user
+
+      load!
     end
 
-    def halt
-      throw :halt
+    def load!
+      @session = {}
     end
 
-    def call client, params
-      @client = client
-      @params = params
+    def persist!
+    end
+  end
 
-      catch :halt do
-        self.class.routes.each do |route|
-          next unless route.match(self, params)
+  class Chat
+    attr_reader :id
 
-          catch :pass do
-            self.class.action_callbacks[:before]
-              .select { |n, o, c| n == route.method_name }
-              .each { |n, o, c| c.bind(self).call }
+    def initialize id:
+      @id = id
+    end
+  end
 
-            send route.method_name
+  class User
+    attr_reader :id
 
-            self.class.action_callbacks[:after]
-              .select { |n, o, c| n == route.method_name }
-              .each { |n, o, c| c.bind(self).call }
+    def initialize id:
+      @id = id
+    end
+  end
 
-            halt
-          end
-        end
-      end
+  class Message
+    attr_reader :chat, :user, :body
+
+    def initialize chat:, user: nil, body:
+    end
+  end
+
+  class Reply
+    attr_reader :chat, :user, :body
+
+    def initialize chat:, user: nil, body:
+    end
+  end
+
+  class Controller
+    def initialize session:
     end
   end
 end
+
+__END__
+# In a cronjob
+TelegramAdaptor.new(token: 456).send WeatherBot.with_session_for(chat: 789, user: 123).run_action(:say_weather)
+
+# In a Webhook controller
+message_obj = TelegramAdaptor.new(token: 456).parse payload
+WeatherBot.dispatch message_obj
+TelegramAdaptor.send result
+
+# As a reciever loop
+TelegramAdaptor.new(token: 456).receive with_bot: WeatherBot

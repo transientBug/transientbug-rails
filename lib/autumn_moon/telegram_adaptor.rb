@@ -1,5 +1,5 @@
 module AutumnMoon
-  class TelegramBot < Bot
+  class TelegramAdaptor
     class << self
       def [] token:
         method(:call).curry.call TelegramClient.new(token: token)
