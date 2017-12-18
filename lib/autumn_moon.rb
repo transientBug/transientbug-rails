@@ -4,16 +4,16 @@ module AutumnMoon
   class NoRouteMatchesError < NotImplementedError; end
 
   autoload :Bot,        "autumn_moon/bot"
-  autoload :Adaptor,    "autumn_moon/bot"
-  autoload :Chat,       "autumn_moon/bot"
-  autoload :User,       "autumn_moon/bot"
-  autoload :Message,    "autumn_moon/bot"
-  autoload :Reply,      "autumn_moon/bot"
-  autoload :Controller, "autumn_moon/bot"
-  autoload :Decomposer, "autumn_moon/bot"
-  autoload :Route,      "autumn_moon/bot"
-  autoload :Router,     "autumn_moon/bot"
-  autoload :Session,    "autumn_moon/bot"
+  autoload :Adaptor,    "autumn_moon/adaptor"
+  autoload :Chat,       "autumn_moon/chat"
+  autoload :User,       "autumn_moon/user"
+  autoload :Message,    "autumn_moon/message"
+  autoload :Reply,      "autumn_moon/reply"
+  autoload :Controller, "autumn_moon/controller"
+  autoload :Decomposer, "autumn_moon/decomposer"
+  autoload :Route,      "autumn_moon/route"
+  autoload :Router,     "autumn_moon/router"
+  autoload :Session,    "autumn_moon/session"
 
   # Telegram specific classes
   autoload :TelegramClient, "autumn_moon/telegram_client"

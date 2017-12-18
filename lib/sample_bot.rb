@@ -18,6 +18,16 @@ class IntentDecomposer < AutumnMoon::Decomposer
 end
 
 class ContextDecomposer < AutumnMoon::Decomposer
+  module ControllerMethods
+    def set_context value
+      session[:context] = value
+    end
+
+    def clear_context
+      session.delete :context
+    end
+  end
+
   def modify_route route
     return route unless route.options[:context]
 
@@ -49,6 +59,8 @@ class SampleBot < AutumnMoon::Bot
 end
 
 class BaseController < AutumnMoon::Controller
+  include ContextDecomposer::ControllerMethods
+
   def testing_topic_help
     set_context :help
 
@@ -103,6 +115,8 @@ class BaseController < AutumnMoon::Controller
 end
 
 class WeatherController < AutumnMoon::Controller
+  include ContextDecomposer::ControllerMethods
+
   DARK_SKY_CLIENT = DarkSky.new token: Rails.application.credentials.dark_sky
   MAPZEN_CLIENT = Mapzen.new token: Rails.application.credentials.mapzen
 
