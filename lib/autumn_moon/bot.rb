@@ -1,4 +1,5 @@
 module AutumnMoon
+
   class Adaptor
     def initialize *data
       @args = data
@@ -22,10 +23,10 @@ module AutumnMoon
     def receive with_bot:
       fail NotImplementedError
 
-      payload = fetch
-      message_obj = parse payload
-      with_bot.dispatch message_obj
-      send result
+      # payload = fetch
+      # message_obj = parse payload
+      # with_bot.dispatch message_obj
+      # send result
     end
   end
 
@@ -46,9 +47,7 @@ module AutumnMoon
   end
 
   class Message
-    attr_reader :chat, :user, :body
-
-    attr_accessor :decompositions
+    attr_reader :chat, :user, :body, :decompositions
 
     def initialize chat:, user: nil, body:
       @chat = chat
@@ -58,10 +57,6 @@ module AutumnMoon
 
     def decompositions
       @decompositions ||= {}
-    end
-
-    def intent
-      @decompositions[:IntentDecomposer]
     end
   end
 
@@ -76,38 +71,52 @@ module AutumnMoon
   end
 
   class Controller
-    attr_reader :session
+    attr_reader :bot
 
-    def initialize session:
-      @session = session
+    def initialize bot:
+      @bot = bot
+    end
+
+    def session
+      bot.session
+    end
+
+    def message
+      bot.message
     end
   end
 
   class Decomposer
-    def self.call message_obj
-      new(message: message_obj).call
+    def modify_route route
+      route
     end
 
-    attr_reader :message
-
-    def initialize message:
-      @message = message
-    end
-
-    def call
-      result = handle
-      message.decompositions[ self.class.name.to_sym ] = result
+    def call message:
+      message.decompositions[ self.class.name.to_sym ] = handle_message message
       message
     end
 
-    def handle
-      fail NotImplementedError
-    end
+    def handle_message message; end
   end
 
-  class IntentDecomposer
-    def handle
-      return :command if message.body.match?(%r{^/.*})
+  class Route
+    attr_reader :on_conditions, :options
+
+    def initialize pattern=nil, to:, on: [], **opts
+      @pattern = pattern
+
+      @to_controller = to
+      @on_conditions = Array(on)
+
+      @options = opts
+    end
+
+    def match? bot
+      # TODO
+      false
+    end
+
+    def call bot
     end
   end
 
@@ -116,53 +125,74 @@ module AutumnMoon
 
     def initialize
       @routes = []
-      @decomposers = [
-        IntentDecomposer
-      ]
+      @decomposers = []
     end
 
-    def dispatch message:
-      decomposed_message_obj = decomposers.each_with_object(message) do |decomposer, memo|
+    def add_decomposer decomposer
+      @decomposers << decomposer.new
+    end
+
+    def build_route *args
+      routes << decomposers.each_with_object(Route.new(*args)) do |decomposer, memo|
+        decomposer.modify_route memo
+      end
+    end
+
+    def decompose message
+      decomposers.each_with_object(message) do |decomposer, memo|
         decomposer.call memo
       end
-
-      routes.find { |route| route.match? decomposed_message_obj }.call decomposed_message_obj
     end
 
-    def dispatch_action action:
-      routes.find { |route| route.action == action }.call
+    def dispatch bot_instance
+      found_route = routes.find { |route| route.match? bot_instance }
+
+      fail NoRouteMatchesError unless found_route
+
+      found_route.call bot_instance
     end
   end
 
-  class Route
+  class Session
+    attr_reader :bot, :chat, :user
+
+    def initialize chat:, user: nil
+      @chat = chat
+      @user = user
+
+      @data = {}
+    end
+
+    def [] key
+      @data[key]
+    end
+
+    def []= key, value
+      @data[key] = value
+    end
   end
 
   class Bot
     class << self
-      def with_session_for chat: nil, user: nil, message: nil
-        session = Session.new chat: message.chat, user: message.user if message
-
-        fail "Chat required" unless chat
-
-        session ||= Session.new bot: self, chat: chat, user: user
-
-        new(session: session, message: message)
-      end
-
       def dispatch message:
-        instance = with_session_for message: message
-        router.dispatch message: message, instance: instance
+        new(message: message).dispatch
       end
 
       def router
         @router ||= Router.new
       end
+
+      def route *args
+        router.build_route(*args)
+      end
     end
 
     attr_reader :session, :message
 
-    def initialize session:, message:
-      @session = session
+    def initialize chat: nil, user: nil, message: nil
+      message = router.decompose message if message
+
+      @session = session_for chat: chat, user: user, message: message
       @message = message
     end
 
@@ -170,38 +200,26 @@ module AutumnMoon
       self.class.router
     end
 
-    def run_action action_name
-      result = router.dispatch_action action: action_name
-
-      session.persist
-
-      result
-    end
-  end
-
-  class Session
-    attr_reader :bot, :chat, :user
-
-    def initialize bot:, chat:, user: nil
-      @bot = bot
-      @chat = chat
-      @user = user
-
-      load!
+    def dispatch
+      router.dispatch self
     end
 
-    def load!
-      @session = {}
-    end
+    def session_for chat: nil, user: nil, message: nil
+      chat ||= message.chat
+      user ||= message.user
 
-    def persist!
+      fail "Chat required" unless chat
+
+      Session.new chat: chat, user: user
     end
   end
 end
 
 __END__
 # In a cronjob
-TelegramAdaptor.new(token: 456).send WeatherBot.with_session_for(chat: 789, user: 123).run_action(:say_weather)
+bot = WeatherBot.new(chat: 789, user: 123)
+reply_obj = WeatherController.new(bot: bot).weather_check
+TelegramAdaptor.new(token: 456).send reply_obj
 
 # In a Webhook controller
 message_obj = TelegramAdaptor.new(token: 456).parse payload

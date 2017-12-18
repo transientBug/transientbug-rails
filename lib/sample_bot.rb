@@ -3,16 +3,52 @@ require "dark_sky"
 require "mapzen"
 require "rose"
 
-class SampleBot < AutumnMoon::TelegramBot
+class IntentDecomposer < AutumnMoon::Decomposer
+  def modify_route route
+    return route unless route.options[:intent]
+
+    route.on_conditions << lambda do
+      message.decompositions[:IntentDecomposer] == route.options[:intent]
+    end
+  end
+
+  def handle_message message
+    return :command if message.body.match?(%r{^/.*})
+  end
+end
+
+class ContextDecomposer < AutumnMoon::Decomposer
+  def modify_route route
+    return route unless route.options[:context]
+
+    route.on_conditions << lambda do
+      session[:context] == route.options[:context]
+    end
+  end
+end
+
+class SampleBot < AutumnMoon::Bot
   VERSION = "v0.0.0".freeze
 
-  DARK_SKY_CLIENT = DarkSky.new token: Rails.application.credentials.dark_sky
-  MAPZEN_CLIENT = Mapzen.new token: Rails.application.credentials.mapzen
+  router.add_decomposer IntentDecomposer
+  router.add_decomposer ContextDecomposer
 
-  register AutumnMoon::Cache
-  register AutumnMoon::ContextRouter
+  route "/help", to: "base_controller#testing_topic_help", intent: :command
+  route "Commands", to: "base_controller#help_commands", intent: :message, context: :help
+  route "About", to: "base_controller#help_about", intent: :message, context: :help
 
-  command "/help", to: :testing_topic_help
+  route "/weather", to: "weather_controller#weather_check", intent: :command, on: [ ->{ session[:user_location].present? } ]
+
+  route "/weather", to: "weather_controller#request_location", intent: :command, on: [ ->{ session[:user_location].blank? } ]
+  route "Custom", to: "weather_controller#custom_location", intent: :message, context: :request_location
+  route "*", to: "weather_controller#custom_location_search", intent: :message, context: :custom_location_search
+  route to: "weather_controller#choose_location", intent: :callback_query, context: :custom_location_search
+  route to: "weather_controller#get_location", intent: :location, context: :request_location
+
+  route to: "base_controller#default_route"
+end
+
+class BaseController < AutumnMoon::Controller
   def testing_topic_help
     set_context :help
 
@@ -34,7 +70,6 @@ class SampleBot < AutumnMoon::TelegramBot
     }
   end
 
-  message "Commands", to: :help_commands, context: :help
   def help_commands
     body = <<~MSG
       Available commands:
@@ -45,10 +80,9 @@ class SampleBot < AutumnMoon::TelegramBot
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
-  message "About", to: :help_about, context: :help
   def help_about
     body = <<~MSG
-      #{ bot_name } - #{ VERSION }
+      #{ bot_name } - #{ SampleBot::VERSION }
       AutumnMoon Framework - Version #{ AutumnMoon::VERSION }
 
       Author: @JoshAshby
@@ -57,7 +91,21 @@ class SampleBot < AutumnMoon::TelegramBot
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
 
-  command "/weather", to: :request_location, on: [ ->{ session[:user_location].blank? } ]
+  # inline_query "*", to: :inline
+  # def inline
+    # inline_reply_with results: [
+    # ]
+  # end
+
+  def default_route
+    reply_with text: "I'm sorry, I don't know what to say"
+  end
+end
+
+class WeatherController < AutumnMoon::Controller
+  DARK_SKY_CLIENT = DarkSky.new token: Rails.application.credentials.dark_sky
+  MAPZEN_CLIENT = Mapzen.new token: Rails.application.credentials.mapzen
+
   def request_location
     body = <<~MSG
       OH NO! I don't seem to have a location on file for you!
@@ -76,7 +124,6 @@ class SampleBot < AutumnMoon::TelegramBot
     set_context :request_location
   end
 
-  message "Custom", to: :custom_location, context: :request_location
   def custom_location
     body = <<~MSG
       Great! Where at? (say something like "Boulder, CO")
@@ -87,7 +134,6 @@ class SampleBot < AutumnMoon::TelegramBot
     set_context :custom_location_search
   end
 
-  message "*", to: :custom_location_search, context: :custom_location_search
   def custom_location_search
     results = MAPZEN_CLIENT.search(query: params[:text])
     session[:search_results] = results
@@ -111,7 +157,6 @@ class SampleBot < AutumnMoon::TelegramBot
     set_context :custom_location_search
   end
 
-  callback_query to: :choose_location, context: :custom_location_search
   def choose_location
     location = session[:search_results][:features].find do |feature|
       feature[:properties][:id] == params[:metadata][:data]
@@ -125,7 +170,6 @@ class SampleBot < AutumnMoon::TelegramBot
     weather_check
   end
 
-  location to: :get_location, context: :request_location
   def get_location
     session[:user_location] = params[:metadata][:location]
     respond_with text: "Great! I'll remember that when fetching the weather!", reply_markup: { remove_keyboard: true }
@@ -133,7 +177,6 @@ class SampleBot < AutumnMoon::TelegramBot
     weather_check
   end
 
-  command "/weather", to: :weather_check, on: [ ->{ session[:user_location].present? } ]
   def weather_check
     weather = DARK_SKY_CLIENT.forecast(**session[:user_location].symbolize_keys)
 
@@ -154,16 +197,5 @@ class SampleBot < AutumnMoon::TelegramBot
     MSG
 
     respond_with text: body
-  end
-
-  # inline_query "*", to: :inline
-  # def inline
-    # inline_reply_with results: [
-    # ]
-  # end
-
-  default to: :default_route
-  def default_route
-    reply_with text: "I'm sorry, I don't know what to say"
   end
 end
