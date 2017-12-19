@@ -1,3 +1,39 @@
+module AutumnMoon
+  class TelegramAdaptor < Adaptor
+    def client
+      @client ||= TelegramClient.new token: options[:token]
+    end
+
+    def send reply_obj
+      message = {
+        text: reply_obj.body,
+        chat_id: reply_obj.chat.id
+      }.merge reply_obj.options
+
+      binding.pry
+
+      # client.send_message message
+    end
+
+    def parse raw_payload
+      chat_obj = Chat.new id: raw_payload[:chat][:id]
+      user_obj = User.new id: raw_payload[:from][:id]
+
+      message_obj = Message.new body: raw_payload.dig(:message, :text), chat: chat_obj, user: user_obj, options: { telegram: raw_payload }
+
+      message_obj
+    end
+
+    def receive with_bot:
+      client.get_updates.each do |update|
+        message_obj = parse update[:message]
+        with_bot.dispatch message_obj
+        send result
+      end
+    end
+  end
+end
+
 # module AutumnMoon
   # class TelegramAdaptor
     # class << self

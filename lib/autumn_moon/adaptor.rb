@@ -1,7 +1,9 @@
 module AutumnMoon
   class Adaptor
-    def initialize *data
-      @args = data
+    attr_reader :options
+
+    def initialize **opts
+      @options = opts
     end
 
     def send reply_obj
@@ -9,14 +11,14 @@ module AutumnMoon
     end
 
     def parse raw_payload
-      #fail NotImplementedError
+      fail NotImplementedError
 
-      chat_obj = Chat.new id: raw_payload[:chat][:id]
-      user_obj = User.new id: raw_payload[:user][:id]
+      # chat_obj = Chat.new id: raw_payload[:chat][:id]
+      # user_obj = User.new id: raw_payload[:user][:id]
 
-      message_obj = Message.new text: raw_payload[:text], chat: chat_obj, user: user_obj
+      # message_obj = Message.new text: raw_payload[:text], chat: chat_obj, user: user_obj
 
-      message_obj
+      # message_obj
     end
 
     def receive with_bot:
