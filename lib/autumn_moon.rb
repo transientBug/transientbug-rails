@@ -18,6 +18,9 @@ module AutumnMoon
   # Telegram specific classes
   autoload :Telegram, "autumn_moon/telegram"
 
+  # Provided helpers
+  autoload :ContextDecomposer, "autumn_moon/context_decomposer"
+
   module_function
 
   def bots

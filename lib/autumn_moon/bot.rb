@@ -31,10 +31,14 @@ module AutumnMoon
     attr_reader :session, :message, :chat, :user
 
     def initialize chat: nil, user: nil, message: nil
-      @message = router.decompose message if message
-
-      @chat = AutumnMoon::Chat.new(id: user) || message&.chat
-      @user = AutumnMoon::User.new(id: user) || message&.user
+      if message
+        @message = router.decompose message
+        @chat = message.chat
+        @user = message.user
+      else
+        @chat = AutumnMoon::Chat.new id: chat
+        @user = AutumnMoon::User.new id: user
+      end
 
       fail ArgumentError, "Chat required" unless @chat
 
