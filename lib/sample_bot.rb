@@ -13,7 +13,12 @@ class IntentDecomposer < AutumnMoon::Decomposer
   end
 
   def handle_message message
+    return :callback_query if message.original[:callback_query]
+    return :location if message.original[:location]
+    return :inline_query if message.original[:inline_query]
+
     return :command if message.body.match?(%r{^/.*})
+    return :message if message.original[:message]
   end
 end
 

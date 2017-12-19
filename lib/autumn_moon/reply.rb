@@ -1,13 +1,13 @@
 module AutumnMoon
   class Reply
-    attr_reader :chat, :user, :body, :options
+    attr_reader :chat, :user, :body, :extra
 
-    def initialize chat:, user: nil, body:, **opts
+    def initialize chat:, user: nil, body:, extra: {}
       @chat = chat
       @user = user
       @body = body
 
-      @options = opts
+      @extra = extra
     end
   end
 end

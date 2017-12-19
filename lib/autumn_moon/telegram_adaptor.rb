@@ -8,7 +8,7 @@ module AutumnMoon
       message = {
         text: reply_obj.body,
         chat_id: reply_obj.chat.id
-      }.merge reply_obj.options
+      }.merge reply_obj.extra
 
       binding.pry
 
@@ -19,7 +19,14 @@ module AutumnMoon
       chat_obj = Chat.new id: raw_payload[:chat][:id]
       user_obj = User.new id: raw_payload[:from][:id]
 
-      message_obj = Message.new body: raw_payload.dig(:message, :text), chat: chat_obj, user: user_obj, options: { telegram: raw_payload }
+      message_obj = Message.new(
+        body: raw_payload.dig(:message, :text),
+        chat: chat_obj,
+        user: user_obj,
+        original: {
+          telegram: raw_payload
+        }
+      )
 
       message_obj
     end
