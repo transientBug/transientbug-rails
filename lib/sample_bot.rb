@@ -29,15 +29,19 @@ class SampleBot < AutumnMoon::Bot
   router.add_decomposer AutumnMoon::Telegram::IntentDecomposer
   router.add_decomposer ContextDecomposer
 
-  route "/help", to: "base_controller#testing_topic_help", intent: :command
+  route "/start", to: "base_controller#start", intent: :command
+  route "/help", to: "base_controller#testing_topic_help", intent: :command, doc: "get ye some infoz!"
   route "Commands", to: "base_controller#help_commands", intent: :message, context: :help
   route "About", to: "base_controller#help_about", intent: :message, context: :help
 
-  route "/weather", to: "weather_controller#weather_check", intent: :command, on: [ ->{ session[:user_location].present? } ]
+  route "/weather",
+    to: "weather_controller#weather_check",
+    intent: :command, on: [ ->{ session[:user_location].present? } ],
+    doc: "get ye some weather!"
 
   route "/weather", to: "weather_controller#request_location", intent: :command, on: [ ->{ session[:user_location].blank? } ]
   route "Custom", to: "weather_controller#custom_location", intent: :message, context: :request_location
-  route "*", to: "weather_controller#custom_location_search", intent: :message, context: :custom_location_search
+  route to: "weather_controller#custom_location_search", intent: :message, context: :custom_location_search
   route to: "weather_controller#choose_location", intent: :callback_query, context: :custom_location_search
   route to: "weather_controller#get_location", intent: :location, context: :request_location
 
@@ -47,6 +51,10 @@ end
 class BaseController < AutumnMoon::Controller
   include ContextDecomposer::ControllerMethods
   include AutumnMoon::Telegram::ControllerMethods
+
+  def start
+    respond_with text: "Hia!"
+  end
 
   def testing_topic_help
     set_context :help
@@ -73,8 +81,13 @@ class BaseController < AutumnMoon::Controller
     body = <<~MSG
       Available commands:
 
-      /help
     MSG
+
+    bot.router.routes
+      .select { |route|  route.options[:doc].present? }
+      .each do |route|
+        body += "#{ route.raw_pattern } - #{ route.options[:doc] }\n"
+      end
 
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
@@ -89,12 +102,6 @@ class BaseController < AutumnMoon::Controller
 
     respond_with text: body, reply_markup: { remove_keyboard: true }
   end
-
-  # inline_query "*", to: :inline
-  # def inline
-    # inline_reply_with results: [
-    # ]
-  # end
 
   def default_route
     reply_with text: "I'm sorry, I don't know what to say"

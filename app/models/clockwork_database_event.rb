@@ -1,5 +1,5 @@
 class ClockworkDatabaseEvent < ApplicationRecord
-  enum frequency_period: [ :sec, :minute, :hour, :day, :week, :month ]
+  enum frequency_period: [ :seconds, :minutes, :hours, :days, :weeks, :months ]
 
   def frequency
     frequency_quantity.send frequency_period.pluralize

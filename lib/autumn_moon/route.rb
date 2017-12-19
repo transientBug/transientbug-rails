@@ -1,8 +1,9 @@
 module AutumnMoon
   class Route
-    attr_reader :to_controller_action, :on_conditions, :options
+    attr_reader :raw_pattern, :to_controller_action, :on_conditions, :options
 
     def initialize pattern=nil, to:, on: [], **opts
+      @raw_pattern = pattern
       @pattern = Mustermann.new pattern, **opts.fetch(:mustermann_options, {}) if pattern
 
       @to_controller_action = to.split("#")

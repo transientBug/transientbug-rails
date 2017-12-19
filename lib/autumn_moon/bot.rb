@@ -20,7 +20,7 @@ module AutumnMoon
       end
 
       def router
-        @router ||= Router.new
+        @router ||= AutumnMoon::Router.new
       end
 
       def route *args
@@ -33,12 +33,12 @@ module AutumnMoon
     def initialize chat: nil, user: nil, message: nil
       @message = router.decompose message if message
 
-      @chat = user || message&.chat
-      @user = chat || message&.user
+      @chat = AutumnMoon::Chat.new(id: user) || message&.chat
+      @user = AutumnMoon::User.new(id: user) || message&.user
 
       fail ArgumentError, "Chat required" unless @chat
 
-      @session = Session.new chat: @chat, user: @user
+      @session = AutumnMoon::Session.new chat: @chat, user: @user
     end
 
     def router
