@@ -44,16 +44,19 @@ module AutumnMoon
 
       LOCATION_MAP = {
         callback_query: {
+          id: [:callback_query, :message, :message_id],
           chat_id: [:callback_query, :message, :chat, :id],
           user_id: [:callback_query, :from, :id],
           body: [:callback_query, :data]
         },
         inline_query: {
+          id: [:message,  :message_id],
           chat_id: [:message, :chat, :id],
           user_id: [:message, :from, :id],
           body: [:inline_query, :query]
         },
         message: {
+          id: [:message,  :message_id],
           chat_id: [:message, :chat, :id],
           user_id: [:message, :from, :id],
           body: [:message, :text]
@@ -63,6 +66,8 @@ module AutumnMoon
       def parse update_payload
         locations = LOCATION_MAP.find { |k, v| update_payload.key? k }&.second
 
+        id = update_payload.dig(*locations[:id])
+
         chat_obj = AutumnMoon::Chat.new id: update_payload.dig(*locations[:chat_id])
         user_obj = AutumnMoon::User.new id: update_payload.dig(*locations[:user_id])
 
@@ -70,7 +75,7 @@ module AutumnMoon
         body ||= ""
 
         message_obj = AutumnMoon::Message.new(
-          id: update_payload.dig(:message, :message_id),
+          id: id,
           body: body,
           chat: chat_obj,
           user: user_obj,
@@ -80,10 +85,6 @@ module AutumnMoon
         )
 
         message_obj
-      end
-
-      def seen_updates
-        @seen_updates ||= client.get_updates.map { |update| update[:update_id] }
       end
 
       def receive with_bot:
@@ -98,6 +99,12 @@ module AutumnMoon
 
           seen_updates << update[:update_id]
         end
+      end
+
+      private
+
+      def seen_updates
+        @seen_updates ||= client.get_updates.map { |update| update[:update_id] }
       end
     end
   end
