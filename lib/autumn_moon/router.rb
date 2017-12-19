@@ -28,6 +28,7 @@ module AutumnMoon
 
       fail NoRouteMatchesError unless found_route
 
+      Rails.logger.debug "Routing message ID #{ bot_instance.message.id } to #{ found_route.to_controller_action }"
       found_route.call bot_instance
     end
   end

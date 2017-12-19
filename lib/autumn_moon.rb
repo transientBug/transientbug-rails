@@ -16,8 +16,7 @@ module AutumnMoon
   autoload :Session,    "autumn_moon/session"
 
   # Telegram specific classes
-  autoload :TelegramClient, "autumn_moon/telegram_client"
-  autoload :TelegramAdaptor, "autumn_moon/telegram_adaptor"
+  autoload :Telegram, "autumn_moon/telegram"
 
   module_function
 

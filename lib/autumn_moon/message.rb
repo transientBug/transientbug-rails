@@ -1,8 +1,9 @@
 module AutumnMoon
   class Message
-    attr_reader :chat, :user, :body, :original, :decompositions
+    attr_reader :id, :chat, :user, :body, :original, :decompositions
 
-    def initialize chat:, user: nil, body:, original: {}
+    def initialize id:, chat:, user: nil, body:, original: {}
+      @id   = id
       @chat = chat
       @user = user
       @body = body

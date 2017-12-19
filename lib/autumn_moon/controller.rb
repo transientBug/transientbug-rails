@@ -15,11 +15,9 @@ module AutumnMoon
       bot.message
     end
 
-    def reply_with text: "", **opts
-      replies << Reply.new(chat: bot.chat, user: bot.user, body: text, extra: opts)
+    def build_reply text:, extra:
+      replies << Reply.new(chat: bot.chat, user: bot.user, message: message, body: text, extra: extra)
     end
-
-    alias_method :respond_with, :reply_with
 
     def process action
       # TODO before, around, after callbacks

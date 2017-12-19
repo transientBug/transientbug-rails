@@ -3,25 +3,6 @@ require "dark_sky"
 require "mapzen"
 require "rose"
 
-class IntentDecomposer < AutumnMoon::Decomposer
-  def modify_route route
-    return route unless route.options[:intent]
-
-    route.on_conditions << lambda do
-      message.decompositions[:IntentDecomposer] == route.options[:intent]
-    end
-  end
-
-  def handle_message message
-    return :callback_query if message.original[:callback_query]
-    return :location if message.original[:location]
-    return :inline_query if message.original[:inline_query]
-
-    return :command if message.body.match?(%r{^/.*})
-    return :message if message.original[:message]
-  end
-end
-
 class ContextDecomposer < AutumnMoon::Decomposer
   module ControllerMethods
     def set_context value
@@ -45,7 +26,7 @@ end
 class SampleBot < AutumnMoon::Bot
   VERSION = "v0.0.0".freeze
 
-  router.add_decomposer IntentDecomposer
+  router.add_decomposer AutumnMoon::Telegram::IntentDecomposer
   router.add_decomposer ContextDecomposer
 
   route "/help", to: "base_controller#testing_topic_help", intent: :command
@@ -65,6 +46,7 @@ end
 
 class BaseController < AutumnMoon::Controller
   include ContextDecomposer::ControllerMethods
+  include AutumnMoon::Telegram::ControllerMethods
 
   def testing_topic_help
     set_context :help
@@ -99,8 +81,8 @@ class BaseController < AutumnMoon::Controller
 
   def help_about
     body = <<~MSG
-      #{ bot_name } - #{ SampleBot::VERSION }
-      AutumnMoon Framework - Version #{ AutumnMoon::VERSION }
+      Version: #{ SampleBot::VERSION }
+      AutumnMoon Ruby Bot Framework - Version: #{ AutumnMoon::VERSION }
 
       Author: @JoshAshby
     MSG
@@ -121,6 +103,7 @@ end
 
 class WeatherController < AutumnMoon::Controller
   include ContextDecomposer::ControllerMethods
+  include AutumnMoon::Telegram::ControllerMethods
 
   DARK_SKY_CLIENT = DarkSky.new token: Rails.application.credentials.dark_sky
   MAPZEN_CLIENT = Mapzen.new token: Rails.application.credentials.mapzen
@@ -154,7 +137,7 @@ class WeatherController < AutumnMoon::Controller
   end
 
   def custom_location_search
-    results = MAPZEN_CLIENT.search(query: params[:text])
+    results = MAPZEN_CLIENT.search(query: message.body)
     session[:search_results] = results
 
     body = <<~MSG
@@ -178,7 +161,7 @@ class WeatherController < AutumnMoon::Controller
 
   def choose_location
     location = session[:search_results][:features].find do |feature|
-      feature[:properties][:id] == params[:metadata][:data]
+      feature[:properties][:id] == message.body
     end
 
     session[:user_location] = [:longitude, :latitude].zip(location[:geometry][:coordinates]).to_h
@@ -190,7 +173,7 @@ class WeatherController < AutumnMoon::Controller
   end
 
   def get_location
-    session[:user_location] = params[:metadata][:location]
+    session[:user_location] = message.original[:telegram][:message][:location]
     respond_with text: "Great! I'll remember that when fetching the weather!", reply_markup: { remove_keyboard: true }
 
     weather_check
