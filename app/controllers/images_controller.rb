@@ -8,6 +8,8 @@ class ImagesController < ApplicationController
     @images = policy_scope(Image).with_attached_image.page params[:page]
   end
 
+  # GET /images/tag/thing
+  # GET /images/tag/thing.json
   def tag
     @images = policy_scope(Image).with_attached_image.where("? = ANY(tags)", params[:tag]).page params[:page]
   end
@@ -105,10 +107,16 @@ class ImagesController < ApplicationController
   # DELETE /images/1
   # DELETE /images/1.json
   def destroy
-    @image.destroy
+    @image.update disabled: true
+
     respond_to do |format|
-      format.html { redirect_to images_url, notice: "Image was successfully destroyed." }
-      format.json { head :no_content }
+      if @image.save
+        format.html { redirect_to images_url, notice: "Image was successfully disabled." }
+        format.json { head :no_content }
+      else
+        format.html { render :new }
+        format.json { render json: @image.errors, status: :unprocessable_entity }
+      end
     end
   end
 
