@@ -11,7 +11,7 @@ require_relative '../config/boot'
 require_relative '../config/environment'
 
 bots_to_check = AutumnMoon.bots.each_with_object({}) do |(token, bot), memo|
-  client = AutumnMoon::TelegramClient.new token: token
+  client = AutumnMoon::Telegram::Client.new token: token
 
   next unless client.get_webhook_info[:url].empty?
 
