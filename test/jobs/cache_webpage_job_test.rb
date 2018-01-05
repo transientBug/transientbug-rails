@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class QuestionnaireTest < ActiveSupport::TestCase
+class CacheWebpageJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end
