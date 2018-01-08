@@ -3,8 +3,12 @@ require "sidekiq/web"
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#main"
-
   get "/home", to: "pages#home"
+
+  match "/login", to: "sessions#index", via: [:get]
+  match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
+  match "/logout", to: "sessions#destroy", via: [:get, :delete]
+
   resources :images do
     collection do
       get "search"
@@ -13,9 +17,7 @@ Rails.application.routes.draw do
     end
   end
 
-  match "/login", to: "sessions#index", via: [:get]
-  match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
-  match "/logout", to: "sessions#destroy", via: [:get, :delete]
+  resource :profile, only: [:show, :edit, :update]
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 

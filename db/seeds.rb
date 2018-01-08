@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-ashby = User.create username: "ashby", email: Rails.application.credentials.admin_email
-ashby.create_identity(
+User.create(
+  username: "ashby",
   email: Rails.application.credentials.admin_email,
   password: Rails.application.credentials.admin_password,
   password_confirmation: Rails.application.credentials.admin_password

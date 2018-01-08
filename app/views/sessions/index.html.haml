@@ -7,7 +7,7 @@
       %h2.ui.header
         .content Login
 
-      = form_tag auth_path(:identity, "callback"), method: :post, class: "ui large form" do
+      = form_tag login_path, method: :post, class: "ui large form" do
         .ui.error.message
         .ui.stacked.segment
           .field
