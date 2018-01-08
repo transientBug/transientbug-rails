@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2017_11_17_155816) do
+ActiveRecord::Schema.define(version: 2018_01_05_172752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,22 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_authorizations_on_user_id"
+  end
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "webpage_id"
+    t.text "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+    t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"
+  end
+
+  create_table "bookmarks_tags", id: false, force: :cascade do |t|
+    t.bigint "bookmark_id", null: false
+    t.bigint "tag_id", null: false
   end
 
   create_table "clockwork_database_events", force: :cascade do |t|
@@ -103,6 +119,13 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.text "label"
+    t.text "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -110,7 +133,15 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.text "email"
   end
 
+  create_table "webpages", force: :cascade do |t|
+    t.text "uri_string"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "authorizations", "users"
+  add_foreign_key "bookmarks", "users"
+  add_foreign_key "bookmarks", "webpages"
   add_foreign_key "identities", "users"
   add_foreign_key "images", "users"
   add_foreign_key "questionnaires", "users"
