@@ -44,7 +44,9 @@ class WebpageCacheService
       base_response = client.get uri
 
       base_path = root.join "original.html"
-      base_path.write base_response.body
+      base_path.open "wb" do |file|
+        file.write base_response.body
+      end
 
       nokogiri = Nokogiri::HTML(base_path.open("r"))
 
@@ -56,12 +58,15 @@ class WebpageCacheService
         .map(&:to_s)
         .map(&Addressable::URI.method(:parse))
         .map { |link| uri + link }
-        .map { |link| [ link, Digest::SHA256.hexdigest(link.to_s) ] }
-        .map do |link, offline_link|
-          response = client.get link
-          asset_root.join(offline_link).write response.body
+        .map do |link|
+          link_key = Digest::SHA256.hexdigest(link.to_s)
 
-          [ link, { key: offline_link, content_type: response.content_type.mime_type } ]
+          response = client.get link
+          asset_root.join(link_key).open "wb" do |file|
+            file.write response.body
+          end
+
+          [ link_key, { link: link, content_type: response.content_type.mime_type } ]
         end.to_h
 
       metadata = {
@@ -97,7 +102,7 @@ class WebpageCacheService
     end
 
     def content_type key:
-      metadata["links"].values.find { |val| val["key"] == key }["content_type"]
+      metadata["links"][ key ]["content_type"]
     end
 
     def asset key:
