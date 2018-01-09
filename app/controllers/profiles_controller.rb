@@ -1,15 +1,18 @@
-class ProfileController < ApplicationController
+class ProfilesController < ApplicationController
   require_login!
   before_action :set_user
 
   def show
   end
 
-  def edit
-  end
-
   def update
-    if @user.update user_params
+    respond_to do |format|
+      if @user.update user_params
+        format.html { redirect_to profile_path, notice: "Profile Updated" }
+      else
+        format.html { render :show }
+      end
+    end
   end
 
   private

@@ -5,6 +5,16 @@ class SessionsController < ApplicationController
   def index
   end
 
+  def new
+    @user = User.find_by(email: params[:email])&.authenticate params[:password]
+
+    return redirect_to login_url, notice: "Unable to log you in!" unless @user.present?
+
+    self.current_user = @user
+
+    redirect_to  home_url
+  end
+
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
   def create
     @auth = Authorization.find_or_create_from_auth_hash(auth_hash, user: current_user)

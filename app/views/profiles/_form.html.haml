@@ -1,0 +1,14 @@
+= form_tag profile_path, method: :patch, class: "ui large form" do
+  .ui.error.message
+  .ui.stacked.segment
+    .field
+      .ui.left.icon.input
+        %i.user.icon
+        = text_field_tag "username", @user.username, placeholder: "Email"
+
+    .field
+      .ui.left.icon.input
+        %i.user.icon
+        = text_field_tag "email", @user.email, placeholder: "Email"
+
+    = submit_tag "Update", class: "ui fluid large green submit button"

@@ -6,8 +6,11 @@ Rails.application.routes.draw do
   get "/home", to: "pages#home"
 
   match "/login", to: "sessions#index", via: [:get]
+  match "/login", to: "sessions#new", via: [:post]
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
   match "/logout", to: "sessions#destroy", via: [:get, :delete]
+
+  resource :profile, only: [:show, :update]
 
   resources :images do
     collection do
@@ -16,8 +19,6 @@ Rails.application.routes.draw do
       get "tag/:tag", action: :tag, as: "tag"
     end
   end
-
-  resource :profile, only: [:show, :edit, :update]
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 
