@@ -1,30 +1,19 @@
 class Bookmark < ApplicationRecord
   belongs_to :user
+  belongs_to :webpage
 
-  has_many :tags, through: :bookmarks_tags
+  has_and_belongs_to_many :tags
 
-  before_validation :save_uri
   after_create :schedule_cache
 
-  validates :uri_string, presence: true
+  default_scope { includes(:webpage) }
 
-  def uri
-    @uri ||= Addressable::URI.parse(uri_string)
-  end
+  delegate :uri_string, to: :webpage
+  delegate :uri, to: :webpage
 
-  def uri= uri_like
-    if uri_like.is_a? Addressable::URI
-      @uri = uri_like
-    else
-      @uri = Addressable::URI.parse uri_like.to_s
-    end
-  end
+  update_index("bookmarks#bookmark") { self }
 
   private
-
-  def save_uri
-    self.uri_string = uri.to_s
-  end
 
   def schedule_cache
     CacheWebpageJob.perform_later bookmark: self

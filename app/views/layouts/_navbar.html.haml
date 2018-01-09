@@ -20,7 +20,12 @@
         .results
 
       - if signed_in?
-        = link_to "Logout", logout_path, class: "item"
+        .ui.simple.dropdown.item
+          = current_user.username
+          %i.dropdown.icon
+          .menu
+            = link_to "Profile", profile_path, class: "item"
+            = link_to "Logout", logout_path, class: "item"
       - else
         = link_to "Login", login_path, class: "item"
 

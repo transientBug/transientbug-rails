@@ -11,7 +11,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/tag/thing
   # GET /bookmarks/tag/thing.json
   def tag
-    @bookmarks = policy_scope(Bookmark).where(tags:, params[:tag]).page params[:page]
+    @bookmarks = policy_scope(Bookmark).where(tags: params[:tag]).page params[:page]
   end
 
   # GET /bookmarks/1
@@ -20,6 +20,18 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.html { render :show }
       format.json { render :show, status: :ok }
+    end
+  end
+
+  # GET /bookmarks/tags/autocomplete.json
+  def autocomplete
+    @tags = tags_search.take(params.fetch(:c, 5))
+      .tap { |arr| arr.unshift params[:q] }
+      .uniq
+      .compact
+
+    respond_to do |format|
+      format.json { render :autocomplete, status: :ok }
     end
   end
 
@@ -44,6 +56,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/new
   def new
     @bookmark = current_user.bookmarks.new
+    @bookmark.webpage = Webpage.new
   end
 
   # GET /bookmarks/1/edit
@@ -101,12 +114,20 @@ class BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    permitted_attributes(@bookmark || Bookmark)
+    permitted_attributes(@bookmark || Bookmark).tap do |obj|
+      tags = params.dig(:bookmark).fetch(:tags, []).map(&:strip).reject(&:empty?).map do |tag|
+        Tag.find_or_create_by label: tag
+      end
+
+      webpage = Webpage.find_or_create_by uri_string: params.dig(:bookmark, :uri_string)
+
+      obj.merge!(tags: tags, webpage: webpage)
+    end
   end
 
-  def bookmarks_search
+  def tags_search
     res = BookmarksIndex.suggest(
-      "bookmark-suggest" => {
+      "tag-suggest" => {
         text: params[:q],
         completion: {
           field: :suggest,
@@ -114,17 +135,17 @@ class BookmarksController < ApplicationController
             fuzziness: 2
           },
           contexts: {
-            type: [ :bookmark ]
+            type: [ :tag ]
           }
         }
       }
     )
-    .suggest["bookmark-suggest"]
+    .suggest["tag-suggest"]
 
-    ids ||= []
-    ids += res.first["options"].map { |row| row.dig("_id") } if res.present?
+    tags ||= []
+    tags += res.first["options"].map { |row| row.dig("_source", "tag") } if res.present?
 
-    Bookmark.where id: ids
+    tags
   end
 end
 

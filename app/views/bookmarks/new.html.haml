@@ -1,0 +1,12 @@
+- content_for :page_title do
+  New Bookmark
+
+= render "navbar"
+
+- content_for :body do
+  .ui.fluid.grid
+    .row
+      %h1 New Bookmark
+
+    .ui.centered.row
+      = render partial: "form", locals: { bookmark: @bookmark }

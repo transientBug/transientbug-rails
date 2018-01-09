@@ -21,11 +21,16 @@ Rails.application.routes.draw do
   end
 
   resources :bookmarks do
+    get "/cache", to: "webpage_cache#index"
+    get "/cache/assets/:key", to: "webpage_cache#assets"
+
     collection do
       get "search"
+      get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
       get "tag/:tag", action: :tag, as: "tag"
     end
   end
+
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 

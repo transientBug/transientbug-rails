@@ -1,0 +1,25 @@
+= form_for bookmark, html: { class: "ui centered fluid form" } do |f|
+  - if bookmark.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
+      %ul
+        - bookmark.errors.full_messages.each do |message|
+          %li= message
+  - if bookmark.new_record?
+    .required.field
+      = f.label :uri_string
+      = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
+
+  .required.field
+    = f.label :title
+    = f.text_field :title, aria: { describedby: "Bookmark title" }
+
+  .field
+    = f.label :description
+    = f.text_area :description, aria: { describedby: "Bookmark description" }
+
+  .field
+    = f.label :tags
+    = f.select :tags, bookmark.tags.map { |t| [ t, t ] }, {}, { multiple: true, class: "ui multiple search selection dropdown", data: { behavior: "autocomplete-tags" } }
+
+  = f.submit "Save", class: "ui positive right floated submit button"

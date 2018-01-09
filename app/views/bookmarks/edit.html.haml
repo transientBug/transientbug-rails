@@ -1,0 +1,12 @@
+- content_for :page_title do
+  Editing Bookmark #{ @bookmark.title }
+
+= render "navbar"
+
+- content_for :body do
+  .ui.fluid.grid.container
+    .row
+      %h1 Editing Bookmark
+
+    .row
+      = render partial: "form", locals: { bookmark: @bookmark }

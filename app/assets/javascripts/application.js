@@ -11,3 +11,4 @@
 //
 //= require pages
 //= require images
+//= require bookmarks

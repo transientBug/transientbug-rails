@@ -1,2 +1,0 @@
-class WebpageCachesController < ApplicationController
-end

@@ -90,25 +90,6 @@ ActiveRecord::Schema.define(version: 2018_01_09_143320) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
-  create_table "questionnaires", force: :cascade do |t|
-    t.bigint "user_id"
-    t.text "title"
-    t.boolean "disabled"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_questionnaires_on_user_id"
-  end
-
-  create_table "questions", force: :cascade do |t|
-    t.bigint "questionnaire_id"
-    t.text "title"
-    t.text "question"
-    t.integer "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
-  end
-
   create_table "tags", force: :cascade do |t|
     t.text "label"
     t.text "color"
@@ -134,6 +115,4 @@ ActiveRecord::Schema.define(version: 2018_01_09_143320) do
   add_foreign_key "bookmarks", "users"
   add_foreign_key "bookmarks", "webpages"
   add_foreign_key "images", "users"
-  add_foreign_key "questionnaires", "users"
-  add_foreign_key "questions", "questionnaires"
 end
