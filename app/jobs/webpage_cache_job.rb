@@ -1,6 +1,6 @@
 require "webpage_cache_service"
 
-class CacheWebpageJob < ApplicationJob
+class WebpageCacheJob < ApplicationJob
   queue_as :default
   attr_reader :bookmark
 

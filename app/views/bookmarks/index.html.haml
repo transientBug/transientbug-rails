@@ -16,7 +16,10 @@
         .item
           %i.bookmark.icon
           .content
-            = link_to bookmark.title, bookmark.uri_string, class: "item"
+            .item
+              = link_to bookmark.title, bookmark.uri_string
+              = link_to bookmark_cache_path(bookmark) do
+                %i.archive.icon
             .description
               = bookmark.description
               - if bookmark.description.present?
