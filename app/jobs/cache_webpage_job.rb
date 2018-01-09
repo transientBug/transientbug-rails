@@ -13,6 +13,6 @@ class CacheWebpageJob < ApplicationJob
   private
 
   def download_original
-    WebpageCacheService.new(uri: bookmark.uri, key: bookmark.id).cache!
+    WebpageCacheService::Cache.new(uri: bookmark.uri, key: bookmark.id).cache
   end
 end
