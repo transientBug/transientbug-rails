@@ -20,6 +20,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :bookmarks do
+    collection do
+      get "search"
+      get "tag/:tag", action: :tag, as: "tag"
+    end
+  end
+
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?

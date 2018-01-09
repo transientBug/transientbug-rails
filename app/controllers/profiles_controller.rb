@@ -2,9 +2,12 @@ class ProfilesController < ApplicationController
   require_login!
   before_action :set_user
 
+  # GET /profile
   def show
   end
 
+  # PATCH /profile
+  # PUT /profile
   def update
     respond_to do |format|
       if @user.update user_params

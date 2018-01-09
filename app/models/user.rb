@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   has_many :authorizations
-  has_many :images
 
-  has_one :identity
+  has_many :images
+  has_many :bookmarks
 
   validates :username, presence: true
   validates :email, presence: true
