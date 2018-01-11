@@ -4,11 +4,11 @@ class InvitesController < ApplicationController
   before_action :no_loggedin
 
   def show
-    redirect_to invites_path and return unless @invitation
+    redirect_to home_path, notice: "That invite isn't valid :(" and return unless @invitation
 
     attempt_reservation
 
-    redirect_to invites_path and return unless @invitations_user
+    redirect_to home_path, notice: "That invite isn't valid :(" and return unless @invitations_user
 
     session[:invite_reservation] = @invitations_user.id
 
@@ -38,7 +38,7 @@ class InvitesController < ApplicationController
   end
 
   def set_invite
-    @invitation = Invitation.find_by code: params[:code]
+    @invitation = Invitation.find_by code: params[:id]
   end
 
   def attempt_reservation
