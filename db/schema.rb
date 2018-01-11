@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_09_143320) do
+ActiveRecord::Schema.define(version: 2018_01_11_212802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,25 @@ ActiveRecord::Schema.define(version: 2018_01_09_143320) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
+  create_table "invitations", force: :cascade do |t|
+    t.text "code"
+    t.text "internal_node"
+    t.text "title"
+    t.text "description"
+    t.integer "limit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "invitations_users", force: :cascade do |t|
+    t.bigint "invitation_id", null: false
+    t.bigint "users_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
+    t.index ["users_id"], name: "index_invitations_users_on_users_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.text "label"
     t.text "color"
@@ -115,4 +134,6 @@ ActiveRecord::Schema.define(version: 2018_01_09_143320) do
   add_foreign_key "bookmarks", "users"
   add_foreign_key "bookmarks", "webpages"
   add_foreign_key "images", "users"
+  add_foreign_key "invitations_users", "invitations"
+  add_foreign_key "invitations_users", "users", column: "users_id"
 end

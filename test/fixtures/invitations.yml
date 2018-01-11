@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyText
+  internal_node: MyText
+  title: MyText
+  description: MyText
+  limit: 
+
+two:
+  code: MyText
+  internal_node: MyText
+  title: MyText
+  description: MyText
+  limit: 
