@@ -39,6 +39,22 @@ App.init = () => {
       url: "view"
     }
   })
+
+  $("[data-behavior~=search-bookmarks]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search bookmarks"
+    },
+    fields: {
+      url: "view"
+    }
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {

@@ -1,12 +1,19 @@
 - content_for :page_title do
-  Bookmarks Tagged "#{ @tag.label }"
+  Bookmarks Tagged '#{ @tag.label }'
 
 = render "navbar"
 
 - content_for :body do
-  .ui.centered.row
+  .ui.row
     %h1
       .ui.massive.label.tag{ class: [ @tag.color ] }= @tag.label
+
+  .ui.row
+    .ui.search
+      .ui.icon.input
+        = form_tag search_bookmarks_path, method: :get do
+          = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }
+        %i.search.icon
 
   .ui.row
     .ui.divider

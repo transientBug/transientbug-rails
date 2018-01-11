@@ -2,11 +2,12 @@
   %i.bookmark.icon
   .content
     .item
-      = link_to bookmark_cache_path(bookmark), class: "archive-link" do
+      = link_to bookmark_cache_path(bookmark), data: { turbolinks: false }, class: "archive-link" do
         %i.archive.icon
 
-      = link_to bookmark.title, bookmark.uri_string
-      = link_to bookmark.uri_string, class: "uri-link"
+      = link_to bookmark.title, bookmark_path(bookmark)
+
+      = link_to bookmark.uri_string
 
     .description
       = bookmark.description

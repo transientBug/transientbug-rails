@@ -13,5 +13,6 @@
 //= require images
 //= require invites
 //= require profiles
+//= require bookmarks
 //= require webpage_caches
 //= require_tree ./admin

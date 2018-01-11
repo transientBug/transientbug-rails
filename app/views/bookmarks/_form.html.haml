@@ -10,6 +10,10 @@
     .required.field
       = f.label :uri_string
       = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
+  - else
+    %p
+      %b URL:
+      = link_to bookmark.uri_string
 
   .required.field
     = f.label :title
@@ -21,6 +25,6 @@
 
   .field
     = f.label :tags
-    = f.select :tags, bookmark.tags.map { |t| [ t, t ] }, {}, { multiple: true, class: "ui multiple search selection dropdown", data: { behavior: "autocomplete-tags" } }
+    = f.select :tags, bookmark.tags.map { |t| [ t.label, t.label ] }, {}, { multiple: true, class: "ui multiple search selection dropdown", data: { behavior: "autocomplete-tags" } }
 
   = f.submit "Save", class: "ui positive right floated submit button"

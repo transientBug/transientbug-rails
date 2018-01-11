@@ -2,42 +2,42 @@
   Profile
 
 - content_for :body do
-  .ui.grid
+  -# .ui.grid
     .ui.four.wide.column
       .ui.row
         .ui.vertical.menu
           .item Basic Info
           .item Security
-          .item API Keys
+          .item API Key
 
     .ui.twelve.wide.column
-      .ui.row
-        %h2.ui.header
-          .content Basic Info
+  .ui.row
+    %h2.ui.header
+      .content Basic Info
 
-        .ui.list
-          .item
-            .content
-              .header Username
-              .description Used only for personalizing the site and communcations; It does not have to be unique
+    .ui.list
+      .item
+        .content
+          .header Username
+          .description Used only for personalizing the site and communcations; It does not have to be unique
 
-          .item
-            .content
-              .header Email
-              .description Used to contact you, help recover a lost password and identify you during login; It does have to be unique.
+      .item
+        .content
+          .header Email
+          .description Used to contact you, help recover a lost password and identify you during login; It does have to be unique.
 
-        = render partial: "form", locals: { user: @user }
+    = render partial: "form", locals: { user: @user }
 
-      .ui.row
-        .ui.divider
+  .ui.row
+    .ui.divider
 
-        %h2.ui.header
-          .content Security
+    %h2.ui.header
+      .content Security
 
-        = render partial: "password_form"
+    = render partial: "password_form"
 
-      .ui.row
-        .ui.divider
+  .ui.row
+    .ui.divider
 
-        %h2.ui.header
-          .content API Keys
+    %h2.ui.header
+      .content API Key

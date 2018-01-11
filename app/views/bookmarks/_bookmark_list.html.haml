@@ -4,11 +4,11 @@
       - bookmarks.each do |bookmark|
         = render partial: "bookmark_list_item", locals: { bookmark: bookmark }
 
-  .row.centered
+  .ui.row.centered
     = paginate bookmarks
 
 - else
-  .row.centered
+  .ui.row.centered
     %i.massive.warning.sign.icon
-  .row.centered
+  .ui.row.centered
     %h1.huge.header Uh oh, nothing found!
