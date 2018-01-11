@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
   match "/logout", to: "sessions#destroy", via: [:get, :delete]
 
-  resource :profile, only: [:show, :update]
+  resource :profile, only: [:show, :update] do
+    post "password"
+  end
 
   resources :images do
     collection do

@@ -1,6 +1,12 @@
 - content_for :navbar_right do
-  .right.menu
-    - if policy(Bookmark).create?
-      .ui.item
-        = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
-          %i.bookmark.icon
+  - if policy(Bookmark).create?
+    .ui.item
+      = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
+        %i.bookmark.icon
+
+  .ui.category.search.item{ data: { behavior: "search-bookmarks" } }
+    .ui.icon.input
+      = form_tag search_bookmarks_path, method: :get do
+        = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "Search" }
+      %i.search.icon
+    .results

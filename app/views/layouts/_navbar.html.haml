@@ -7,17 +7,13 @@
     = active_link_to "Home", home_path, class: "item"
     = active_link_to "Images", images_path, class: "item"
 
+    - if signed_in?
+      = active_link_to "Bookmarks", bookmarks_path, class: "item"
+
     = content_for :navbar
 
     .right.menu
       = content_for :navbar_right
-
-      .ui.category.search.item{ data: { behavior: "search-images" } }
-        .ui.icon.input
-          = form_tag search_images_path, method: :get do
-            = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Images ...", aria: { label: "Search" }
-          %i.search.icon
-        .results
 
       - if signed_in?
         .ui.simple.dropdown.item

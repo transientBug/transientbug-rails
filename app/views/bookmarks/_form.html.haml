@@ -5,6 +5,7 @@
       %ul
         - bookmark.errors.full_messages.each do |message|
           %li= message
+
   - if bookmark.new_record?
     .required.field
       = f.label :uri_string
