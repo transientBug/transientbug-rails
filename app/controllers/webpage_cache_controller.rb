@@ -3,7 +3,7 @@ require "webpage_cache_service"
 class WebpageCacheController < ApplicationController
   BASE_TEMPLATE = Addressable::Template.new("/bookmarks/{id}/cache/assets/")
 
-  require_login!# only: [ :new, :edit, :create, :update, :destroy ]
+  # require_login!# only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_bookmark
 
   def index
@@ -12,6 +12,7 @@ class WebpageCacheController < ApplicationController
   end
 
   def assets
+    render plain: "404 Not Found", status: :not_found and return unless renderer.asset?(key: params[:key])
     send_data renderer.asset(key: params[:key]).read, type: renderer.content_type(key: params[:key]), disposition: "inline"
   end
 

@@ -1,0 +1,14 @@
+- if bookmarks.any?
+  .ui.row
+    .ui.very.relaxed.divided.list
+      - bookmarks.each do |bookmark|
+        = render partial: "bookmark_list_item", locals: { bookmark: bookmark }
+
+  .row.centered
+    = paginate bookmarks
+
+- else
+  .row.centered
+    %i.massive.warning.sign.icon
+  .row.centered
+    %h1.huge.header Uh oh, nothing found!

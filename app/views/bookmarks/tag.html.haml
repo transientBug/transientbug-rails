@@ -1,0 +1,14 @@
+- content_for :page_title do
+  Bookmarks Tagged "#{ @tag.label }"
+
+= render "navbar"
+
+- content_for :body do
+  .ui.centered.row
+    %h1
+      .ui.massive.label.tag{ class: [ @tag.color ] }= @tag.label
+
+  .ui.row
+    .ui.divider
+
+  = render partial: "bookmark_list", locals: { bookmarks: @bookmarks }

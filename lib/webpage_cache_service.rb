@@ -105,6 +105,10 @@ class WebpageCacheService
       metadata["links"][ key ]["content_type"]
     end
 
+    def asset? key:
+      root.join("assets", key).exist?
+    end
+
     def asset key:
       root.join("assets", key).open("r")
     end

@@ -1,6 +1,7 @@
 class BookmarksController < ApplicationController
   require_login!# only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_bookmark, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_tag, only: [ :tag ]
 
   # GET /bookmarks
   # GET /bookmarks.json
@@ -11,7 +12,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/tag/thing
   # GET /bookmarks/tag/thing.json
   def tag
-    @bookmarks = policy_scope(Bookmark).where(tags: params[:tag]).page params[:page]
+    @bookmarks = policy_scope(Bookmark).where(tags: @tag).page params[:page]
   end
 
   # GET /bookmarks/1
@@ -111,6 +112,10 @@ class BookmarksController < ApplicationController
 
   def set_bookmark
     @bookmark = policy_scope(Bookmark).find(params[:id])
+  end
+
+  def set_tag
+    @tag = Tag.find_by(label: params[:tag])
   end
 
   def bookmark_params

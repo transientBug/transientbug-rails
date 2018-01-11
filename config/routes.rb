@@ -1,6 +1,10 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  namespace :admin do
+  end
+  get 'invites/index'
+  get 'invites/create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#main"
   get "/home", to: "pages#home"
@@ -22,7 +26,7 @@ Rails.application.routes.draw do
 
   resources :bookmarks do
     get "/cache", to: "webpage_cache#index"
-    get "/cache/assets/:key", to: "webpage_cache#assets"
+    match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
 
     collection do
       get "search"
@@ -30,7 +34,6 @@ Rails.application.routes.draw do
       get "tag/:tag", action: :tag, as: "tag"
     end
   end
-
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 
