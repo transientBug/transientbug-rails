@@ -7,6 +7,9 @@ class PagesController < ApplicationController
     redirect_to images_path
   end
 
+  def faq
+  end
+
   def home
   end
 
