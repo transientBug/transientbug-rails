@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_11_212802) do
+ActiveRecord::Schema.define(version: 2018_01_12_202108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,9 +96,9 @@ ActiveRecord::Schema.define(version: 2018_01_11_212802) do
     t.text "title"
     t.text "description"
     t.integer "limit"
-    t.integer "available"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "available"
   end
 
   create_table "invitations_users", force: :cascade do |t|
@@ -107,7 +107,17 @@ ActiveRecord::Schema.define(version: 2018_01_11_212802) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
-    t.index ["users_id"], name: "index_invitations_users_on_users_id"
+    t.index ["user_id"], name: "index_invitations_users_on_users_id"
+  end
+
+  create_table "service_announcements", force: :cascade do |t|
+    t.text "title"
+    t.text "message"
+    t.text "color"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tags", force: :cascade do |t|
@@ -123,6 +133,7 @@ ActiveRecord::Schema.define(version: 2018_01_11_212802) do
     t.datetime "updated_at", null: false
     t.text "email"
     t.string "password_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "webpages", force: :cascade do |t|
@@ -136,5 +147,5 @@ ActiveRecord::Schema.define(version: 2018_01_11_212802) do
   add_foreign_key "bookmarks", "webpages"
   add_foreign_key "images", "users"
   add_foreign_key "invitations_users", "invitations"
-  add_foreign_key "invitations_users", "users", column: "users_id"
+  add_foreign_key "invitations_users", "users"
 end
