@@ -15,17 +15,6 @@
     %h2.ui.header
       .content Basic Info
 
-    .ui.list
-      .item
-        .content
-          .header Username
-          .description Used only for personalizing the site and communcations; It does not have to be unique
-
-      .item
-        .content
-          .header Email
-          .description Used to contact you, help recover a lost password and identify you during login; It does have to be unique.
-
     = render partial: "form", locals: { user: @user }
 
   .ui.row

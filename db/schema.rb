@@ -92,17 +92,18 @@ ActiveRecord::Schema.define(version: 2018_01_11_212802) do
 
   create_table "invitations", force: :cascade do |t|
     t.text "code"
-    t.text "internal_node"
+    t.text "internal_note"
     t.text "title"
     t.text "description"
     t.integer "limit"
+    t.integer "available"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "invitations_users", force: :cascade do |t|
     t.bigint "invitation_id", null: false
-    t.bigint "users_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"

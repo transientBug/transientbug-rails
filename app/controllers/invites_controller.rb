@@ -1,24 +1,23 @@
 class InvitesController < ApplicationController
-  before_action :set_invite, only: [ :show, :update ]
-  before_action :attempt_reservation, only: [ :show, :update ]
   before_action :no_loggedin
 
+  before_action :set_invite, only: [ :create, :show, :update ]
+
+  def index
+  end
+
+  def create
+    redirect_to invite_path(@invitation.code)
+  end
+
   def show
-    redirect_to home_path, notice: "That invite isn't valid :(" and return unless @invitation
-
-    attempt_reservation
-
-    redirect_to home_path, notice: "That invite isn't valid :(" and return unless @invitations_user
-
-    session[:invite_reservation] = @invitations_user.id
-
     @user = User.new
   end
 
   def update
     @user = User.new user_params
 
-    if user.save
+    if @user.save
       @invitations_user.update user: @user
       self.current_user = @user
       redirect_to home_path, notice: "Welcome #{ @user.username }!"
@@ -38,25 +37,30 @@ class InvitesController < ApplicationController
   end
 
   def set_invite
-    @invitation = Invitation.find_by code: params[:id]
-  end
+    @invitation = Invitation.find_by code: (params[:id] || params[:code])
 
-  def attempt_reservation
+    redirect_to invites_path, error: "That invite isn't valid :(" unless @invitation
+
     @invitations_user = @invitation.invitations_users.find_by id: session[:invite_reservation]
-    @invitations_user ||= Invitation.transaction do
-      @invitation.with_lock("FOR NO KEY UPDATE") do
-        query = <<~SQL
-          INSERT INTO invitations_users (invitation_id, created_at, updated_at)
-          SELECT $1, NOW(), NOW()
-          FROM invitations_users
-          WHERE invitation_id = $1
-          HAVING count(*) < $2
-          RETURNING id;
-        SQL
 
-        result = ActiveRecord::Base.connection.raw_connection.exec_params(query, [@invitation.id.to_s, @invitation.limit.to_s])
-        @invitation.invitations_users.find_by id: result.to_a.first&.fetch("id")
-      end
-    end
+    return if @invitations_user
+
+    query = <<~SQL
+      UPDATE invitations
+      SET available = available - 1
+      WHERE available > 0
+        AND id = $1
+      RETURNING id, available
+      ;
+    SQL
+
+    result = ActiveRecord::Base.connection.raw_connection.exec_params(query, [@invitation.id.to_s])
+
+    row = result.to_a.first
+
+    redirect_to invites_path, error: "That invite isn't valid :(" if row["available"] < 0
+
+    @invitations_user = @invitation.invitations_users.create
+    session[:invite_reservation] = @invitations_user.id
   end
 end
