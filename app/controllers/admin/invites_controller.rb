@@ -1,2 +1,2 @@
-class Admin::InvitesController < ApplicationController
+class Admin::InvitesController < AdminController
 end

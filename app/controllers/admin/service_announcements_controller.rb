@@ -1,2 +1,2 @@
-class Admin::ServiceAnnouncementsController < ApplicationController
+class Admin::ServiceAnnouncementsController < AdminController
 end

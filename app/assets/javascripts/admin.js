@@ -4,9 +4,9 @@
 //= require semantic-ui
 //= require action_cable
 //
-//= require application_init
+//= require admin_init
 //
 // You can generate new channels where WebSocket features live using the `rails generate channel` command.
-//= require_tree ./channels
+//= require_tree ./channels/admin
 //
-//= require_tree ./public
+//= require_tree ./admin

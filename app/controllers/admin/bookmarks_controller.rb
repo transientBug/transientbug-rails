@@ -1,2 +1,2 @@
-class Admin::BookmarksController < ApplicationController
+class Admin::BookmarksController < AdminController
 end
