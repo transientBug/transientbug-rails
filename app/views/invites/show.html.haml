@@ -10,7 +10,7 @@
       = @invitation.description
 
   .ui.row
-    = form_for @user, url: invite_path(@invitation.code), method: :patch, class: "ui form" do |f|
+    = form_for @user, url: invite_path(@invitation.code), method: :patch, html: { class: "ui form" } do |f|
       - if @user.errors.any?
         .ui.message.error
           %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"

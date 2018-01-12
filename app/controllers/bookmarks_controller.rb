@@ -6,13 +6,13 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmarks = policy_scope(Bookmark).page params[:page]
+    @bookmarks = current_user.bookmarks.page params[:page]
   end
 
   # GET /bookmarks/tag/thing
   # GET /bookmarks/tag/thing.json
   def tag
-    @bookmarks = policy_scope(Bookmark).where(tags: @tag).page params[:page]
+    @bookmarks = current_user.bookmarks.where(tags: @tag).page params[:page]
   end
 
   # GET /bookmarks/1
@@ -111,7 +111,7 @@ class BookmarksController < ApplicationController
   private
 
   def set_bookmark
-    @bookmark = policy_scope(Bookmark).find(params[:id])
+    @bookmark = current_user.bookmarks.find(params[:id])
   end
 
   def set_tag

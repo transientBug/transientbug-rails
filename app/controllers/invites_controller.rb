@@ -20,6 +20,7 @@ class InvitesController < ApplicationController
     if @user.save
       @invitations_user.update user: @user
       self.current_user = @user
+      session.delete :invite_reservation
       redirect_to home_path, notice: "Welcome #{ @user.username }!"
     else
       render :show
