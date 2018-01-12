@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
     resources :service_announcements
 
-    resources :invites
+    resources :invitations
     resources :users
 
     resources :bookmarks
@@ -49,5 +49,6 @@ Rails.application.routes.draw do
 
   post "/telegram/:token", to: "telegram_webhooks#webhook"
 
+  # This should be locked down actually rather than disabled outside of dev
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 end
