@@ -1,10 +1,6 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
-  namespace :admin do
-  end
-  get 'invites/index'
-  get 'invites/create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#main"
   get "/home", to: "pages#home"
@@ -21,7 +17,10 @@ Rails.application.routes.draw do
     post "password"
   end
 
-  resources :images do
+  resources :bookmarks do
+    get "/cache", to: "webpage_cache#index"
+    match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
+
     collection do
       get "search"
       get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
@@ -29,10 +28,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :bookmarks do
-    get "/cache", to: "webpage_cache#index"
-    match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
+  namespace :admin do
+    root "home#home"
 
+    resources :service_announcements
+
+    resources :invites
+    resources :users
+
+    resources :bookmarks
+  end
+
+  resources :images do
     collection do
       get "search"
       get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
