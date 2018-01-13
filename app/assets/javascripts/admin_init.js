@@ -12,6 +12,11 @@ App.init = () => {
   $(".message .close").on("click", () => {
     $(this).closest(".message").transition("fade")
   })
+
+  $(".sidebar.icon").on("click", () => {
+    $('.ui.sidebar')
+      .sidebar('toggle')
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {

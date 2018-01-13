@@ -1,0 +1,45 @@
+- content_for :page_title do
+  Invitations
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      = render partial: "menu", locals: { count: @count }
+
+  .ui.fourteen.wide.column
+    .ui.row
+      %table.ui.celled.table
+        %thead
+          %tr
+            %th.collapsing= check_box_tag "select-all", data: { behaviour: "select-all" }
+            %th Code
+            %th Title
+            %th Description
+            %th Internal Note
+            %th.collapsing Limit
+            %th.collapsing Created At
+            %th.collapsing Actions
+        %tbody
+          - if @invitations.any?
+            - @invitations.each do |invitation|
+              %tr
+                %td= check_box_tag "select-#{ invitation.id }", data: { behaviour: "select" }
+                %td= invitation.code
+                %td= invitation.title
+                %td= invitation.description.truncate 120
+                %td= invitation.internal_note.truncate 240
+                %td= invitation.limit
+                %td= invitation.created_at.to_s(:long)
+                %th
+                  .ui.buttons
+                    = link_to "edit", edit_admin_invitation_path(invitation), class: "ui blue button"
+                    .or
+                    = link_to "destroy", admin_invitation_path(invitation), method: :destroy, data: { confirm: "really?!?" }, class: "ui negative button"
+
+          - else
+            %tr
+              %td{ colspan: 6 }
+                No invitations made yet
+
+    .ui.row
+      = paginate @invitations

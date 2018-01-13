@@ -2,8 +2,8 @@ class Invitation < ApplicationRecord
   has_many :invitations_users
   has_many :users, through: :invitation_users
 
-  before_create :gen_code
-  before_create :set_current
+  after_initialize :gen_code
+  after_initialize :set_current
 
   private
 
@@ -12,6 +12,6 @@ class Invitation < ApplicationRecord
   end
 
   def set_current
-    self.current = self.limit
+    self.current ||= self.limit
   end
 end

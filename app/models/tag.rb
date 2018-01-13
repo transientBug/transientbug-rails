@@ -15,7 +15,7 @@ class Tag < ApplicationRecord
     :black
   ].freeze
 
-  before_validation :set_color
+  after_initialize :set_color
 
   validates :label, presence: true
 

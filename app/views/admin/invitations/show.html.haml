@@ -1,0 +1,10 @@
+- content_for :page_title do
+  Viewing "#{ @invitation.title }"
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      = render partial: "menu", locals: { count: @count }
+
+  .ui.fourteen.wide.column
+    .ui.row

@@ -1,9 +1,10 @@
 .ui.top.fixed.inverted.red.menu
+  .item
+    %i.sidebar.icon
+
   = link_to admin_root_path, class: "header item" do
     = image_tag "bug_logo.png", class: "logo"
     transientBug Admin
-
-  = active_link_to "Home", admin_root_path, class: "item"
 
   = content_for :navbar
 
@@ -11,6 +12,7 @@
     = content_for :navbar_right
 
     .ui.simple.dropdown.item
+      %i.user.circle.outline.icon
       = current_user.username
       %i.dropdown.icon
       .menu

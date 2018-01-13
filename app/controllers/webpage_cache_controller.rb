@@ -3,7 +3,7 @@ require "webpage_cache_service"
 class WebpageCacheController < ApplicationController
   BASE_TEMPLATE = Addressable::Template.new("/bookmarks/{id}/cache/assets/")
 
-  # require_login!# only: [ :new, :edit, :create, :update, :destroy ]
+  require_login!# only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_bookmark
 
   def index

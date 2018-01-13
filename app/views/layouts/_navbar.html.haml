@@ -17,12 +17,14 @@
 
       - if signed_in?
         .ui.simple.dropdown.item
+          %i.user.circle.outline.icon
           = current_user.username
           %i.dropdown.icon
           .menu
             = link_to "Profile", profile_path, class: "item"
             = link_to "Admin Panel", admin_root_path, class: "item"
             = link_to "Logout", logout_path, class: "item"
+
       - else
         = link_to "Login", login_path, class: "item"
 
