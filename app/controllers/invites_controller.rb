@@ -57,7 +57,7 @@ class InvitesController < ApplicationController
 
     result = ActiveRecord::Base.connection.raw_connection.exec_params(query, [@invitation.id.to_s])
 
-    row = result.to_a.first
+    row = result.to_a.first || {}
 
     redirect_to invites_path, error: "That invite isn't valid :(" if row["available"] < 0
 

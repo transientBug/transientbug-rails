@@ -8,3 +8,53 @@
 
   .ui.fourteen.wide.column
     .ui.row
+      %h2.ui.dividing.header Internal Stuff
+      %p= @invitation.internal_note
+
+    .ui.row
+      .ui.buttons
+        = link_to edit_admin_invitation_path(@invitation), class: "ui button" do
+          %i.edit.icon
+          edit
+        .ui.simple.dropdown.icon.button
+          %i.dropdown.icon
+          .menu
+            .header
+              %i.warning.sign.icon
+              DANGERZONE
+            .divider
+
+            = link_to admin_invitation_path(@invitation), method: :destroy, data: { confirm: "really?!?" }, class: "error item" do
+              %i.delete.icon
+              destroy
+
+    .ui.row
+      %h2.ui.dividing.header Quick Info
+
+      %table.ui.collapsing.celled.table
+        %tbody
+          %tr
+            %td
+              %b Code
+            %td
+              = @invitation.code
+          %tr
+            %td
+              %b Limit
+            %td
+              = @invitation.limit
+          %tr
+            %td
+              %b Current Available
+            %td
+              = @invitation.current
+          %tr
+            %td
+              %b Created At
+            %td
+              = @invitation.created_at.to_s(:long)
+
+    .ui.row
+      %h2.ui.dividing.header End User Facing Info
+      %h3.header= @invitation.title
+      %p= @invitation.description
