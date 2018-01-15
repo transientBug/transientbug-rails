@@ -93,7 +93,7 @@ Released under the MIT license
 
 }).call(this);
 (function() {
-  var CustomEvent, fire, matches;
+  var CustomEvent, fire, matches, preventDefault;
 
   matches = Rails.matches;
 
@@ -107,6 +107,19 @@ Released under the MIT license
       return evt;
     };
     CustomEvent.prototype = window.Event.prototype;
+    preventDefault = CustomEvent.prototype.preventDefault;
+    CustomEvent.prototype.preventDefault = function() {
+      var result;
+      result = preventDefault.call(this);
+      if (this.cancelable && !this.defaultPrevented) {
+        Object.defineProperty(this, 'defaultPrevented', {
+          get: function() {
+            return true;
+          }
+        });
+      }
+      return result;
+    };
   }
 
   fire = Rails.fire = function(obj, name, data) {
@@ -173,13 +186,11 @@ Released under the MIT license
       }
       return typeof options.complete === "function" ? options.complete(xhr, xhr.statusText) : void 0;
     });
-    if (typeof options.beforeSend === "function") {
-      options.beforeSend(xhr, options);
+    if ((options.beforeSend != null) && !options.beforeSend(xhr, options)) {
+      return false;
     }
     if (xhr.readyState === XMLHttpRequest.OPENED) {
       return xhr.send(options.data);
-    } else {
-      return fire(document, 'ajaxStop');
     }
   };
 
@@ -282,7 +293,7 @@ Released under the MIT license
     }
     params = [];
     inputs.forEach(function(input) {
-      if (!input.name) {
+      if (!input.name || input.disabled) {
         return;
       }
       if (matches(input, 'select')) {
@@ -544,7 +555,7 @@ Released under the MIT license
           return fire(element, 'ajax:send', [xhr]);
         } else {
           fire(element, 'ajax:stopped');
-          return xhr.abort();
+          return false;
         }
       },
       success: function() {
@@ -35280,8 +35291,10 @@ window.App || (window.App = {})
 
 App.init = () => {
   $.fn.api.settings.api = {
-    "autocomplete tags": "/images/tags/autocomplete.json?q={query}",
-    "search images": "/images/search.json?q={query}"
+    "autocomplete image tags": "/images/tags/autocomplete.json?q={query}",
+    "search images": "/images/search.json?q={query}",
+    "autocomplete bookmark tags": "/bookmarks/tags/autocomplete.json?q={query}",
+    "search bookmarks": "/bookmarks/search.json?q={query}"
   }
 
   $.fn.api.settings.cache = false
@@ -35315,6 +35328,22 @@ App.init = () => {
       url: "view"
     }
   })
+
+  $("[data-behavior~=search-bookmarks]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search bookmarks"
+    },
+    fields: {
+      url: "view"
+    }
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {
@@ -35322,9 +35351,24 @@ document.addEventListener("turbolinks:load", () => {
 })
 ;
 document.addEventListener("turbolinks:load", () => {
-  if (!($(".pages.index").length > 0)) {
+  if (!($(".bookmarks").length > 0)) {
     return
   }
+
+  $("[data-behavior~=autocomplete-tags]").dropdown({
+    apiSettings: {
+      cache: false,
+      action: "autocomplete bookmark tags"
+    },
+    fields: {
+      name: "label",
+      value: "label"
+    }
+  })
+
+  $("[data-behavior~=tag-popup]").popup({
+    inline: true
+  })
 })
 ;
 document.addEventListener("turbolinks:load", () => {
@@ -35335,7 +35379,7 @@ document.addEventListener("turbolinks:load", () => {
   $("[data-behavior~=autocomplete-tags]").dropdown({
     apiSettings: {
       cache: false,
-      action: "autocomplete tags"
+      action: "autocomplete image tags"
     },
     fields: {
       name: "title",
@@ -35346,6 +35390,24 @@ document.addEventListener("turbolinks:load", () => {
   $("[data-behavior~=tag-popup]").popup({
     inline: true
   })
+})
+;
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".invites").length > 0)) {
+    return
+  }
+})
+;
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".pages.index").length > 0)) {
+    return
+  }
+})
+;
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".profiles").length > 0)) {
+    return
+  }
 })
 ;
 
@@ -35359,6 +35421,5 @@ document.addEventListener("turbolinks:load", () => {
 // You can generate new channels where WebSocket features live using the `rails generate channel` command.
 
 //
-
 
 ;

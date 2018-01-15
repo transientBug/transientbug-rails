@@ -1,15 +1,3 @@
-/* line 2, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/sessions.scss */
-.sessions.index .grid {
-  height: 100%;
-}
-/* line 5, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/sessions.scss */
-.sessions.index .image {
-  margin-top: -100px;
-}
-/* line 8, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/sessions.scss */
-.sessions.index .column {
-  max-width: 450px;
-}
 @charset "UTF-8";
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
@@ -40114,27 +40102,27 @@ body.pushable > .pusher {
 /*******************************
          Site Overrides
 *******************************/
-/* line 21, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/application.scss */
+/* line 21, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
 .header {
   font-family: "Maven Pro", "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-/* line 25, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/application.scss */
-.main.container {
+/* line 25, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
+.main.grid {
   margin-top: 5em;
 }
 
-/* line 29, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/application.scss */
+/* line 29, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
 .item.padder {
   margin-top: 2em;
 }
 
-/* line 33, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/application.scss */
+/* line 33, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
 .ui.menu .item img.logo {
   margin-right: 1.5em;
 }
 
-/* line 37, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/application.scss */
+/* line 37, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
 .ui.footer.segment {
   margin: 5em 0em 0em;
   padding: 5em 0em;
