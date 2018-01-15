@@ -1,0 +1,13 @@
+- content_for :page_title do
+  Fequently Asked Questions and Other Things
+
+= content_for :body do
+  %h2.dividing.header Bookmarks
+  %p
+    .question Why isn't X website caching offline correctly?
+    .answer
+      The offline caching system is pretty rudimentary at the moment. It downloads the original webpage, and attempts to grab all the directly referenced script, css and image tags within that webpage. In the off chance that your bookmarked webpage is to a site that actively tries to prevent crawlers, or a site that is rendered with flash or even JS (looking at you, react rendered blog), transientBug is unable to cache those sites at this time.
+
+  %p
+    .question
+    .answer

@@ -9,6 +9,7 @@ class Invitation < ApplicationRecord
 
   def gen_code
     self.code ||= SecureRandom.hex(4)
+    self.limit ||= 1
   end
 
   def set_current

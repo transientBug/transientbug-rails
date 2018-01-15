@@ -61,7 +61,7 @@ class Admin::InvitationsController < AdminController
   private
 
   def set_invitation
-    @invitiation = Invitation.find params[:id]
+    @invitation = Invitation.find params[:id]
   end
 
   def set_count

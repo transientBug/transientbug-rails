@@ -20,7 +20,7 @@ class ProfilesController < ApplicationController
 
   # POST /profile/password
   def password
-    unless @user.authenticate params.dig(:user, :current_password)
+    unless @user.authenticate params[:current_password]
       respond_to do |format|
         format.html do
           flash.now[:error] = "Current password was incorrect, password not updated"
@@ -51,6 +51,6 @@ class ProfilesController < ApplicationController
   end
 
   def password_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.permit(:password, :password_confirmation)
   end
 end
