@@ -30,7 +30,7 @@ document.addEventListener("turbolinks:load", () => {
 
     modal.modal({
       onHidden: (el) => {
-        debugger
+        modal.remove()
       }
     }).modal("show")
   })
