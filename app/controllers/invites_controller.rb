@@ -57,11 +57,9 @@ class InvitesController < ApplicationController
 
     result = ActiveRecord::Base.connection.raw_connection.exec_params(query, [@invitation.id.to_s])
 
-    Rails.logger.info result.to_a
-
     row = result.to_a.first || {}
 
-    redirect_to invites_path, error: "That invite isn't valid :(" if row["available"] < 0
+    redirect_to invites_path, error: "That invite isn't valid :(" if row["available"]&.negative?
 
     @invitations_user = @invitation.invitations_users.create
     session[:invite_reservation] = @invitations_user.id

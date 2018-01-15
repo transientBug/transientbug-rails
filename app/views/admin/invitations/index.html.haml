@@ -24,7 +24,7 @@
             - @invitations.each do |invitation|
               %tr
                 %td= check_box_tag "select-#{ invitation.id }", data: { behaviour: "select" }
-                %th
+                %td
                   .ui.buttons
                     = link_to "view", admin_invitation_path(invitation), class: "ui button"
                     .ui.simple.dropdown.icon.button

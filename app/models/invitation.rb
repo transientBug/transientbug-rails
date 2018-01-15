@@ -3,7 +3,7 @@ class Invitation < ApplicationRecord
   has_many :users, through: :invitation_users
 
   after_initialize :gen_code
-  after_initialize :set_current
+  before_validate :set_current
 
   private
 
