@@ -11,23 +11,26 @@
       %table.ui.celled.table
         %thead
           %tr
-            %th.collapsing= check_box_tag "select-all", data: { behavior: "select-all" }
-            %th.collapsing Actions
+            %th= check_box_tag "select-all", data: { behavior: "select-all" }
+            %th Actions
             %th Code
             %th Title
             %th Description
             %th Internal Note
-            %th.collapsing Limit
-            %th.collapsing Available
-            %th.collapsing Created At
+            %th Limit
+            %th Available
+            %th Created At
         %tbody
           - if @invitations.any?
             - @invitations.each do |invitation|
               %tr
-                %td= check_box_tag "select-#{ invitation.id }", data: { behavior: "select" }
-                %td
+                %td.collapsing= check_box_tag "select-#{ invitation.id }", data: { behavior: "select" }
+                %td.collapsing
                   .ui.buttons
-                    = link_to "view", admin_invitation_path(invitation), class: "ui button"
+                    = link_to admin_invitation_path(invitation), class: "ui icon button" do 
+                      %i.expand.icon
+                      view
+
                     .ui.simple.dropdown.icon.button
                       %i.dropdown.icon
                       .menu
@@ -40,17 +43,17 @@
                           DANGERZONE
                         .divider
 
-                        .item{ data: { behavior: "delete-modal", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
-                          %i.delete.icon
+                        .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
+                          %i.trash.icon
                           delete
 
-                %td= invitation.code
+                %td.collapsing= invitation.code
                 %td= invitation.title
                 %td= invitation.description&.truncate 120
                 %td= invitation.internal_note&.truncate 240
-                %td= invitation.limit
-                %td= invitation.available
-                %td= invitation.created_at.to_s(:long)
+                %td.collapsing= invitation.limit
+                %td.collapsing= invitation.current
+                %td.collapsing= invitation.created_at.to_s(:long)
 
           - else
             %tr

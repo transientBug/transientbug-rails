@@ -17,6 +17,21 @@ App.init = () => {
     $('.ui.sidebar')
       .sidebar('toggle')
   })
+
+  $("[data-behavior~=modal]").on("click", (event) => {
+    let dataset = event.target.dataset
+
+    let renderedModal = JST[dataset.template](dataset)
+
+    let modal = $(renderedModal)
+    $('body').append(modal)
+
+    modal.modal({
+      onHidden: (el) => {
+        modal.remove()
+      }
+    }).modal("show")
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {

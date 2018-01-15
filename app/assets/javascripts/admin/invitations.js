@@ -13,25 +13,4 @@ document.addEventListener("turbolinks:load", () => {
       value: "title"
     }
   })
-
-  $("[data-behavior~=delete-modal]").on("click", (event) => {
-    let template = JST["admin/templates/invitations/delete"]
-
-    let dataset = event.target.dataset
-
-    let renderedModal = template({
-      url: dataset.url,
-      title: dataset.title,
-      code: dataset.code
-    })
-
-    let modal = $(renderedModal)
-    $('body').append(modal)
-
-    modal.modal({
-      onHidden: (el) => {
-        modal.remove()
-      }
-    }).modal("show")
-  })
 })

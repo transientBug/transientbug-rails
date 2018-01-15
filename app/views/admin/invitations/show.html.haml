@@ -8,27 +8,29 @@
 
   .ui.fourteen.wide.column
     .ui.row
-      %h2.ui.dividing.header Internal Stuff
-      %p= @invitation.internal_note
-
-    .ui.row
-      .ui.buttons
-        = link_to edit_admin_invitation_path(@invitation), class: "ui button" do
+      .ui.menu
+        = link_to edit_admin_invitation_path(@invitation), class: "item" do
           %i.edit.icon
           edit
-        .ui.simple.dropdown.icon.button
-          %i.dropdown.icon
-          .menu
-            .header
-              %i.warning.sign.icon
-              DANGERZONE
-            .divider
 
-            = link_to admin_invitation_path(@invitation), method: :destroy, data: { confirm: "really?!?" }, class: "error item" do
-              %i.delete.icon
-              destroy
+        .right.menu
+          .ui.simple.dropdown.item
+            more
+            %i.dropdown.icon
+            .menu
 
-    .ui.row
+              .header
+                %i.warning.sign.icon
+                DANGERZONE
+              .divider
+
+              .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(@invitation), code: @invitation.code, title: @invitation.title } }
+                %i.trash.icon
+                delete
+
+      %h2.dividing.header.item Internal Stuff
+      %p= @invitation.internal_note
+
       %h2.ui.dividing.header Quick Info
 
       %table.ui.collapsing.celled.table
@@ -54,7 +56,6 @@
             %td
               = @invitation.created_at.to_s(:long)
 
-    .ui.row
       %h2.ui.dividing.header End User Facing Info
       %h3.header= @invitation.title
       %p= @invitation.description

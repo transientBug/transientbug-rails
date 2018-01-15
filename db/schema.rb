@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(version: 2018_01_15_145454) do
     t.integer "limit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "available"
     t.integer "current"
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
