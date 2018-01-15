@@ -44,7 +44,7 @@
     .header misc
 
   .menu
-    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
+    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
 
   = content_for :sidebar
 
