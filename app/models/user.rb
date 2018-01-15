@@ -1,5 +1,8 @@
 class User < ApplicationRecord
+  default_scope { includes(:roles) }
+
   has_many :authorizations
+  has_and_belongs_to_many :roles
 
   has_many :images
   has_many :bookmarks
@@ -22,5 +25,9 @@ class User < ApplicationRecord
 
   def owner_of? record
     record.user_id == self.id
+  end
+
+  def role? name
+    roles.find { |role| role.name == name.to_s }
   end
 end
