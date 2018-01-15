@@ -2,12 +2,31 @@
   Fequently Asked Questions and Other Things
 
 = content_for :body do
+  %h1.dividing.header FAQ
+
+  %h2.dividing.header General
+  %p
+    %b.question Can I make suggestions for new features?
+    .answer
+      Yup, send an email to suggestions (at) transientbug.ninja and I'll look into it.
+
+  %p
+    %b.question How can I report a bug?
+    .answer
+      You should send an email to issues (at) transientbug.ninja with any information you can. The more information I've got, the easier it is to track down the bug; Bonus points: I'll let you know when the bug is fixed, or which github issue or trello card you can use to track the progress.
+
+  %p
+    %b.question Is there a place I can track whats in progress?
+    .answer
+      Sure is! #{ link_to "Check out this trello board", "https://trello.com/b/rcaslGoe" }
+
   %h2.dividing.header Bookmarks
   %p
-    .question Why isn't X website caching offline correctly?
+    %b.question Why isn't X website caching offline correctly?
     .answer
       The offline caching system is pretty rudimentary at the moment. It downloads the original webpage, and attempts to grab all the directly referenced script, css and image tags within that webpage. In the off chance that your bookmarked webpage is to a site that actively tries to prevent crawlers, or a site that is rendered with flash or even JS (looking at you, react rendered blog), transientBug is unable to cache those sites at this time.
 
   %p
-    .question
+    %b.question Why am I getting a 500 error for some caches?
     .answer
+      Chances are the page redirects or isn't a valid URL. I'm working on making transientBug smarter about handling these, but for now it just throws a 500 on the cached view.
