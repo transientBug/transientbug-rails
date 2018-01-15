@@ -20,6 +20,7 @@ gem "semantic-ui-sass"
 gem "jquery-rails"
 gem "coffee-rails" # uuuuuuugh
 gem "turbolinks", "~> 5"
+gem "ejs" # javascript templates for things like fancy delete modals
 
 gem "active_link_to"
 gem "kaminari"

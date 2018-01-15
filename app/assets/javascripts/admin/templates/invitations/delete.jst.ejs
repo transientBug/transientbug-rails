@@ -1,0 +1,20 @@
+<div class="ui basic modal">
+  <div class="ui icon header">
+    <i class="trash icon"></i>
+    Delete Invitation?
+  </div>
+  <div class="content">
+    <p>Are you sure you want to delete this invitation titled "<%= title %>" with code "<%= code %>"?</p>
+    <p>Doing so will prevent anyone with the code from registering. You should consider disabling it instead of a hard delete.</p>
+  </div>
+  <div class="actions">
+    <div class="ui green basic cancel inverted button">
+      <i class="remove icon"></i>
+      No
+    </div>
+    <a href="<%= url %>" data-method="delete" rel="nofollow" class="ui red ok inverted button">
+      <i class="checkmark icon"></i>
+      Yes, I'm sure
+    </a>
+  </div>
+</div>

@@ -11,19 +11,20 @@
       %table.ui.celled.table
         %thead
           %tr
-            %th.collapsing= check_box_tag "select-all", data: { behaviour: "select-all" }
+            %th.collapsing= check_box_tag "select-all", data: { behavior: "select-all" }
             %th.collapsing Actions
             %th Code
             %th Title
             %th Description
             %th Internal Note
             %th.collapsing Limit
+            %th.collapsing Available
             %th.collapsing Created At
         %tbody
           - if @invitations.any?
             - @invitations.each do |invitation|
               %tr
-                %td= check_box_tag "select-#{ invitation.id }", data: { behaviour: "select" }
+                %td= check_box_tag "select-#{ invitation.id }", data: { behavior: "select" }
                 %td
                   .ui.buttons
                     = link_to "view", admin_invitation_path(invitation), class: "ui button"
@@ -39,15 +40,16 @@
                           DANGERZONE
                         .divider
 
-                        = link_to admin_invitation_path(invitation), method: :destroy, data: { confirm: "really?!?" }, class: "error item" do
+                        .item{ data: { behavior: "delete-modal", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
                           %i.delete.icon
-                          destroy
+                          delete
 
                 %td= invitation.code
                 %td= invitation.title
                 %td= invitation.description&.truncate 120
                 %td= invitation.internal_note&.truncate 240
                 %td= invitation.limit
+                %td= invitation.available
                 %td= invitation.created_at.to_s(:long)
 
           - else

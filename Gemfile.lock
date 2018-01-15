@@ -154,6 +154,7 @@ GEM
     dotenv-rails (2.2.1)
       dotenv (= 2.2.1)
       railties (>= 3.2, < 5.2)
+    ejs (1.1.1)
     elasticsearch (5.0.4)
       elasticsearch-api (= 5.0.4)
       elasticsearch-transport (= 5.0.4)
@@ -547,6 +548,7 @@ DEPENDENCIES
   coffee-rails
   connection_pool
   dotenv-rails
+  ejs
   factory_girl (~> 4.0)
   flay
   foreman
