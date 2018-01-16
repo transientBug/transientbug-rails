@@ -40127,3 +40127,8 @@ body.pushable > .pusher {
   margin: 5em 0em 0em;
   padding: 5em 0em;
 }
+
+/* line 42, /Users/joshashby/repos/transientbug-rails/app/assets/stylesheets/admin.scss */
+.ui.menu > .item.hidden {
+  display: none;
+}
