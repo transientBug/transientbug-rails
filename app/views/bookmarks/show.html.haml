@@ -9,22 +9,20 @@
       .content= @bookmark.title
 
     = link_to @bookmark.uri_string
+    .date= @bookmark.created_at.to_s(:long)
 
-  .ui.row
-    = link_to "Offline Cache", bookmark_cache_path(@bookmark), data: { turbolinks: false }
-
-  .ui.row
-    = @bookmark.description
-
-  .ui.row
     .ui.small.tag.labels
       - @bookmark.tags.each do |tag|
-        = link_to tag_bookmarks_path(tag.label) do
+        = link_to bookmarks_tag_path(tag) do
           .ui.label{ class: [tag.color] }= tag.label
 
-  .ui.row
-    = @bookmark.updated_at.to_date.to_s(:long)
-    |
-    = link_to "edit", edit_bookmark_path(@bookmark)
-    |
-    = link_to "delete", bookmark_path(@bookmark), method: :delete, data: { confirm: "really delete '#{ @bookmark.title }'? REALLY?!" }
+    .ui.fluid.text.menu
+      = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
+      = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
+      .right.menu
+        = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
+        .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri_string, title: @bookmark.title } }
+          delete
+
+    - if @bookmark.description.present?
+      %p= @bookmark.description

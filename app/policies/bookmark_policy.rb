@@ -1,35 +1,23 @@
 class BookmarkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      # return scope.all if user.present?
-      scope.order(:created_at)
+      # return scope.where(public: true) unless user.present?
+
+      return scope.all if user.role? :admin
+
+      scope.where(user: user).order(:created_at)
     end
   end
 
-  def create?
-    return false unless user.present?
-    true
-  end
-
   def show?
-    return scope.where(id: record.id).exists? if user.present?
-
-    scope.where(id: record.id).exists?
-  end
-
-  def update?
     return false unless user.present?
-    user.owner_of? record
-  end
+    # return record.public? unless user.present?
 
-  def edit?
-    return false unless user.present?
-    user.owner_of? record
-  end
+    return true if user.role? :admin
 
-  def destroy?
-    return false unless user.present?
-    user.owner_of? record
+    # return record.public? unless user.owner_of? record
+
+    true
   end
 
   def permitted_attributes

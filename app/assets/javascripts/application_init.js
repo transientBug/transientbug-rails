@@ -91,7 +91,7 @@ App.init = () => {
   //   Could this all be done with like $("[data-behavior~=select]:checked").size()
   //   checks?
   const toggleBulkEditToolbar = (shouldShow) => {
-    let bulkEditItems = $("[data-behavior~=bulk-edit-menu]")
+    let bulkEditItems = $("[data-group~=bulk-edit-menu]")
     bulkEditItems.toggleClass("hidden", !shouldShow)
 
     let sticky = bulkEditItems.parents("[data-behavior~=sticky]")

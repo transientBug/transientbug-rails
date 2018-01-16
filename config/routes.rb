@@ -28,9 +28,14 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get "search"
-      get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
-      get "tag/:tag", action: :tag, as: "tag"
+      scope as: :bookmarks do
+        resources :search, only: [:index], module: "bookmarks"
+        resources :tags, only: [:index, :show], module: "bookmarks" do
+          collection do
+            resources :autocomplete, only: [:index], module: "tags"
+          end
+        end
+      end
     end
   end
 

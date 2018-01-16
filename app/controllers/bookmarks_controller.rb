@@ -1,72 +1,28 @@
 class BookmarksController < ApplicationController
-  require_login!# only: [ :new, :edit, :create, :update, :destroy ]
+  require_login!
   before_action :set_bookmark, only: [ :show, :edit, :update, :destroy ]
-  before_action :set_tag, only: [ :tag ]
+
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmarks = current_user.bookmarks.page params[:page]
-  end
-
-  # GET /bookmarks/tag/thing
-  # GET /bookmarks/tag/thing.json
-  def tag
-    @bookmarks = current_user.bookmarks.where(tags: @tag).page params[:page]
-  end
-
-  # GET /bookmarks/1
-  # GET /bookmarks/1.json
-  def show
-    respond_to do |format|
-      format.html { render :show }
-      format.json { render :show, status: :ok }
-    end
-  end
-
-  # GET /bookmarks/tags/autocomplete.json
-  def autocomplete
-    @tags = tags_search.take(params.fetch(:c, 5))
-      .tap { |arr| arr.unshift params[:q] }
-      .uniq
-      .compact
-
-    respond_to do |format|
-      format.json { render :autocomplete, status: :ok }
-    end
-  end
-
-  # GET /bookmarks/search
-  # GET /bookmarks/search.json
-  def search
-    @bookmarks = BookmarksIndex.query(
-      bool: {
-        should: [
-          { match: { title: params[:q] } },
-          { match: { tags: params[:q] } }
-        ]
-      }
-    ).objects.page params[:page]
-
-    respond_to do |format|
-      format.html { render :search }
-      format.json { render :search, status: :ok }
-    end
+    @bookmarks = policy_scope(Bookmark).page params[:page]
   end
 
   # GET /bookmarks/new
   def new
+    authorize Bookmark
+
     @bookmark = current_user.bookmarks.new
     @bookmark.webpage = Webpage.new
-  end
-
-  # GET /bookmarks/1/edit
-  def edit
   end
 
   # POST /bookmarks
   # POST /bookmarks.json
   def create
+    authorize Bookmark
     @bookmark = current_user.bookmarks.new(bookmark_params)
 
     respond_to do |format|
@@ -78,6 +34,19 @@ class BookmarksController < ApplicationController
         format.json { render json: @bookmark.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /bookmarks/1
+  # GET /bookmarks/1.json
+  def show
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render :show, status: :ok }
+    end
+  end
+
+  # GET /bookmarks/1/edit
+  def edit
   end
 
   # PATCH/PUT /bookmarks/1
@@ -112,10 +81,7 @@ class BookmarksController < ApplicationController
 
   def set_bookmark
     @bookmark = current_user.bookmarks.find(params[:id])
-  end
-
-  def set_tag
-    @tag = Tag.find_by(label: params[:tag])
+    authorize @bookmark
   end
 
   def bookmark_params
@@ -128,29 +94,6 @@ class BookmarksController < ApplicationController
 
       obj.merge!(tags: tags, webpage: webpage)
     end
-  end
-
-  def tags_search
-    res = BookmarksIndex.suggest(
-      "tag-suggest" => {
-        text: params[:q],
-        completion: {
-          field: :suggest,
-          fuzzy: {
-            fuzziness: 2
-          },
-          contexts: {
-            type: [ :tag ]
-          }
-        }
-      }
-    )
-    .suggest["tag-suggest"]
-
-    tags ||= []
-    tags += res.first["options"].map { |row| row.dig("_source", "tag") } if res.present?
-
-    tags
   end
 end
 

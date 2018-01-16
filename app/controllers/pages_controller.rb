@@ -11,6 +11,7 @@ class PagesController < ApplicationController
   end
 
   def home
+    @recent_bookmarks = policy_scope(Bookmark).limit(15)
   end
 
   protected

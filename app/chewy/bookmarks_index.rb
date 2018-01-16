@@ -35,6 +35,8 @@ class BookmarksIndex < Chewy::Index
 
     field :tags, type: "text", analyzer: :tag, value: ->(bookmark) { bookmark.tags.map(&:label) }
 
+    field :user_id, type: :integer
+
     field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(bookmark) {
       {
         input: [bookmark.title.downcase, bookmark.uri_string].concat(bookmark.tags.map(&:label)),
@@ -49,6 +51,7 @@ class BookmarksIndex < Chewy::Index
 
   define_type Tag do
     field :label, type: "keyword"
+
     field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(tag) {
       {
         input: tag.label.downcase,

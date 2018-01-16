@@ -3,18 +3,23 @@ require "webpage_cache_service"
 class Bookmarks::CacheController < ApplicationController
   BASE_TEMPLATE = Addressable::Template.new("/bookmarks/{id}/cache/")
 
-  require_login!# only: [ :new, :edit, :create, :update, :destroy ]
+  require_login!
   before_action :set_bookmark
 
+  # GET /bookmarks/1/cache
   def index
     base_uri = BASE_TEMPLATE.expand id: params[:bookmark_id]
     render html: renderer.render(uri: @bookmark.uri, base_uri: base_uri).html_safe
   end
 
+  # POST /bookmarks/1/cache
   def create
     WebpageCacheJob.perform_later bookmark: @bookmark
+
+    redirect_to bookmark_path(@bookmark), notice: "Bookmark queued to be recached"
   end
 
+  # GET /bookmarks/1/cache/123abc
   def show
     key = params[:key]
 

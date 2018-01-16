@@ -4,9 +4,7 @@
 = render "navbar"
 
 - content_for :body do
-  .ui.fluid.grid
-    .row
-      %h1 New Bookmark
+  .ui.row
+    %h1 New Bookmark
 
-    .ui.centered.row
-      = render partial: "form", locals: { bookmark: @bookmark }
+    = render partial: "form", locals: { bookmark: @bookmark }
