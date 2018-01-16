@@ -24,7 +24,7 @@
           - if @invitations.any?
             - @invitations.each do |invitation|
               %tr
-                %td.collapsing= check_box_tag "select-#{ invitation.id }", data: { behavior: "select" }
+                %td.collapsing= check_box_tag "select-#{ invitation.id }", data: { id: invitation.id, behavior: "select" }
                 %td.collapsing
                   .ui.buttons
                     = link_to admin_invitation_path(invitation), class: "ui icon button" do 
@@ -38,10 +38,10 @@
                           %i.edit.icon
                           edit
 
+                        .divider
                         .header
                           %i.warning.sign.icon
                           DANGERZONE
-                        .divider
 
                         .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
                           %i.trash.icon

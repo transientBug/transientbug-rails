@@ -34,7 +34,11 @@ Rails.application.routes.draw do
     resources :service_announcements
 
     resources :invitations
-    resources :users
+    resources :users, only: [ :index, :show, :edit, :update ] do
+      # Trying out the pattern talked about here
+      # http://jeromedalbert.com/how-dhh-organizes-his-rails-controllers/
+      resources :password, only: [ :create ], module: "users"
+    end
 
     resources :bookmarks
   end

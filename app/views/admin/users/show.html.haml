@@ -1,0 +1,65 @@
+- content_for :page_title do
+  Viewing "#{ @user.username }"
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      = render partial: "menu", locals: { count: @count }
+
+  .ui.fourteen.wide.column
+    .ui.row
+      .ui.menu
+        = link_to edit_admin_user_path(@user), class: "item" do
+          %i.edit.icon
+          edit
+
+        .item
+          %i.unlock.alternative.icon
+          change password
+
+        -#.right.menu
+          -#.ui.simple.dropdown.item
+            -#more
+            -#%i.dropdown.icon
+            -#.menu
+
+              -#.divider
+              -#.header
+                -#%i.warning.sign.icon
+                -#DANGERZONE
+
+              -#.item{ data: { behavior: "modal", template: "admin/templates/users/delete", url: admin_user_path(@user), code: @user.code, title: @user.title } }
+                -#%i.trash.icon
+                -#delete
+
+      %h2.ui.dividing.header Internal Stuff
+      %table.ui.collapsing.celled.table
+        %tbody
+          %tr
+            %td
+              %b ID
+            %td
+              = @user.id
+          %tr
+            %td
+              %b Username
+            %td
+              = @user.username
+          %tr
+            %td
+              %b Email
+            %td
+              = @user.email
+          %tr
+            %td
+              %b Roles
+            %td
+              = @user.roles.map(&:name).join ", "
+          %tr
+            %td
+              %b Created At
+            %td
+              = @user.created_at.to_s(:long)
+
+      %h2.ui.dividing.header Bookmarks
+      %h2.ui.dividing.header Images

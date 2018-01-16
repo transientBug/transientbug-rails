@@ -9,18 +9,11 @@ class Admin::InvitationsController < AdminController
 
   # GET /invitations/1
   def show
-    respond_to do |format|
-      format.html { render :show }
-    end
   end
 
   # GET /invitations/new
   def new
     @invitation = Invitation.new
-  end
-
-  # GET /invitations/1/edit
-  def edit
   end
 
   # POST /invitations
@@ -34,6 +27,10 @@ class Admin::InvitationsController < AdminController
         format.html { render :new }
       end
     end
+  end
+
+  # GET /invitations/1/edit
+  def edit
   end
 
   # PATCH/PUT /invitations/1

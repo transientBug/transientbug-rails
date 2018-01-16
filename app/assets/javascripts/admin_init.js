@@ -32,6 +32,10 @@ App.init = () => {
       }
     }).modal("show")
   })
+
+  $("[data-behavior~=select-all]").on("change", (event) => {
+    $("[data-behavior~=select-all]").prop("checked", event.target.checked)
+  })
 }
 
 document.addEventListener("turbolinks:load", () => {
