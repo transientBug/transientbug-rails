@@ -52398,6 +52398,8 @@ App.init = () => {
       .sidebar("toggle")
   })
 
+  // Setup searching for things. can probably redo this into a bit more dynamic
+  // through data attributes
   $("[data-behavior~=search-images]").search({
     type: "category",
     minCharacters: 2,
@@ -52430,6 +52432,8 @@ App.init = () => {
     }
   })
 
+  // Lets handle dynamically creating and dismissing modals which are stored in
+  // ejs templates
   $("[data-behavior~=modal]").on("click", (event) => {
     let dataset = event.target.dataset
 
@@ -52443,6 +52447,67 @@ App.init = () => {
         modal.remove()
       }
     }).modal("show")
+  })
+
+  // Handle making the side menus sticky
+  $("[data-behavior~=sticky]").each((idx, element) => {
+    let stickySettings = Object.assign({}, element.dataset)
+    if(stickySettings.offset)
+      stickySettings.offset = parseInt(stickySettings.offset)
+
+    $(element).sticky(stickySettings)
+  })
+
+  // And now for select all and the bulk edit toolbar things. This also will
+  // refresh any sticky objects that the toolbars might be a part of
+  //
+  // TODO:
+  //   Could this all be done with like $("[data-behavior~=select]:checked").size()
+  //   checks?
+  const toggleBulkEditToolbar = (shouldShow) => {
+    let bulkEditItems = $("[data-group~=bulk-edit-menu]")
+    bulkEditItems.toggleClass("hidden", !shouldShow)
+
+    let sticky = bulkEditItems.parents("[data-behavior~=sticky]")
+
+    if(sticky)
+      sticky.sticky("refresh")
+  }
+
+  let selectCheckboxes = $("[data-behavior~=select]")
+  let selectAll = $("[data-behavior~=select-all]")
+
+  // If the select all is clicked or unclicked, update all of the selects
+  selectAll.on("change", (event) => {
+    let target = $(event.target)
+    let checked = target.prop("checked")
+
+    selectCheckboxes.prop("checked", checked)
+    toggleBulkEditToolbar(checked)
+  })
+
+  selectCheckboxes.on("change", (event) => {
+    let target = $(event.target)
+
+    if(target.prop("checked")) {
+      // If we're being checked, and all others are checked, check the select all
+      let allChecked = _.every(selectCheckboxes, (value, idx, col) => $(value).prop("checked"))
+
+      if(allChecked)
+        selectAll.prop("checked", true)
+
+      toggleBulkEditToolbar(true)
+    } else {
+      // If the select all is checked and we're being unchecked, uncheck the
+      // select all
+      if(selectAll.prop("checked"))
+        selectAll.prop("checked", false)
+
+      let allUnchecked = _.every(selectCheckboxes, (value, idx, col) => !$(value).prop("checked"))
+
+      if(allUnchecked)
+        toggleBulkEditToolbar(false)
+    }
   })
 }
 
@@ -52510,6 +52575,8 @@ document.addEventListener("turbolinks:load", () => {
   }
 })
 ;
+(function() { this.JST || (this.JST = {}); this.JST["public/templates/bookmarks/delete"] = function(obj){var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('<div class="ui basic modal">\n  <div class="ui icon header">\n    <i class="trash icon"></i>\n    Delete Bookmark?\n  </div>\n  <div class="content">\n    <p>Are you sure you want to delete this bookmark?</p>\n    <table class="table">\n      <tbody>\n        <tr>\n          <td>Title</td>\n          <td>',  title ,'</td>\n        </tr>\n        <tr>\n          <td>URL</td>\n          <td>',  uri ,'</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <div class="actions">\n    <div class="ui green basic cancel inverted button">\n      <i class="remove icon"></i>\n      Cancel!\n    </div>\n    <a href="',  url ,'" data-method="delete" rel="nofollow" class="ui red ok inverted button">\n      <i class="checkmark icon"></i>\n      Yes, I\'m sure\n    </a>\n  </div>\n</div>\n');}return __p.join('');};
+}).call(this);
 
 
 
