@@ -1,5 +1,6 @@
 //= require rails-ujs
 //= require jquery3
+//= require lodash
 //= require turbolinks
 //= require semantic-ui
 //= require action_cable

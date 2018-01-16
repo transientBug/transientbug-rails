@@ -9,6 +9,6 @@ class RolesToUsersJoinTable < ActiveRecord::Migration[5.2]
       Role.create name: role
     end
 
-    User.find_by(email: Rails.application.credentials.admin_email).roles = roles
+    User.find_by(email: Rails.application.credentials.admin_email)&.roles = roles
   end
 end

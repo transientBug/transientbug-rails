@@ -17,6 +17,7 @@ gem "chewy"
 gem "haml"
 gem "haml-rails"
 gem "semantic-ui-sass"
+gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
 gem "coffee-rails" # uuuuuuugh
 gem "turbolinks", "~> 5"

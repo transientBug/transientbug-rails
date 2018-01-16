@@ -17,3 +17,5 @@
       = form_tag admin_invitations_path, method: :get do
         = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }
       %i.search.link.icon
+
+  = content_for :menu
