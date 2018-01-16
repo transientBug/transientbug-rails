@@ -13,6 +13,12 @@
     = content_for :navbar
 
     .right.menu
+      - if policy(Bookmark).create?
+        .ui.item
+          = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
+            %i.bookmark.icon
+            new bookmark
+
       = content_for :navbar_right
 
       - if signed_in?

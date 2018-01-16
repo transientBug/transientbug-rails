@@ -1,9 +1,4 @@
 - content_for :navbar_right do
-  - if policy(Bookmark).create?
-    .ui.item
-      = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
-        %i.bookmark.icon
-
   .ui.category.search.item{ data: { behavior: "search-bookmarks" } }
     .ui.icon.input
       = form_tag bookmarks_search_index_path, method: :get do
