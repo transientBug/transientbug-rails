@@ -18,8 +18,14 @@ Rails.application.routes.draw do
   end
 
   resources :bookmarks do
-    get "/cache", to: "webpage_cache#index"
-    match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
+    # get "/cache", to: "webpage_cache#index"
+    # match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
+
+    resources :cache, only: [:index, :create], module: "bookmarks" do
+      collection do
+        match "/*key", to: "cache#show", via: [:get]
+      end
+    end
 
     collection do
       get "search"

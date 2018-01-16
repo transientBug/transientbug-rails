@@ -2,7 +2,7 @@
   %i.bookmark.icon
   .content
     .item
-      = link_to bookmark_cache_path(bookmark), data: { turbolinks: false }, class: "archive-link" do
+      = link_to bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "archive-link" do
         %i.archive.icon
 
       = link_to bookmark.title, bookmark_path(bookmark)

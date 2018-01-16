@@ -1,4 +1,4 @@
-= form_for bookmark, html: { class: "ui centered fluid form" } do |f|
+= form_for bookmark, html: { class: "ui fluid form" } do |f|
   - if bookmark.errors.any?
     .ui.message.error
       %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
@@ -6,11 +6,15 @@
         - bookmark.errors.full_messages.each do |message|
           %li= message
 
-  - if bookmark.new_record?
+  .required.field
+    = f.label :uri_string
+    = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
+
+  -#- if bookmark.new_record?
     .required.field
       = f.label :uri_string
       = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
-  - else
+  -#- else
     %p
       %b URL:
       = link_to bookmark.uri_string
