@@ -37,13 +37,29 @@ App.init = () => {
     }).modal("show")
   })
 
-  // And now for select all and the bulk edit toolbar things
+  // Handle making the side menus sticky
+  $("[data-behavior~=sticky]").each((idx, element) => {
+    let stickySettings = Object.assign({}, element.dataset)
+    if(stickySettings.offset)
+      stickySettings.offset = parseInt(stickySettings.offset)
+
+    $(element).sticky(stickySettings)
+  })
+
+  // And now for select all and the bulk edit toolbar things. This also will
+  // refresh any sticky objects that the toolbars might be a part of
   //
   // TODO:
   //   Could this all be done with like $("[data-behavior~=select]:checked").size()
   //   checks?
   const toggleBulkEditToolbar = (shouldShow) => {
-    $("[data-behavior~=bulk-edit-menu]").toggleClass("hidden", !shouldShow)
+    let bulkEditItems = $("[data-behavior~=bulk-edit-menu]")
+    bulkEditItems.toggleClass("hidden", !shouldShow)
+
+    let sticky = bulkEditItems.parents("[data-behavior~=sticky]")
+
+    if(sticky)
+      sticky.sticky("refresh")
   }
 
   let selectCheckboxes = $("[data-behavior~=select]")

@@ -1,6 +1,22 @@
 - content_for :page_title do
   Users
 
+- content_for :menu do
+  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+    .divider
+    .header Bulk Actions
+    .menu
+      .item Nothing Here Yet
+      -#.item
+        .ui.fluid.icon.button
+          %i.hide.icon
+          disable all
+
+      -#.item
+        .ui.fluid.icon.negative.basic.button
+          %i.trash.icon
+          delete all
+
 - content_for :body do
   .ui.two.wide.column
     .ui.row
@@ -8,14 +24,10 @@
 
   .ui.fourteen.wide.column
     .ui.row
-      .ui.inverted.pointing.menu
-        .item
-          wat
-
-      %table.ui.celled.table
+      %table.ui.celled.table#stickContext
         %thead
           %tr
-            %th= check_box_tag "select-all", data: { behavior: "select-all" }
+            %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
             %th Actions
             %th ID
             %th Username
@@ -25,7 +37,7 @@
           - if @users.any?
             - @users.each do |user|
               %tr
-                %td.collapsing= check_box_tag "select-#{ user.id }", data: { id: user.id, behavior: "select" }
+                %td.collapsing= check_box_tag "select-#{ user.id }", nil, false, data: { id: user.id, behavior: "select" }
                 %td.collapsing
                   .ui.buttons
                     = link_to admin_user_path(user), class: "ui icon button" do 
@@ -54,5 +66,4 @@
               %td{ colspan: 6 }
                 No users yet (this might be a problem, yo)
 
-    .ui.row
       = paginate @users
