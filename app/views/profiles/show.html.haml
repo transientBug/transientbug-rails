@@ -1,0 +1,25 @@
+- content_for :page_title do
+  Profile
+
+- content_for :body do
+  .ui.row
+    %h2.ui.header
+      .content Basic Info
+
+    = render partial: "form", locals: { user: @user }
+
+  .ui.row
+    .ui.divider
+
+    %h2.ui.header
+      .content Security
+
+    = render partial: "password_form"
+
+  .ui.row
+    .ui.divider
+
+    %h2.ui.header
+      .content API Key
+
+    %p Coming soon! A functioning API and maybe some browser extensions are the next thing to be built!

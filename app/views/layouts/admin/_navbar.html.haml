@@ -1,0 +1,20 @@
+.ui.top.fixed.inverted.red.menu
+  .item
+    %i.sidebar.icon
+
+  = link_to admin_root_path, class: "header item" do
+    = image_tag "bug_logo.png", class: "logo"
+    transientBug Admin
+
+  = content_for :navbar
+
+  .right.menu
+    = content_for :navbar_right
+
+    .ui.simple.dropdown.item
+      %i.user.circle.outline.icon
+      = current_user.username
+      %i.dropdown.icon
+      .menu
+        = link_to "Exit Admin", root_path, class: "item"
+        = link_to "Logout", logout_path, class: "item"

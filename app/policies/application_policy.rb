@@ -7,15 +7,19 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    user.present?
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    record.present?
   end
 
   def create?
-    false
+    return false unless user.present?
+
+    return true if user.role? :admin
+
+    user.owner_of? record
   end
 
   def new?
@@ -23,7 +27,11 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    return false unless user.present?
+
+    return true if user.role? :admin
+
+    user.owner_of? record
   end
 
   def edit?
@@ -31,7 +39,11 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    return false unless user.present?
+
+    return true if user.role? :admin
+
+    user.owner_of? record
   end
 
   def scope

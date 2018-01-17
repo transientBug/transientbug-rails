@@ -2,4 +2,8 @@
   Home
 
 - content_for :body do
-  Hia #{ current_user.username }!
+  .ui.row
+    %h4.header Hia #{ current_user.username }!
+
+    %h2.dividing.header Most recent bookmarks
+    = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @recent_bookmarks }

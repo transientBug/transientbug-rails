@@ -1,0 +1,57 @@
+- content_for :page_title do
+  = @invitation.title
+
+- content_for :body do
+  .ui.row
+    %h2.ui.header
+      .content= @invitation.title
+
+    %p
+      = @invitation.description
+
+  .ui.row
+    = form_for @user, url: invite_path(@invitation.code), method: :patch, html: { class: "ui form" } do |f|
+      - if @user.errors.any?
+        .ui.message.error
+          %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
+          %ul
+            - @user.errors.full_messages.each do |message|
+              %li= message
+
+      .ui.segment
+        .ui.list
+          .item
+            .content
+              .header Username
+              .description Used only for personalizing the site and communications; It does not have to be unique
+
+          .item
+            .content
+              .header Email
+              .description Used to contact you, help recover a lost password and identify you during login; It does have to be unique.
+
+        .required.field
+          = f.label :username
+          .ui.left.icon.input
+            %i.user.icon
+            = f.text_field :username, placeholder: "Username"
+
+        .required.field
+          = f.label :email
+          .ui.left.icon.input
+            %i.user.icon
+            = f.text_field :email, placeholder: "Email"
+
+        .required.field
+          = f.label :password
+          .ui.left.icon.input
+            %i.lock.icon
+            = f.password_field :password, placeholder: "**************"
+
+        .required.field
+          = f.label :password_confirmation
+          .ui.left.icon.input
+            %i.lock.icon
+            = f.password_field :password_confirmation, placeholder: "**************"
+
+        = f.submit "Register", class: "ui right floated green submit button"

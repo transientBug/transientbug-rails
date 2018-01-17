@@ -1,0 +1,61 @@
+- content_for :page_title do
+  Viewing "#{ @invitation.title }"
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      = render partial: "menu", locals: { count: @count }
+
+  .ui.fourteen.wide.column
+    .ui.row
+      .ui.menu
+        = link_to edit_admin_invitation_path(@invitation), class: "item" do
+          %i.edit.icon
+          edit
+
+        .right.menu
+          .ui.simple.dropdown.item
+            more
+            %i.dropdown.icon
+            .menu
+
+              .header
+                %i.warning.sign.icon
+                DANGERZONE
+              .divider
+
+              .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(@invitation), code: @invitation.code, title: @invitation.title } }
+                %i.trash.icon
+                delete
+
+      %h2.ui.dividing.header Internal Stuff
+      %p= @invitation.internal_note
+
+      %h2.ui.dividing.header Quick Info
+
+      %table.ui.collapsing.celled.table
+        %tbody
+          %tr
+            %td
+              %b Code
+            %td
+              = @invitation.code
+          %tr
+            %td
+              %b Limit
+            %td
+              = @invitation.limit
+          %tr
+            %td
+              %b Current Available
+            %td
+              = @invitation.current
+          %tr
+            %td
+              %b Created At
+            %td
+              = @invitation.created_at.to_s(:long)
+
+      %h2.ui.dividing.header End User Facing Info
+      %h3.header= @invitation.title
+      %p= @invitation.description

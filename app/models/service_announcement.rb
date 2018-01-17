@@ -1,0 +1,2 @@
+class ServiceAnnouncement < ApplicationRecord
+end

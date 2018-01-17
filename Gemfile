@@ -6,8 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2.0.alpha", github: "rails/rails"
-gem "arel", "~> 9.0.0.alpha",  github: "rails/arel"
+gem "rails", "~> 5.2.0.beta", github: "rails/rails"
+gem "arel", "~> 9.0.0",  github: "rails/arel"
 
 # Data Stores
 gem "pg", "~> 0.18"
@@ -17,9 +17,11 @@ gem "chewy"
 gem "haml"
 gem "haml-rails"
 gem "semantic-ui-sass"
+gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
 gem "coffee-rails" # uuuuuuugh
 gem "turbolinks", "~> 5"
+gem "ejs" # javascript templates for things like fancy delete modals
 
 gem "active_link_to"
 gem "kaminari"

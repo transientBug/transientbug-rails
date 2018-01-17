@@ -7,7 +7,11 @@ class PagesController < ApplicationController
     redirect_to images_path
   end
 
+  def faq
+  end
+
   def home
+    @recent_bookmarks = policy_scope(Bookmark).limit(15)
   end
 
   protected

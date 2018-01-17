@@ -1,11 +1,16 @@
 class User < ApplicationRecord
-  has_many :authorizations
-  has_many :images
+  default_scope { includes(:roles) }
 
-  has_one :identity
+  has_many :authorizations
+  has_and_belongs_to_many :roles
+
+  has_many :images
+  has_many :bookmarks
 
   validates :username, presence: true
   validates :email, presence: true
+
+  has_secure_password
 
   def self.find_or_create_from_auth_hash! auth_hash
     email = auth_hash.dig 'info', 'email'
@@ -20,5 +25,9 @@ class User < ApplicationRecord
 
   def owner_of? record
     record.user_id == self.id
+  end
+
+  def role? name
+    roles.find { |role| role.name == name.to_s }
   end
 end

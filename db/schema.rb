@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2017_11_17_155816) do
+ActiveRecord::Schema.define(version: 2018_01_15_145454) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,22 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
 
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "webpage_id"
+    t.text "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+    t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"
+  end
+
+  create_table "bookmarks_tags", id: false, force: :cascade do |t|
+    t.bigint "bookmark_id", null: false
+    t.bigint "tag_id", null: false
+  end
+
   create_table "clockwork_database_events", force: :cascade do |t|
     t.integer "frequency_quantity"
     t.integer "frequency_period"
@@ -61,16 +77,6 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.jsonb "job_arguments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "identities", force: :cascade do |t|
-    t.bigint "user_id"
-    t.text "email"
-    t.text "name"
-    t.text "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "images", force: :cascade do |t|
@@ -84,23 +90,54 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
-  create_table "questionnaires", force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "invitations", force: :cascade do |t|
+    t.text "code"
+    t.text "internal_note"
     t.text "title"
-    t.boolean "disabled"
+    t.text "description"
+    t.integer "limit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_questionnaires_on_user_id"
+    t.integer "current"
+    t.index ["code"], name: "index_invitations_on_code", unique: true
   end
 
-  create_table "questions", force: :cascade do |t|
-    t.bigint "questionnaire_id"
-    t.text "title"
-    t.text "question"
-    t.integer "type"
+  create_table "invitations_users", force: :cascade do |t|
+    t.bigint "invitation_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
+    t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
+    t.index ["user_id"], name: "index_invitations_users_on_users_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.text "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_roles_on_name", unique: true
+  end
+
+  create_table "roles_users", id: false, force: :cascade do |t|
+    t.bigint "role_id", null: false
+    t.bigint "user_id", null: false
+  end
+
+  create_table "service_announcements", force: :cascade do |t|
+    t.text "title"
+    t.text "message"
+    t.text "color"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.text "label"
+    t.text "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -108,11 +145,20 @@ ActiveRecord::Schema.define(version: 2017_11_17_155816) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "email"
+    t.string "password_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "webpages", force: :cascade do |t|
+    t.text "uri_string"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "authorizations", "users"
-  add_foreign_key "identities", "users"
+  add_foreign_key "bookmarks", "users"
+  add_foreign_key "bookmarks", "webpages"
   add_foreign_key "images", "users"
-  add_foreign_key "questionnaires", "users"
-  add_foreign_key "questions", "questionnaires"
+  add_foreign_key "invitations_users", "invitations"
+  add_foreign_key "invitations_users", "users"
 end

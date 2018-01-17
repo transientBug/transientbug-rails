@@ -1,0 +1,54 @@
+- if bookmarks.any?
+  .ui.menu
+    .ui.item= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+    .ui.item.hidden{ data: { group: "bulk-edit-menu", behavior: "recache-all" } }
+      %i.download.icon
+      recache
+    .ui.item.hidden{ data: { group: "bulk-edit-menu", behavior: "retag-all" } }
+      %i.tags.icon
+      tags
+    .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
+      %i.trash.icon
+      delete
+
+  .ui.feed
+    - bookmarks.each do |bookmark|
+      .event
+        .label
+          %i.bookmark.icon
+        .content
+          .summary
+            = check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
+            = link_to bookmark.title, bookmark_path(bookmark), class: "title"
+            .date= bookmark.created_at.to_s(:long)
+
+          = link_to bookmark.uri_string, bookmark.uri_string
+
+          - if bookmark.description.present?
+            = bookmark.description&.truncate(240)
+            = link_to "read more", bookmark_path(bookmark)
+
+          .ui.fluid.text.menu
+            .ui.item
+              %i.tags.icon
+              = bookmark.tags.length
+              = "tag".pluralize(bookmark.tags.length)
+            = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
+            = link_to "edit", edit_bookmark_path(bookmark), class: "ui item"
+            .right.menu
+              .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(bookmark), uri: bookmark.uri_string, title: bookmark.title } }
+                delete
+
+          .ui.divider
+
+- else
+  %h1.huge.center.aligned.icon.header
+    %i.bookmark.icon
+    .content No bookmarks found!
+
+  %p
+    Maybe
+    = link_to "make one?", new_bookmark_path
+
+- if bookmarks.respond_to? :total_pages
+  = paginate bookmarks

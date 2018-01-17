@@ -4,8 +4,13 @@
       .three.wide.column
         %h4.ui.inverted.header All the Links!
         .ui.inverted.link.list
-          .item= link_to "Home", home_url
-          .item= link_to "Images", images_url
+          .item= link_to "Home", home_path
+          .item= link_to "Images", images_path
+          .item= link_to "Bookmarks", bookmarks_path
+
+          - if signed_in?
+            .item= link_to "Profile", profile_path
+
           - if Rails.env.development?
             .item= link_to "Dev Auth", auth_path(:developer)
 
@@ -39,5 +44,6 @@
     .ui.horizontal.inverted.small.divided.link.list
       -#.item Site Map
       .item me (at) transientbug.ninja
+      .item= link_to "FAQ", faq_path
       -#.item Terms and Conditions
       -#.item Privacy Policy

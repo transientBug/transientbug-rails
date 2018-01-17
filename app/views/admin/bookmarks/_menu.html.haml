@@ -1,0 +1,17 @@
+.ui.fluid.vertical.menu.sticky{ data: { behavior: "sticky", context: "#stickContext", offset: 75 } }
+  .item
+    .header
+      Bookmarks
+
+  = active_link_to admin_bookmarks_path, active: :exclusive, class: "item" do
+    Index
+    - if count
+      .ui.label= count
+
+  -#.item
+    .ui.transparent.icon.input
+      = form_tag admin_invitations_path, method: :get do
+        = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }
+      %i.search.link.icon
+
+  = content_for :menu

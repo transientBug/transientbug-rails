@@ -1,0 +1,39 @@
+- content_for :page_title do
+  Home
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      %h2.dividing.header general admin
+
+      .ui.list
+        = link_to "service announcements", admin_service_announcements_path, class: "item"
+
+  .ui.two.wide.column
+    .ui.row
+      %h2.dividing.header user admin
+
+      .ui.list
+        = link_to "invitations", admin_invitations_path, class: "item"
+        = link_to "users", admin_users_path, class: "item"
+
+  .ui.two.wide.column
+    .ui.row
+      %h2.dividing.header bookmark related
+
+      .ui.list
+        = link_to "bookmarks", admin_bookmarks_path, class: "item"
+
+  .ui.two.wide.column
+    .ui.row
+      %h2.dividing.header image related
+
+      .ui.list
+        .item "Coming Soon"
+
+  .ui.two.wide.column
+    .ui.row
+      %h2.dividing.header misc
+
+      .ui.list
+        = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
