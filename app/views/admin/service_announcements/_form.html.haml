@@ -1,0 +1,38 @@
+= form_for [:admin, service_announcement], html: { class: "ui fluid form" } do |f|
+  - if service_announcement.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize service_announcement.errors.count, "error" } prohibited this service announcement from being saved:"
+      %ul
+        - service_announcement.errors.full_messages.each do |message|
+          %li= message
+
+  %h4.ui.dividing.header User Facing Info 
+
+  .required.field
+    = f.label :title
+    = f.text_field :title, aria: { describedby: "Service Announcement Title" }
+
+  .required.field
+    = f.label :message
+    = f.text_area :message, aria: { describedby: "Service Announcement Message" }
+
+  %h5.ui.dividing.header Visual Items
+
+  .field
+    = f.label :icon
+    = f.text_field :icon, aria: { describedby: "Service Announcement Icon" }
+
+  .field
+    = f.label :color
+    = f.text_field :color, aria: { describedby: "Service Announcement Color" }
+
+  %h4.ui.dividing.header Limits
+  .field
+    = f.label :start_at
+    = f.datetime_field :start_at, aria: { describedby: "Service Announcement Start At" }
+
+  .field
+    = f.label :end_at
+    = f.datetime_field :end_at, aria: { describedby: "Service Announcement End At" }
+
+  = f.submit "Save", class: "ui positive right floated submit button"

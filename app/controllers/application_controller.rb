@@ -3,11 +3,13 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  before_action :set_active_service_announcements
+
+  helper_method :current_user, :signed_in?
+
   def self.require_login! **opts
     before_action :require_login, **opts
   end
-
-  helper_method :current_user, :signed_in?
 
   protected
 
@@ -26,5 +28,9 @@ class ApplicationController < ActionController::Base
   def current_user= user
     @current_user = user
     session[:user_id] = user&.id
+  end
+
+  def set_active_service_announcements
+    @active_service_announcements = ServiceAnnouncement.active
   end
 end

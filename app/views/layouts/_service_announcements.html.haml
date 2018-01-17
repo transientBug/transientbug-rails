@@ -1,0 +1,11 @@
+- if service_announcements&.any?
+  - service_announcements.each do |service_announcement|
+    .ui.message{ class: [ service_announcement.color, (service_announcement.icon ? "icon" : "")] }
+      - if service_announcement.icon
+        %i.icon{ class: [ service_announcement.icon ] }
+
+      .content
+        .header
+          = service_announcement.title
+        %p
+          = service_announcement.message

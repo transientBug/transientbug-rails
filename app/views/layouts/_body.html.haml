@@ -2,6 +2,8 @@
 
 .ui.pusher
   .ui.main.container
+    = render partial: "layouts/service_announcements", locals: { service_announcements: @active_service_announcements }
+
     = semantic_flash
 
     = content_for :body

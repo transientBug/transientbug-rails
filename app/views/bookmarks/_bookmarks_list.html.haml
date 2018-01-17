@@ -20,7 +20,9 @@
           .summary
             = check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
             = link_to bookmark.title, bookmark_path(bookmark), class: "title"
-            .date= bookmark.created_at.to_s(:long)
+            .date
+              = distance_of_time_in_words_to_now(bookmark.created_at)
+              ago
 
           = link_to bookmark.uri_string, bookmark.uri_string
 

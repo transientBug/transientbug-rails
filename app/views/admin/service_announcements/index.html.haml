@@ -1,0 +1,82 @@
+- content_for :page_title do
+  Service Announcements
+
+- content_for :menu do
+  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+    .divider
+    .header Bulk Actions
+    .menu
+      .item
+        .ui.fluid.icon.button
+          %i.hide.icon
+          deactivate all
+
+      .item
+        .ui.fluid.icon.negative.basic.button
+          %i.trash.icon
+          delete all
+
+
+- content_for :body do
+  .ui.two.wide.column
+    .ui.row
+      = render partial: "menu", locals: { count: @count }
+
+  .ui.fourteen.wide.column
+    .ui.row
+      %table.ui.celled.table#stickContext
+        %thead
+          %tr
+            %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+            %th Actions
+            %th Title
+            %th Message
+            %th Active?
+            %th Effective During
+            %th Created At
+        %tbody
+          - if @service_announcements.any?
+            - @service_announcements.each do |service_announcement|
+              %tr{ class: [ (service_announcement.active ? "" : "disabled") ] }
+                %td.collapsing= check_box_tag "select-#{ service_announcement.id }", nil, false, data: { id: service_announcement.id, behavior: "select" }
+                %td.collapsing
+                  .ui.buttons
+                    = link_to admin_service_announcement_path(service_announcement), class: "ui icon button" do 
+                      %i.expand.icon
+                      view
+
+                    .ui.simple.dropdown.icon.button
+                      %i.dropdown.icon
+                      .menu
+                        = link_to edit_admin_service_announcement_path(service_announcement), class: "item" do
+                          %i.edit.icon
+                          edit
+
+                        .item
+                          %i.hide.icon
+                          deactivate
+
+                        .divider
+                        .header
+                          %i.warning.sign.icon
+                          DANGERZONE
+
+                        .item{ data: { behavior: "modal", template: "admin/templates/service_announcements/delete", url: admin_service_announcement_path(service_announcement), title: service_announcement.title } }
+                          %i.trash.icon
+                          delete
+
+                %td= service_announcement.title
+                %td= service_announcement.message&.truncate(240)
+                %td.collapsing= service_announcement.active
+                %td.collapsing
+                  = service_announcement.start_at&.to_s(:long)
+                  \-
+                  = service_announcement.end_at&.to_s(:long)
+                %td.collapsing= service_announcement.created_at.to_s(:long)
+
+          - else
+            %tr
+              %td{ colspan: 7 }
+                No service announcements made yet
+
+      = paginate @service_announcements

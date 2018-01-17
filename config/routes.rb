@@ -42,7 +42,9 @@ Rails.application.routes.draw do
   namespace :admin do
     root "home#home"
 
-    resources :service_announcements
+    resources :service_announcements do
+      resources :toggle, only: [ :create ], module: "service_announcements"
+    end
 
     resources :invitations
     resources :users, only: [ :index, :show, :edit, :update ] do
