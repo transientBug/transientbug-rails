@@ -1,5 +1,5 @@
 class InvitesController < ApplicationController
-  before_action :no_loggedin
+  before_action :redirect_on_signed_in
 
   before_action :set_invite, only: [ :create, :show, :update ]
 
@@ -37,7 +37,7 @@ class InvitesController < ApplicationController
     params.require(:user).permit(:username, :email, :password, :password_confirmation)
   end
 
-  def no_loggedin
+  def redirect_on_signed_in
     redirect_to home_path if signed_in?
   end
 
