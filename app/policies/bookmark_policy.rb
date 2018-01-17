@@ -12,6 +12,14 @@ class BookmarkPolicy < ApplicationPolicy
     user&.owner_of? record
   end
 
+  def update?
+    user&.owner_of? record
+  end
+
+  def destroy?
+    user&.owner_of? record
+  end
+
   def permitted_attributes
     [ :title, :description ]
   end

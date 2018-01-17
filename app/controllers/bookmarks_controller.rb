@@ -2,9 +2,6 @@ class BookmarksController < ApplicationController
   require_login!
   before_action :set_bookmark, only: [ :show, :edit, :update, :destroy ]
 
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
-
   # GET /bookmarks
   # GET /bookmarks.json
   def index
