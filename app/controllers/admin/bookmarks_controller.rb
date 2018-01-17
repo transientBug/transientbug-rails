@@ -14,24 +14,6 @@ class Admin::BookmarksController < AdminController
     end
   end
 
-  # GET /bookmarks/new
-  # def new
-  #   @bookmark = Bookmark.new
-  # end
-
-  # POST /bookmarks
-  # def create
-  #   @bookmark = Bookmark.new bookmark_params
-
-  #   respond_to do |format|
-  #     if @bookmark.save
-  #       format.html { redirect_to [:admin, @bookmark], notice: "Bookmark was successfully created." }
-  #     else
-  #       format.html { render :new }
-  #     end
-  #   end
-  # end
-
   # GET /bookmarks/1/edit
   def edit
   end
@@ -46,17 +28,6 @@ class Admin::BookmarksController < AdminController
       end
     end
   end
-
-  # DELETE /bookmarks/1
-  # def destroy
-  #   respond_to do |format|
-  #     if @bookmark.destroy
-  #       format.html { redirect_to admin_bookmarks_url, notice: "Bookmark was successfully deleted." }
-  #     else
-  #       format.html { render :new }
-  #     end
-  #   end
-  # end
 
   private
 

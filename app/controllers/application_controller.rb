@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
     before_action :require_login, **opts
   end
 
+  helper_method :current_user, :signed_in?
+
   protected
 
   def require_login
@@ -20,8 +22,6 @@ class ApplicationController < ActionController::Base
   def signed_in?
     current_user.present?
   end
-
-  helper_method :current_user, :signed_in?
 
   def current_user= user
     @current_user = user

@@ -14,24 +14,6 @@ class Admin::UsersController < AdminController
     end
   end
 
-  # GET /users/new
-  # def new
-  #   @user = User.new
-  # end
-
-  # POST /users
-  # def create
-  #   @user = User.new user_params
-
-  #   respond_to do |format|
-  #     if @user.save
-  #       format.html { redirect_to [:admin, @user], notice: "User was successfully created." }
-  #     else
-  #       format.html { render :new }
-  #     end
-  #   end
-  # end
-
   # GET /users/1/edit
   def edit
   end
@@ -46,17 +28,6 @@ class Admin::UsersController < AdminController
       end
     end
   end
-
-  # DELETE /users/1
-  # def destroy
-  #   respond_to do |format|
-  #     if @user.destroy
-  #       format.html { redirect_to admin_users_url, notice: "User was successfully deleted." }
-  #     else
-  #       format.html { render :new }
-  #     end
-  #   end
-  # end
 
   private
 

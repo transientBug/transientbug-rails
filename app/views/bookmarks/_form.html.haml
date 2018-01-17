@@ -10,15 +10,6 @@
     = f.label :uri_string
     = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
 
-  -#- if bookmark.new_record?
-    .required.field
-      = f.label :uri_string
-      = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
-  -#- else
-    %p
-      %b URL:
-      = link_to bookmark.uri_string
-
   .required.field
     = f.label :title
     = f.text_field :title, aria: { describedby: "Bookmark title" }

@@ -3,17 +3,21 @@ class InvitesController < ApplicationController
 
   before_action :set_invite, only: [ :create, :show, :update ]
 
+  # GET /invites
   def index
   end
 
+  # POST /invites
   def create
     redirect_to invite_path(@invitation.code)
   end
 
+  # GET /invites/1
   def show
     @user = User.new
   end
 
+  # POST /invites/1
   def update
     @user = User.new user_params
 

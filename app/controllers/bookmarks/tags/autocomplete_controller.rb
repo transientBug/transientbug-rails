@@ -28,8 +28,7 @@ class Bookmarks::Tags::AutocompleteController < ApplicationController
           }
         }
       }
-    )
-    .suggest["tag-suggest"]
+    ).suggest["tag-suggest"]
 
     tags ||= []
     tags += res.first["options"].map { |row| row.dig("_source", "label") } if res.present?
