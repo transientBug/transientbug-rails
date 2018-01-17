@@ -52376,7 +52376,13 @@ window.App || (window.App = {})
 
 App.init = () => {
   $.fn.api.settings.api = { }
+}
 
+document.addEventListener("turbolinks:load", () => {
+  App.init()
+})
+;
+document.addEventListener("turbolinks:load", () => {
   $.fn.api.settings.cache = false
   $.fn.api.settings.debug = true
   $.fn.api.settings.verbose = true
@@ -52384,8 +52390,8 @@ App.init = () => {
   this.cable || (this.cable = ActionCable.createConsumer())
 
   // Dismiss messages when the X is clicked
-  $(".message .close").on("click", () => {
-    $(this).closest(".message").transition("fade")
+  $(".message .close").on("click", (event) => {
+    $(event.target).closest(".message").transition("fade")
   })
 
   // Toggle the sidebar open and closed
@@ -52394,7 +52400,7 @@ App.init = () => {
       .sidebar('toggle')
   })
 
-  // Lets handle dynamically creating and dismissing modals which are stored in
+  // Let's handle dynamically creating and dismissing modals which are stored in
   // ejs templates
   $("[data-behavior~=modal]").on("click", (event) => {
     let dataset = event.target.dataset
@@ -52471,18 +52477,9 @@ App.init = () => {
         toggleBulkEditToolbar(false)
     }
   })
-}
 
-document.addEventListener("turbolinks:load", () => {
-  App.init()
-})
-;
-document.addEventListener("turbolinks:load", () => {
-  if (!($(".invitations").length > 0)) {
-    return
-  }
-
-  $("[data-behavior~=autocomplete-tags]").dropdown({
+  // Setup autocomplete forms for image and bookmark tags. This could probably be simplified with data attributes.
+  $("[data-behavior~=autocomplete-image-tags]").dropdown({
     apiSettings: {
       cache: false,
       action: "autocomplete image tags"
@@ -52492,9 +52489,63 @@ document.addEventListener("turbolinks:load", () => {
       value: "title"
     }
   })
+
+  $("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
+    apiSettings: {
+      cache: false,
+      action: "autocomplete bookmark tags"
+    },
+    fields: {
+      name: "label",
+      value: "label"
+    }
+  })
+
+  // Setup searching for things. This could probably be simplified with data attributes.
+  $("[data-behavior~=search-images]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search images"
+    },
+    fields: {
+      url: "view"
+    }
+  })
+
+  $("[data-behavior~=search-bookmarks]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search bookmarks"
+    },
+    fields: {
+      url: "view"
+    }
+  })
+
+  $("[data-behavior~=tag-popup]").popup({
+    inline: true
+  })
 })
 ;
-(function() { this.JST || (this.JST = {}); this.JST["admin/templates/invitations/delete"] = function(obj){var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('<div class="ui basic modal">\n  <div class="ui icon header">\n    <i class="trash icon"></i>\n    Delete Invitation?\n  </div>\n  <div class="content">\n    <p>Are you sure you want to delete this invitation?</p>\n    <p>Doing so will prevent anyone with the code from registering, which could potentially be irresponsible.</p>\n    <table class="table">\n      <tbody>\n        <tr>\n          <td>Title</td>\n          <td>',  title ,'</td>\n        </tr>\n        <tr>\n          <td>Code</td>\n          <td>',  code ,'</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <div class="actions">\n    <div class="ui green basic cancel inverted button">\n      <i class="remove icon"></i>\n      Cancel!\n    </div>\n    <a href="',  url ,'" data-method="delete" rel="nofollow" class="ui red ok inverted button">\n      <i class="checkmark icon"></i>\n      Yes, I\'m sure\n    </a>\n  </div>\n</div>\n');}return __p.join('');};
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".invitations").length > 0)) {
+    return
+  }
+})
+;
+(function() { this.JST || (this.JST = {}); this.JST["admin/templates/invitations/delete"] = function(obj){var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('<div class="ui basic modal">\n  <div class="ui icon header">\n    <i class="trash icon"></i>\n    Delete Invitation?\n  </div>\n  <div class="content">\n    <p>Are you sure you want to delete this invitation?</p>\n    <p>Doing so will prevent anyone with the code from registering which is potentially irresponsible.</p>\n    <table class="table">\n      <tbody>\n        <tr>\n          <td>Title</td>\n          <td>',  title ,'</td>\n        </tr>\n        <tr>\n          <td>Code</td>\n          <td>',  code ,'</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <div class="actions">\n    <div class="ui green basic cancel inverted button">\n      <i class="remove icon"></i>\n      Cancel!\n    </div>\n    <a href="',  url ,'" data-method="delete" rel="nofollow" class="ui red ok inverted button">\n      <i class="checkmark icon"></i>\n      Yes, I\'m sure\n    </a>\n  </div>\n</div>\n');}return __p.join('');};
 }).call(this);
 
 
@@ -52508,5 +52559,6 @@ document.addEventListener("turbolinks:load", () => {
 // You can generate new channels where WebSocket features live using the `rails generate channel` command.
 
 //
+
 
 ;

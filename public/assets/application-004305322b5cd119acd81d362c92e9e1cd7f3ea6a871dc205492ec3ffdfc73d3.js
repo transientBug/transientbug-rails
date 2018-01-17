@@ -52381,58 +52381,31 @@ App.init = () => {
     "autocomplete bookmark tags": "/bookmarks/tags/autocomplete.json?q={query}",
     "search bookmarks": "/bookmarks/search.json?q={query}"
   }
+}
 
+document.addEventListener("turbolinks:load", () => {
+  App.init()
+})
+;
+document.addEventListener("turbolinks:load", () => {
   $.fn.api.settings.cache = false
   $.fn.api.settings.debug = true
   $.fn.api.settings.verbose = true
 
   this.cable || (this.cable = ActionCable.createConsumer())
 
-  $(".message .close").on("click", () => {
-    $(this).closest(".message").transition("fade")
+  // Dismiss messages when the X is clicked
+  $(".message .close").on("click", (event) => {
+    $(event.target).closest(".message").transition("fade")
   })
 
-  $("[data-behavior~=open-sidebar]").on("click", () => {
-    $("#mobile-sidebar")
-      .sidebar('setting', 'transition', 'overlay')
-      .sidebar("toggle")
+  // Toggle the sidebar open and closed
+  $(".sidebar.icon").on("click", () => {
+    $('.ui.sidebar')
+      .sidebar('toggle')
   })
 
-  // Setup searching for things. can probably redo this into a bit more dynamic
-  // through data attributes
-  $("[data-behavior~=search-images]").search({
-    type: "category",
-    minCharacters: 2,
-    cache: false,
-    searchFields   : [
-      "title"
-    ],
-    apiSettings: {
-      cache: false,
-      action: "search images"
-    },
-    fields: {
-      url: "view"
-    }
-  })
-
-  $("[data-behavior~=search-bookmarks]").search({
-    type: "category",
-    minCharacters: 2,
-    cache: false,
-    searchFields   : [
-      "title"
-    ],
-    apiSettings: {
-      cache: false,
-      action: "search bookmarks"
-    },
-    fields: {
-      url: "view"
-    }
-  })
-
-  // Lets handle dynamically creating and dismissing modals which are stored in
+  // Let's handle dynamically creating and dismissing modals which are stored in
   // ejs templates
   $("[data-behavior~=modal]").on("click", (event) => {
     let dataset = event.target.dataset
@@ -52465,7 +52438,7 @@ App.init = () => {
   //   Could this all be done with like $("[data-behavior~=select]:checked").size()
   //   checks?
   const toggleBulkEditToolbar = (shouldShow) => {
-    let bulkEditItems = $("[data-group~=bulk-edit-menu]")
+    let bulkEditItems = $("[data-behavior~=bulk-edit-menu]")
     bulkEditItems.toggleClass("hidden", !shouldShow)
 
     let sticky = bulkEditItems.parents("[data-behavior~=sticky]")
@@ -52509,39 +52482,9 @@ App.init = () => {
         toggleBulkEditToolbar(false)
     }
   })
-}
 
-document.addEventListener("turbolinks:load", () => {
-  App.init()
-})
-;
-document.addEventListener("turbolinks:load", () => {
-  if (!($(".bookmarks").length > 0)) {
-    return
-  }
-
-  $("[data-behavior~=autocomplete-tags]").dropdown({
-    apiSettings: {
-      cache: false,
-      action: "autocomplete bookmark tags"
-    },
-    fields: {
-      name: "label",
-      value: "label"
-    }
-  })
-
-  $("[data-behavior~=tag-popup]").popup({
-    inline: true
-  })
-})
-;
-document.addEventListener("turbolinks:load", () => {
-  if (!($(".images").length > 0)) {
-    return
-  }
-
-  $("[data-behavior~=autocomplete-tags]").dropdown({
+  // Setup autocomplete forms for image and bookmark tags. This could probably be simplified with data attributes.
+  $("[data-behavior~=autocomplete-image-tags]").dropdown({
     apiSettings: {
       cache: false,
       action: "autocomplete image tags"
@@ -52552,9 +52495,65 @@ document.addEventListener("turbolinks:load", () => {
     }
   })
 
+  $("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
+    apiSettings: {
+      cache: false,
+      action: "autocomplete bookmark tags"
+    },
+    fields: {
+      name: "label",
+      value: "label"
+    }
+  })
+
+  // Setup searching for things. This could probably be simplified with data attributes.
+  $("[data-behavior~=search-images]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search images"
+    },
+    fields: {
+      url: "view"
+    }
+  })
+
+  $("[data-behavior~=search-bookmarks]").search({
+    type: "category",
+    minCharacters: 2,
+    cache: false,
+    searchFields   : [
+      "title"
+    ],
+    apiSettings: {
+      cache: false,
+      action: "search bookmarks"
+    },
+    fields: {
+      url: "view"
+    }
+  })
+
   $("[data-behavior~=tag-popup]").popup({
     inline: true
   })
+})
+;
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".bookmarks").length > 0)) {
+    return
+  }
+})
+;
+document.addEventListener("turbolinks:load", () => {
+  if (!($(".images").length > 0)) {
+    return
+  }
 })
 ;
 document.addEventListener("turbolinks:load", () => {
@@ -52589,5 +52588,6 @@ document.addEventListener("turbolinks:load", () => {
 // You can generate new channels where WebSocket features live using the `rails generate channel` command.
 
 //
+
 
 ;
