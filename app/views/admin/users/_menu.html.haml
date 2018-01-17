@@ -8,10 +8,6 @@
     - if count
       .ui.label= count
 
-  -#= active_link_to new_admin_user_path, class: "item" do
-    %i.plus.icon
-    New
-
   -#.item
     .ui.transparent.icon.input
       = form_tag admin_invitations_path, method: :get do

@@ -17,21 +17,6 @@
           %i.unlock.alternative.icon
           change password
 
-        -#.right.menu
-          -#.ui.simple.dropdown.item
-            -#more
-            -#%i.dropdown.icon
-            -#.menu
-
-              -#.divider
-              -#.header
-                -#%i.warning.sign.icon
-                -#DANGERZONE
-
-              -#.item{ data: { behavior: "modal", template: "admin/templates/users/delete", url: admin_user_path(@user), code: @user.code, title: @user.title } }
-                -#%i.trash.icon
-                -#delete
-
       %h2.ui.dividing.header Internal Stuff
       %table.ui.collapsing.celled.table
         %tbody
