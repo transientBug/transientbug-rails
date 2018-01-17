@@ -1,23 +1,23 @@
 class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      return scope.all.order(:title) if user.present?
+      return scope.all.order(:title) if user&.role? :admin
       scope.where(disabled: false).order(:title)
     end
   end
 
   def create?
-    return false unless user.present?
+    user&.role? :admin
+  end
 
-    true
+  def destroy?
+    user&.role? :admin
   end
 
   def show?
     return !record.disabled? unless user.present?
 
-    return true if user.role? :admin
-
-    user.owner_of? record
+    user.role? :admin
   end
 
   def permitted_attributes
