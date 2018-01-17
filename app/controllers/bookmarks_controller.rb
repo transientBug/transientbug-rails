@@ -13,17 +13,18 @@ class BookmarksController < ApplicationController
 
   # GET /bookmarks/new
   def new
-    authorize Bookmark
-
     @bookmark = current_user.bookmarks.new
     @bookmark.webpage = Webpage.new
+
+    authorize @bookmark
   end
 
   # POST /bookmarks
   # POST /bookmarks.json
   def create
-    authorize Bookmark
     @bookmark = current_user.bookmarks.new(bookmark_params)
+
+    authorize @bookmark
 
     respond_to do |format|
       if @bookmark.save
