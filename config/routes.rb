@@ -18,9 +18,6 @@ Rails.application.routes.draw do
   end
 
   resources :bookmarks do
-    # get "/cache", to: "webpage_cache#index"
-    # match "/cache/assets/*key", to: "webpage_cache#assets", via: [:get]
-
     resources :cache, only: [:index, :create], module: "bookmarks" do
       collection do
         match "/*key", to: "cache#show", via: [:get]
@@ -28,9 +25,9 @@ Rails.application.routes.draw do
     end
 
     collection do
-      scope as: :bookmarks do
-        resources :search, only: [:index], module: "bookmarks"
-        resources :tags, only: [:index, :show], module: "bookmarks" do
+      scope as: :bookmarks, module: :bookmarks do
+        resources :search, only: [:index]
+        resources :tags, only: [:index, :show] do
           collection do
             resources :autocomplete, only: [:index], module: "tags"
           end
@@ -46,12 +43,20 @@ Rails.application.routes.draw do
 
     resources :invitations
     resources :users, only: [ :index, :show, :edit, :update ] do
-      # Trying out the pattern talked about here
-      # http://jeromedalbert.com/how-dhh-organizes-his-rails-controllers/
       resources :password, only: [ :create ], module: "users"
     end
 
     resources :bookmarks
+  end
+
+  namespace :api do
+    namespace :v1 do
+      # Disable having to .json the request url but default to JSON. Don't
+      # include the new and edit routes that normal html routes expect
+      scope format: false, except: [ :new, :edit ], defaults: { format: :json } do
+        resource :profile, only: [ :show ]
+      end
+    end
   end
 
   resources :images do

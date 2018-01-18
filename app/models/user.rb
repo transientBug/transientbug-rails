@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validates :email, presence: true
 
   has_secure_password
+  has_secure_token :auth_token
 
   def self.find_or_create_from_auth_hash! auth_hash
     email = auth_hash.dig 'info', 'email'
