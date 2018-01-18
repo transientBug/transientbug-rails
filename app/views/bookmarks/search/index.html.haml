@@ -3,8 +3,6 @@
 
 = render "bookmarks/navbar"
 
-- content_for :body do
-  .ui.row
-    %h1 Search Results
+%h1 Search Results
 
-    = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

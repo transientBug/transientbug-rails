@@ -1,53 +1,46 @@
 - content_for :page_title do
   Viewing "#{ @user.username }"
 
-- content_for :body do
-  .ui.two.wide.column
-    .ui.row
-      = render partial: "menu", locals: { count: @count }
+.ui.menu
+  = link_to edit_admin_user_path(@user), class: "item" do
+    %i.edit.icon
+    edit
 
-  .ui.fourteen.wide.column
-    .ui.row
-      .ui.menu
-        = link_to edit_admin_user_path(@user), class: "item" do
-          %i.edit.icon
-          edit
+  .item
+    %i.unlock.alternative.icon
+    change password
 
-        .item
-          %i.unlock.alternative.icon
-          change password
+%h2.ui.dividing.header Internal Stuff
+%table.ui.collapsing.celled.table
+  %tbody
+    %tr
+      %td
+        %b ID
+      %td
+        = @user.id
+    %tr
+      %td
+        %b Username
+      %td
+        = @user.username
+    %tr
+      %td
+        %b Email
+      %td
+        = @user.email
+    %tr
+      %td
+        %b Roles
+      %td
+        = @user.roles.map(&:name).join ", "
+    %tr
+      %td
+        %b Created At
+      %td
+        = @user.created_at.to_s(:long)
 
-      %h2.ui.dividing.header Internal Stuff
-      %table.ui.collapsing.celled.table
-        %tbody
-          %tr
-            %td
-              %b ID
-            %td
-              = @user.id
-          %tr
-            %td
-              %b Username
-            %td
-              = @user.username
-          %tr
-            %td
-              %b Email
-            %td
-              = @user.email
-          %tr
-            %td
-              %b Roles
-            %td
-              = @user.roles.map(&:name).join ", "
-          %tr
-            %td
-              %b Created At
-            %td
-              = @user.created_at.to_s(:long)
+%h2.ui.dividing.header Bookmarks
+%p Coming soon
 
-      %h2.ui.dividing.header Bookmarks
-      %p Coming soon
-
-      %h2.ui.dividing.header Images
-      %p Coming soon
+%h2.ui.dividing.header Images
+%p Coming soon

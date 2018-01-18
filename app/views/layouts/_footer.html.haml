@@ -6,9 +6,9 @@
         .ui.inverted.link.list
           .item= link_to "Home", home_path
           .item= link_to "Images", images_path
-          .item= link_to "Bookmarks", bookmarks_path
 
           - if signed_in?
+            .item= link_to "Bookmarks", bookmarks_path
             .item= link_to "Profile", profile_path
 
           - if Rails.env.development?

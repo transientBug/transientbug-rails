@@ -1,18 +1,14 @@
 - content_for :page_title do
   Image search
 
-= render "navbar"
+.ui.fluid.grid
+  .ui.centered.row
+    %h1 Image Search Results
 
-- content_for :body do
-  .ui.fluid.grid
-    .ui.centered.row
-      %h1 Image Search Results
+    .ui.search
+      .ui.icon.input
+        = form_tag search_images_path, method: :get do
+          = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Images ...", aria: { label: "search" }
+        %i.search.icon
 
-    .ui.centered.row
-      .ui.search
-        .ui.icon.input
-          = form_tag search_images_path, method: :get do
-            = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Images ...", aria: { label: "search" }
-          %i.search.icon
-
-    = render partial: "cards", locals: { images: @images }
+  = render partial: "cards", locals: { images: @images }

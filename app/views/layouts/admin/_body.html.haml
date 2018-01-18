@@ -1,53 +1,4 @@
-.ui.sidebar.inverted.vertical.menu
-  .item
-    .header Admin #{ current_user.username }
-
-  = active_link_to admin_root_path, active: :exclusive, class: "item" do
-    Home
-    %i.home.icon
-
-  .item
-    .header general admin
-
-  .menu
-    = active_link_to admin_service_announcements_path, class: "item" do
-      service announcements
-      %i.announcement.icon
-
-  .item
-    .header user admin
-
-  .menu
-    = active_link_to admin_invitations_path, class: "item" do
-      invitatitons
-      %i.mail.icon
-
-    = active_link_to admin_users_path, class: "item" do
-      users
-      %i.users.icon
-
-  .item
-    .header bookmark related
-
-  .menu
-    = active_link_to admin_bookmarks_path, class: "item" do
-      bookmarks
-      %i.bookmark.icon
-
-  .item
-    .header image related
-
-  .menu
-    .item "Coming Soon"
-
-  .item
-    .header misc
-
-  .menu
-    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
-
-  = content_for :sidebar
-
+= render partial: "layouts/admin/sidebar"
 
 = render partial: "layouts/admin/navbar"
 
@@ -59,4 +10,14 @@
 
         = semantic_flash
 
-    = content_for :body
+    - if lookup_context.template_exists?("admin/#{ controller_name }/menu", [], true)
+      .ui.two.wide.column
+        .ui.row
+          = render partial: "menu", locals: { count: @count }
+
+      .ui.fourteen.wide.column
+        .ui.row
+          = yield
+
+    - else
+      = yield

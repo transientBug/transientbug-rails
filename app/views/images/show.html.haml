@@ -15,25 +15,22 @@
 - content_for :page_title do
   = @image.title
 
-= render "navbar"
+.ui.fluid.grid
+  .row
+    %h1= @image.title
 
-- content_for :body do
-  .ui.fluid.grid
-    .row
-      %h1= @image.title
+  .row
+    = link_to image_path(@image, format: :gif), class: "ui top attached centered image" do
+      = image_tag image_path(@image, format: :gif)
 
-    .row
-      = link_to image_path(@image, format: :gif), class: "ui top attached centered image" do
-        = image_tag image_path(@image, format: :gif)
+  .row
+    .ui.fluid.menu
+      - if policy(@image).update?
+        = link_to "Edit", edit_image_path(@image), class: "item"
 
-    .row
-      .ui.fluid.menu
-        - if policy(@image).update?
-          = link_to "Edit", edit_image_path(@image), class: "item"
+      .right.menu
+        .ui.item
+          Updated: #{ @image.updated_at.to_date.to_s(:long) }
 
-        .right.menu
-          .ui.item
-            Updated: #{ @image.updated_at.to_date.to_s(:long) }
-
-    .row
-      = render partial: "tags", locals: { tags: @image.tags }
+  .row
+    = render partial: "tags", locals: { tags: @image.tags }

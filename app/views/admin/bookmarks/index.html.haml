@@ -16,62 +16,54 @@
           %i.trash.icon
           delete all
 
+%table.ui.celled.table#stickContext
+  %thead
+    %tr
+      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th Actions
+      %th Creator
+      %th URL
+      %th Tags
+      %th Created At
+  %tbody
+    - if @bookmarks.any?
+      - @bookmarks.each do |bookmark|
+        %tr
+          %td.collapsing= check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
+          %td.collapsing
+            .ui.buttons
+              = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
+                %i.expand.icon
+                view
 
-- content_for :body do
-  .ui.two.wide.column
-    .ui.row
-      = render partial: "menu", locals: { count: @count }
+              .ui.simple.dropdown.icon.button
+                %i.dropdown.icon
+                .menu
+                  = link_to edit_admin_bookmark_path(bookmark), class: "item" do
+                    %i.edit.icon
+                    edit
 
-  .ui.fourteen.wide.column
-    .ui.row
-      %table.ui.celled.table#stickContext
-        %thead
-          %tr
-            %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
-            %th Actions
-            %th Creator
-            %th URL
-            %th Tags
-            %th Created At
-        %tbody
-          - if @bookmarks.any?
-            - @bookmarks.each do |bookmark|
-              %tr
-                %td.collapsing= check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
-                %td.collapsing
-                  .ui.buttons
-                    = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
-                      %i.expand.icon
-                      view
+                  .item
+                    %i.download.icon
+                    recache
 
-                    .ui.simple.dropdown.icon.button
-                      %i.dropdown.icon
-                      .menu
-                        = link_to edit_admin_bookmark_path(bookmark), class: "item" do
-                          %i.edit.icon
-                          edit
+                  .divider
+                  .header
+                    %i.warning.sign.icon
+                    DANGERZONE
 
-                        .item
-                          %i.download.icon
-                          recache
+                  .item{ data: { behavior: "modal", template: "admin/templates/bookmarks/delete", url: admin_bookmark_path(bookmark), username: bookmark.user.username, title: bookmark.title } }
+                    %i.trash.icon
+                    delete
 
-                        .divider
-                        .header
-                          %i.warning.sign.icon
-                          DANGERZONE
+          %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
+          %td= bookmark.uri_string
+          %td.collapsing= bookmark.tags.map(&:label).join ", "
+          %td.collapsing= bookmark.created_at.to_s(:long)
 
-                        .item{ data: { behavior: "modal", template: "admin/templates/bookmarks/delete", url: admin_bookmark_path(bookmark), username: bookmark.user.username, title: bookmark.title } }
-                          %i.trash.icon
-                          delete
+    - else
+      %tr
+        %td{ colspan: 6 }
+          No bookmarks made yet
 
-                %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
-                %td= bookmark.uri_string
-                %td.collapsing= bookmark.tags.map(&:label).join ", "
-                %td.collapsing= bookmark.created_at.to_s(:long)
-
-          - else
-            %tr
-              %td{ colspan: 6 }
-                No bookmarks made yet
-
-      = paginate @bookmarks
+= paginate @bookmarks
