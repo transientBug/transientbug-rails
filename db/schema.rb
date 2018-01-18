@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_17_175000) do
+ActiveRecord::Schema.define(version: 2018_01_18_154729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,10 +95,9 @@ ActiveRecord::Schema.define(version: 2018_01_17_175000) do
     t.text "internal_note"
     t.text "title"
     t.text "description"
-    t.integer "limit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "current"
+    t.integer "available", default: 1
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
 

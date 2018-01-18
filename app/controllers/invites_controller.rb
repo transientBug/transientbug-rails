@@ -44,7 +44,7 @@ class InvitesController < ApplicationController
   def set_invite
     @invitation = Invitation.find_by code: (params[:id] || params[:code])
 
-    redirect_to invites_path, error: "That invite isn't valid :(" unless @invitation
+    redirect_to invites_path, error: "That invite isn't valid :(" and return unless @invitation
 
     @invitations_user = @invitation.invitations_users.find_by id: session[:invite_reservation]
 
@@ -63,7 +63,7 @@ class InvitesController < ApplicationController
 
     row = result.to_a.first || {}
 
-    redirect_to invites_path, error: "That invite isn't valid :(" if row["available"]&.negative?
+    redirect_to invites_path, error: "That invite isn't valid :(" and return if row["available"]&.negative?
 
     @invitations_user = @invitation.invitations_users.create
     session[:invite_reservation] = @invitations_user.id

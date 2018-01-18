@@ -26,8 +26,8 @@
       %p It's recommended to put a little internal note about what this invitation is for.
 
   .required.field
-    = f.label :limit
-    = f.number_field :limit, aria: { describedby: "Invitation Use Limit" }
+    = f.label :available
+    = f.number_field :available, aria: { describedby: "Invitation Available Uses" }
 
   - if invitation.new_record?
     .field
