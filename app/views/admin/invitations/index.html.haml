@@ -16,7 +16,6 @@
           %i.trash.icon
           delete all
 
-
 - content_for :body do
   .ui.two.wide.column
     .ui.row
@@ -33,7 +32,6 @@
             %th Title
             %th Description
             %th Internal Note
-            %th Limit
             %th Available
             %th Created At
         %tbody
@@ -67,8 +65,7 @@
                 %td= invitation.title
                 %td= invitation.description&.truncate 120
                 %td= invitation.internal_note&.truncate 240
-                %td.collapsing= invitation.limit
-                %td.collapsing= invitation.current
+                %td.collapsing= invitation.available
                 %td.collapsing= invitation.created_at.to_s(:long)
 
           - else
