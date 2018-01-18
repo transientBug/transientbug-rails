@@ -24,6 +24,13 @@ class User < ApplicationRecord
     # end
   end
 
+  # Similar to has_secure_password's #authenticate
+  def token_authenticate token
+    token_digest = ::Digest::SHA256.hexdigest token
+    user_digest  = ::Digest::SHA256.hexdigest auth_token
+    ActiveSupport::SecurityUtils.secure_compare(token_digest, user_digest) && self
+  end
+
   def owner_of? record
     record.user_id == self.id
   end

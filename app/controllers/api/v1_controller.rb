@@ -5,7 +5,8 @@ class Api::V1Controller < ApiController
 
   def authenticate
     @current_user = if params[:auth_token]
-      User.find_by(auth_token: params[:auth_token])
+      email, token = params[:auth_token].split(":", 2)
+      User.find_by(email: email)&.token_authenticate token
     else
       authenticate_or_request_with_http_basic do |email, password|
         User.find_by(email: email)&.authenticate password
