@@ -35,14 +35,9 @@
         = @invitation.code
     %tr
       %td
-        %b Limit
+        %b Currently Available
       %td
-        = @invitation.limit
-    %tr
-      %td
-        %b Current Available
-      %td
-        = @invitation.current
+        = @invitation.available
     %tr
       %td
         %b Created At

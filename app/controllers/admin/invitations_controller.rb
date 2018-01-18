@@ -66,7 +66,7 @@ class Admin::InvitationsController < AdminController
   end
 
   def invitation_params
-    params.require(:invitation).permit(:code, :internal_note, :title, :description, :limit)
+    params.require(:invitation).permit(:code, :internal_note, :title, :description, :available)
   end
 end
 
