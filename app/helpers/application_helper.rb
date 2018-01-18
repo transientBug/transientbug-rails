@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def render_service_announcements
-    render partial: "layouts/service_announcements", locals: { service_announcements: ServiceAnnouncements.displayable }
+    render partial: "layouts/service_announcements", locals: { service_announcements: ServiceAnnouncement.displayable }
   end
 end

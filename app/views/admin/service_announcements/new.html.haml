@@ -1,11 +1,4 @@
 - content_for :page_title do
   New Service Announcement
 
-- content_for :body do
-  .ui.two.wide.column
-    .ui.row
-      = render partial: "menu", locals: { count: @count }
-
-  .ui.fourteen.wide.column
-    .ui.row
-      = render partial: "form", locals: { service_announcement: @service_announcement }
+= render partial: "form", locals: { service_announcement: @service_announcement }
