@@ -1,25 +1,13 @@
 - content_for :page_title do
   Profile
 
-- content_for :body do
-  .ui.row
-    %h2.ui.header
-      .content Basic Info
+%h2.ui.dividing.header Basic Info
+= render partial: "form", locals: { user: @user }
+%br
 
-    = render partial: "form", locals: { user: @user }
+%h2.ui.dividing.header Security
+= render partial: "password_form"
+%br
 
-  .ui.row
-    .ui.divider
-
-    %h2.ui.header
-      .content Security
-
-    = render partial: "password_form"
-
-  .ui.row
-    .ui.divider
-
-    %h2.ui.header
-      .content API Key
-
-    %p Coming soon! A functioning API and maybe some browser extensions are the next thing to be built!
+%h2.ui.dividing.header API Key
+%p Coming soon! A functioning API and maybe some browser extensions are the next thing to be built!

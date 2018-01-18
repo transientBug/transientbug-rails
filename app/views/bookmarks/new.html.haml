@@ -1,10 +1,6 @@
 - content_for :page_title do
   New Bookmark
 
-= render "navbar"
+%h1 New Bookmark
 
-- content_for :body do
-  .ui.row
-    %h1 New Bookmark
-
-    = render partial: "form", locals: { bookmark: @bookmark }
+= render partial: "form", locals: { bookmark: @bookmark }

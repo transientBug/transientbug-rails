@@ -1,11 +1,4 @@
 - content_for :page_title do
   Editing "#{ @invitation.title }"
 
-- content_for :body do
-  .ui.two.wide.column
-    .ui.row
-      = render partial: "menu", locals: { count: @count }
-
-  .ui.fourteen.wide.column
-    .ui.row
-      = render partial: "form", locals: { invitation: @invitation }
+= render partial: "form", locals: { invitation: @invitation }

@@ -1,10 +1,6 @@
 - content_for :page_title do
   Bookmarks
 
-= render "navbar"
+%h1 Your Bookmarks
 
-- content_for :body do
-  .ui.row
-    %h1 Your Bookmarks
-
-    = render partial: "bookmarks_list", locals: { bookmarks: @bookmarks }
+= render partial: "bookmarks_list", locals: { bookmarks: @bookmarks }

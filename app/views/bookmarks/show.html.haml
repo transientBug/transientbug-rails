@@ -1,28 +1,24 @@
 - content_for :page_title do
   Bookmark '#{ @bookmark.title }'
 
-= render "navbar"
+%h2.ui.header
+  .content= @bookmark.title
 
-- content_for :body do
-  .ui.row
-    %h2.ui.header
-      .content= @bookmark.title
+= link_to @bookmark.uri_string
+.date= @bookmark.created_at.to_s(:long)
 
-    = link_to @bookmark.uri_string
-    .date= @bookmark.created_at.to_s(:long)
+.ui.small.tag.labels
+  - @bookmark.tags.each do |tag|
+    = link_to bookmarks_tag_path(tag) do
+      .ui.label{ class: [tag.color] }= tag.label
 
-    .ui.small.tag.labels
-      - @bookmark.tags.each do |tag|
-        = link_to bookmarks_tag_path(tag) do
-          .ui.label{ class: [tag.color] }= tag.label
+.ui.fluid.text.menu
+  = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
+  = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
+  .right.menu
+    = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
+    .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri_string, title: @bookmark.title } }
+      delete
 
-    .ui.fluid.text.menu
-      = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
-      = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
-      .right.menu
-        = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
-        .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri_string, title: @bookmark.title } }
-          delete
-
-    - if @bookmark.description.present?
-      %p= @bookmark.description
+- if @bookmark.description.present?
+  %p= @bookmark.description
