@@ -4,7 +4,6 @@ class PagesController < ApplicationController
   before_action :login_redirect, only: [ :main ]
 
   def main
-    redirect_to images_path
   end
 
   def faq

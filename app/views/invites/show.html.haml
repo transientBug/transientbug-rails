@@ -1,24 +1,20 @@
 - content_for :page_title do
   = @invitation.title
 
-- content_for :body do
-  .ui.row
-    %h2.ui.header
-      .content= @invitation.title
+.ui.grid
+  .row
+    .centered.six.wide.column
+      %h2.ui.header= @invitation.title
+      %p= @invitation.description
 
-    %p
-      = @invitation.description
+      = form_for @user, url: invite_path(@invitation.code), method: :patch, html: { class: "ui form" } do |f|
+        - if @user.errors.any?
+          .ui.message.error
+            %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
+            %ul
+              - @user.errors.full_messages.each do |message|
+                %li= message
 
-  .ui.row
-    = form_for @user, url: invite_path(@invitation.code), method: :patch, html: { class: "ui form" } do |f|
-      - if @user.errors.any?
-        .ui.message.error
-          %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
-          %ul
-            - @user.errors.full_messages.each do |message|
-              %li= message
-
-      .ui.segment
         .ui.list
           .item
             .content
