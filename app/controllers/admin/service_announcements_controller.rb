@@ -4,7 +4,7 @@ class Admin::ServiceAnnouncementsController < AdminController
 
   # GET /service_announcements
   def index
-    @service_announcements = ServiceAnnouncement.unscoped.all.order(created_at: :desc).page params[:page]
+    @service_announcements = ServiceAnnouncement.all.order(created_at: :desc).page params[:page]
   end
 
   # GET /service_announcements/1
@@ -58,11 +58,11 @@ class Admin::ServiceAnnouncementsController < AdminController
   private
 
   def set_service_announcement
-    @service_announcement = ServiceAnnouncement.unscoped.find params[:id]
+    @service_announcement = ServiceAnnouncement.find params[:id]
   end
 
   def set_count
-    @count = ServiceAnnouncement.count
+    @count = ServiceAnnouncement.displayable.count
   end
 
   def service_announcement_params

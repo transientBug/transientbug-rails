@@ -15,6 +15,6 @@ class Admin::ServiceAnnouncements::ToggleController < AdminController
   private
 
   def set_service_announcement
-    @service_announcement = ServiceAnnouncement.unscoped.find params[:service_announcement_id]
+    @service_announcement = ServiceAnnouncement.find params[:service_announcement_id]
   end
 end

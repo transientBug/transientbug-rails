@@ -55,7 +55,7 @@
   .ui.main.horizontally.padded.grid
     .row
       .column
-        = render partial: "layouts/service_announcements", locals: { service_announcements: @active_service_announcements }
+        = render_service_announcements
 
         = semantic_flash
 
