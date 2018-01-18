@@ -24,7 +24,11 @@ class User < ApplicationRecord
     # end
   end
 
-  # Similar to has_secure_password's #authenticate
+  # Similar to has_secure_password's #authenticate, this tries to do a time
+  # constant comparison. Digesting both tokens before hand ensures that both
+  # strings are the same length during comparison. Suppose something could be
+  # done to store the digest instead, but that'd require overriding
+  # .has_secure_token
   def token_authenticate token
     token_digest = ::Digest::SHA256.hexdigest token
     user_digest  = ::Digest::SHA256.hexdigest auth_token
