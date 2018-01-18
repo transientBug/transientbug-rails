@@ -27,6 +27,12 @@
     = f.text_field :color, aria: { describedby: "Service Announcement Color" }
 
   %h4.ui.dividing.header Limits
+  .ui.info.message
+    %p Setting a start and end date allows the service announcement to handle the logic behind being shown and hidden automatically.
+    %ul.list
+      %li A lack of a starting date will result in the announcement being visible the from the moment it is created until the end date.
+      %li No end date will result in the announcement displaying indefinitely or until manually deactivated.
+
   .field
     = f.label :start_at
     = f.datetime_field :start_at, aria: { describedby: "Service Announcement Start At" }

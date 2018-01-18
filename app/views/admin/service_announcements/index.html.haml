@@ -37,7 +37,7 @@
         %tbody
           - if @service_announcements.any?
             - @service_announcements.each do |service_announcement|
-              %tr{ class: [ (service_announcement.active ? "" : "disabled") ] }
+              %tr
                 %td.collapsing= check_box_tag "select-#{ service_announcement.id }", nil, false, data: { id: service_announcement.id, behavior: "select" }
                 %td.collapsing
                   .ui.buttons
@@ -52,9 +52,13 @@
                           %i.edit.icon
                           edit
 
-                        .item
-                          %i.hide.icon
-                          deactivate
+                        = link_to admin_service_announcement_toggle_index_path(service_announcement), class: "item", method: :post do
+                          - if service_announcement.active
+                            %i.hide.icon
+                            deactivate
+                          - else
+                            %i.unhide.icon
+                            activate
 
                         .divider
                         .header

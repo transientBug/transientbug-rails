@@ -21,6 +21,11 @@
             %i.unhide.icon
             activate
 
+        .right.menu
+          .item{ data: { behavior: "modal", template: "admin/templates/service_announcements/delete", url: admin_service_announcement_path(@service_announcement), title: @service_announcement.title } }
+            %i.trash.icon
+            delete
+
       %h2.ui.dividing.header Internal Stuff
       %table.ui.collapsing.celled.table
         %tbody
