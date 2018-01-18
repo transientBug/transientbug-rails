@@ -16,61 +16,54 @@
           %i.trash.icon
           delete all
 
-- content_for :body do
-  .ui.two.wide.column
-    .ui.row
-      = render partial: "menu", locals: { count: @count }
+%table.ui.celled.table#stickContext
+  %thead
+    %tr
+      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th Actions
+      %th Code
+      %th Title
+      %th Description
+      %th Internal Note
+      %th Available
+      %th Created At
+  %tbody
+    - if @invitations.any?
+      - @invitations.each do |invitation|
+        %tr
+          %td.collapsing= check_box_tag "select-#{ invitation.id }", nil, false, data: { id: invitation.id, behavior: "select" }
+          %td.collapsing
+            .ui.buttons
+              = link_to admin_invitation_path(invitation), class: "ui icon button" do 
+                %i.expand.icon
+                view
 
-  .ui.fourteen.wide.column
-    .ui.row
-      %table.ui.celled.table#stickContext
-        %thead
-          %tr
-            %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
-            %th Actions
-            %th Code
-            %th Title
-            %th Description
-            %th Internal Note
-            %th Available
-            %th Created At
-        %tbody
-          - if @invitations.any?
-            - @invitations.each do |invitation|
-              %tr
-                %td.collapsing= check_box_tag "select-#{ invitation.id }", nil, false, data: { id: invitation.id, behavior: "select" }
-                %td.collapsing
-                  .ui.buttons
-                    = link_to admin_invitation_path(invitation), class: "ui icon button" do 
-                      %i.expand.icon
-                      view
+              .ui.simple.dropdown.icon.button
+                %i.dropdown.icon
+                .menu
+                  = link_to edit_admin_invitation_path(invitation), class: "item" do
+                    %i.edit.icon
+                    edit
 
-                    .ui.simple.dropdown.icon.button
-                      %i.dropdown.icon
-                      .menu
-                        = link_to edit_admin_invitation_path(invitation), class: "item" do
-                          %i.edit.icon
-                          edit
+                  .divider
+                  .header
+                    %i.warning.sign.icon
+                    DANGERZONE
 
-                        .divider
-                        .header
-                          %i.warning.sign.icon
-                          DANGERZONE
+                  .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
+                    %i.trash.icon
+                    delete
 
-                        .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
-                          %i.trash.icon
-                          delete
+          %td.collapsing= invitation.code
+          %td= invitation.title
+          %td= invitation.description&.truncate 120
+          %td= invitation.internal_note&.truncate 240
+          %td.collapsing= invitation.available
+          %td.collapsing= invitation.created_at.to_s(:long)
 
-                %td.collapsing= invitation.code
-                %td= invitation.title
-                %td= invitation.description&.truncate 120
-                %td= invitation.internal_note&.truncate 240
-                %td.collapsing= invitation.available
-                %td.collapsing= invitation.created_at.to_s(:long)
+    - else
+      %tr
+        %td{ colspan: 6 }
+          No invitations made yet
 
-          - else
-            %tr
-              %td{ colspan: 6 }
-                No invitations made yet
-
-      = paginate @invitations
+= paginate @invitations

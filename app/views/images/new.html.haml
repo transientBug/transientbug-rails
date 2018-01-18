@@ -1,12 +1,7 @@
 - content_for :page_title do
   = @image.title
 
-= render "navbar"
-
-- content_for :body do
-  .ui.fluid.grid
-    .row
-      %h1 New Image
-
-    .ui.centered.row
-      = render partial: "form", locals: { image: @image }
+.ui.fluid.grid
+  .ui.centered.row
+    %h1 New Image
+    = render partial: "form", locals: { image: @image }
