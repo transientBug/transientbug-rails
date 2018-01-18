@@ -3,9 +3,7 @@
 
 = render "bookmarks/navbar"
 
-- content_for :body do
-  .ui.row
-    %h1
-      .ui.massive.label.tag{ class: [ @tag.color ] }= @tag.label
+%h1
+  .ui.massive.label.tag{ class: [ @tag.color ] }= @tag.label
 
-    = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

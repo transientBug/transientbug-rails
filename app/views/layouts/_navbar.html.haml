@@ -1,3 +1,6 @@
+- if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
+  = render partial: "navbar"
+
 .computer.only.ui.top.fixed.inverted.menu
   .ui.container
     = link_to root_path, class: "header item" do
@@ -5,7 +8,6 @@
       transientBug
 
     = active_link_to "Home", home_path, class: "item"
-    = active_link_to "Images", images_path, class: "item"
 
     - if signed_in?
       = active_link_to "Bookmarks", bookmarks_path, class: "item"

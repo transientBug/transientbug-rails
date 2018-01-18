@@ -1,12 +1,9 @@
 - content_for :page_title do
   Images
 
-= render "navbar"
+.ui.fluid.grid
+  .ui.centered.row
+    %h1
+      .ui.massive.label.tag{ class: [color_for(params[:tag])] }= params[:tag]
 
-- content_for :body do
-  .ui.fluid.grid
-    .ui.centered.row
-      %h1
-        .ui.massive.label.tag{ class: [color_for(params[:tag])] }= params[:tag]
-
-    = render partial: "cards", locals: { images: @images }
+  = render partial: "cards", locals: { images: @images }
