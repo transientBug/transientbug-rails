@@ -35,6 +35,9 @@ document.addEventListener("turbolinks:load", () => {
 
   // Handle making the side menus sticky
   $("[data-behavior~=sticky]").each((idx, element) => {
+    if($(element.dataset.context).length < 1)
+      return
+
     let stickySettings = Object.assign({}, element.dataset)
     if(stickySettings.offset)
       stickySettings.offset = parseInt(stickySettings.offset)

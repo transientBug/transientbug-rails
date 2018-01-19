@@ -1,0 +1,71 @@
+- content_for :page_title do
+  Viewing "#{ @service_announcement.title }"
+
+.ui.row
+  .ui.menu
+    = link_to edit_admin_service_announcement_path(@service_announcement), class: "item" do
+      %i.edit.icon
+      edit
+
+    = link_to admin_service_announcement_toggle_index_path(@service_announcement), class: "item", method: :post do
+      - if @service_announcement.active
+        %i.hide.icon
+        deactivate
+      - else
+        %i.unhide.icon
+        activate
+
+    .right.menu
+      .item{ data: { behavior: "modal", template: "admin/templates/service_announcements/delete", url: admin_service_announcement_path(@service_announcement), title: @service_announcement.title } }
+        %i.trash.icon
+        delete
+
+  %h2.ui.dividing.header Internal Stuff
+  %table.ui.collapsing.celled.table
+    %tbody
+      %tr
+        %td
+          %b ID
+        %td
+          = @service_announcement.id
+      %tr
+        %td
+          %b Active?
+        %td
+          = @service_announcement.active
+      %tr
+        %td
+          %b Title
+        %td
+          = @service_announcement.title
+      %tr
+        %td
+          %b Message
+        %td
+          = @service_announcement.message
+      %tr
+        %td
+          %b Icon
+        %td
+          = @service_announcement.icon
+          %i.icon{ class: [ @service_announcement.color, @service_announcement.icon ] }
+      %tr
+        %td
+          %b Color
+        %td
+          = @service_announcement.color
+      %tr
+        %td
+          %b Start At
+        %td
+          = @service_announcement.start_at&.to_s(:long)
+      %tr
+        %td
+          %b End At
+        %td
+          = @service_announcement.end_at&.to_s(:long)
+      %tr
+        %td
+          %b Created At
+        %td
+          = @service_announcement.created_at.to_s(:long)

@@ -6,6 +6,8 @@
   .ui.main.horizontally.padded.grid
     .row
       .column
+        = render_service_announcements
+
         = semantic_flash
 
     - if lookup_context.template_exists?("admin/#{ controller_name }/menu", [], true)

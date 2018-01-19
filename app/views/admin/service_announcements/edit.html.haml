@@ -1,0 +1,4 @@
+- content_for :page_title do
+  Editing "#{ @service_announcement.title }"
+
+= render partial: "form", locals: { service_announcement: @service_announcement }
