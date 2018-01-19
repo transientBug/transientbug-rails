@@ -1,3 +1,3 @@
 json.profile do
-  json.auth_token current_user.auth_token
+  json.api_token current_user.api_token
 end
