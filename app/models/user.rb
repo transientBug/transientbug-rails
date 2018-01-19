@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  before_create :set_auth_token
+
   def self.find_or_create_from_auth_hash! auth_hash
     email = auth_hash.dig 'info', 'email'
 
@@ -23,11 +25,48 @@ class User < ApplicationRecord
     # end
   end
 
+  def self.generate_unique_secure_token
+    SecureRandom.uuid
+  end
+
+  def regenerate_auth_token
+    update! auth_token: self.class.generate_unique_secure_token
+  end
+
+  # The token that should be sent to the clients, hashed with a pepper because
+  # just getting a hold of the database wouldn't result in a compromised API
+  # Key unless they also got the secret.
+  def api_token
+    Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
+  end
+
+  # Similar to has_secure_password's #authenticate, this tries to do a time
+  # constant comparison. Digesting both tokens before hand ensures that both
+  # strings are the same length during comparison. Suppose something could be
+  # done to store the digest instead, but that'd require overriding
+  # .has_secure_token
+  def token_authenticate user_sent_token
+    user_digest  = ::Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
+
+    return false unless user_sent_token.bytesize == user_digest.bytesize
+    ActiveSupport::SecurityUtils.secure_compare(user_sent_token, user_digest) && self
+  end
+
   def owner_of? record
     record.user_id == self.id
   end
 
   def role? name
     roles.find { |role| role.name == name.to_s }
+  end
+
+  private
+
+  def set_auth_token
+    self.auth_token ||= self.class.generate_unique_secure_token
+  end
+
+  def pepper
+    Rails.application.credentials.auth_token_pepper
   end
 end

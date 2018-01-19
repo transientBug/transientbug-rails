@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
 
     self.current_user = @user
 
-    redirect_to  home_url
+    redirect_to home_url
   end
 
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
