@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  require_login! only: [ :home ]
+  require_login! except: [ :main, :faq ]
 
   before_action :login_redirect, only: [ :main ]
 
@@ -11,6 +11,9 @@ class PagesController < ApplicationController
 
   def home
     @recent_bookmarks = policy_scope(Bookmark).limit(15)
+  end
+
+  def extension_pair
   end
 
   protected
