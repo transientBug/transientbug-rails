@@ -2,7 +2,7 @@ class Profiles::RegenerateController < ApplicationController
   require_login!
   before_action :set_user
 
-  def update
+  def create
     respond_to do |format|
       if @user.regenerate_auth_token
         format.html { redirect_to profile_path, notice: "API Token Regenerated!" }
