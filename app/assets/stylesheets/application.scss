@@ -15,10 +15,19 @@
  */
 @import "semantic-ui";
 
+// TODO: Replace with a local font
 @import url("//fonts.googleapis.com/css?family=Maven+Pro:700,900");
+
+html, body{
+  height: 100%;
+}
 
 .header {
   font-family: "Maven Pro", $font-family;
+}
+
+.ui.pusher {
+  height: 100%;
 }
 
 .main.container {
