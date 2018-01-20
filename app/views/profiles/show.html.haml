@@ -10,4 +10,10 @@
 %br
 
 %h2.ui.dividing.header API Key
-%p Coming soon! A functioning API and maybe some browser extensions are the next thing to be built!
+%p Documentation coming soon, I promise.
+
+.ui.right.action.fluid.input#authData{ data: { email: @user.email, apiToken: @user.api_token } }
+  = text_field_tag "api_token", @user.api_token
+  = link_to profile_regenerate_index_path(@service_announcement), class: "ui negative button", method: :post do
+    %i.refresh.icon
+    regenerate

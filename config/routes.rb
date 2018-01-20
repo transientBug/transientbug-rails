@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   root "pages#main"
   get "/home", to: "pages#home"
   get "/faq", to: "pages#faq"
-  get "/extension-pair", to: "pages#extension_pair"
 
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
@@ -16,6 +15,7 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :update] do
     post "password"
+    resources :regenerate, only: [ :create ], module: "profiles"
   end
 
   resources :bookmarks do
