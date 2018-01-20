@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       # include the new and edit routes that normal html routes expect
       scope format: false, except: [ :new, :edit ], defaults: { format: :json } do
         resource :profile, only: [ :show ]
+        resources :bookmarks
       end
     end
   end

@@ -1,5 +1,10 @@
 class Api::V1Controller < ApiController
+  include Pundit
+  include ActionController::HttpAuthentication::Basic::ControllerMethods
+
   before_action :authenticate
+
+  helper_method :current_user
 
   protected
 
@@ -8,6 +13,10 @@ class Api::V1Controller < ApiController
     @current_user ||= basic_auth
 
     render_unauthorized "Invalid API Credentials" unless @current_user
+  end
+
+  def current_user
+    @current_user
   end
 
   def render_unauthorized message

@@ -67,8 +67,12 @@ gem "mustermann"
 
 gem "connection_pool"
 
+# TODO: Replace because of rails 5.2 having redis stores built in
 gem "redis-rails"
 gem "redis-rack-cache"
+
+# CORS
+gem "rack-cors"
 
 gem "aws-sdk-s3", "~> 1"
 
