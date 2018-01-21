@@ -1,0 +1,40 @@
+{
+  "resource": "Profiles",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/profile",
+  "description": "Get",
+  "explanation": "Fetch the users auth_token",
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/profile?auth_token=person1%40example.com%3A7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c",
+      "request_body": null,
+      "request_headers": {
+        "Host": "example.org"
+      },
+      "request_query_parameters": {
+        "auth_token": "person1@example.com:7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c"
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"profile\": {\n    \"api_token\": \"7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c\"\n  }\n}",
+      "response_headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

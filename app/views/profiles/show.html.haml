@@ -10,7 +10,9 @@
 %br
 
 %h2.ui.dividing.header API Key
-%p Documentation coming soon, I promise.
+%p
+  API Documentation can be found
+  = link_to "here.", apitome.root_path
 
 .ui.right.action.fluid.input#authData{ data: { email: @user.email, apiToken: @user.api_token } }
   = text_field_tag "api_token", @user.api_token

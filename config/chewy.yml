@@ -1,12 +1,12 @@
 # config/chewy.yml
 # separate environment configs
-test:
-  host: 'localhost:9250'
-  prefix: 'transientbug_test'
-
 development:
   host: 'localhost:9200'
   prefix: 'transientbug'
+
+test:
+  host: 'localhost:9200'
+  prefix: 'transientbug_test'
 
 production:
   host: <%= ENV["ELASTICSEARCH_URL"] %>
