@@ -51,6 +51,6 @@ jobs:
     - stage: test
       script: bundle exec rspec
     - stage: stylistic
-      script: bundle exec pronto run -f github_status -c origin/master
+      script: bundle exec pronto run -f github_status -c origin/master --exit-code
     - stage: docs
       script: bundle exec yard

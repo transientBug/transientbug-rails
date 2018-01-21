@@ -20,6 +20,13 @@ A Paw.app file is provided and I try to keep it up to date with the current
 API.
 
 # Testing
+Chrome headless is being setup for the capybara tests, you should install it
+with something like
+```
+brew install chromedriver
+```
+Or look into using a [helper](https://github.com/flavorjones/chromedriver-helper).
+
 Basics:
  - RSpec is used for tests (eventually, they're a work in progress) deal with it
  - Capybara specs run with chrome-headless
