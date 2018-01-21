@@ -37,7 +37,7 @@ services:
       - "redis"
     build:
       context: .
-    command: bundle exec sidekiq -C config/sidekiq.yml
+      dockerfile: dockerfiles/Dockerfile.sidekiq
     networks:
       - "services"
     env_file:
@@ -51,7 +51,7 @@ services:
       - "sidekiq"
     build:
       context: .
-    command: bundle exec clockwork clock.rb
+      dockerfile: dockerfiles/Dockerfile.clockwork
     networks:
       - "services"
     env_file:
@@ -64,6 +64,7 @@ services:
       - "redis"
     build:
       context: .
+      dockerfile: dockerfiles/Dockerfile.rails
     ports:
       - "8000:3000"
     volumes:
@@ -73,18 +74,13 @@ services:
       - "services"
     env_file:
       - ".env.production"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost", "||", "exit", "1"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
 
   cable:
     depends_on:
       - "redis"
     build:
       context: .
-    command: bundle exec puma -p 28080 cable/config.ru
+      dockerfile: dockerfiles/Dockerfile.cable
     ports:
       - "28080:28080"
     #volumes:
