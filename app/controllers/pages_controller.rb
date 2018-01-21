@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  require_login! only: [ :home ]
+  require_login! except: [ :main, :faq ]
 
   before_action :login_redirect, only: [ :main ]
 

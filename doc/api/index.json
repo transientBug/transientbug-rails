@@ -1,0 +1,17 @@
+{
+  "resources": [
+    {
+      "name": "Profiles",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Get",
+          "link": "profiles/get.json",
+          "groups": true,
+          "route": "/api/v1/profile",
+          "method": "get"
+        }
+      ]
+    }
+  ]
+}

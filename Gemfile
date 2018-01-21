@@ -92,6 +92,18 @@ gem "addressable"
 # Utils
 gem "mustermann" # Used by the autumn moon bot framework for pattern matching
 
+# API Documentation from RAD
+gem "apitome"
+
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  gem "web-console", ">= 3.3.0"
+  gem "listen", ">= 3.0.5", "< 3.2"
+
+  gem "better_errors"
+  gem "binding_of_caller"
+end
+
 group :development, :test do
   # Runner & Environment
   gem "foreman"
@@ -112,7 +124,7 @@ group :development, :test do
   gem "rspec-rails", "~> 3.5"
 
   # Build out better factories than the yaml fixtures
-  gem "factory_girl", "~> 4.0"
+  gem "factory_bot_rails"
 
   # Auto-runners for tests and docs
   gem "guard"
@@ -122,12 +134,8 @@ group :development, :test do
   # Handle mail intercepting in development
   gem "mailcatcher"
 
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "web-console", ">= 3.3.0"
-  gem "listen", ">= 3.0.5", "< 3.2"
-
-  # gem "better_errors"
-  # gem "binding_of_caller"
+  # Document the API through rspec tests
+  gem "rspec_api_documentation"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
@@ -142,7 +150,6 @@ group :test do
   gem "selenium-webdriver"
   # gem "chromedriver-helper"
 
-
   # Test rack things
   gem "rack-test"
 
@@ -154,6 +161,9 @@ group :test do
 
   # Coverage reports
   gem "simplecov", require: false
+
+  # Cleanup
+  gem "database_cleaner"
 
   # Check things
   gem "flay"
