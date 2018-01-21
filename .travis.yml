@@ -34,6 +34,7 @@ env:
   global:
     - ES_VERSION=5.5.1
     - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz
+    - PULL_REQUEST_ID=$TRAVIS_PULL_REQUEST
 
 jobs:
   include:
