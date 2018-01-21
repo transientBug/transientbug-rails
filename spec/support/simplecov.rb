@@ -1,3 +1,3 @@
-require 'simplecov'
+require "simplecov"
 
-SimpleCov.start('rails')
+SimpleCov.start("rails")

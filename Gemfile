@@ -111,6 +111,9 @@ group :development, :test do
   gem "rspec"
   gem "rspec-rails", "~> 3.5"
 
+  # Build out better factories than the yaml fixtures
+  gem "factory_girl", "~> 4.0"
+
   # Auto-runners for tests and docs
   gem "guard"
   gem "guard-yard"
@@ -139,8 +142,6 @@ group :test do
   gem "selenium-webdriver"
   # gem "chromedriver-helper"
 
-  # Build out better factories than the yaml fixtures
-  gem "factory_girl", "~> 4.0"
 
   # Test rack things
   gem "rack-test"
