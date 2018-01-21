@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "$ref": "_bookmark.json"
+    }
+  }
+}

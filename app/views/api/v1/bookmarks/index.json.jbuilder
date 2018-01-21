@@ -1,1 +1,3 @@
-json.array! @bookmarks, partial: 'api/v1/bookmarks/bookmark', as: :bookmark
+json.data do
+  json.array! @bookmarks, partial: 'api/v1/bookmarks/bookmark', as: :bookmark
+end

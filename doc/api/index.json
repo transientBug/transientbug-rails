@@ -1,12 +1,25 @@
 {
   "resources": [
     {
-      "name": "Profiles",
+      "name": "Bookmarks",
       "explanation": null,
       "examples": [
         {
           "description": "Get",
-          "link": "profiles/get.json",
+          "link": "bookmarks/get.json",
+          "groups": true,
+          "route": "/api/v1/bookmarks",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Get",
+          "link": "profile/get.json",
           "groups": true,
           "route": "/api/v1/profile",
           "method": "get"

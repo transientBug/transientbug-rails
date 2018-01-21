@@ -1,0 +1,41 @@
+{
+  "resource": "Bookmarks",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/bookmarks",
+  "description": "Get",
+  "explanation": "Fetch the users bookmarks",
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/bookmarks?auth_token=person1%40example.com%3Ac4169d6e3b9a0f71f8e448bd5b5c3ff754d081b182bbdb5175b6469a19451b66",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/json",
+        "Host": "example.org"
+      },
+      "request_query_parameters": {
+        "auth_token": "person1@example.com:c4169d6e3b9a0f71f8e448bd5b5c3ff754d081b182bbdb5175b6469a19451b66"
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"data\": [\n    {\n      \"type\": \"bookmark\",\n      \"id\": 1,\n      \"attributes\": {\n        \"title\": \"test\",\n        \"created_at\": \"2018-01-21T18:04:58.203Z\",\n        \"updated_at\": \"2018-01-21T18:04:58.203Z\",\n        \"uri\": \"http://1.example.com\",\n        \"attr!\": [\n          {\n            \"type\": \"tag\",\n            \"id\": 1,\n            \"attributes\": {\n              \"label\": \"tag1\",\n              \"color\": \"green\"\n            },\n            \"links\": {\n              \"view\": \"http://example.org/bookmarks/tags.1\"\n            }\n          },\n          {\n            \"type\": \"tag\",\n            \"id\": 2,\n            \"attributes\": {\n              \"label\": \"tag2\",\n              \"color\": \"green\"\n            },\n            \"links\": {\n              \"view\": \"http://example.org/bookmarks/tags.2\"\n            }\n          },\n          {\n            \"type\": \"tag\",\n            \"id\": 3,\n            \"attributes\": {\n              \"label\": \"tag3\",\n              \"color\": \"green\"\n            },\n            \"links\": {\n              \"view\": \"http://example.org/bookmarks/tags.3\"\n            }\n          },\n          {\n            \"type\": \"tag\",\n            \"id\": 4,\n            \"attributes\": {\n              \"label\": \"tag4\",\n              \"color\": \"green\"\n            },\n            \"links\": {\n              \"view\": \"http://example.org/bookmarks/tags.4\"\n            }\n          },\n          {\n            \"type\": \"tag\",\n            \"id\": 5,\n            \"attributes\": {\n              \"label\": \"tag5\",\n              \"color\": \"green\"\n            },\n            \"links\": {\n              \"view\": \"http://example.org/bookmarks/tags.5\"\n            }\n          }\n        ]\n      },\n      \"links\": {\n        \"self\": \"http://example.org/api/v1/bookmarks/1\",\n        \"view\": \"http://example.org/bookmarks/1\"\n      }\n    }\n  ]\n}",
+      "response_headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

@@ -14,12 +14,25 @@ resource "Bookmarks" do
 
   get "/api/v1/bookmarks" do
     example "Get" do
-      explanation "Fetch the users bookmarks"
+      explanation "Fetch the users bookmarks."
 
       do_request
 
       expect(status).to eq(200)
-      expect(JSON.parse(response_body)).to be_an(Array).and(include(a_kind_of(Hash)))
+      expect(response_body).to match_response_schema("api/v1/bookmarks/index")
+    end
+  end
+
+  get "/api/v1/bookmarks/:id" do
+    let(:id) { bookmark.id }
+
+    example "Get" do
+      explanation "Fetch a users specific bookmark."
+
+      do_request
+
+      expect(status).to eq(200)
+      expect(response_body).to match_response_schema("api/v1/bookmarks/show")
     end
   end
 end

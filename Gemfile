@@ -136,6 +136,7 @@ group :development, :test do
 
   # Document the API through rspec tests
   gem "rspec_api_documentation"
+  gem "json_matchers"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
