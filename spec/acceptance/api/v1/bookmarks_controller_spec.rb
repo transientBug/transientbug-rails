@@ -13,7 +13,7 @@ resource "Bookmarks" do
   parameter :auth_token, "Authentication Token", required: true
 
   get "/api/v1/bookmarks" do
-    example "Get" do
+    example "Get All" do
       explanation "Fetch the users bookmarks."
 
       do_request
@@ -26,7 +26,9 @@ resource "Bookmarks" do
   get "/api/v1/bookmarks/:id" do
     let(:id) { bookmark.id }
 
-    example "Get" do
+    parameter :id, "Bookmark ID", required: true
+
+    example "Get Individual" do
       explanation "Fetch a users specific bookmark."
 
       do_request

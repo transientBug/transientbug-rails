@@ -5,10 +5,17 @@
       "explanation": null,
       "examples": [
         {
-          "description": "Get",
-          "link": "bookmarks/get.json",
+          "description": "Get All",
+          "link": "bookmarks/get_all.json",
           "groups": true,
           "route": "/api/v1/bookmarks",
+          "method": "get"
+        },
+        {
+          "description": "Get Individual",
+          "link": "bookmarks/get_individual.json",
+          "groups": true,
+          "route": "/api/v1/bookmarks/:id",
           "method": "get"
         }
       ]
