@@ -15,8 +15,9 @@ class Api::V1::BookmarksController < Api::V1Controller
   # POST /api/v1/bookmarks
   # POST /api/v1/bookmarks.json
   def create
+    # TODO: webpage find_or_create_by has a race condition
     @bookmark = current_user.bookmarks.new(bookmark_params)
-    @bookmark.webpage = Webpage.find_or_create uri_string: params.dig(:bookmark, :url)
+    @bookmark.webpage = Webpage.find_or_create_by uri_string: params.dig(:url)
 
     if @bookmark.save
       render :show, status: :created, location: @bookmark
@@ -50,6 +51,6 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.require(:bookmark).permit(:title)
+    params.permit(:title)
   end
 end
