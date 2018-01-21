@@ -10,6 +10,7 @@ nvm:
 
 addons:
   chrome: stable
+  postgresql: "9.6"
 
 services:
   - postgresql
