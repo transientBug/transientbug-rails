@@ -20,4 +20,4 @@ RUN bundle exec rake RAILS_ENV=production DATABASE_URL=postgresql://user:pass@12
 
 VOLUME ["/app/public", "/dropzone"]
 
-CMD bundle exec rake docs:generate && bundle exec puma -C config/puma.rb
+CMD bundle exec puma -C config/puma.rb
