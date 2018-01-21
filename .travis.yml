@@ -1,0 +1,54 @@
+dist: trusty
+sudo: false
+
+language: ruby
+rvm:
+  - 2.4.1
+
+nvm:
+  - 8.3.0
+
+addons:
+  chrome: stable
+
+services:
+  - postgresql
+  - redis-server
+
+# only build pushes to master, force build branches and PRs
+branches:
+  only:
+    - master
+    - /force-build$/ # allow for developers to force CI builds if required before PR
+
+cache:
+  bundler: true
+  yarn: true
+  directories:
+    - node_modules
+
+matrix:
+  fast_finish: true
+
+env:
+  - ES_VERSION=5.5.1 ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz
+  - RACK_ENV=test
+
+before_install:
+  - wget ${ES_DOWNLOAD_URL}
+  - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+  - ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
+#  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
+#  - export PATH=$HOME/.yarn/bin:$PATH
+
+before_script:
+  - wget -q --waitretry=1 --retry-connrefused -T 10 -O - http://127.0.0.1:9200
+
+jobs:
+  include:
+    - stage: test
+      script: bundle exec rspec
+    - stage: stylistic
+      script: bundle exec pronto run #-f github_status -c origin/master
+    - stage: docs
+      script: bundle exec yard
