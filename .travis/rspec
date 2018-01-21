@@ -10,6 +10,10 @@ yarn install
 wget -q --waitretry=2 --retry-connrefused -T 20 -O - http://127.0.0.1:9200
 
 mv config/master.ci.key config/master.key
-mv -f config/credentials.ci.yml.enc config/credentials.yml.enc
+rm config/credentials.yml.enc
+mv config/credentials.ci.yml.enc config/credentials.yml.enc
+
+cat config/master.key
+cat config/credentials.yml.enc
 
 bundle exec rspec
