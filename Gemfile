@@ -10,41 +10,68 @@ gem "rails", "~> 5.2.0.beta", github: "rails/rails"
 gem "arel", "~> 9.0.0",  github: "rails/arel"
 
 # Data Stores
+#  * Postgres
+#  * Elasticsearch
+#  * Redis
 gem "pg", "~> 0.18"
 gem "chewy"
+gem "redis", "~> 3.0"
+gem "hiredis"
+gem "connection_pool"
+
+# gem "aws-sdk-s3", "~> 1"
+
+# TODO: Replace because of rails 5.2 having redis stores built in
+gem "redis-rails"
+gem "redis-rack-cache"
+
+# CORS
+gem "rack-cors"
+
+# Needed for has_secure_password
+gem "bcrypt"
+
+# Server
+gem "puma", "~> 3.7"
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data"
 
 # Views
 gem "haml"
 gem "haml-rails"
-gem "semantic-ui-sass"
-gem "rails-assets-lodash", source: "https://rails-assets.org"
-gem "jquery-rails"
-gem "coffee-rails" # uuuuuuugh
-gem "turbolinks", "~> 5"
-gem "ejs" # javascript templates for things like fancy delete modals
 
-gem "active_link_to"
-gem "kaminari"
-
+# Javascript and CSS
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 gem "webpacker"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
+#
+gem "coffee-rails" # uuuuuuugh
+gem "turbolinks", "~> 5"
+gem "semantic-ui-sass"
+gem "rails-assets-lodash", source: "https://rails-assets.org"
+gem "jquery-rails"
+gem "ejs" # javascript templates for things like fancy delete modals
+
+# Better link styling
+gem "active_link_to"
+
+# Pagination
+gem "kaminari"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.5"
 
-# Jobs
-gem "redis", "~> 3.0"
-gem "hiredis"
+# ActiveJob Worker
 gem "sidekiq"
 
 # Auth
 gem "omniauth-twitter"
 gem "omniauth-github"
 
-# Admin & Permissions
+# Permissions
 gem "pundit", github: "elabs/pundit"
 
 # Request making
@@ -54,52 +81,43 @@ gem "pundit", github: "elabs/pundit"
 # gem "excon"
 gem "http"
 gem "addressable"
+# gem "robotstxt-parser", require: "robotstxt"
 
 # Parsing/HTML handling
 # gem "nokogiri"
 # gem "loofah"
 # gem "ruby-readability"
 # gem "stopwords-filter"
-gem "robotstxt-parser", require: "robotstxt"
 
 # Utils
-gem "mustermann"
-
-gem "connection_pool"
-
-gem "redis-rails"
-gem "redis-rack-cache"
-
-gem "aws-sdk-s3", "~> 1"
-
-gem "bcrypt"
-
-# Server
-gem "puma", "~> 3.7"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data"
+gem "mustermann" # Used by the autumn moon bot framework for pattern matching
 
 group :development, :test do
   # Runner & Environment
   gem "foreman"
   gem "dotenv-rails"
 
-  # Debugging
+  # Better Debugging
   gem "awesome_print"
   gem "byebug"
   gem "pry"
   gem "pry-byebug"
   gem "pry-rails"
-  gem "better_errors"
-  gem "binding_of_caller"
+
+  # Document everything
+  gem "yard"
+
+  # Test everything
+  gem "rspec"
+  gem "rspec-rails", "~> 3.5"
+
+  # Build out better factories than the yaml fixtures
+  gem "factory_girl", "~> 4.0"
 
   # Auto-runners for tests and docs
   gem "guard"
   gem "guard-yard"
-
-  # Document everything
-  gem "yard"
+  gem "guard-rspec"
 
   # Handle mail intercepting in development
   gem "mailcatcher"
@@ -108,30 +126,41 @@ group :development, :test do
   gem "web-console", ">= 3.3.0"
   gem "listen", ">= 3.0.5", "< 3.2"
 
+  # gem "better_errors"
+  # gem "binding_of_caller"
+
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
   # gem "spring-watcher-listen", "~> 2.0.0"
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
+  # Adds support for Capybara system testing and selenium driver with headless
+  # chrome
   gem "capybara", "~> 2.13"
+  gem "capybara-selenium"
   gem "selenium-webdriver"
+  # gem "chromedriver-helper"
 
-  gem "rspec"
-  gem "rspec-rails", "~> 3.5"
 
-  gem "guard-rspec"
-  gem "factory_girl", "~> 4.0"
+  # Test rack things
   gem "rack-test"
+
+  # A Mockery of Time
   gem "timecop"
+
+  # A Mockery of Requests
   gem "webmock"
+
+  # Coverage reports
   gem "simplecov", require: false
 
+  # Check things
   gem "flay"
   gem "reek"
   gem "rubocop"
   gem "rubocop-rspec"
+
   gem "pronto"
   gem "pronto-flay", require: false
   gem "pronto-reek", require: false

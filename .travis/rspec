@@ -1,0 +1,12 @@
+#!/bin/bash
+set -ev
+
+wget ${ES_DOWNLOAD_URL}
+tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+./elasticsearch-${ES_VERSION}/bin/elasticsearch &
+
+yarn install
+
+wget -q --waitretry=2 --retry-connrefused -T 20 -O - http://127.0.0.1:9200
+
+bundle exec rspec
