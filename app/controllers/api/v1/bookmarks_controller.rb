@@ -4,7 +4,7 @@ class Api::V1::BookmarksController < Api::V1Controller
   # GET /api/v1/bookmarks
   # GET /api/v1/bookmarks.json
   def index
-    @bookmarks = Bookmark.all
+    @bookmarks = current_user.bookmarks.all
   end
 
   # GET /api/v1/bookmarks/1
@@ -15,7 +15,8 @@ class Api::V1::BookmarksController < Api::V1Controller
   # POST /api/v1/bookmarks
   # POST /api/v1/bookmarks.json
   def create
-    @bookmark = Bookmark.new(bookmark_params)
+    @bookmark = current_user.bookmarks.new(bookmark_params)
+    @bookmark.webpage = Webpage.find_or_create uri_string: params.dig(:bookmark, :url)
 
     if @bookmark.save
       render :show, status: :created, location: @bookmark
@@ -44,11 +45,11 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Use callbacks to share common setup or constraints between actions.
   def set_bookmark
-    @bookmark = Bookmark.find(params[:id])
+    @bookmark = current_user.bookmarks.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.fetch(:bookmark, {})
+    params.require(:bookmark).permit(:title)
   end
 end
