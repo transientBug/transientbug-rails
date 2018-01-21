@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 services:
-  - postgresql
+  - postgresql: "9.6"
   - redis-server
 
 # only build pushes to master, force build branches and PRs
