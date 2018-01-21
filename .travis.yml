@@ -38,7 +38,7 @@ env:
 jobs:
   include:
     - stage: test
-      script: ./.travis/rspec
+      script: .travis/rspec
     - stage: stylistic
       script: bundle exec pronto run -f github_status -c origin/master --exit-code
     - stage: docs
