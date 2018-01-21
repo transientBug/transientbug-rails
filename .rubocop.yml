@@ -1,0 +1,154 @@
+inherit_from:
+  - .rubocop_rspec.yml
+
+AllCops:
+  TargetRubyVersion: 2.4.1
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - bin/*
+
+# Configuration parameters: Include, TreatCommentsAsGroupSeparators.
+# Include: **/Gemfile, **/gems.rb
+Bundler/OrderedGems:
+  TreatCommentsAsGroupSeparators: true
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/**_spec.rb
+    - spec/support/examples/**.rb
+
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
+# URISchemes: http, https
+Metrics/LineLength:
+  Max: 120
+  AllowHeredoc: true
+  AllowURI: true
+  IgnoredPatterns:
+    - logger.* # Ignore lines that log info, sometimes its better to have it all on a longer line
+    - \A# # Exclude comment lines, not sure why it doesn't already but ¯\_(ツ)_/¯
+    - fail*
+
+Metrics/MethodLength:
+  Max: 30
+
+Naming/FileName:
+  Exclude:
+    - Gemfile
+    - Rakefile
+    - Thorfile
+    - Guardfile
+
+# Multi-line method chaining should be done with leading dots.
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+# Use empty lines between defs.
+Layout/EmptyLineBetweenDefs:
+  # If `true`, this parameter means that single line method definitions don't
+  # need an empty line between them.
+  AllowAdjacentOneLineDefs: true
+  # Can be array to specify minimum and maximum number of empty lines, e.g. [1, 2]
+  NumberOfEmptyLines: 1
+
+# Configuration parameters: SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
+Style/MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses_except_multiline
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# Ashby tends to put a space after a not so that its easier to see and pick out
+Layout/SpaceAfterNot:
+  Enabled: false
+
+# Configuration parameters: SupportedStyles.
+# SupportedStyles: space, no_space
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: space, no_space
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyle: space
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: space, no_space
+Layout/SpaceInsideStringInterpolation:
+  EnforcedStyle: space
+
+Layout/SpaceInsideBrackets:
+  Enabled: false
+
+Layout/SpaceInsideParens:
+  Enabled: false
+
+# Spaces make things easier to read
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+# Need a new line but don't have a blank line
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: final_newline, final_blank_line
+Layout/TrailingBlankLines:
+  EnforcedStyle: final_newline
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: prefer_alias, prefer_alias_method
+Style/Alias:
+  Enabled: false # Use either as we see fit
+
+# This is the ugliest rule and makes it hard to read what is getting
+# assigned, imo.
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false # Eventually this should be turned of but for now lots of things remain undocumented
+
+# magic comments? nooooooo. at least not right now
+# This disables the need for the # frozen_string_literal: true
+# comments that are recommended for the move to ruby 3
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Why use a method to check if a number is a number?
+# This normally wants you to use #zero? instead of == 0 which seems rightly
+# ludicrous.
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r # use %r{} for defining regex instead of //
+
+Style/SignalException:
+  EnforcedStyle: only_fail
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiterals:
+  AutoCorrect: true
+  EnforcedStyle: double_quotes
+
+# This is the ugliest and most unreadable and not clear rule
+# Don't use %i[] for symbol arrays, just make them [ :symbol ] for readability
+Style/SymbolArray:
+  Enabled: false
+
+# Don't always use %w[] to define arrays of words, as its not really nice
+# reading for short two or three word arrays.
+Style/WordArray:
+  Enabled: false
