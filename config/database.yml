@@ -56,10 +56,10 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
+  <<: *default
   <% if ENV["CI"] %>
   database: travis_ci_test
   <% else %>
-  <<: *default
   database: transientbug_test
   <% end %>
 

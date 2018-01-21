@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :update] do
     post "password"
+    resources :regenerate, only: [ :create ], module: "profiles"
   end
 
   resources :bookmarks do

@@ -1,6 +1,8 @@
 # transientBug Rails Project
 This is the main server and frontend for the transientBug.ninja website.
 
+[![Build Status](https://travis-ci.org/transientBug/transientbug-rails.svg?branch=master)](https://travis-ci.org/transientBug/transientbug-rails)
+
 # Setup
 General principles:
  - Try to keep it simple, mkay?
