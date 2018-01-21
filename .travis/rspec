@@ -13,7 +13,4 @@ mv config/master.ci.key config/master.key
 rm config/credentials.yml.enc
 mv config/credentials.ci.yml.enc config/credentials.yml.enc
 
-cat config/master.key
-cat config/credentials.yml.enc
-
 bundle exec rspec

@@ -10,9 +10,10 @@ nvm:
 
 addons:
   chrome: stable
+  postgresql: "9.6"
 
 services:
-  - postgresql: "9.6"
+  - postgresql
   - redis-server
 
 # only build pushes to master, force build branches and PRs
