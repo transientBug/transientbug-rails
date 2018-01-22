@@ -7,7 +7,7 @@ FactoryBot.define do
 
     factory :bookmark_with_tags do
       transient do
-        tags_count 5
+        tags_count 2
       end
 
       after(:create) do |bookmark, evaluator|

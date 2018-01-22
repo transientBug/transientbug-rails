@@ -54,5 +54,5 @@ Rails.application.configure do
 
   config.active_storage.service = :local
 
-  config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = :async
 end

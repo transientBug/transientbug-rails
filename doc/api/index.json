@@ -1,33 +1,40 @@
 {
   "resources": [
     {
-      "name": "Bookmarks",
+      "name": "v1 Bookmarks",
       "explanation": null,
       "examples": [
         {
           "description": "Get All",
-          "link": "bookmarks/get_all.json",
-          "groups": true,
+          "link": "v1_bookmarks/get_all.json",
+          "groups": "api_v1",
           "route": "/api/v1/bookmarks",
           "method": "get"
         },
         {
           "description": "Get Individual",
-          "link": "bookmarks/get_individual.json",
-          "groups": true,
+          "link": "v1_bookmarks/get_individual.json",
+          "groups": "api_v1",
           "route": "/api/v1/bookmarks/:id",
           "method": "get"
+        },
+        {
+          "description": "Post Upsert",
+          "link": "v1_bookmarks/post_upsert.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks",
+          "method": "post"
         }
       ]
     },
     {
-      "name": "Profile",
+      "name": "v1 Profile",
       "explanation": null,
       "examples": [
         {
           "description": "Get",
-          "link": "profile/get.json",
-          "groups": true,
+          "link": "v1_profile/get.json",
+          "groups": "api_v1",
           "route": "/api/v1/profile",
           "method": "get"
         }

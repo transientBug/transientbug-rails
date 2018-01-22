@@ -1,0 +1,46 @@
+{
+  "resource": "v1 Bookmarks",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/bookmarks/:id",
+  "description": "Get Individual",
+  "explanation": "Fetch a users specific bookmark.",
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    },
+    {
+      "required": true,
+      "name": "id",
+      "description": "Bookmark ID"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/bookmarks/2?auth_token=person2%40example.com%3A96781cb9691bf87a6e3b959e28237c8b906c878f1be0a241e2d8e1db4549b722",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/vnd.api+json",
+        "Accept": "application/vnd.api+json"
+      },
+      "request_query_parameters": {
+        "auth_token": "person2@example.com:96781cb9691bf87a6e3b959e28237c8b906c878f1be0a241e2d8e1db4549b722"
+      },
+      "request_content_type": "application/vnd.api+json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":2,\"attributes\":{\"title\":\"test\",\"description\":null,\"created_at\":\"2018-01-22T01:19:44.450Z\",\"updated_at\":\"2018-01-22T01:19:44.450Z\",\"uri\":\"http://2.example.com\",\"tags\":[\"tag3\",\"tag4\"]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/2\",\"view\":\"http://example.org/bookmarks/2\"}}}",
+      "response_headers": {
+        "Content-Type": "application/vnd.api+json"
+      },
+      "response_content_type": "application/vnd.api+json",
+      "curl": null
+    }
+  ]
+}

@@ -3,8 +3,11 @@ class Api::V1Controller < ApiController
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
   before_action :authenticate
+  after_action :set_headers
 
   helper_method :current_user
+
+  attr_reader :current_user
 
   protected
 
@@ -15,8 +18,10 @@ class Api::V1Controller < ApiController
     render_unauthorized "Invalid API Credentials" unless @current_user
   end
 
-  def current_user
-    @current_user
+  def set_headers
+    response.headers["Content-Type"]      = "application/vnd.api+json"
+    response.headers["X-Dino-Says"]       = "Rawr!"
+    response.headers["X-Clacks-Overhead"] = "GNU Terry Pratchett"
   end
 
   def render_unauthorized message
