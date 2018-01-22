@@ -7,8 +7,7 @@ class Api::V1::BookmarksController < Api::V1Controller
   end
 
   # GET /api/v1/bookmarks/1
-  def show
-  end
+  def show; end
 
   # POST /api/v1/bookmarks
   def create
