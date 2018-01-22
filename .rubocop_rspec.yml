@@ -66,9 +66,12 @@ RSpec/MultipleDescribes:
   Description: Checks for multiple top level describes.
   Enabled: true
 
+# Turn this off for acceptance tests because that breaks the api docs
 RSpec/MultipleExpectations:
   Description: Checks if examples contain too many `expect` calls.
   Enabled: true
+  Exclude:
+    - spec/acceptance/**/*_spec.rb
 
 RSpec/NamedSubject:
   Description: Checks for explicitly referenced test subjects.
