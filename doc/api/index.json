@@ -19,6 +19,13 @@
           "method": "get"
         },
         {
+          "description": "Patch Update",
+          "link": "v1_bookmarks/patch_update.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/:id",
+          "method": "patch"
+        },
+        {
           "description": "Post Upsert",
           "link": "v1_bookmarks/post_upsert.json",
           "groups": "api_v1",

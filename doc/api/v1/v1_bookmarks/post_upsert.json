@@ -12,30 +12,28 @@
       "description": "Authentication Token"
     },
     {
+      "scope": "data",
       "required": true,
-      "scope": [
-        "data"
-      ],
       "name": "type",
-      "description": "Data type"
+      "description": "bookmark"
     },
     {
-      "required": true,
       "scope": [
         "data",
         "attributes"
       ],
+      "required": true,
       "name": "url",
-      "description": "Data attributes url"
+      "description": "Bookmarks URL"
     },
     {
-      "required": true,
       "scope": [
         "data",
         "attributes"
       ],
+      "required": true,
       "name": "title",
-      "description": "Data attributes title"
+      "description": "Title"
     },
     {
       "scope": [
@@ -43,7 +41,7 @@
         "attributes"
       ],
       "name": "description",
-      "description": "Data attributes description"
+      "description": "Description/Note"
     },
     {
       "scope": [
@@ -51,7 +49,7 @@
         "attributes"
       ],
       "name": "tags",
-      "description": "Data attributes tags"
+      "description": "Comma separated"
     }
   ],
   "response_fields": [
@@ -61,7 +59,7 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/bookmarks",
-      "request_body": "{\"auth_token\":\"person3@example.com:2b8df5f0466bb4851e9ab709bbf71cdc51da8bf7cb21655358d89afccfc13cec\",\"data\":{\"type\":\"bookmark\",\"attributes\":{\"url\":\"https://bookmark.example\",\"title\":\"bookmark 1\",\"description\":\"Something witty\",\"tags\":\"tag 1, tag 2, tag 3\"}}}",
+      "request_body": "{\"auth_token\":\"person3@example.com:3349190099113faa11d490e3715b67e60a0f56d8f23c169a4945d46e398fb08b\",\"data\":{\"type\":\"bookmark\",\"attributes\":{\"url\":\"https://bookmark.example\",\"title\":\"bookmark 1\",\"description\":\"Something witty\",\"tags\":\"tag 1, tag 2, tag 3\"}}}",
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
@@ -71,7 +69,7 @@
       "request_content_type": "application/vnd.api+json",
       "response_status": 201,
       "response_status_text": "Created",
-      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":3,\"attributes\":{\"title\":\"bookmark 1\",\"description\":null,\"created_at\":\"2018-01-22T01:19:44.791Z\",\"updated_at\":\"2018-01-22T01:19:44.791Z\",\"uri\":\"https://bookmark.example\",\"tags\":[]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/3\",\"view\":\"http://example.org/bookmarks/3\"}}}",
+      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":3,\"attributes\":{\"title\":\"bookmark 1\",\"description\":null,\"created_at\":\"2018-01-22T02:45:11.699Z\",\"updated_at\":\"2018-01-22T02:45:11.699Z\",\"uri\":\"https://bookmark.example\",\"tags\":[]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/3\",\"view\":\"http://example.org/bookmarks/3\"}}}",
       "response_headers": {
         "Content-Type": "application/vnd.api+json"
       },

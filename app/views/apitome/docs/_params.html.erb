@@ -1,0 +1,35 @@
+<section class="params">
+  <h3><%= t(:parameters, scope: :apitome) %></h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <% param_headers(params).each do |title| %>
+          <th><%= title %></th>
+        <% end %>
+      </tr>
+
+      <% params.each do |param| %>
+        <tr>
+          <td class="name">
+            <code>
+              <% if param["scope"] %>
+                <%= "#{ Array(param["scope"]).push(param["name"]).flatten.join "." }" %>
+              <% else %>
+                <%= param["name"] %>
+              <% end %>
+
+              <% if param["required"] %>
+                <span class="label label-danger required"><%= t(:required, scope: :apitome) %></span>
+              <% end %>
+            </code>
+          </td>
+
+          <td class="description"><%= param["description"] %></td>
+          <% param_extras(params).each do |extra| %>
+            <td class="extra"><%= param[extra] %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</section>
