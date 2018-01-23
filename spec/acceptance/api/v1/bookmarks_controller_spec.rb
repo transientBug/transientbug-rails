@@ -106,4 +106,28 @@ resource "v1 Bookmarks" do
       expect(status).to eq(204)
     end
   end
+
+  get "/api/v1/bookmarks/check", focus: true do
+    parameter :url, "URL to check", required: true
+
+    let(:url) { bookmark.uri_string }
+
+    example "Check for an existing bookmark" do
+      do_request
+
+      expect(status).to eq(302)
+    end
+  end
+
+  get "/api/v1/bookmarks/check" do
+    parameter :url, "URL to check", required: true
+
+    let(:url) { "http://not.found" }
+
+    example "Check for a non-existent bookmark" do
+      do_request
+
+      expect(status).to eq(404)
+    end
+  end
 end
