@@ -5,29 +5,36 @@
       "explanation": null,
       "examples": [
         {
-          "description": "Get All",
-          "link": "v1_bookmarks/get_all.json",
+          "description": "Delete a bookmark",
+          "link": "v1_bookmarks/delete_a_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/:id",
+          "method": "delete"
+        },
+        {
+          "description": "Get All Bookmarks",
+          "link": "v1_bookmarks/get_all_bookmarks.json",
           "groups": "api_v1",
           "route": "/api/v1/bookmarks",
           "method": "get"
         },
         {
-          "description": "Get Individual",
-          "link": "v1_bookmarks/get_individual.json",
+          "description": "Get a Bookmark",
+          "link": "v1_bookmarks/get_a_bookmark.json",
           "groups": "api_v1",
           "route": "/api/v1/bookmarks/:id",
           "method": "get"
         },
         {
-          "description": "Patch Update",
-          "link": "v1_bookmarks/patch_update.json",
+          "description": "Update a Bookmark",
+          "link": "v1_bookmarks/update_a_bookmark.json",
           "groups": "api_v1",
           "route": "/api/v1/bookmarks/:id",
           "method": "patch"
         },
         {
-          "description": "Post Upsert",
-          "link": "v1_bookmarks/post_upsert.json",
+          "description": "Upsert a Bookmark",
+          "link": "v1_bookmarks/upsert_a_bookmark.json",
           "groups": "api_v1",
           "route": "/api/v1/bookmarks",
           "method": "post"

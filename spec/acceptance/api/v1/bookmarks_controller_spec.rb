@@ -14,32 +14,11 @@ resource "v1 Bookmarks" do
       bookmark
     end
 
-    example "Get All" do
-      explanation "Fetch the users bookmarks"
-
+    example "Get All Bookmarks" do
       do_request
 
       expect(status).to eq(200)
       expect(response_body).to match_response_schema("api/v1/bookmarks/index")
-    end
-  end
-
-  get "/api/v1/bookmarks/:id" do
-    before do
-      bookmark
-    end
-
-    let(:id) { bookmark.id }
-
-    parameter :id, "Bookmark ID", required: true
-
-    example "Get Individual" do
-      explanation "Fetch a users specific bookmark."
-
-      do_request
-
-      expect(status).to eq(200)
-      expect(response_body).to match_response_schema("api/v1/bookmarks/show")
     end
   end
 
@@ -63,12 +42,27 @@ resource "v1 Bookmarks" do
 
     let(:raw_post) { params.to_json }
 
-    example "Post Upsert" do
-      explanation "Creates, or updates a bookmark."
-
+    example "Upsert a Bookmark" do
       do_request
 
       expect(status).to eq(201)
+      expect(response_body).to match_response_schema("api/v1/bookmarks/show")
+    end
+  end
+
+  get "/api/v1/bookmarks/:id" do
+    before do
+      bookmark
+    end
+
+    let(:id) { bookmark.id }
+
+    parameter :id, "Bookmark ID", required: true
+
+    example "Get a Bookmark" do
+      do_request
+
+      expect(status).to eq(200)
       expect(response_body).to match_response_schema("api/v1/bookmarks/show")
     end
   end
@@ -95,13 +89,21 @@ resource "v1 Bookmarks" do
 
     let(:raw_post) { params.to_json }
 
-    example "Patch Update" do
-      explanation "Updates a bookmark."
-
+    example "Update a Bookmark" do
       do_request
 
       expect(status).to eq(200)
       expect(response_body).to match_response_schema("api/v1/bookmarks/show")
+    end
+  end
+
+  delete "/api/v1/bookmarks/:id" do
+    let(:id) { bookmark.id }
+
+    example "Delete a bookmark" do
+      do_request
+
+      expect(status).to eq(204)
     end
   end
 end

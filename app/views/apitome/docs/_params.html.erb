@@ -11,17 +11,15 @@
       <% params.each do |param| %>
         <tr>
           <td class="name">
-            <code>
-              <% if param["scope"] %>
-                <%= "#{ Array(param["scope"]).push(param["name"]).flatten.join "." }" %>
-              <% else %>
-                <%= param["name"] %>
-              <% end %>
+            <% if param["scope"] %>
+              <code><%= "#{ Array(param["scope"]).push(param["name"]).flatten.join "." }" %></code>
+            <% else %>
+              <code><%= param["name"] %></code>
+            <% end %>
 
-              <% if param["required"] %>
-                <span class="label label-danger required"><%= t(:required, scope: :apitome) %></span>
-              <% end %>
-            </code>
+            <% if param["required"] %>
+              <span class="label label-danger required"><%= t(:required, scope: :apitome) %></span>
+            <% end %>
           </td>
 
           <td class="description"><%= param["description"] %></td>

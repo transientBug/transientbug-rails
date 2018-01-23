@@ -18,18 +18,18 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/profile?auth_token=person5%40example.com%3Ae6016376780788174a2ecccac50d7bae99ac1ea17252d13814a47e07720b9358",
+      "request_path": "/api/v1/profile?auth_token=person6%40example.com%3A09d4b3ce90e65fac375a127edbe64371b057086b505b642fd7f11d4598e3b9f2",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/json"
       },
       "request_query_parameters": {
-        "auth_token": "person5@example.com:e6016376780788174a2ecccac50d7bae99ac1ea17252d13814a47e07720b9358"
+        "auth_token": "person6@example.com:09d4b3ce90e65fac375a127edbe64371b057086b505b642fd7f11d4598e3b9f2"
       },
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\"profile\":{\"api_token\":\"e6016376780788174a2ecccac50d7bae99ac1ea17252d13814a47e07720b9358\"}}",
+      "response_body": "{\"profile\":{\"api_token\":\"09d4b3ce90e65fac375a127edbe64371b057086b505b642fd7f11d4598e3b9f2\"}}",
       "response_headers": {
         "Content-Type": "application/vnd.api+json"
       },
