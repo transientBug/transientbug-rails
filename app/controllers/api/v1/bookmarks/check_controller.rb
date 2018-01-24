@@ -1,7 +1,8 @@
 class Api::V1::Bookmarks::CheckController < Api::V1Controller
   # GET /api/v1/bookmarks/check
   def index
-    head :not_found and return unless bookmark_found?
+    return head :not_found unless bookmark_found?
+
     head :found
   end
 
