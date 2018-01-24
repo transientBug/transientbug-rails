@@ -23,14 +23,14 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/bookmarks/check?auth_token=person7%40example.com%3A4fb10166f9e60202c026f0632d430d9452c8799225cd1f0f54c32641927c3492&url=http%3A%2F%2Fnot.found",
+      "request_path": "/api/v1/bookmarks/check?auth_token=person7%40example.com%3Ab9351c187f3ae41191d578cf49fa89a815b50b8e0cb4d50cb25051580c9cf517&url=http%3A%2F%2Fnot.found",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person7@example.com:4fb10166f9e60202c026f0632d430d9452c8799225cd1f0f54c32641927c3492",
+        "auth_token": "person7@example.com:b9351c187f3ae41191d578cf49fa89a815b50b8e0cb4d50cb25051580c9cf517",
         "url": "http://not.found"
       },
       "request_content_type": "application/vnd.api+json",

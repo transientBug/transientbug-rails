@@ -10,6 +10,11 @@
       "required": true,
       "name": "auth_token",
       "description": "Authentication Token"
+    },
+    {
+      "required": true,
+      "name": "id",
+      "description": "Bookmark ID"
     }
   ],
   "response_fields": [
@@ -25,7 +30,7 @@
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person5@example.com:e5bd31f502ed0b5d9b308e4ff2c98da2fc7bd40756ecc4e42fd7de086a9d8532"
+        "auth_token": "person5@example.com:63f8811da1140234e12d21526b77a600c7066b6b2a6d7ae00559c2e512734319"
       },
       "request_content_type": "application/vnd.api+json",
       "response_status": 204,

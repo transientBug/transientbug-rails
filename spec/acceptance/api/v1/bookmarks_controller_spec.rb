@@ -68,6 +68,8 @@ resource "v1 Bookmarks" do
   end
 
   patch "/api/v1/bookmarks/:id" do
+    parameter :id, "Bookmark ID", required: true
+
     with_options scope: :data do
       parameter :type, "bookmark", required: true
       parameter :id, "Bookmark ID to update", required: true
@@ -99,6 +101,8 @@ resource "v1 Bookmarks" do
 
   delete "/api/v1/bookmarks/:id" do
     let(:id) { bookmark.id }
+
+    parameter :id, "Bookmark ID", required: true
 
     example "Delete a bookmark" do
       do_request
