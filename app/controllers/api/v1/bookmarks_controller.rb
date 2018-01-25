@@ -3,7 +3,7 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # GET /api/v1/bookmarks
   def index
-    @bookmarks = current_user.bookmarks.all
+    @bookmarks = current_user.bookmarks.all.page params[:page]
   end
 
   # GET /api/v1/bookmarks/1

@@ -1,10 +1,30 @@
 {
   "type": "object",
-  "required": ["data"],
+  "required": [ "data" ],
   "properties": {
     "data": {
       "type": "array",
       "items": { "$ref": "_bookmark.json" }
+    },
+    "links": {
+      "type": "object",
+      "required": [ "self" ],
+      "properties": {
+        "self": { "type": "string", "format": "uri" },
+        "first": { "oneOf": [ { "type": "string", "format": "uri" }, { "type": "null" } ] },
+        "prev": { "oneOf": [ { "type": "string", "format": "uri" }, { "type": "null" } ] },
+        "next": { "oneOf": [ { "type": "string", "format": "uri" }, { "type": "null" } ] },
+        "last": { "oneOf": [ { "type": "string", "format": "uri" }, { "type": "null" } ] }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [ "count", "total_count", "total_pages" ],
+      "properties": {
+        "count": { "type": "integer" },
+        "total_count": { "type": "integer" },
+        "total_pages": { "type": "integer", "minimum": 1 }
+      }
     }
   }
 }
