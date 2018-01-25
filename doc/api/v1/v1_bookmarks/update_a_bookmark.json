@@ -70,7 +70,7 @@
     {
       "request_method": "PATCH",
       "request_path": "/api/v1/bookmarks/4",
-      "request_body": "{\"auth_token\":\"person4@example.com:e93a94315052ddf0c0e75bf46408bbae3f3d93d892bfa5da7511cba3d1a225cb\",\"data\":{\"type\":\"bookmark\",\"id\":4,\"attributes\":{\"url\":\"https://bookmark.example\",\"title\":\"bookmark 1\",\"description\":\"Something witty\",\"tags\":\"tag 1, tag 2, tag 3\"}}}",
+      "request_body": "{\"auth_token\":\"person4@example.com:043b19a3e4341091b9b316571b8ae5cb12fec6a5e423105374ef9f60025d6e00\",\"data\":{\"type\":\"bookmark\",\"id\":4,\"attributes\":{\"url\":\"https://bookmark.example\",\"title\":\"bookmark 1\",\"description\":\"Something witty\",\"tags\":\"tag 1, tag 2, tag 3\"}}}",
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
@@ -80,7 +80,7 @@
       "request_content_type": "application/vnd.api+json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":4,\"attributes\":{\"title\":\"bookmark 1\",\"description\":null,\"created_at\":\"2018-01-24T02:35:53.357Z\",\"updated_at\":\"2018-01-24T02:35:53.558Z\",\"uri\":\"http://3.example.com\",\"tags\":[\"tag5\",\"tag6\"]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/4\",\"view\":\"http://example.org/bookmarks/4\"}}}",
+      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":4,\"attributes\":{\"title\":\"bookmark 1\",\"description\":null,\"created_at\":\"2018-01-25T16:01:15.593Z\",\"updated_at\":\"2018-01-25T16:01:15.717Z\",\"uri\":\"http://3.example.com\",\"tags\":[\"tag5\",\"tag6\"]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/4\",\"view\":\"http://example.org/bookmarks/4\"}}}",
       "response_headers": {
         "Content-Type": "application/vnd.api+json"
       },

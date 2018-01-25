@@ -30,7 +30,7 @@
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person5@example.com:63f8811da1140234e12d21526b77a600c7066b6b2a6d7ae00559c2e512734319"
+        "auth_token": "person5@example.com:f910ac82b0a1284a1e7a538bb485c60a11d31a3dff3c6acd933d526c5efc8db8"
       },
       "request_content_type": "application/vnd.api+json",
       "response_status": 204,
