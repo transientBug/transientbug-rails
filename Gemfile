@@ -136,6 +136,7 @@ group :development, :test do
 
   # Document the API through rspec tests
   gem "rspec_api_documentation"
+  gem "json_matchers"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
@@ -166,13 +167,13 @@ group :test do
   gem "database_cleaner"
 
   # Check things
-  gem "flay"
-  gem "reek"
+  # gem "flay"
+  # gem "reek"
   gem "rubocop"
   gem "rubocop-rspec"
 
   gem "pronto"
-  gem "pronto-flay", require: false
-  gem "pronto-reek", require: false
+  # gem "pronto-flay", require: false
+  # gem "pronto-reek", require: false
   gem "pronto-rubocop", require: false
 end

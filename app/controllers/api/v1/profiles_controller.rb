@@ -1,4 +1,3 @@
 class Api::V1::ProfilesController < Api::V1Controller
-  def show
-  end
+  def show; end
 end

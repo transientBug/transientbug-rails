@@ -1,6 +1,8 @@
-resource "Profiles" do
+resource "v1 Profile" do
   let(:user) { create(:user) }
   let(:auth_token) { "#{ user.email }:#{ user.api_token }" }
+
+  header "Content-Type", "application/json"
 
   parameter :auth_token, "Authentication Token", required: true
 

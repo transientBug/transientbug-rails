@@ -27,6 +27,7 @@ cache:
   yarn: true
   directories:
     - node_modules
+    - elasticsearch-5.5.1
 
 matrix:
   fast_finish: true

@@ -1,0 +1,80 @@
+{
+  "resource": "v1 Bookmarks",
+  "resource_explanation": null,
+  "http_method": "POST",
+  "route": "/api/v1/bookmarks",
+  "description": "Upsert a Bookmark",
+  "explanation": null,
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    },
+    {
+      "scope": "data",
+      "required": true,
+      "name": "type",
+      "description": "bookmark"
+    },
+    {
+      "scope": [
+        "data",
+        "attributes"
+      ],
+      "required": true,
+      "name": "url",
+      "description": "Bookmarks URL"
+    },
+    {
+      "scope": [
+        "data",
+        "attributes"
+      ],
+      "required": true,
+      "name": "title",
+      "description": "Title"
+    },
+    {
+      "scope": [
+        "data",
+        "attributes"
+      ],
+      "name": "description",
+      "description": "Description/Note"
+    },
+    {
+      "scope": [
+        "data",
+        "attributes"
+      ],
+      "name": "tags",
+      "description": "Comma separated"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "POST",
+      "request_path": "/api/v1/bookmarks",
+      "request_body": "{\"auth_token\":\"person2@example.com:47d3f11b9043255884bc6d39d177e62eea9cf799f576f19966b61284dec0224e\",\"data\":{\"type\":\"bookmark\",\"attributes\":{\"url\":\"https://bookmark.example\",\"title\":\"bookmark 1\",\"description\":\"Something witty\",\"tags\":\"tag 1, tag 2, tag 3\"}}}",
+      "request_headers": {
+        "Content-Type": "application/vnd.api+json",
+        "Accept": "application/vnd.api+json"
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/vnd.api+json",
+      "response_status": 201,
+      "response_status_text": "Created",
+      "response_body": "{\"data\":{\"type\":\"bookmark\",\"id\":2,\"attributes\":{\"title\":\"bookmark 1\",\"description\":null,\"created_at\":\"2018-01-25T16:01:15.301Z\",\"updated_at\":\"2018-01-25T16:01:15.301Z\",\"uri\":\"https://bookmark.example\",\"tags\":[]},\"links\":{\"self\":\"http://example.org/api/v1/bookmarks/2\",\"view\":\"http://example.org/bookmarks/2\"}}}",
+      "response_headers": {
+        "Content-Type": "application/vnd.api+json"
+      },
+      "response_content_type": "application/vnd.api+json",
+      "curl": null
+    }
+  ]
+}

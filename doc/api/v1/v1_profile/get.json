@@ -1,0 +1,40 @@
+{
+  "resource": "v1 Profile",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/profile",
+  "description": "Get",
+  "explanation": "Fetch the users auth_token",
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/profile?auth_token=person8%40example.com%3Afb95943b081d738be4b0f827adda7da7ccfdb6a432e93ebe5960aafa2245d75a",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_query_parameters": {
+        "auth_token": "person8@example.com:fb95943b081d738be4b0f827adda7da7ccfdb6a432e93ebe5960aafa2245d75a"
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\"profile\":{\"api_token\":\"fb95943b081d738be4b0f827adda7da7ccfdb6a432e93ebe5960aafa2245d75a\"}}",
+      "response_headers": {
+        "Content-Type": "application/vnd.api+json"
+      },
+      "response_content_type": "application/vnd.api+json",
+      "curl": null
+    }
+  ]
+}

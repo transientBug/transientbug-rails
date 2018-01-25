@@ -1,10 +1,13 @@
 #!/bin/bash
 set -ev
 
+if [ ! -d directory ]; then
+  wget ${ES_DOWNLOAD_URL}
+  tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+fi
+
 psql -c 'create database travis_ci_test;' -U postgres
 
-wget ${ES_DOWNLOAD_URL}
-tar -xzf elasticsearch-${ES_VERSION}.tar.gz
 ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
 
 yarn install
