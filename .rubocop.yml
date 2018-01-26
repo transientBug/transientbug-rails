@@ -17,6 +17,7 @@ Bundler/OrderedGems:
 
 Metrics/BlockLength:
   Exclude:
+    - db/**/*.rb
     - spec/**/**_spec.rb
     - spec/support/examples/**.rb
 

@@ -84,9 +84,7 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     permitted_attributes(@bookmark || Bookmark).tap do |obj|
-      tags = params.dig(:bookmark).fetch(:tags, []).map(&:strip).reject(&:empty?).map do |tag|
-        Tag.find_or_create_by label: tag
-      end
+      tags = Tag.find_or_create_tags tags: params.dig(:bookmark).fetch(:tags, [])
 
       webpage = Webpage.find_or_create_by uri_string: params.dig(:bookmark, :uri_string)
 
@@ -94,4 +92,3 @@ class BookmarksController < ApplicationController
     end
   end
 end
-

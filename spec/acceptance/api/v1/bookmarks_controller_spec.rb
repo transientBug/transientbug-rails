@@ -38,7 +38,7 @@ resource "v1 Bookmarks" do
     let(:url) { "https://bookmark.example" }
     let(:title) { "bookmark 1" }
     let(:description) { "Something witty" }
-    let(:tags) { "tag 1, tag 2, tag 3" }
+    let(:tags) { ["tag 1", "tag 2", "tag 3" ] }
 
     let(:raw_post) { params.to_json }
 
@@ -87,7 +87,7 @@ resource "v1 Bookmarks" do
     let(:url) { "https://bookmark.example" }
     let(:title) { "bookmark 1" }
     let(:description) { "Something witty" }
-    let(:tags) { "tag 1, tag 2, tag 3" }
+    let(:tags) { ["tag 1", "tag 2", "tag 3" ] }
 
     let(:raw_post) { params.to_json }
 

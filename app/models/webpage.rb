@@ -3,7 +3,7 @@ class Webpage < ApplicationRecord
 
   before_validation :save_uri
 
-  validates :uri_string, presence: true, unique: true
+  validates :uri_string, presence: true, uniqueness: true
 
   def uri
     @uri ||= Addressable::URI.parse(uri_string)
