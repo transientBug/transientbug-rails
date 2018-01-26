@@ -2,6 +2,8 @@ class Api::V1Controller < ApiController
   include Pundit
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
+  wrap_parameters format: []
+
   before_action :authenticate
   after_action :set_headers
 
