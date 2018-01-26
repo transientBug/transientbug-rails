@@ -17,17 +17,9 @@ class Bookmark < ApplicationRecord
 
   # This has potential performance costs if we start retrying lots of times
   def self.find_or_create_for_user user:, uri_string:
-    webpage = begin
-                Webpage.find_or_create_by uri_string: uri_string
-              rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
-                retry
-              end
+    webpage = Webpage.upsert uri_string: uri_string
 
-    begin
-      find_or_create_by user: user, webpage: webpage
-    rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
-      retry
-    end
+    upsert user: user, webpage: webpage
   end
 
   private

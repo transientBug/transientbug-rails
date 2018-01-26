@@ -23,11 +23,7 @@ class Tag < ApplicationRecord
 
   def self.find_or_create_tags tags: []
     tags.map(&:strip).reject(&:empty?).map do |tag|
-      begin
-        find_or_create_by label: tag
-      rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
-        retry
-      end
+      upsert label: tag
     end
   end
 
