@@ -9,7 +9,11 @@
       "required": [ "title", "uri" ],
       "properties": {
         "title": { "type": "string" },
-        "uri": { "type": "string" }
+        "description": { "oneOf": [ { "type": "string" }, { "type": "null" } ] },
+        "uri": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "created_at": { "type": "string", "format": "date-time" }
       }
     }
   }
