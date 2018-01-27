@@ -1,5 +1,5 @@
 {
-  "resource": "Profiles",
+  "resource": "v1 Profile",
   "resource_explanation": null,
   "http_method": "GET",
   "route": "/api/v1/profile",
@@ -18,22 +18,22 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/profile?auth_token=person1%40example.com%3A7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c",
+      "request_path": "/api/v1/profile?auth_token=person8%40example.com%3Aded619fb5197c1ef9898d728eaaf5d4c786d377f8115a7e50bc6d4f35da47114",
       "request_body": null,
       "request_headers": {
-        "Host": "example.org"
+        "Content-Type": "application/json"
       },
       "request_query_parameters": {
-        "auth_token": "person1@example.com:7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c"
+        "auth_token": "person8@example.com:ded619fb5197c1ef9898d728eaaf5d4c786d377f8115a7e50bc6d4f35da47114"
       },
-      "request_content_type": null,
+      "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"profile\": {\n    \"api_token\": \"7d3548383283e55d78b34ab598a7194242811a9c8c2e074d57ebe2e450aeb58c\"\n  }\n}",
+      "response_body": "{\"profile\":{\"api_token\":\"ded619fb5197c1ef9898d728eaaf5d4c786d377f8115a7e50bc6d4f35da47114\"}}",
       "response_headers": {
-        "Content-Type": "application/json; charset=utf-8"
+        "Content-Type": "application/vnd.api+json"
       },
-      "response_content_type": "application/json; charset=utf-8",
+      "response_content_type": "application/vnd.api+json",
       "curl": null
     }
   ]

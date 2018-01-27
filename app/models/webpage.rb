@@ -3,7 +3,7 @@ class Webpage < ApplicationRecord
 
   before_validation :save_uri
 
-  validates :uri_string, presence: true
+  validates :uri_string, presence: true, uniqueness: true
 
   def uri
     @uri ||= Addressable::URI.parse(uri_string)
@@ -19,7 +19,9 @@ class Webpage < ApplicationRecord
 
   private
 
+  # Cleans up the URI, removing fragments (bits after the #) and converts the
+  # Addressable object into a string for storage
   def save_uri
-    self.uri_string = uri.to_s
+    self.uri_string = uri.omit(:fragment).to_s
   end
 end

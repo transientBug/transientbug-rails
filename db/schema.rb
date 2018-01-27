@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_18_211710) do
+ActiveRecord::Schema.define(version: 2018_01_26_152556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2018_01_18_211710) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "webpage_id"], name: "index_bookmarks_on_user_id_and_webpage_id", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
     t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"
   end
@@ -156,6 +157,7 @@ ActiveRecord::Schema.define(version: 2018_01_18_211710) do
     t.text "uri_string"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uri_string"], name: "index_webpages_on_uri_string", unique: true
   end
 
   add_foreign_key "authorizations", "users"

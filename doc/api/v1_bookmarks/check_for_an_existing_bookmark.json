@@ -1,0 +1,47 @@
+{
+  "resource": "v1 Bookmarks",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/bookmarks/check",
+  "description": "Check for an existing bookmark",
+  "explanation": null,
+  "parameters": [
+    {
+      "required": true,
+      "name": "auth_token",
+      "description": "Authentication Token"
+    },
+    {
+      "required": true,
+      "name": "url",
+      "description": "URL to check"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/bookmarks/check?auth_token=person6%40example.com%3A496614ee5ebd36ad3c6638f2f88f6d186067df34d59003175a5e96dbef3759d6&url=http%3A%2F%2F5.example.com",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/vnd.api+json",
+        "Accept": "application/vnd.api+json"
+      },
+      "request_query_parameters": {
+        "auth_token": "person6@example.com:496614ee5ebd36ad3c6638f2f88f6d186067df34d59003175a5e96dbef3759d6",
+        "url": "http://5.example.com"
+      },
+      "request_content_type": "application/vnd.api+json",
+      "response_status": 302,
+      "response_status_text": "Found",
+      "response_body": null,
+      "response_headers": {
+        "Content-Type": "application/vnd.api+json"
+      },
+      "response_content_type": "application/vnd.api+json",
+      "curl": null
+    }
+  ]
+}

@@ -1,2 +1,3 @@
-class ApiController < ApplicationController
+class ApiController < ActionController::API
+  include AbstractController::Translation
 end

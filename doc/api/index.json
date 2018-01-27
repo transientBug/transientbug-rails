@@ -1,13 +1,68 @@
 {
   "resources": [
     {
-      "name": "Profiles",
+      "name": "v1 Bookmarks",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Check for a non-existent bookmark",
+          "link": "v1_bookmarks/check_for_a_non-existent_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/check",
+          "method": "get"
+        },
+        {
+          "description": "Check for an existing bookmark",
+          "link": "v1_bookmarks/check_for_an_existing_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/check",
+          "method": "get"
+        },
+        {
+          "description": "Delete a bookmark",
+          "link": "v1_bookmarks/delete_a_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/:id",
+          "method": "delete"
+        },
+        {
+          "description": "Get All Bookmarks",
+          "link": "v1_bookmarks/get_all_bookmarks.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks",
+          "method": "get"
+        },
+        {
+          "description": "Get a Bookmark",
+          "link": "v1_bookmarks/get_a_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/:id",
+          "method": "get"
+        },
+        {
+          "description": "Update a Bookmark",
+          "link": "v1_bookmarks/update_a_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/:id",
+          "method": "patch"
+        },
+        {
+          "description": "Upsert a Bookmark",
+          "link": "v1_bookmarks/upsert_a_bookmark.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "name": "v1 Profile",
       "explanation": null,
       "examples": [
         {
           "description": "Get",
-          "link": "profiles/get.json",
-          "groups": true,
+          "link": "v1_profile/get.json",
+          "groups": "api_v1",
           "route": "/api/v1/profile",
           "method": "get"
         }

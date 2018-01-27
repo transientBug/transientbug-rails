@@ -17,6 +17,7 @@ Bundler/OrderedGems:
 
 Metrics/BlockLength:
   Exclude:
+    - db/**/*.rb
     - spec/**/**_spec.rb
     - spec/support/examples/**.rb
 
@@ -105,6 +106,11 @@ Layout/TrailingBlankLines:
 # SupportedStyles: prefer_alias, prefer_alias_method
 Style/Alias:
   Enabled: false # Use either as we see fit
+
+# All of rails uses this compact definition so lets just not fight it
+Style/ClassAndModuleChildren:
+  Exclude:
+    - app/**/*.rb
 
 # This is the ugliest rule and makes it hard to read what is getting
 # assigned, imo.

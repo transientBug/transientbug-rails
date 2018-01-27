@@ -17,9 +17,15 @@ class Tag < ApplicationRecord
 
   after_initialize :set_color
 
-  validates :label, presence: true
+  validates :label, presence: true, uniqueness: true
 
   update_index("bookmarks#tag") { self }
+
+  def self.find_or_create_tags tags: []
+    tags.map(&:strip).reject(&:empty?).map do |tag|
+      upsert label: tag
+    end
+  end
 
   private
 
