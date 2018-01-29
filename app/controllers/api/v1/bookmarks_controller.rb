@@ -48,8 +48,11 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.require(:data).require(:attributes).permit(:title, :description).tap do |obj|
-      obj[:tags] = Tag.find_or_create_tags tags: params.dig(:data, :attributes).fetch(:tags, [])
+    params.require(:data).require(:attributes).permit(:title, :description, :tags).tap do |obj|
+      tags = Tag.find_or_create_tags tags: params.dig(:data, :attributes).fetch(:tags, [])
+      tags = @bookmark.tags.to_a.concat(tags).uniq if @bookmark
+
+      obj[:tags] = tags
     end
   end
 end
