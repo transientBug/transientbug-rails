@@ -23,6 +23,8 @@ class Tag < ApplicationRecord
 
   def self.find_or_create_tags tags: []
     tags.map(&:strip).reject(&:empty?).map do |tag|
+      next tag if tag.is_a? Tag
+
       upsert label: tag
     end
   end

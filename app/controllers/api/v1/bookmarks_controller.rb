@@ -11,13 +11,16 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # POST /api/v1/bookmarks
   def create
-    @bookmark = Bookmark.find_or_create_for_user user: current_user, uri_string: params.dig(:data, :attributes, :url)
+    @bookmark = Bookmark.for(current_user, params.dig(:data, :attributes, :url)) do |bookmark|
+      authorize bookmark
 
-    authorize @bookmark
+      bookmark.title = upsert_params(:title)
+      bookmark.description = upsert_params(:description)
 
-    @bookmark.update bookmark_params
+      bookmark.tags = upsert_params(:tags)
+    end
 
-    if @bookmark.save
+    if @bookmark.upsert
       render :show, status: :created, location: @bookmark
     else
       render json: @bookmark.errors, status: :unprocessable_entity
@@ -48,11 +51,22 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.require(:data).require(:attributes).permit(:title, :description, :tags).tap do |obj|
-      tags = Tag.find_or_create_tags tags: params.dig(:data, :attributes).fetch(:tags, [])
-      tags = @bookmark.tags.to_a.concat(tags).uniq if @bookmark
+    params.require(:data).require(:attributes).permit(:title, :description, :tags)
+  end
 
-      obj[:tags] = tags
-    end
+  def upsert_params key
+    return upsert_tags if key == :tags
+
+    bookmark_params[key] || @bookmark&.send(key)
+  end
+
+
+  def upsert_tags
+    base = []
+
+    base.concat(bookmark_params[:tags].to_a)
+    base.concat(@bookmark&.tags.to_a)
+
+    base.uniq
   end
 end

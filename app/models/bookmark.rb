@@ -16,10 +16,23 @@ class Bookmark < ApplicationRecord
   validates_uniqueness_of :webpage_id, scope: :user_id
 
   # This has potential performance costs if we start retrying lots of times
-  def self.find_or_create_for_user user:, uri_string:
-    webpage = Webpage.upsert uri_string: uri_string
+  def self.for user, uri
+    webpage = Webpage.upsert uri_string: uri
+    bookmark = find_or_initialize_by user: user, webpage: webpage
 
-    upsert user: user, webpage: webpage
+    yield bookmark
+
+    bookmark.tags = Tag.find_or_create_tags tags: bookmark.tags
+
+    bookmark
+  end
+
+  def upsert
+    save
+  rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
+    existing = find_by user: user, webpage: webpage
+    existing.update self.attributes.slice("title", "description").merge(tags: self.tags)
+    existing
   end
 
   private
