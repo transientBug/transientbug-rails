@@ -31,7 +31,6 @@ class Bookmark < ApplicationRecord
   private
 
   def schedule_cache
-    return unless ENV["SCRAPE"]
     WebpageCacheJob.perform_later bookmark: self
   end
 end
