@@ -14,10 +14,10 @@ class Api::V1::BookmarksController < Api::V1Controller
     @bookmark = Bookmark.for(current_user, params.dig(:data, :attributes, :url)) do |bookmark|
       authorize bookmark
 
-      bookmark.title = upsert_params(:title)
-      bookmark.description = upsert_params(:description)
+      bookmark.title = upsert_params(:title, bookmark)
+      bookmark.description = upsert_params(:description, bookmark)
 
-      bookmark.tags = upsert_params(:tags)
+      bookmark.tags = upsert_params(:tags, bookmark)
     end
 
     if @bookmark.upsert
@@ -29,7 +29,7 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # PATCH/PUT /api/v1/bookmarks/1
   def update
-    if @bookmark.update(bookmark_params)
+    if @bookmark.update(update_params)
       render :show, status: :ok, location: @bookmark
     else
       render json: @bookmark.errors, status: :unprocessable_entity
@@ -51,21 +51,26 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.require(:data).require(:attributes).permit(:title, :description, :tags)
+    params.require(:data).require(:attributes).permit(:title, :description, tags: [])
   end
 
-  def upsert_params key
-    return upsert_tags if key == :tags
-
-    bookmark_params[key] || @bookmark&.send(key)
+  def update_params
+    bookmark_params.tap do |obj|
+      obj[:tags] = Tag.find_or_create_tags tags: obj[:tags]
+    end
   end
 
+  def upsert_params key, bookmark
+    return upsert_tags bookmark if key == :tags
 
-  def upsert_tags
+    bookmark_params[key] || bookmark&.send(key)
+  end
+
+  def upsert_tags bookmark
     base = []
 
     base.concat(bookmark_params[:tags].to_a)
-    base.concat(@bookmark&.tags.to_a)
+    base.concat(bookmark&.tags.to_a)
 
     base.uniq
   end
