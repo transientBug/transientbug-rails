@@ -24,7 +24,7 @@ class Bookmark < ApplicationRecord
     save
   rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
     existing = find_by user: user, webpage: webpage
-    existing.update self.attributes.slice("title", "description").merge(tags: self.tags)
+    existing.update attributes.slice("title", "description").merge(tags: tags)
     existing
   end
 

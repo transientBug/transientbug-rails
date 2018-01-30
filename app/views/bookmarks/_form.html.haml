@@ -8,7 +8,7 @@
 
   .required.field
     = f.label :uri
-    = f.uri_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
+    = f.url_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
 
   .required.field
     = f.label :title
