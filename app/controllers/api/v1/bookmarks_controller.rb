@@ -15,10 +15,8 @@ class Api::V1::BookmarksController < Api::V1Controller
 
     authorize @bookmark
 
-    @bookmark.title = upsert_params(:title)
-    @bookmark.description = upsert_params(:description)
-
-    @bookmark.tags = upsert_tags
+    @bookmark.assign_attributes bookmark_params.to_h.compact
+    @bookmark.tags = @bookmark.tags.to_a.concat(tags_models)
 
     if @bookmark.upsert
       render :show, status: :created, location: @bookmark
@@ -30,7 +28,7 @@ class Api::V1::BookmarksController < Api::V1Controller
   # PATCH/PUT /api/v1/bookmarks/1
   def update
     @bookmark.assign_attributes bookmark_params
-    @bookmark.tags = update_tags
+    @bookmark.tags = tags_models
 
     if @bookmark.save
       render :show, status: :ok, location: @bookmark
@@ -61,20 +59,7 @@ class Api::V1::BookmarksController < Api::V1Controller
     params.require(:data).require(:attributes).permit(tags: [])
   end
 
-  def update_tags
-    Tag.find_or_create_tags tags: tags_params[:tags]
-  end
-
-  def upsert_params key
-    bookmark_params[key] || @bookmark&.send(key)
-  end
-
-  def upsert_tags bookmark
-    base = []
-
-    base.concat(bookmark_params[:tags].to_a)
-    base.concat(bookmark&.tags.to_a)
-
-    Tag.find_or_create_tags tags: base.uniq
+  def tags_models
+    Tag.find_or_create_tags tags: tags_params[:tags].to_a
   end
 end
