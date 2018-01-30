@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_26_152556) do
+ActiveRecord::Schema.define(version: 2018_01_30_024723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,10 +154,10 @@ ActiveRecord::Schema.define(version: 2018_01_26_152556) do
   end
 
   create_table "webpages", force: :cascade do |t|
-    t.text "uri_string"
+    t.text "uri"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["uri_string"], name: "index_webpages_on_uri_string", unique: true
+    t.index ["uri"], name: "index_webpages_on_uri", unique: true
   end
 
   add_foreign_key "authorizations", "users"

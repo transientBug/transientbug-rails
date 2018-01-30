@@ -22,11 +22,12 @@ class Tag < ApplicationRecord
   update_index("bookmarks#tag") { self }
 
   def self.find_or_create_tags tags: []
-    tags.map(&:strip).reject(&:empty?).map do |tag|
+    tags.map do |tag|
       next tag if tag.is_a? Tag
+      next if tag.empty?
 
-      upsert label: tag
-    end
+      upsert label: tag.strip
+    end.compact
   end
 
   private

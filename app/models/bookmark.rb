@@ -8,7 +8,6 @@ class Bookmark < ApplicationRecord
 
   default_scope { includes(:webpage) }
 
-  delegate :uri_string, to: :webpage
   delegate :uri, to: :webpage
 
   update_index("bookmarks#bookmark") { self }
@@ -17,14 +16,8 @@ class Bookmark < ApplicationRecord
 
   # This has potential performance costs if we start retrying lots of times
   def self.for user, uri
-    webpage = Webpage.upsert uri_string: uri
-    bookmark = find_or_initialize_by user: user, webpage: webpage
-
-    yield bookmark
-
-    bookmark.tags = Tag.find_or_create_tags tags: bookmark.tags
-
-    bookmark
+    webpage = Webpage.upsert uri: uri
+    find_or_initialize_by user: user, webpage: webpage
   end
 
   def upsert
@@ -38,6 +31,7 @@ class Bookmark < ApplicationRecord
   private
 
   def schedule_cache
+    return unless ENV["SCRAPE"]
     WebpageCacheJob.perform_later bookmark: self
   end
 end

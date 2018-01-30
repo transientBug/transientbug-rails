@@ -1,4 +1,4 @@
-json.extract! bookmark, :id, :title, :description, :uri_string, :created_at, :updated_at
+json.extract! bookmark, :id, :title, :description, :uri, :created_at, :updated_at
 json.tags do
   json.array! bookmark.tags, partial: "bookmarks/tags/tag", as: :tag
 end

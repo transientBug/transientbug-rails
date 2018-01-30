@@ -28,7 +28,7 @@ class BookmarksIndex < Chewy::Index
   }
 
   define_type Bookmark do
-    field :uri, type: "keyword", value: ->(bookmark) { bookmark.uri_string }
+    field :uri, type: "keyword", value: ->(bookmark) { bookmark.uri.to_s }
 
     field :title, type: "text", term_vector: "yes", analyzer: :title
     field :description, type: "text", analyzer: :description
@@ -39,7 +39,7 @@ class BookmarksIndex < Chewy::Index
 
     field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(bookmark) {
       {
-        input: [bookmark.title.downcase, bookmark.uri_string].concat(bookmark.tags.map(&:label)),
+        input: [bookmark.title&.downcase, bookmark.uri.to_s].concat(bookmark.tags.map(&:label)),
         contexts: {
           type: [:bookmark]
         }
