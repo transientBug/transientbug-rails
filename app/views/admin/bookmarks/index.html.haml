@@ -57,7 +57,7 @@
                     delete
 
           %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
-          %td= bookmark.uri_string
+          %td= bookmark.uri.to_s
           %td.collapsing= bookmark.tags.map(&:label).join ", "
           %td.collapsing= bookmark.created_at.to_s(:long)
 

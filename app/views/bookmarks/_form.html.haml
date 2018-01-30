@@ -7,8 +7,8 @@
           %li= message
 
   .required.field
-    = f.label :uri_string
-    = f.text_field :uri_string, aria: { describedby: "Bookmark URL" }
+    = f.label :uri
+    = f.url_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
 
   .required.field
     = f.label :title
