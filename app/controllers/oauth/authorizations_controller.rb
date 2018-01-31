@@ -1,5 +1,7 @@
-class AuthorizationsController < Doorkeeper::ApplicationController
-  before_action :authenticate_resource_owner!
+class Oauth::AuthorizationsController <ApplicationController
+  require_login!
+
+  include Doorkeeper::Helpers::Controller
 
   def new
     if pre_auth.authorizable?
@@ -26,9 +28,11 @@ class AuthorizationsController < Doorkeeper::ApplicationController
   private
 
   def matching_token?
-    AccessToken.matching_token_for pre_auth.client,
-                                   current_resource_owner.id,
-                                   pre_auth.scopes
+    Doorkeeper::AccessToken.matching_token_for(
+      pre_auth.client,
+      current_resource_owner.id,
+      pre_auth.scopes
+    )
   end
 
   def redirect_or_render(auth)
@@ -40,9 +44,11 @@ class AuthorizationsController < Doorkeeper::ApplicationController
   end
 
   def pre_auth
-    @pre_auth ||= OAuth::PreAuthorization.new(Doorkeeper.configuration,
-                                              server.client_via_uid,
-                                              params)
+    @pre_auth ||= Doorkeeper::OAuth::PreAuthorization.new(
+      Doorkeeper.configuration,
+      server.client_via_uid,
+      params
+    )
   end
 
   def authorization

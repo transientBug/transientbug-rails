@@ -8,7 +8,7 @@
 
   .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
     %i.trash.icon
-    delete
+    revoke
 
 %table.ui.celled.table
   %thead
@@ -24,9 +24,9 @@
           %td.collapsing= check_box_tag "select-#{ application.id }", nil, false, data: { id: application.id, behavior: "select" }
           %td.collapsing
             .ui.buttons
-              .ui.icon.button{ data: { behavior: "modal", template: "public/templates/oauth/applications/delete", url: oauth_application_path(application), model: JSON.parse(application.to_json) } }
+              .ui.icon.button{ data: { behavior: "modal", template: "public/templates/oauth/authorized_applications/delete", url: oauth_authorized_application_path(application), model: JSON.parse(application.to_json) } }
                 %i.trash.icon
-                delete
+                revoke
 
           %td= application.name
           %td= application.created_at.to_s(:long)
