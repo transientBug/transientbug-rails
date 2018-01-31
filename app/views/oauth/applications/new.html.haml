@@ -1,0 +1,6 @@
+- content_for :page_title do
+  New OAuth2 App
+
+%h1 New OAuth2 App
+
+= render partial: "form", locals: { application: @application }
