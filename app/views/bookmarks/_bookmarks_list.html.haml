@@ -24,7 +24,7 @@
               = distance_of_time_in_words_to_now(bookmark.created_at)
               ago
 
-          = link_to bookmark.uri_string, bookmark.uri_string
+          = link_to bookmark.uri.to_s, bookmark.uri.to_s
 
           - if bookmark.description.present?
             = bookmark.description&.truncate(240)
@@ -38,7 +38,7 @@
             = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
             = link_to "edit", edit_bookmark_path(bookmark), class: "ui item"
             .right.menu
-              .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(bookmark), uri: bookmark.uri_string, title: bookmark.title } }
+              .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(bookmark), uri: bookmark.uri.to_s, title: bookmark.title } }
                 delete
 
           .ui.divider

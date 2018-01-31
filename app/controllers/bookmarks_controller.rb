@@ -86,7 +86,7 @@ class BookmarksController < ApplicationController
     permitted_attributes(@bookmark || Bookmark).tap do |obj|
       tags = Tag.find_or_create_tags tags: params.dig(:bookmark).fetch(:tags, [])
 
-      webpage = Webpage.upsert uri_string: params.dig(:bookmark, :uri_string)
+      webpage = Webpage.upsert uri: params.dig(:bookmark, :uri)
 
       obj.merge!(tags: tags, webpage: webpage)
     end

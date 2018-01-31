@@ -8,7 +8,6 @@ class Bookmark < ApplicationRecord
 
   default_scope { includes(:webpage) }
 
-  delegate :uri_string, to: :webpage
   delegate :uri, to: :webpage
 
   update_index("bookmarks#bookmark") { self }
@@ -16,10 +15,17 @@ class Bookmark < ApplicationRecord
   validates_uniqueness_of :webpage_id, scope: :user_id
 
   # This has potential performance costs if we start retrying lots of times
-  def self.find_or_create_for_user user:, uri_string:
-    webpage = Webpage.upsert uri_string: uri_string
+  def self.for user, uri
+    webpage = Webpage.upsert uri: uri
+    find_or_initialize_by user: user, webpage: webpage
+  end
 
-    upsert user: user, webpage: webpage
+  def upsert
+    save
+  rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
+    existing = find_by user: user, webpage: webpage
+    existing.update attributes.slice("title", "description").merge(tags: tags)
+    existing
   end
 
   private
