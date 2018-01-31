@@ -69,6 +69,9 @@ gem "jbuilder", "~> 2.5"
 gem "sidekiq"
 
 # Auth
+# Profiver
+gem "doorkeeper"
+# Consumer
 gem "omniauth-twitter"
 gem "omniauth-github"
 
