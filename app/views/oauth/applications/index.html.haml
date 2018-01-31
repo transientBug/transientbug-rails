@@ -1,11 +1,9 @@
 - content_for :page_title do
-  OAuth2 Apps
+  Developer - OAuth2 Apps
 
-%h1 Your OAuth2 Apps
+%h1 Developer OAuth2 Apps
 
 .ui.menu
-  .ui.item= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
-
   .ui.item
     = link_to new_oauth_application_path do
       %i.add.icon

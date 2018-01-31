@@ -14,7 +14,18 @@
   API Documentation can be found
   = link_to "here.", apitome.root_path
 
+%p
+  If you are building an app or extension that interacts with the transientBug API, you should make a
+  = link_to "new OAuth2 Application", oauth_applications_path
+  and make use of the OAuth2 Authorization Code flow if at all possible.
+
+%p
+  You can
+  = link_to "click here", oauth_authorized_applications_path
+  to see your currently authorized applications and revoke any of them at any time.
+
 .ui.right.action.fluid.input#authData{ data: { email: @user.email, apiToken: @user.api_token } }
+  %p
   = text_field_tag "api_token", @user.api_token
   = link_to profile_regenerate_index_path(@service_announcement), class: "ui negative button", method: :post do
     %i.refresh.icon

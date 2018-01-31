@@ -4,8 +4,6 @@
 %h1 Authorized Apps
 
 .ui.menu
-  .ui.item= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
-
   .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
     %i.trash.icon
     revoke
