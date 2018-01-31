@@ -33,7 +33,7 @@ class Api::V1Controller < ApiController
   end
 
   def token_auth
-    return nil if params[:auth_token]
+    return nil unless params[:auth_token]
 
     email, token = params[:auth_token].split(":", 2)
     User.find_by(email: email)&.token_authenticate token
