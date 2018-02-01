@@ -9,7 +9,7 @@
   .ui.item
     = link_to new_oauth_application_path do
       %i.add.icon
-      = t('.new')
+      new
 
   .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
     %i.trash.icon
@@ -20,9 +20,9 @@
     %tr
       %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
       %th Actions
-      %th= t('.name')
-      %th= t('.callback_url')
-      %th= t('.created_at')
+      %th Name
+      %th Callback URLs
+      %th Created At (UTC)
   %tbody
     - if @applications.any?
       - @applications.each do |application|

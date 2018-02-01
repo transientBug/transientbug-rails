@@ -1,6 +1,6 @@
 - content_for :page_title do
-  = t('doorkeeper.authorizations.error.title')
+  An error has occurred
 
-%h1= t('doorkeeper.authorizations.error.title')
+%h1 An error has occured :(
 
 %pre= @pre_auth.error_response.body[:error_description]

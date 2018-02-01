@@ -15,8 +15,8 @@
     %tr
       %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
       %th Actions
-      %th= t('doorkeeper.authorized_applications.index.application')
-      %th= t('doorkeeper.authorized_applications.index.created_at')
+      %th Application Name
+      %th Created At (UTC)
   %tbody
     - if @applications.any?
       - @applications.each do |application|

@@ -19,11 +19,11 @@
     = doorkeeper_errors_for application, :redirect_uri
 
     .ui.message
-      %p= t('doorkeeper.applications.help.redirect_uri')
+      %p Use one line per URI
 
       - if Doorkeeper.configuration.native_redirect_uri
         %p
-          = t("doorkeeper.applications.help.native_redirect_uri")
+          Use this string for local tests:
           %code
             = Doorkeeper.configuration.native_redirect_uri
 
@@ -32,7 +32,8 @@
     = f.text_area :scopes, aria: { describedby: "Application Scopes" }
 
     = doorkeeper_errors_for application, :scopes
-    .ui.message.error
-      = t('doorkeeper.applications.help.scopes')
+
+    .ui.message
+      Separate scopes with spaces. Leave blank to use the default scopes.
 
   = f.submit "Save", class: "ui positive right floated submit button"
