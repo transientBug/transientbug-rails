@@ -9,6 +9,7 @@ AllCops:
     - '**/Rakefile'
   Exclude:
     - bin/*
+    - db/migrate/*
 
 # Configuration parameters: Include, TreatCommentsAsGroupSeparators.
 # Include: **/Gemfile, **/gems.rb

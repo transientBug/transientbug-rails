@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :images
   has_many :bookmarks
 
-  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
   validates :username, presence: true
   validates :email, presence: true
@@ -56,7 +56,7 @@ class User < ApplicationRecord
 
   def owner_of? record
     return record.owner == self if record.respond_to? :owner
-    return record.user_id == self.id if record.respond_to? :user_id
+    return record.user_id == id if record.respond_to? :user_id
     false
   end
 

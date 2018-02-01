@@ -1,4 +1,4 @@
-class Oauth::AuthorizationsController <ApplicationController
+class Oauth::AuthorizationsController < ApplicationController
   require_login!
 
   include Doorkeeper::Helpers::Controller
@@ -35,7 +35,7 @@ class Oauth::AuthorizationsController <ApplicationController
     )
   end
 
-  def redirect_or_render(auth)
+  def redirect_or_render auth
     if auth.redirectable?
       redirect_to auth.redirect_uri
     else

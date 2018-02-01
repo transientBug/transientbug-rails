@@ -40,7 +40,7 @@ class Api::V1Controller < ApiController
   end
 
   def basic_auth
-    return nil unless request.headers["Authorization"] =~ /^Basic/
+    return nil unless request.headers["Authorization"].match? %r{^Basic}
 
     authenticate_with_http_basic do |email, password|
       User.find_by(email: email)&.authenticate password

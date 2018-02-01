@@ -15,7 +15,7 @@ class Oauth::ApplicationsController < ApplicationController
 
   def create
     @application = Doorkeeper::Application.new application_params
-    @application.owner = current_user# if Doorkeeper.configuration.confirm_application_owner?
+    @application.owner = current_user
 
     authorize @application
 
