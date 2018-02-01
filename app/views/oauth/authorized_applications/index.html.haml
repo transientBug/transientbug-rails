@@ -1,7 +1,9 @@
 - content_for :page_title do
   Authorized Apps
 
-%h1 Authorized Apps
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header Authorized Apps
 
 .ui.menu
   .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }

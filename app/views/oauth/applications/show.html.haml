@@ -1,7 +1,9 @@
 - content_for :page_title do
   Viewing "#{ @application.name }"
 
-%h1= @application.name
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header= @application.name
 
 .ui.fluid.text.menu
   .ui.item

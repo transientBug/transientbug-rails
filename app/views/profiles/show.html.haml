@@ -1,6 +1,8 @@
 - content_for :page_title do
   Profile
 
+= render partial: "profiles/tabs"
+
 %h2.ui.dividing.header Basic Info
 = render partial: "form", locals: { user: @user }
 %br
