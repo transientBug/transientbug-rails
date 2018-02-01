@@ -1,3 +1,3 @@
-json.profile do
-  json.api_token current_user.api_token
+json.data do
+  json.partial! "api/v1/profiles/profile", profile: current_user
 end

@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "type": { "type": "string" },
+    "id": { "type": "integer" },
+    "attributes": {
+      "type": "object",
+      "required": [ "username", "email", "api_token" ],
+      "properties": {
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "api_token": { "type": "string" }
+      }
+    }
+  }
+}
