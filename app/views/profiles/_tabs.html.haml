@@ -1,0 +1,6 @@
+.ui.tabular.menu
+  = active_link_to "Profile Settings", profile_path, class: "item"
+  = active_link_to "Authorized Apps", oauth_authorized_applications_path, class: "item"
+
+  .right.menu
+    = active_link_to "Developer Apps", oauth_applications_path, class: "item"

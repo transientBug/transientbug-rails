@@ -1,0 +1,39 @@
+= form_for application, url: doorkeeper_submit_path(application), html: { class: "ui fluid form" } do |f|
+  - if application.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize application.errors.count, "error" } prohibited this application from being saved:"
+      %ul
+        - application.errors.full_messages.each do |message|
+          %li= message
+
+  .required.field
+    = f.label :name
+    = f.text_field :name, aria: { describedby: "Application Name" }
+
+    = doorkeeper_errors_for application, :name
+
+  .required.field
+    = f.label :redirect_uri
+    = f.text_area :redirect_uri, aria: { describedby: "Application Redirect URLs" }
+
+    = doorkeeper_errors_for application, :redirect_uri
+
+    .ui.message
+      %p Use one line per URI
+
+      - if Doorkeeper.configuration.native_redirect_uri
+        %p
+          Use this string for local tests:
+          %code
+            = Doorkeeper.configuration.native_redirect_uri
+
+  .field
+    = f.label :scopes
+    = f.text_area :scopes, aria: { describedby: "Application Scopes" }
+
+    = doorkeeper_errors_for application, :scopes
+
+    .ui.message
+      Separate scopes with spaces. Leave blank to use the default scopes.
+
+  = f.submit "Save", class: "ui positive right floated submit button"

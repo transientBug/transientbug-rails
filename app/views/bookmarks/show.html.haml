@@ -4,7 +4,7 @@
 %h2.ui.header
   .content= @bookmark.title
 
-= link_to @bookmark.uri_string
+= link_to @bookmark.uri.to_s
 .date= @bookmark.created_at.to_s(:long)
 
 .ui.small.tag.labels
@@ -17,7 +17,7 @@
   = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
   .right.menu
     = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
-    .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri_string, title: @bookmark.title } }
+    .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri.to_s, title: @bookmark.title } }
       delete
 
 - if @bookmark.description.present?

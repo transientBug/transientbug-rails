@@ -1,37 +1,11 @@
 document.addEventListener("turbolinks:load", () => {
-  $.fn.api.settings.cache = false
-  $.fn.api.settings.debug = true
-  $.fn.api.settings.verbose = true
-
-  this.cable || (this.cable = ActionCable.createConsumer())
-
   // Dismiss messages when the X is clicked
   $(".message .close").on("click", (event) => {
     $(event.target).closest(".message").transition("fade")
   })
 
   // Toggle the sidebar open and closed
-  $(".sidebar.icon").on("click", () => {
-    $('.ui.sidebar')
-      .sidebar('toggle')
-  })
-
-  // Let's handle dynamically creating and dismissing modals which are stored in
-  // ejs templates
-  $("[data-behavior~=modal]").on("click", (event) => {
-    let dataset = event.target.dataset
-
-    let renderedModal = JST[dataset.template](dataset)
-
-    let modal = $(renderedModal)
-    $('body').append(modal)
-
-    modal.modal({
-      onHidden: (el) => {
-        modal.remove()
-      }
-    }).modal("show")
-  })
+  $(".sidebar.icon").on("click", () => $(".ui.sidebar").sidebar("toggle"))
 
   // Handle making the side menus sticky
   $("[data-behavior~=sticky]").each((idx, element) => {
@@ -52,7 +26,7 @@ document.addEventListener("turbolinks:load", () => {
   //   Could this all be done with like $("[data-behavior~=select]:checked").size()
   //   checks?
   const toggleBulkEditToolbar = (shouldShow) => {
-    let bulkEditItems = $("[data-behavior~=bulk-edit-menu]")
+    let bulkEditItems = $("[data-group~=bulk-edit-menu]")
     bulkEditItems.toggleClass("hidden", !shouldShow)
 
     let sticky = bulkEditItems.parents("[data-behavior~=sticky]")

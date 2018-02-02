@@ -1,0 +1,39 @@
+- content_for :page_title do
+  Authorize "#{ @pre_auth.client.name }"
+
+.ui.grid
+  .row
+    .centered.six.wide.column
+      %h2.ui.header Authorization required
+
+      %p
+        Authorize this application
+        %code= @pre_auth.client.name
+        to access your data?
+
+      - if @pre_auth.scopes.count > 0
+        %p This application will be able to:
+
+        %ul.ui.list
+          - @pre_auth.scopes.each do |scope|
+            %li.item= scope
+
+      .ui.grid
+        .equal.width.row
+          .column
+            = form_tag oauth_authorization_path, method: :post do
+              = hidden_field_tag :client_id, @pre_auth.client.uid
+              = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+              = hidden_field_tag :state, @pre_auth.state
+              = hidden_field_tag :response_type, @pre_auth.response_type
+              = hidden_field_tag :scope, @pre_auth.scope
+              = submit_tag "Authorize", class: "ui huge positive button"
+
+          .column
+            = form_tag oauth_authorization_path, method: :delete do
+              = hidden_field_tag :client_id, @pre_auth.client.uid
+              = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+              = hidden_field_tag :state, @pre_auth.state
+              = hidden_field_tag :response_type, @pre_auth.response_type
+              = hidden_field_tag :scope, @pre_auth.scope
+              = submit_tag "Deny", class: "ui huge negative button"

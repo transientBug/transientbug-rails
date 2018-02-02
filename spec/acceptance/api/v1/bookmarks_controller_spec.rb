@@ -114,7 +114,7 @@ resource "v1 Bookmarks" do
   get "/api/v1/bookmarks/check", focus: true do
     parameter :url, "URL to check", required: true
 
-    let(:url) { bookmark.uri_string }
+    let(:url) { bookmark.uri }
 
     example "Check for an existing bookmark" do
       do_request

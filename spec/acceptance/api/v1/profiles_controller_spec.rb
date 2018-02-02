@@ -2,20 +2,21 @@ resource "v1 Profile" do
   let(:user) { create(:user) }
   let(:auth_token) { "#{ user.email }:#{ user.api_token }" }
 
-  header "Content-Type", "application/json"
+  header "Content-Type", "application/vnd.api+json"
+  header "Accept", "application/vnd.api+json"
 
   parameter :auth_token, "Authentication Token", required: true
 
   get "/api/v1/profile" do
-    let(:expected_body) { { profile: { api_token: user.api_token } } }
-
     example "Get" do
-      explanation "Fetch the users auth_token"
+      explanation <<~DESC
+        Fetch the users profile information, including their api_token and email used to build the auth_token.
+      DESC
 
       do_request
 
       expect(status).to eq(200)
-      expect(response_body).to eq(expected_body.to_json)
+      expect(response_body).to match_response_schema("api/v1/profiles/profile")
     end
   end
 end
