@@ -34,7 +34,7 @@ html, body{
 
 .ui.menu {
   & > .hidden, & > .right.menu > .hidden {
-    display: none;
+    display: none !important;
   }
 }
 
