@@ -1,0 +1,32 @@
+- content_for :page_title do
+  Viewing "#{ @application.name }"
+
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header= @application.name
+
+.ui.fluid.text.menu
+  .ui.item
+    = link_to "Edit", edit_oauth_application_path(@application)
+
+  .right.menu
+    .item{ data: { behavior: "modal", template: "public/templates/oauth/applications/delete", url: oauth_application_path(@application), model: JSON.parse(@application.to_json) } }
+      %i.trash.icon
+      delete
+
+.ui.relaxed.divided.list
+  .item
+    Client ID:
+    %code= @application.uid
+
+  .item
+    Client Secret:
+    %code= @application.secret
+
+  .item
+    Scopes:
+    %code= @application.scopes
+
+  .item
+    Callback URLs:
+    %pre= @application.redirect_uri

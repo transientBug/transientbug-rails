@@ -1,0 +1,6 @@
+- content_for :page_title do
+  An error has occurred
+
+%h1 An error has occured :(
+
+%pre= @pre_auth.error_response.body[:error_description]

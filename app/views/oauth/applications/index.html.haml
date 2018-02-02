@@ -1,0 +1,63 @@
+- content_for :page_title do
+  Developer - OAuth2 Apps
+
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header Developer OAuth2 Apps
+
+.ui.menu
+  .ui.item
+    = link_to new_oauth_application_path do
+      %i.add.icon
+      new
+
+  .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
+    %i.trash.icon
+    delete
+
+%table.ui.celled.table
+  %thead
+    %tr
+      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th Actions
+      %th Name
+      %th Callback URLs
+      %th Created At (UTC)
+  %tbody
+    - if @applications.any?
+      - @applications.each do |application|
+        %tr
+          %td.collapsing= check_box_tag "select-#{ application.id }", nil, false, data: { id: application.id, behavior: "select" }
+          %td.collapsing
+            .ui.buttons
+              = link_to oauth_application_path(application), class: "ui icon button" do 
+                %i.expand.icon
+                view
+
+              .ui.simple.dropdown.icon.button
+                %i.dropdown.icon
+                .menu
+                  = link_to edit_oauth_application_path(application), class: "item" do
+                    %i.edit.icon
+                    edit
+
+                  .divider
+                  .header
+                    %i.warning.sign.icon
+                    DANGERZONE
+
+                  .item{ data: { behavior: "modal", template: "public/templates/oauth/applications/delete", url: oauth_application_path(application), model: JSON.parse(application.to_json) } }
+                    %i.trash.icon
+                    delete
+
+          %td= application.name
+          %td
+            %pre= application.redirect_uri
+          %td= application.created_at.to_s(:long)
+
+    - else
+      %tr
+        %td{ colspan: 5 }
+          No applications made yet
+
+= paginate @applications

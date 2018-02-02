@@ -1,6 +1,14 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  use_doorkeeper do
+    controllers(
+      applications: "oauth/applications",
+      authorized_applications: "oauth/authorized_applications",
+      authorizations: "oauth/authorizations"
+    )
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#main"
   get "/home", to: "pages#home"

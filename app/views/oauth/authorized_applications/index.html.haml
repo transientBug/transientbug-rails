@@ -1,0 +1,39 @@
+- content_for :page_title do
+  Authorized Apps
+
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header Authorized Apps
+
+.ui.menu
+  .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
+    %i.trash.icon
+    revoke
+
+%table.ui.celled.table
+  %thead
+    %tr
+      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th Actions
+      %th Application Name
+      %th Created At (UTC)
+  %tbody
+    - if @applications.any?
+      - @applications.each do |application|
+        %tr
+          %td.collapsing= check_box_tag "select-#{ application.id }", nil, false, data: { id: application.id, behavior: "select" }
+          %td.collapsing
+            .ui.buttons
+              .ui.icon.button{ data: { behavior: "modal", template: "public/templates/oauth/authorized_applications/delete", url: oauth_authorized_application_path(application), model: JSON.parse(application.to_json) } }
+                %i.trash.icon
+                revoke
+
+          %td= application.name
+          %td= application.created_at.to_s(:long)
+
+    - else
+      %tr
+        %td{ colspan: 5 }
+          No applications authorized
+
+= paginate @applications
