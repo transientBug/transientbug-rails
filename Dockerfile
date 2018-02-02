@@ -3,7 +3,7 @@ LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 
 ENV LANG en_US.utf8
 
-RUN apk add --no-cache --update build-base postgresql postgresql-dev git curl
+RUN apk add --no-cache --update build-base postgresql postgresql-dev sqlite-dev cmake git curl
 
 RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpinelinux.org/alpine/edge/community\nhttp://dl-cdn.alpinelinux.org/alpine/edge/testing' > /etc/apk/repositories && \
     apk add --no-cache nodejs-current yarn
@@ -18,17 +18,13 @@ RUN bundle install --binstubs --jobs 4
 
 COPY . ./
 
-RUN postgres -c /etc/postgresql/postgresql.conf &&\
+ENV PGDATA /var/lib/postgresql/data
+
+RUN su postgres -c 'pg_ctl -w initdb' &&\
+    su postgres -c 'pg_ctl -w start' &&\
     psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
     createdb -O docker docker &&\
     bundle exec rake RAILS_ENV=production DATABASE_URL=postgresql://docker:docker@127.0.0.1/docker assets:precompile docs:generate
-
-
-FROM ruby:2.4-alpine
-LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
-
-COPY --from=0 /app/doc .
-COPY --from=0 /app/public .
 
 VOLUME ["/app/public", "/dropzone"]
 
