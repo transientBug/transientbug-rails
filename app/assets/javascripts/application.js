@@ -1,14 +1,6 @@
 class Application {
   static boot() {
     window.App || (window.App = new Application())
-    document.addEventListener("turbolinks:load", () => {
-      App.init()
-      App.connect()
-    })
-
-    document.addEventListener("turbolinks:visit", () => {
-      App.disconnect()
-    })
   }
 
   constructor() {
@@ -16,6 +8,15 @@ class Application {
     this._initializers = []
 
     this._domWires = []
+
+    document.addEventListener("turbolinks:load", () => {
+      this.init()
+      this.connect()
+    })
+
+    document.addEventListener("turbolinks:visit", () => {
+      this.disconnect()
+    })
   }
 
   registerInitializer(key, callback) {
