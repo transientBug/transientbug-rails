@@ -1,6 +1,4 @@
 document.addEventListener("turbolinks:load", () => {
-  App.init()
-
   // Dismiss messages when the X is clicked
   $(".message .close").on("click", (event) => {
     $(event.target).closest(".message").transition("fade")
@@ -8,23 +6,6 @@ document.addEventListener("turbolinks:load", () => {
 
   // Toggle the sidebar open and closed
   $(".sidebar.icon").on("click", () => $(".ui.sidebar").sidebar("toggle"))
-
-  // Let's handle dynamically creating and dismissing modals which are stored in
-  // ejs templates
-  $("[data-behavior~=modal]").on("click", (event) => {
-    let dataset = event.target.dataset
-
-    let renderedModal = JST[dataset.template](dataset)
-
-    let modal = $(renderedModal)
-    $('body').append(modal)
-
-    modal.modal({
-      onHidden: (el) => {
-        modal.remove()
-      }
-    }).modal("show")
-  })
 
   // Handle making the side menus sticky
   $("[data-behavior~=sticky]").each((idx, element) => {

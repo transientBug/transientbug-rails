@@ -1,40 +1,54 @@
 class Application {
-  constructor(apis) {
-    this._apis = apis
-    this._inited = false
-    this._registeredInits = []
+  static boot() {
+    window.App || (window.App = new Application())
+    document.addEventListener("turbolinks:load", () => {
+      App.init()
+      App.connect()
+    })
 
-    this._currentInits = []
-
-    this.cable = ActionCable.createConsumer()
+    document.addEventListener("turbolinks:visit", () => {
+      App.disconnect()
+    })
   }
 
-  registerInit(klass) {
-    this._registeredInits.push(klass)
+  constructor() {
+    this._initialized = false
+    this._initializers = []
+
+    this._domWires = []
+  }
+
+  registerInitializer(key, callback) {
+    this._initializers.push({ key: key, callback: callback })
+  }
+
+  registerDOMWire(klass) {
+    this._domWires.push(new klass())
   }
 
   init() {
-    // Cleanup things, #destroy should remove event handlers and anything that
-    // might keep a reference to the object around, causing a memory leak
-    this._currentInits.forEach((initer) => {
-      if("destroy" in initer)
-        initer.destroy()
-    })
-
-    delete this._currentInits
-    this._currentInits = []
-
-    this._currentInits = this._registeredInits.map((initer) => new initer())
-
-    if(this._inited)
+    if(this._initialized)
       return
 
-    $.fn.api.settings.api = this._apis
+    this._initializers.forEach(({callback}) => callback(this))
 
-    $.fn.api.settings.cache = false
-    $.fn.api.settings.debug = true
-    $.fn.api.settings.verbose = true
+    this._initialized = true
+  }
 
-    this._inited = true
+  disconnect() {
+    this._domWires.forEach((wire) => {
+      if("disconnect" in wire)
+        wire.disconnect()
+    })
+  }
+
+  connect() {
+    this._domWires.map((wire) => wire.connect())
   }
 }
+
+Application.boot()
+
+App.registerInitializer("action cable", (app) => {
+  app.cable = ActionCable.createConsumer()
+})
