@@ -1,7 +1,7 @@
 - if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
   = render partial: "navbar"
 
-.computer.only.ui.top.fixed.inverted.menu
+.ui.top.fixed.inverted.menu
   .ui.container
     = link_to root_path, class: "header item" do
       = image_tag "bug_logo.png", class: "logo"
