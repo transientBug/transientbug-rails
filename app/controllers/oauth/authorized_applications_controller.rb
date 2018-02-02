@@ -8,7 +8,7 @@ class Oauth::AuthorizedApplicationsController < ApplicationController
   def destroy
     Doorkeeper::AccessToken.revoke_all_for params[:id], current_user
 
-    notice = I18n.t(:notice, scope: [:doorkeeper, :flash, :authorized_applications, :destroy])
+    notice = "Application revoked"
     redirect_to oauth_authorized_applications_url, notice: notice
   end
 end

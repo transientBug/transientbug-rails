@@ -20,7 +20,7 @@ class Oauth::ApplicationsController < ApplicationController
     authorize @application
 
     if @application.save
-      flash[:notice] = I18n.t :notice, scope: [:doorkeeper, :flash, :applications, :create]
+      flash[:notice] = "Application registered"
       redirect_to oauth_application_url(@application)
     else
       render :new
@@ -31,7 +31,7 @@ class Oauth::ApplicationsController < ApplicationController
 
   def update
     if @application.update_attributes(application_params)
-      flash[:notice] = I18n.t :notice, scope: [:doorkeeper, :flash, :applications, :update]
+      flash[:notice] = "Application updated"
       redirect_to oauth_application_url(@application)
     else
       render :edit
@@ -39,7 +39,7 @@ class Oauth::ApplicationsController < ApplicationController
   end
 
   def destroy
-    flash[:notice] = I18n.t :notice, scope: [:doorkeeper, :flash, :applications, :destroy] if @application.destroy
+    flash[:notice] = "Application deleted" if @application.destroy
     redirect_to oauth_applications_url
   end
 
