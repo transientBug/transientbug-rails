@@ -1,9 +1,5 @@
 document.addEventListener("turbolinks:load", () => {
-  $.fn.api.settings.cache = false
-  $.fn.api.settings.debug = true
-  $.fn.api.settings.verbose = true
-
-  this.cable || (this.cable = ActionCable.createConsumer())
+  App.init()
 
   // Dismiss messages when the X is clicked
   $(".message .close").on("click", (event) => {
@@ -11,10 +7,7 @@ document.addEventListener("turbolinks:load", () => {
   })
 
   // Toggle the sidebar open and closed
-  $(".sidebar.icon").on("click", () => {
-    $('.ui.sidebar')
-      .sidebar('toggle')
-  })
+  $(".sidebar.icon").on("click", () => $(".ui.sidebar").sidebar("toggle"))
 
   // Let's handle dynamically creating and dismissing modals which are stored in
   // ejs templates
