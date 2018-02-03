@@ -1,9 +1,9 @@
 .git
 .dockerignore
 .byebug_history
-log/*
-tmp/*
+log
+tmp
 .*.swp
-node_modules/*
-storage/*
-spec/*
+node_modules
+storage
+dockerfiles

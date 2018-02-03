@@ -18,7 +18,7 @@ services:
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
+      #test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -37,7 +37,7 @@ services:
       - "redis"
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.sidekiq
+      dockerfile: Dockerfile.sidekiq
     networks:
       - "services"
     env_file:
@@ -51,7 +51,7 @@ services:
       - "sidekiq"
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.clockwork
+      dockerfile: Dockerfile.clockwork
     networks:
       - "services"
     env_file:
@@ -64,7 +64,7 @@ services:
       - "redis"
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.rails
+      dockerfile: Dockerfile.rails
     ports:
       - "8000:3000"
     volumes:
@@ -80,7 +80,7 @@ services:
       - "redis"
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.cable
+      dockerfile: Dockerfile.cable
     ports:
       - "28080:28080"
     #volumes:
