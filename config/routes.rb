@@ -26,6 +26,20 @@ Rails.application.routes.draw do
     resources :regenerate, only: [ :create ], module: "profiles"
   end
 
+  namespace :oauth do
+    namespace :applications do
+      namespace :bulk do
+        resource :delete, only: [:create]
+      end
+    end
+
+    namespace :authorized_applications do
+      namespace :bulk do
+        resource :revoke, only: [:create]
+      end
+    end
+  end
+
   resources :bookmarks do
     resources :cache, only: [:index, :create], module: "bookmarks" do
       collection do
