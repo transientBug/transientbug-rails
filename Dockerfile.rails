@@ -88,13 +88,13 @@ WORKDIR /app
 
 COPY . .
 
+VOLUME ["/app/public", "/dropzone"]
+
 COPY --from=0 /app/doc /app/doc
 COPY --from=0 /app/public /app/public
 
 RUN echo "install: --no-document" > $HOME/.gemrc &&\
     echo "update: --no-document" >> $HOME/.gemrc &&\
     bundle install --binstubs --jobs 4 --without development test
-
-VOLUME ["/app/public", "/dropzone"]
 
 CMD bundle exec puma -C config/puma.rb
