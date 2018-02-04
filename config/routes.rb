@@ -29,13 +29,13 @@ Rails.application.routes.draw do
   namespace :oauth do
     namespace :applications do
       namespace :bulk do
-        resource :delete, only: [:create]
+        resource :delete, only: [:destroy]
       end
     end
 
     namespace :authorized_applications do
       namespace :bulk do
-        resource :revoke, only: [:create]
+        resource :revoke, only: [:destroy]
       end
     end
   end

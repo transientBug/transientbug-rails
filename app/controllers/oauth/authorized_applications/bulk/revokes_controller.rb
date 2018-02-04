@@ -1,8 +1,8 @@
 class Oauth::AuthorizedApplications::Bulk::RevokesController < ApplicationController
   require_login!
 
-  # POST /oauth/authorized_applications/bulk/revokes
-  def create
+  # DELETE /oauth/authorized_applications/bulk/revokes
+  def destroy
     # binding.pry
     flash[:info] = "Bulk application revoke successful"
     render json: { heyo: "okayo" }, status: :ok

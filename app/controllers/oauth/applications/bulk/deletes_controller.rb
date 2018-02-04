@@ -1,8 +1,8 @@
 class Oauth::Applications::Bulk::DeletesController < ApplicationController
   require_login!
 
-  # POST /oauth/applications/bulk/deletes
-  def create
+  # DELETE /oauth/applications/bulk/deletes
+  def destroy
     # binding.pry
     flash[:info] = "Bulk delete applications successful"
     render json: { heyo: "okayo" }, status: :ok

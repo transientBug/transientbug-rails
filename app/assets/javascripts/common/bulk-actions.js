@@ -175,3 +175,4 @@ async function deleteAllHandler({triggerData, modelData, modal}) {
 }
 
 BulkActions.registerHandlerFor("delete-all", deleteAllHandler)
+BulkActions.registerHandlerFor("revoke-all", deleteAllHandler)

@@ -14,7 +14,6 @@ class AutomaticallyWiredModals {
       model: Object.assign({}, storageTarget.dataset)
     }
 
-    console.log(dataset.template)
     const renderedModal = JST[dataset.template](templateData)
 
     const modal = $(renderedModal)
