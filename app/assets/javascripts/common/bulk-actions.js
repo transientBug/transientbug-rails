@@ -65,61 +65,24 @@ class BulkActions {
   handleBulkActionClicked(event) {
     const dataset = event.target.dataset
 
-    const loader = $("#page-loader")
-    loader.innerText = "Performing bulk actions ... please wait"
-
+    const triggerData = Object.assign({}, dataset)
     const modelData = $("[data-behavior~=select]:checked").siblings()
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
 
-    const templateData = {
-      action: _.omit(dataset, "behavior", "group", "template"),
-      models: modelData
-    }
+    BulkActions._handlers[triggerData.behavior]({triggerData: triggerData, modelData: modelData})
+  }
 
-    const renderedModal = JST[dataset.template](templateData)
+  static registerHandlerFor(behavior, handler) {
+    this.handlers[behavior] = handler
+  }
 
-    const modal = $(renderedModal)
-    $("body").append(modal)
+  static get handlers() {
+    return this._handlers || (this._handlers = {})
+  }
 
-    const payload = {
-      bulk: {
-        action: dataset.behavior,
-        ids: modelData.map((model) => model.id)
-      }
-    }
-
-    // Add rails csrf token
-    payload[ Rails.csrfParam() ] = Rails.csrfToken()
-
-    modal.modal({
-      onHide: (el) => {
-        loader.parent(".dimmer").dimmer("show")
-        return true
-      },
-      onHidden: (el) => {
-        modal.remove()
-      },
-      onApprove: (el) => {
-        // TODO: look for a custom handler in like App.bulks.handlers or
-        // something, and fallback to a default one like this otherwise?
-        // That would allow for DELETE requests and such for custom bulks
-        fetch(dataset.url, {
-          method: "POST",
-          credentials: "same-origin",
-          headers: new Headers({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-CSRF-Token": Rails.csrfToken(),
-            "X-Requested-With": "XMLHttpRequest"
-          }),
-          body: JSON.stringify(payload)
-        }).then((result) => {
-          if(result.ok)
-            location.reload(true)
-        })
-      }
-    }).modal("show")
+  static set handlers(val) {
+    this._handlers = val
   }
 
   // Let's setup our handlers, make sure we toggle the bulk actions if any
@@ -141,3 +104,72 @@ class BulkActions {
 }
 
 App.registerDOMWire(BulkActions)
+
+function buildRequest(payload) {
+  const request = new Request("")
+
+  const csrfParam = Rails.csrfParam()
+  const csrfToken = Rails.csrfToken()
+  // Add rails csrf token
+  payload[ csrfParam ] = csrfToken
+
+  request.headers = new Headers({
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "X-CSRF-Token": csrfToken,
+    "X-Requested-With": "XMLHttpRequest"
+  })
+
+  request.credentials = "same-origin"
+
+  request.body = JSON.stringify(payload)
+
+  return request
+}
+
+async function deleteAllHandler({triggerData, modelData}) {
+  const loader = $("#page-loader")
+  loader.innerText = "Performing bulk actions ... please wait"
+
+  const templateData = {
+    action: _.omit(triggerData, "behavior", "group", "template"),
+    models: modelData
+  }
+
+  const renderedModal = JST[triggerData.template](templateData)
+
+  const modal = $(renderedModal)
+  $("body").append(modal)
+
+  const payload = {
+    bulk: {
+      action: triggerData.behavior,
+      ids: modelData.map((model) => model.id)
+    }
+  }
+
+  const request = buildRequest(payload)
+  request.method = "DELETE"
+
+  request.url = triggerData.url
+
+  async function onApprove(el) {
+    const result = await fetch(request)
+
+    if(result.ok)
+      location.reload(true)
+  }
+
+  modal.modal({
+    onHide: (el) => {
+      loader.parent(".dimmer").dimmer("show")
+      return true
+    },
+    onHidden: (el) => {
+      modal.remove()
+    },
+    onApprove: onApprove
+  }).modal("show")
+}
+
+BulkActions.registerHandlerFor("delete-all", deleteAllHandler)
