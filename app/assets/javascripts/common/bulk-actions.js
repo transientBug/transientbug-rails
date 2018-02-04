@@ -70,7 +70,39 @@ class BulkActions {
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
 
-    BulkActions._handlers[triggerData.behavior]({triggerData: triggerData, modelData: modelData})
+    const templateData = {
+      action: _.omit(triggerData, "behavior", "group", "template"),
+      models: modelData
+    }
+
+    const loader = $("#page-loader")
+    loader.addClass("indeterminate text")
+    loader.innerText = "Performing bulk actions ... please wait"
+
+    const curriedHandler = (modal) => {
+      return BulkActions._handlers[triggerData.behavior]({
+        triggerData: triggerData,
+        modelData: modelData,
+        modal: modal
+      })
+    }
+
+    const renderedModal = JST[triggerData.template](templateData)
+
+    const modal = $(renderedModal)
+    $("body").append(modal)
+
+    modal.modal({
+      onHide: (el) => {
+        loader.parent(".dimmer").dimmer("show")
+        return true
+      },
+      onHidden: (el) => {
+        loader.removeClass("indeterminate text")
+        modal.remove()
+      },
+      onApprove: curriedHandler
+    }).modal("show")
   }
 
   static registerHandlerFor(behavior, handler) {
@@ -83,6 +115,25 @@ class BulkActions {
 
   static set handlers(val) {
     this._handlers = val
+  }
+
+  static buildRequest({url, method, payload}) {
+    const csrfParam = Rails.csrfParam()
+    const csrfToken = Rails.csrfToken()
+    // Add rails csrf token
+    payload[ csrfParam ] = csrfToken
+
+    return fetch(url, {
+      method: method,
+      headers: new Headers({
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfToken,
+        "X-Requested-With": "XMLHttpRequest"
+      }),
+      credentials: "same-origin",
+      body: JSON.stringify(payload)
+    })
   }
 
   // Let's setup our handlers, make sure we toggle the bulk actions if any
@@ -105,42 +156,7 @@ class BulkActions {
 
 App.registerDOMWire(BulkActions)
 
-function buildRequest(payload) {
-  const request = new Request("")
-
-  const csrfParam = Rails.csrfParam()
-  const csrfToken = Rails.csrfToken()
-  // Add rails csrf token
-  payload[ csrfParam ] = csrfToken
-
-  request.headers = new Headers({
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "X-CSRF-Token": csrfToken,
-    "X-Requested-With": "XMLHttpRequest"
-  })
-
-  request.credentials = "same-origin"
-
-  request.body = JSON.stringify(payload)
-
-  return request
-}
-
-async function deleteAllHandler({triggerData, modelData}) {
-  const loader = $("#page-loader")
-  loader.innerText = "Performing bulk actions ... please wait"
-
-  const templateData = {
-    action: _.omit(triggerData, "behavior", "group", "template"),
-    models: modelData
-  }
-
-  const renderedModal = JST[triggerData.template](templateData)
-
-  const modal = $(renderedModal)
-  $("body").append(modal)
-
+async function deleteAllHandler({triggerData, modelData, modal}) {
   const payload = {
     bulk: {
       action: triggerData.behavior,
@@ -148,28 +164,14 @@ async function deleteAllHandler({triggerData, modelData}) {
     }
   }
 
-  const request = buildRequest(payload)
-  request.method = "DELETE"
+  const response = await BulkActions.buildRequest({
+    url: triggerData.url,
+    method: "DELETE",
+    payload: payload
+  })
 
-  request.url = triggerData.url
-
-  async function onApprove(el) {
-    const result = await fetch(request)
-
-    if(result.ok)
-      location.reload(true)
-  }
-
-  modal.modal({
-    onHide: (el) => {
-      loader.parent(".dimmer").dimmer("show")
-      return true
-    },
-    onHidden: (el) => {
-      modal.remove()
-    },
-    onApprove: onApprove
-  }).modal("show")
+  if(response.ok)
+    location.reload(true)
 }
 
 BulkActions.registerHandlerFor("delete-all", deleteAllHandler)
