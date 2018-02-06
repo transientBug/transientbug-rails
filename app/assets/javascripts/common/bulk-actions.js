@@ -70,9 +70,7 @@ class BulkActions {
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
 
-    const handler = BulkActions._handlers[triggerData.behavior]
-
-    handler.handleBulkActionTrigger({ triggerData: triggerData, modelData: modelData })
+    BulkActions._handlers[triggerData.behavior](triggerData, modelData)
   }
 
   static registerHandlerFor(behavior, handler) {

@@ -1,77 +1,76 @@
 class BulkActionsGenericModalHandler {
-  get loader() { return $("#page-loader") }
-  constructor(method) {
-    this._method = method
+  static buildHandler(method) {
+    const handler = (triggerData, modelData) => {
+      const handlerInstance = new this(triggerData, modelData)
+      handlerInstance.method = method
+      return handlerInstance.handle()
+    }
+
+    return handler
   }
 
-  async onApprove({ triggerData, modelData, button }) {
+  constructor(triggerData, modelData) {
+    this.triggerData = triggerData
+    this.modelData = modelData
+
+    this.buildModal()
+  }
+
+  get template() { return JST[this.triggerData.template] }
+
+  buildModal() {
+    const templateData = {
+      action: _.omit(this.triggerData, "behavior", "group", "template"),
+      models: this.modelData
+    }
+
+    const renderedModal = this.template(templateData)
+
+    this.modal = $(renderedModal)
+    $("body").append(this.modal)
+  }
+
+  handle() {
+    this.modal.modal({
+      onHidden: this.onHidden.bind(this),
+      onApprove: this.onApprove.bind(this)
+    }).modal("show")
+  }
+
+  onHidden(el) {
+    this.modal.remove()
+  }
+
+  buildPayload() {
     const payload = {
       bulk: {
-        action: triggerData.behavior,
-        ids: modelData.map((model) => model.id)
+        action: this.triggerData.behavior,
+        ids: this.modelData.map((model) => model.id)
       }
     }
 
+    return payload
+  }
+
+  async onApprove(el) {
     const response = await App.buildRequest({
-      url: triggerData.url,
-      method: this._method,
-      payload: payload
+      url: this.triggerData.url,
+      method: this.method,
+      payload: this.buildPayload()
     })
 
     if(response.ok)
       location.reload(true)
   }
-
-  setLoader(text) {
-    this.loader.addClass("indeterminate text")
-
-    this.loader.innerText = text
-
-    this.loader.parent(".dimmer").dimmer("show")
-  }
-
-  onHide(el) {
-    this.setLoader("Performing bulk actions ... please wait")
-    return true
-  }
-
-  onHidden(modal, el) {
-    this.loader.removeClass("indeterminate text")
-    modal.remove()
-  }
-
-  handleBulkActionTrigger({ triggerData, modelData }) {
-    const templateData = {
-      action: _.omit(triggerData, "behavior", "group", "template"),
-      models: modelData
-    }
-
-    const curriedHandler = (modal, el) => this.onApprove({ triggerData: triggerData, modelData: modelData, modal: modal, button: el })
-
-    const renderedModal = JST[triggerData.template](templateData)
-
-    const modal = $(renderedModal)
-    $("body").append(modal)
-
-    modal.modal({
-      onHide: this.onHide.bind(this),
-      onHidden: this.onHidden.bind(this, modal),
-      onApprove: curriedHandler.bind(this, modal)
-    })
-
-    modal.modal("show")
-
-    return modal
-  }
 }
 
 
-const deleteHandler = new BulkActionsGenericModalHandler("DELETE")
+const deleteHandler = BulkActionsGenericModalHandler.buildHandler("DELETE")
 
 BulkActions.registerHandlerFor("delete-all", deleteHandler)
 BulkActions.registerHandlerFor("revoke-all", deleteHandler)
 
 
-const postHandler = new BulkActionsGenericModalHandler("POST")
+const postHandler = BulkActionsGenericModalHandler.buildHandler("POST")
 
 BulkActions.registerHandlerFor("recache-all", postHandler)

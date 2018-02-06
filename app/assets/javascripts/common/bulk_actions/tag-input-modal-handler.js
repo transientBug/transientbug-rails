@@ -1,10 +1,12 @@
 class BulkActionTagInputModalHandler extends BulkActionsGenericModalHandler {
-  handleBulkActionTrigger({ triggerData, modelData }) {
-    const modal = super.handleBulkActionTrigger({ triggerData: triggerData, modelData: modelData })
+  static buildHandler() { return super.buildHandler("PATCH") }
 
-    const tagsInput = modal.find("[data-behavior~=autocomplete-bookmark-tags]")
+  get tagsInput() { return this.modal.find("[data-behavior~=autocomplete-bookmark-tags]") }
 
-    tagsInput.dropdown({
+  constructor(triggerData, modelData) {
+    super(triggerData, modelData)
+
+    this.tagsInput.dropdown({
       apiSettings: {
         cache: false,
         action: "autocomplete bookmark tags"
@@ -16,27 +18,18 @@ class BulkActionTagInputModalHandler extends BulkActionsGenericModalHandler {
     })
   }
 
-  async onApprove({ triggerData, modelData, button, modal }) {
-    const tagsInput = modal.find("[data-behavior~=autocomplete-bookmark-tags]")
-
+  buildPayload() {
     const payload = {
       bulk: {
-        action: triggerData.behavior,
-        ids: modelData.map((model) => model.id),
-        tags: tagsInput.val()
+        action: this.triggerData.behavior,
+        ids: this.modelData.map((model) => model.id),
+        tags: this.tagsInput.val()
       }
     }
 
-    const response = await App.buildRequest({
-      url: triggerData.url,
-      method: "PATCH",
-      payload: payload
-    })
-
-    if(response.ok)
-      location.reload(true)
+    return payload
   }
 }
 
-const tagInputModalHandler = new BulkActionTagInputModalHandler()
+const tagInputModalHandler = BulkActionTagInputModalHandler.buildHandler()
 BulkActions.registerHandlerFor("tag-all", tagInputModalHandler)

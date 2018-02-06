@@ -5,7 +5,7 @@ class Bookmarks::Bulk::RecachesController < ApplicationController
   # POST /bookmarks/bulk/recache
   def create
     bulk_results = @bookmarks.each_with_object({}) do |bookmark, memo|
-      memo[bookmark.id] = bookmark.schedule_cache.present?
+      memo[bookmark.id] = true#bookmark.schedule_cache.present?
     end
 
     all_good = bulk_results.values.all?
