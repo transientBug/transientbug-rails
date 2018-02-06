@@ -28,8 +28,6 @@ class Bookmark < ApplicationRecord
     existing
   end
 
-  private
-
   def schedule_cache
     WebpageCacheJob.perform_later bookmark: self
   end

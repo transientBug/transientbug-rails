@@ -72,50 +72,11 @@ class BulkActions {
 
     const handler = BulkActions._handlers[triggerData.behavior]
 
-    if(handler.hasOwnFlow)
-      return handler.handler({ triggerData: triggerData, modelData: modelData })
-
-    const templateData = {
-      action: _.omit(triggerData, "behavior", "group", "template"),
-      models: modelData
-    }
-
-    const loader = $("#page-loader")
-    loader.addClass("indeterminate text")
-    loader.innerText = "Performing bulk actions ... please wait"
-
-    const curriedHandler = (modal) => {
-      return handler.handler({
-        triggerData: triggerData,
-        modelData: modelData,
-        modal: modal
-      })
-    }
-
-    const renderedModal = JST[triggerData.template](templateData)
-
-    const modal = $(renderedModal)
-    $("body").append(modal)
-
-    modal.modal({
-      onHide: (el) => {
-        loader.parent(".dimmer").dimmer("show")
-        return true
-      },
-      onHidden: (el) => {
-        loader.removeClass("indeterminate text")
-        modal.remove()
-      },
-      onApprove: curriedHandler
-    }).modal("show")
+    handler.handleBulkActionTrigger({ triggerData: triggerData, modelData: modelData })
   }
 
-  static registerHandlerFor(behavior, handler, opts) {
-    if(!opts)
-      opts = {}
-
-    opts.handler = handler
-    this.handlers[behavior] = opts
+  static registerHandlerFor(behavior, handler) {
+    this.handlers[behavior] = handler
   }
 
   static get handlers() {
@@ -124,25 +85,6 @@ class BulkActions {
 
   static set handlers(val) {
     this._handlers = val
-  }
-
-  static buildRequest({url, method, payload}) {
-    const csrfParam = Rails.csrfParam()
-    const csrfToken = Rails.csrfToken()
-    // Add rails csrf token
-    payload[ csrfParam ] = csrfToken
-
-    return fetch(url, {
-      method: method,
-      headers: new Headers({
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-CSRF-Token": csrfToken,
-        "X-Requested-With": "XMLHttpRequest"
-      }),
-      credentials: "same-origin",
-      body: JSON.stringify(payload)
-    })
   }
 
   // Let's setup our handlers, make sure we toggle the bulk actions if any
@@ -164,93 +106,3 @@ class BulkActions {
 }
 
 App.registerDOMWire(BulkActions)
-
-function basicBulkHandler(method) {
-  return async function deleteAllHandler({triggerData, modelData, el}) {
-    const payload = {
-      bulk: {
-        action: triggerData.behavior,
-        ids: modelData.map((model) => model.id)
-      }
-    }
-
-    const response = await BulkActions.buildRequest({
-      url: triggerData.url,
-      method: method,
-      payload: payload
-    })
-
-    if(response.ok)
-      location.reload(true)
-  }
-}
-
-BulkActions.registerHandlerFor("delete-all", basicBulkHandler("DELETE"))
-BulkActions.registerHandlerFor("revoke-all", basicBulkHandler("DELETE"))
-
-BulkActions.registerHandlerFor("recache-all", basicBulkHandler("POST"))
-
-
-function tagAllHandler({ triggerData, modelData }) {
-  const templateData = {
-    action: _.omit(triggerData, "behavior", "group", "template"),
-    models: modelData
-  }
-
-  const loader = $("#page-loader")
-  loader.addClass("indeterminate text")
-  loader.innerText = "Performing bulk actions ... please wait"
-
-  const renderedModal = JST[triggerData.template](templateData)
-
-  const modal = $(renderedModal)
-  $("body").append(modal)
-
-  modal.modal({
-    onHide: (el) => {
-      loader.parent(".dimmer").dimmer("show")
-      return true
-    },
-    onHidden: (el) => {
-      loader.removeClass("indeterminate text")
-      modal.remove()
-    },
-    onApprove: onApprove
-  })
-
-  tagsInput = modal.find("[data-behavior~=autocomplete-bookmark-tags]")
-
-  tagsInput.dropdown({
-    apiSettings: {
-      cache: false,
-      action: "autocomplete bookmark tags"
-    },
-    fields: {
-      name: "label",
-      value: "label"
-    }
-  })
-
-  modal.modal("show")
-
-  async function onApprove(el) {
-    const payload = {
-      bulk: {
-        action: triggerData.behavior,
-        ids: modelData.map((model) => model.id),
-        tags: tagsInput.val()
-      }
-    }
-
-    const response = await BulkActions.buildRequest({
-      url: triggerData.url,
-      method: "PATCH",
-      payload: payload
-    })
-
-    if(response.ok)
-      location.reload(true)
-  }
-}
-
-BulkActions.registerHandlerFor("tag-all", tagAllHandler, { hasOwnFlow: true })

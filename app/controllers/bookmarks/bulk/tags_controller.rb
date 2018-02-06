@@ -6,18 +6,21 @@ class Bookmarks::Bulk::TagsController < ApplicationController
   # PUT /bookmarks/bulk/tag
   # PATCH /bookmarks/bulk/tag
   def update
-    bulk_result = @bookmarks.map do |bookmark|
+    tags_length = @tags.length
+
+    bulk_results = @bookmarks.each_with_object({}) do |bookmark, memo|
       bookmark.tags = bookmark.tags.to_a.concat(@tags)
+      memo[bookmark.id] = bookmark.tags.length >= tags_length
     end
 
-    all_good = bulk_result.values.all?
+    all_good = bulk_results.values.all?
 
     if all_good
-      flash[:info] = "Bulk delete applications successful"
-      render json: { bulk_results: bulk_result }, status: :ok
+      flash[:info] = "Bulk tagging of bookmarks was successful"
+      render json: { bulk_results: bulk_results }, status: :ok
     else
-      flash[:error] = "Some applications could not be deleted"
-      render json: { bulk_results: bulk_result }, status: :unprocessable_entity
+      flash[:error] = "Some bookmarks could not be tagged"
+      render json: { bulk_results: bulk_results }, status: :unprocessable_entity
     end
   end
 

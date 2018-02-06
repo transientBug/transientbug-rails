@@ -4,18 +4,18 @@ class Bookmarks::Bulk::DeletesController < ApplicationController
 
   # DELETE /bookmarks/bulk/delete
   def destroy
-    destroy_results = @bookmarks.each_with_object({}) do |model, memo|
+    bulk_results = @bookmarks.each_with_object({}) do |model, memo|
       memo[model.id] = model.destroy
     end
 
-    all_good = destroy_results.values.all?
+    all_good = bulk_results.values.all?
 
     if all_good
       flash[:info] = "Bulk delete of bookmarks was successful"
-      render json: { bulk_results: destroy_results }, status: :ok
+      render json: { bulk_results: bulk_results }, status: :ok
     else
       flash[:error] = "Some bookmarks could not be deleted"
-      render json: { bulk_results: destroy_results }, status: :unprocessable_entity
+      render json: { bulk_results: bulk_results }, status: :unprocessable_entity
     end
   end
 
