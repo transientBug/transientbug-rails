@@ -70,43 +70,53 @@ class BulkActions {
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
 
-    const templateData = {
-      action: _.omit(triggerData, "behavior", "group", "template"),
-      models: modelData
+    const handler = BulkActions._handlers[triggerData.behavior]
+
+    if(handler.hasOwnFlow) {
+      handler.handler({ triggerData: triggerData, modelData: modelData })
+    } else {
+      const templateData = {
+        action: _.omit(triggerData, "behavior", "group", "template"),
+        models: modelData
+      }
+
+      const loader = $("#page-loader")
+      loader.addClass("indeterminate text")
+      loader.innerText = "Performing bulk actions ... please wait"
+
+      const curriedHandler = (modal) => {
+        return handler.handler({
+          triggerData: triggerData,
+          modelData: modelData,
+          modal: modal
+        })
+      }
+
+      const renderedModal = JST[triggerData.template](templateData)
+
+      const modal = $(renderedModal)
+      $("body").append(modal)
+
+      modal.modal({
+        onHide: (el) => {
+          loader.parent(".dimmer").dimmer("show")
+          return true
+        },
+        onHidden: (el) => {
+          loader.removeClass("indeterminate text")
+          modal.remove()
+        },
+        onApprove: curriedHandler
+      }).modal("show")
     }
-
-    const loader = $("#page-loader")
-    loader.addClass("indeterminate text")
-    loader.innerText = "Performing bulk actions ... please wait"
-
-    const curriedHandler = (modal) => {
-      return BulkActions._handlers[triggerData.behavior]({
-        triggerData: triggerData,
-        modelData: modelData,
-        modal: modal
-      })
-    }
-
-    const renderedModal = JST[triggerData.template](templateData)
-
-    const modal = $(renderedModal)
-    $("body").append(modal)
-
-    modal.modal({
-      onHide: (el) => {
-        loader.parent(".dimmer").dimmer("show")
-        return true
-      },
-      onHidden: (el) => {
-        loader.removeClass("indeterminate text")
-        modal.remove()
-      },
-      onApprove: curriedHandler
-    }).modal("show")
   }
 
-  static registerHandlerFor(behavior, handler) {
-    this.handlers[behavior] = handler
+  static registerHandlerFor(behavior, handler, opts) {
+    if(!opts)
+      opts = {}
+
+    opts.handler = handler
+    this.handlers[behavior] = opts
   }
 
   static get handlers() {
@@ -176,3 +186,88 @@ async function deleteAllHandler({triggerData, modelData, modal}) {
 
 BulkActions.registerHandlerFor("delete-all", deleteAllHandler)
 BulkActions.registerHandlerFor("revoke-all", deleteAllHandler)
+
+
+function tagAllHandler({ triggerData, modelData }) {
+  const templateData = {
+    action: _.omit(triggerData, "behavior", "group", "template"),
+    models: modelData
+  }
+
+  const loader = $("#page-loader")
+  loader.addClass("indeterminate text")
+  loader.innerText = "Performing bulk actions ... please wait"
+
+  const renderedModal = JST[triggerData.template](templateData)
+
+  const modal = $(renderedModal)
+  $("body").append(modal)
+
+  modal.modal({
+    onHide: (el) => {
+      loader.parent(".dimmer").dimmer("show")
+      return true
+    },
+    onHidden: (el) => {
+      loader.removeClass("indeterminate text")
+      modal.remove()
+    },
+    onApprove: onApprove
+  })
+
+  modal.find("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
+    apiSettings: {
+      cache: false,
+      action: "autocomplete bookmark tags"
+    },
+    fields: {
+      name: "label",
+      value: "label"
+    }
+  })
+
+  modal.modal("show")
+
+  async function onApprove(modal) {
+    const payload = {
+      bulk: {
+        action: triggerData.behavior,
+        ids: modelData.map((model) => model.id)
+      }
+    }
+
+    debugger
+
+    const response = await BulkActions.buildRequest({
+      url: triggerData.url,
+      method: "PATCH",
+      payload: payload
+    })
+
+    if(response.ok)
+      location.reload(true)
+  }
+}
+
+BulkActions.registerHandlerFor("tag-all", tagAllHandler, { hasOwnFlow: true })
+
+
+async function recacheAllHandler({triggerData, modelData, modal}) {
+  const payload = {
+    bulk: {
+      action: triggerData.behavior,
+      ids: modelData.map((model) => model.id)
+    }
+  }
+
+  const response = await BulkActions.buildRequest({
+    url: triggerData.url,
+    method: "POST",
+    payload: payload
+  })
+
+  if(response.ok)
+    location.reload(true)
+}
+
+BulkActions.registerHandlerFor("recache-all", recacheAllHandler)

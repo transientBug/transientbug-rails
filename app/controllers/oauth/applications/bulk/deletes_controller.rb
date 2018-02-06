@@ -1,13 +1,12 @@
 class Oauth::Applications::Bulk::DeletesController < ApplicationController
   require_login!
+  before_action :set_applications
 
-  # DELETE /oauth/applications/bulk/deletes
+  # DELETE /oauth/applications/bulk/delete
   def destroy
-    applications = Doorkeeper::Application.where id: bulk_params[:ids]
-
     # I guess this should be done in a transaction, so that all of the destroys
     # are rolled back if one goes wrong?
-    destroy_results = applications.each_with_object({}) do |application, memo|
+    destroy_results = @applications.each_with_object({}) do |application, memo|
       memo[application.id] = application.destroy
     end
 
@@ -26,5 +25,9 @@ class Oauth::Applications::Bulk::DeletesController < ApplicationController
 
   def bulk_params
     params.require(:bulk).permit(ids: [])
+  end
+
+  def set_applications
+    @applications = Doorkeeper::Application.where id: bulk_params[:ids]
   end
 end

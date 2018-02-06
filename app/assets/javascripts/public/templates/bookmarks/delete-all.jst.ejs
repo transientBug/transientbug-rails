@@ -1,21 +1,20 @@
 <div class="ui modal">
   <div class="ui icon header">
     <i class="trash icon"></i>
-    Delete Applications?
+    Delete Bookmarks?
   </div>
   <div class="scrolling content">
-    <p>Are you REALLY sure you want to delete these applications?</p>
-    <p>Any deployed applications using <strong>ANY</strong> of these credentials will be invalidated and unable to interact with transientBug anymore.</p>
+    <p>Are you sure you want to delete these bookmarks?</p>
     <table class="ui celled table">
       <thead>
-        <th>Name</th>
-        <th>Client ID</th>
+        <th>Title</th>
+        <th>URL</th>
       </thead>
       <tbody>
         <% models.forEach((model) => { %>
           <tr>
-            <td><%= model.name %></td>
-            <td><%= model.uid %></td>
+            <td><%= model.title %></td>
+            <td><%= model.uri %></td>
           </tr>
         <% }) %>
       </tbody>
