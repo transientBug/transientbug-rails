@@ -13,6 +13,22 @@ class WebpageCacheService
     "//img/@src"
   ].freeze
 
+  autoload :Render, "webpage_cache_service/render"
+
+  class Errors < Hash
+    def add key, value
+      self[key] ||= []
+      self[key] << value
+      self[key].uniq!
+    end
+
+    def each
+      each_key do |field|
+        self[field].each { |message| yield field, message }
+      end
+    end
+  end
+
   class Cache
     attr_reader :uri, :key
     attr_accessor :headers
@@ -20,6 +36,10 @@ class WebpageCacheService
     def initialize uri:, key:
       @uri = uri
       @key = key
+    end
+
+    def errors
+      @errors ||= Errors.new
     end
 
     def headers
@@ -35,46 +55,25 @@ class WebpageCacheService
     end
 
     def root
-      @root ||= ROOT.join(key.to_s).tap do |path|
-        path.mkpath
-      end
+      @root ||= ROOT.join(key.to_s)
     end
 
     def cache
-      base_response = client.get uri
+      response = get uri: uri, path: original_html_path
 
-      base_path = root.join "original.html"
-      base_path.open "wb" do |file|
-        file.write base_response.body
+      if response.code != 200
+        errors.add uri, "Returned non-okay status code"
+        return
       end
 
-      nokogiri = Nokogiri::HTML(base_path.open("r"))
-
-      asset_root = root.join("assets").tap do |path|
-        path.mkpath
-      end
-
-      link_map = ASSET_XPATHS.flat_map(&nokogiri.method(:xpath))
-        .map(&:to_s)
-        .map(&Addressable::URI.method(:parse))
-        .map { |link| uri + link }
-        .map do |link|
-          link_key = Digest::SHA256.hexdigest(link.to_s)
-
-          response = client.get link
-          asset_root.join(link_key).open "wb" do |file|
-            file.write response.body
-          end
-
-          [ link_key, { link: link, content_type: response.content_type.mime_type } ]
-        end.to_h
+      link_map = cache_links
 
       metadata = {
         uri: uri.to_s,
         links: link_map
       }
 
-      root.join("metadata.json").write metadata.to_json
+      metadata_path.write metadata.to_json
 
       root
     end
@@ -84,50 +83,53 @@ class WebpageCacheService
     def client
       @client ||= HTTP.headers headers
     end
-  end
 
-  class Render
-    attr_reader :key
+    def get uri:, path:
+      path.parent.mkpath
 
-    def initialize key:
-      @key = key
-    end
+      response = client.get uri
 
-    def root
-      @root ||= ROOT.join(key.to_s)
-    end
-
-    def metadata
-      JSON.parse root.join("metadata.json").read
-    end
-
-    def content_type key:
-      metadata["links"][ key ]["content_type"]
-    end
-
-    def asset? key:
-      root.join("assets", key).exist?
-    end
-
-    def asset key:
-      root.join("assets", key).open("r")
-    end
-
-    def render uri:, base_uri:
-      base_path = root.join "original.html"
-
-      nokogiri = Nokogiri::HTML(base_path.open("r"))
-
-      ASSET_XPATHS.each do |xpath|
-        nokogiri.xpath(xpath).each do |xpath_attr|
-          link = uri + Addressable::URI.parse(xpath_attr.value)
-          link_key = Digest::SHA256.hexdigest(link.to_s)
-
-          xpath_attr.value = base_uri + link_key
-        end
+      path.open "wb" do |file|
+        file.write response.body
       end
 
-      nokogiri.to_html
+      response
+    end
+
+    def asset_root
+      @asset_root ||= root.join("assets")
+    end
+
+    def original_html_path
+      @original_html_path ||= root.join("original.html")
+    end
+
+    def metadata_path
+      @metadata_path ||= root.join("metadata.json")
+    end
+
+    def nokogiri
+      @nokogiri ||= Nokogiri::HTML(original_html_path.open("r"))
+    end
+
+    def links
+      @links ||= ASSET_XPATHS.flat_map(&nokogiri.method(:xpath))
+        .map(&:to_s)
+        .map(&Addressable::URI.method(:parse))
+        .map { |link| uri + link }
+    end
+
+    def cache_links
+      links.map do |link|
+        link_key = Digest::SHA256.hexdigest link.to_s
+
+        response = get uri: link, path: asset_root.join(link_key)
+        if response.code != 200
+          errors.add link, "Returned non-okay status code"
+        end
+
+        [ link_key, { link: link, content_type: response.content_type.mime_type } ]
+      end.to_h
     end
   end
 end
