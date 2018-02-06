@@ -4,7 +4,16 @@ class Admin::UsersController < AdminController
 
   # GET /users
   def index
-    @users = User.all.order(created_at: :desc).page params[:page]
+    user_table = User.arel_table
+
+    query_param = params[:q]
+    base_where = user_table[:id].eq(query_param)
+      .or(user_table[:username].matches("%#{ query_param }%"))
+      .or(user_table[:email].matches("%#{ query_param }%"))
+
+    @users = User.all
+    @users = @users.where(base_where) if query_param.present? && !query_param.empty?
+    @users = @users.order(created_at: :desc).page params[:page]
   end
 
   # GET /users/1

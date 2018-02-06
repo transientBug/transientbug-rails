@@ -2,7 +2,7 @@
   Users
 
 - content_for :menu do
-  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
     .divider
     .header Bulk Actions
     .menu
@@ -20,17 +20,18 @@
 %table.ui.celled.table#stickContext
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
       %th ID
       %th Username
       %th Email
       %th Created At
+
   %tbody
     - if @users.any?
       - @users.each do |user|
         %tr
-          %td.collapsing= check_box_tag "select-#{ user.id }", nil, false, data: { id: user.id, behavior: "select" }
+          %td.collapsing= model_tag user, only: [ :id, :username ]
           %td.collapsing
             .ui.buttons
               = link_to admin_user_path(user), class: "ui icon button" do 

@@ -12,7 +12,7 @@
     %i.plus.icon
     New
 
-  -#.item
+  .item
     .ui.transparent.icon.input
       = form_tag admin_service_announcements_path, method: :get do
         = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }

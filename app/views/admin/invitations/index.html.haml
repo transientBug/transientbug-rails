@@ -2,36 +2,38 @@
   Invitations
 
 - content_for :menu do
-  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
     .divider
     .header Bulk Actions
     .menu
-      .item
-        .ui.fluid.icon.button
+      -#.item
+        = bulk_edit_action "disable-all", url: admin_invitations_bulk_disable_path, class: "ui fluid icon button" do
           %i.hide.icon
           disable all
 
       .item
-        .ui.fluid.icon.negative.basic.button
+        = bulk_edit_action "delete-all", url: admin_invitations_bulk_delete_path, class: "ui fluid icon negative basic button" do
           %i.trash.icon
           delete all
 
 %table.ui.celled.table#stickContext
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
+      %th ID
       %th Code
       %th Title
       %th Description
       %th Internal Note
       %th Available
       %th Created At
+
   %tbody
     - if @invitations.any?
       - @invitations.each do |invitation|
         %tr
-          %td.collapsing= check_box_tag "select-#{ invitation.id }", nil, false, data: { id: invitation.id, behavior: "select" }
+          %td.collapsing= model_tag invitation, only: [ :id, :invite_code ]
           %td.collapsing
             .ui.buttons
               = link_to admin_invitation_path(invitation), class: "ui icon button" do 
@@ -50,10 +52,11 @@
                     %i.warning.sign.icon
                     DANGERZONE
 
-                  .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(invitation), code: invitation.code, title: invitation.title } }
+                  = modal_tag invitation, :delete, url: admin_invitation_path(invitation) do
                     %i.trash.icon
                     delete
 
+          %td.collapsing= invitation.id
           %td.collapsing= invitation.code
           %td= invitation.title
           %td= invitation.description&.truncate 120

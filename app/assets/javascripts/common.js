@@ -5,7 +5,7 @@ document.addEventListener("turbolinks:load", () => {
   })
 
   // Toggle the sidebar open and closed
-  $(".sidebar.icon").on("click", () => $(".ui.sidebar").sidebar("toggle"))
+  $(".sidebar.icon").parent().on("click", () => $(".ui.sidebar").sidebar("toggle"))
 
   // Handle making the side menus sticky
   $("[data-behavior~=sticky]").each((idx, element) => {

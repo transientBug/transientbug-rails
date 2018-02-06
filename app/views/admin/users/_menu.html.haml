@@ -8,9 +8,9 @@
     - if count
       .ui.label= count
 
-  -#.item
+  .item
     .ui.transparent.icon.input
-      = form_tag admin_invitations_path, method: :get do
+      = form_tag admin_users_path, method: :get do
         = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }
       %i.search.link.icon
 

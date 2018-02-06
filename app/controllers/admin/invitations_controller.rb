@@ -4,7 +4,17 @@ class Admin::InvitationsController < AdminController
 
   # GET /invitations
   def index
-    @invitations = Invitation.all.order(created_at: :desc).page params[:page]
+    invitation_table = Invitation.arel_table
+
+    query_param = params[:q]
+    base_where = invitation_table[:id].eq(query_param)
+      .or(invitation_table[:code].eq(query_param))
+      .or(invitation_table[:internal_note].matches("%#{ query_param }%"))
+      # .or(invitation_table[:title].matches("%#{ query_param }%"))
+
+    @invitations = Invitation.all
+    @invitations = @invitations.where(base_where) if query_param.present? && !query_param.empty?
+    @invitations = @invitations.order(created_at: :desc).page params[:page]
   end
 
   # GET /invitations/1
