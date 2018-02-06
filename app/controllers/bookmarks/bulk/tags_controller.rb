@@ -5,6 +5,7 @@ class Bookmarks::Bulk::TagsController < ApplicationController
 
   # PUT /bookmarks/bulk/tag
   # PATCH /bookmarks/bulk/tag
+  # rubocop:disable Metrics/AbcSize
   def update
     tags_length = @tags.length
 
@@ -23,6 +24,7 @@ class Bookmarks::Bulk::TagsController < ApplicationController
       render json: { bulk_results: bulk_results }, status: :unprocessable_entity
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   protected
 
