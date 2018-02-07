@@ -10,11 +10,11 @@
       <tbody>
         <tr>
           <td>Name</td>
-          <td><%= modelName %></td>
+          <td><%= model.name %></td>
         </tr>
         <tr>
           <td>Client ID</td>
-          <td><%= modelUid %></td>
+          <td><%= model.uid %></td>
         </tr>
       </tbody>
     </table>
@@ -24,7 +24,7 @@
       <i class="remove icon"></i>
       Cancel!
     </div>
-    <a href="<%= url %>" data-method="delete" rel="nofollow" class="ui red ok inverted button">
+    <a href="<%= modal.url %>" data-method="delete" rel="nofollow" class="ui red ok inverted button">
       <i class="checkmark icon"></i>
       Yes, I'm sure
     </a>

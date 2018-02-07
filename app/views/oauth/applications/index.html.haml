@@ -11,23 +11,25 @@
       %i.add.icon
       new
 
-  .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
-    %i.trash.icon
-    delete
+  .right.menu
+    = bulk_edit_action "delete-all", url: oauth_applications_bulk_delete_path do
+      %i.trash.icon
+      delete all
 
 %table.ui.celled.table
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
       %th Name
       %th Callback URLs
       %th Created At (UTC)
+
   %tbody
     - if @applications.any?
       - @applications.each do |application|
         %tr
-          %td.collapsing= check_box_tag "select-#{ application.id }", nil, false, data: { id: application.id, behavior: "select" }
+          %td.collapsing= model_tag application, only: [:uid, :name]
           %td.collapsing
             .ui.buttons
               = link_to oauth_application_path(application), class: "ui icon button" do 
@@ -46,7 +48,7 @@
                     %i.warning.sign.icon
                     DANGERZONE
 
-                  .item{ data: { behavior: "modal", template: "public/templates/oauth/applications/delete", url: oauth_application_path(application), model: JSON.parse(application.to_json) } }
+                  = modal_tag application, :delete, url: oauth_application_path(application) do
                     %i.trash.icon
                     delete
 
