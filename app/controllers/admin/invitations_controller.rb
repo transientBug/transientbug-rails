@@ -10,7 +10,6 @@ class Admin::InvitationsController < AdminController
     base_where = invitation_table[:id].eq(query_param)
       .or(invitation_table[:code].eq(query_param))
       .or(invitation_table[:internal_note].matches("%#{ query_param }%"))
-      # .or(invitation_table[:title].matches("%#{ query_param }%"))
 
     @invitations = Invitation.all
     @invitations = @invitations.where(base_where) if query_param.present? && !query_param.empty?

@@ -8,9 +8,6 @@ class Admin::BookmarksController < AdminController
 
     query_param = params[:q]
     base_where = bookmark_table[:id].eq(query_param)
-      # .or(bookmark_table[:url].eq(query_param))
-      # .or(bookmark_table[:tags].matches("%#{ query_param }%"))
-      # .or(bookmark_table[:title].matches("%#{ query_param }%"))
 
     @bookmarks = Bookmark.all
     @bookmarks = @bookmarks.where(base_where) if query_param.present? && !query_param.empty?

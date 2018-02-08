@@ -14,13 +14,17 @@ module ApplicationHelper
   #
   # Content passed in through the block ends up inside of the div, useful for
   # icons and text about the action.
+  # rubocop:disable Metrics/AbcSize
   def bulk_edit_action behavior, **opts, &block
     template_prefix = "public" unless controller_path.start_with? "admin/"
+    template_prefix ||= "admin"
+
+    current_controller = controller_path.gsub(%r{^admin/}, "")
 
     template_path = [
       template_prefix,
       "templates",
-      controller_path,
+      current_controller,
       behavior
     ].compact.join "/"
 
@@ -37,6 +41,7 @@ module ApplicationHelper
 
     tag.div(**options, &block)
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Renders a checkbox that, when clicked, will check all of the bulk select
   # checkboxes on the page through some JS magic

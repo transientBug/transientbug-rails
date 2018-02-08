@@ -72,6 +72,9 @@ class BulkActions {
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
 
+    if(!BulkActions._handlers[triggerData.behavior])
+      throw new Error(`Missing handler for ${ triggerData.behavior }`)
+
     BulkActions._handlers[triggerData.behavior](triggerData, modelData)
   }
 
