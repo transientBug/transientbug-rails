@@ -12,11 +12,11 @@ class WebpageCacheService
     def_delegator :webpage, :uri
 
     def asset? key:
-      find_attachment(key: key).exists?
+      find_attachment(key: key).present?
     end
 
     def asset key:
-      find_attachment(key: key).blob.download
+      StringIO.new find_attachment(key: key).blob.download
     end
 
     def content_type key:
@@ -40,7 +40,7 @@ class WebpageCacheService
 
     private
 
-    def find_attachement key:
+    def find_attachment key:
       offline_cache.assets.joins(:blob).find_by(active_storage_blobs: { filename: key })
     end
   end
