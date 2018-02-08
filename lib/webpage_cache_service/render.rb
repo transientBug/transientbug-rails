@@ -1,35 +1,30 @@
 class WebpageCacheService
   class Render
-    attr_reader :key
+    extend Forwardable
 
-    def initialize key:
-      @key = key
+    attr_reader :offline_cache
+
+    def initialize offline_cache:
+      @offline_cache = offline_cache
     end
 
-    def root
-      @root ||= ROOT.join(key.to_s)
-    end
-
-    def metadata
-      JSON.parse root.join("metadata.json").read
-    end
-
-    def content_type key:
-      metadata["links"][ key ]["content_type"]
-    end
+    def_delegator :@offline_cache, :webpage
+    def_delegator :webpage, :uri
 
     def asset? key:
-      root.join("assets", key).exist?
+      find_attachment(key: key).exists?
     end
 
     def asset key:
-      root.join("assets", key).open("r")
+      find_attachment(key: key).blob.download
     end
 
-    def render uri:, base_uri:
-      base_path = root.join "original.html"
+    def content_type key:
+      find_attachment(key: key).blob.content_type
+    end
 
-      nokogiri = Nokogiri::HTML(base_path.open("r"))
+    def render base_uri:
+      nokogiri = Nokogiri::HTML(offline_cache.root.blob.download)
 
       ASSET_XPATHS.each do |xpath|
         nokogiri.xpath(xpath).each do |xpath_attr|
@@ -41,6 +36,12 @@ class WebpageCacheService
       end
 
       nokogiri.to_html
+    end
+
+    private
+
+    def find_attachement key:
+      offline_cache.assets.joins(:blob).find_by(active_storage_blobs: { filename: key })
     end
   end
 end
