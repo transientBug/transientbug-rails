@@ -9,8 +9,7 @@ class Bookmarks::CacheController < ApplicationController
   # GET /bookmarks/1/cache
   def index
     render status: :not_found unless @bookmark.current_offline_cache
-    base_uri = BASE_TEMPLATE.expand id: params[:bookmark_id]
-    render html: renderer.render(base_uri: base_uri).html_safe
+    render html: renderer.render.html_safe
   end
 
   # POST /bookmarks/1/cache
@@ -35,6 +34,10 @@ class Bookmarks::CacheController < ApplicationController
   end
 
   def renderer
-    @renderer ||= WebpageCacheService::Render.new(offline_cache: @bookmark.current_offline_cache)
+    @renderer ||= WebpageCacheService::Render.new(offline_cache: @bookmark.current_offline_cache, base_uri: base_uri)
+  end
+
+  def base_uri
+    @base_uri ||= BASE_TEMPLATE.expand id: params[:bookmark_id]
   end
 end

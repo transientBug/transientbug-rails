@@ -17,6 +17,10 @@ class WebpageCacheService
       @errors ||= Errors.new
     end
 
+    def successful?
+      @errors.empty?
+    end
+
     def headers
       @headers ||= DEFAULT_HEADERS.dup
     end
@@ -30,7 +34,11 @@ class WebpageCacheService
     end
 
     def exec
-      cache
+      cache_root
+
+      return unless PARSABLE_MIMES.include? @root_attachment.blob.content_type
+
+      cache_links
 
       # Return self since there is an errors object and the offline cache model
       # that people might care about on this object.
@@ -39,8 +47,7 @@ class WebpageCacheService
 
     private
 
-    # rubocop:disable Metrics/AbcSize
-    def cache
+    def cache_root
       response, root_attachment = get uri: uri
       @root_attachment = root_attachment
 
@@ -49,16 +56,12 @@ class WebpageCacheService
         obj.save
       end
 
-      if response.status > 399
-        errors.add uri, "Got non-okay status back from the server: #{ response.status }"
-        return
-      end
+      errors.add uri, "Got non-okay status back from the server: #{ response.status }" if response.status > 399
+    end
 
-      return unless PARSABLE_MIMES.include? root_attachment.blob.content_type
-
+    def cache_links
       links.each { |link| get uri: link }
     end
-    # rubocop:enable Metrics/AbcSize
 
     # this has some serious memory implications since it reads the whole file
     # in, but hopefully people don't have gigabyte sized HTML pages
@@ -77,47 +80,70 @@ class WebpageCacheService
       @client ||= HTTP.headers(headers).follow
     end
 
-    # rubocop:disable Metrics/AbcSize
     def get uri:
       response = client.get uri
 
-      content_type = response.content_type.mime_type
-
-      temp_key = Digest::SHA256.hexdigest uri.to_s
-      attachment = Tempfile.create temp_key do |temp_file|
-        temp_file.binmode
-
-        response.body.each do |partial|
-          temp_file.write partial
-        end
-
-        temp_file.rewind
-
-        unless content_type
-          # some websites *cough*offline.pink*cough* don't return a content type
-          # header, so we'll first see if the html doctype string is present and
-          # guess this is text/html or we'll fallback to assuming its binary
-          # https://en.wikipedia.org/wiki/Content_sniffing
-          content_type ||= MimeMagic.by_magic(temp_file)
-          content_type ||= "application/octet-stream"
-
-          temp_file.rewind
-        end
+      # Without manually managing the temp file, there isn't an easy way to
+      # breakup the following logic but I did my best and fuck you too rubocop
+      attachments = temp_file_for uri: uri do |temp_file, uri_filename|
+        write_body response: response, to: temp_file
 
         offline_cache.assets.attach(
           io: temp_file,
-          filename: Digest::SHA256.hexdigest(uri.to_s),
-          content_type: content_type,
-          metadata: {
-            uri: uri.to_s,
-            status_code: response.code,
-            headers: response.headers.to_h
-          }
-        )&.first
+          filename: uri_filename,
+          content_type: get_content_type(response: response, io: temp_file),
+          metadata: build_metadata(response: response)
+        )
       end
 
-      [ response, attachment ]
+      [ response, attachments.first ]
     end
-    # rubocop:enable Metrics/AbcSize
+
+    def temp_file_for uri:
+      uri_filename = Digest::SHA256.hexdigest uri.to_s
+
+      Tempfile.create uri_filename do |temp_file|
+        temp_file.binmode
+
+        yield temp_file, uri_filename
+      end
+    end
+
+    # Streams the response body into the temp file to hopefully avoid some
+    # memory issues if this is a large document
+    def write_body response:, to:
+      io_handle = to
+
+      response.body.each do |partial|
+        io_handle.write partial
+      end
+
+      io_handle.rewind
+    end
+
+    def build_metadata response:
+      {
+        uri: response.uri.to_s,
+        status_code: response.code,
+        headers: response.headers.to_h
+      }
+    end
+
+    def get_content_type response:, io:
+      return response.content_type.mime_type if response.content_type.mime_type
+
+      io_handle = io
+
+      # some websites *cough*offline.pink*cough* don't return a content type
+      # header, so we'll first see if the html doctype string is present and
+      # guess this is text/html or we'll fallback to assuming its binary
+      # https://en.wikipedia.org/wiki/Content_sniffing
+      content_type ||= MimeMagic.by_magic(io_handle)
+      content_type ||= "application/octet-stream"
+
+      io_handle.rewind
+
+      content_type
+    end
   end
 end
