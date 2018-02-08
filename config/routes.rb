@@ -26,19 +26,41 @@ Rails.application.routes.draw do
     resources :regenerate, only: [ :create ], module: "profiles"
   end
 
-  resources :bookmarks do
-    resources :cache, only: [:index, :create], module: "bookmarks" do
-      collection do
-        match "/*key", to: "cache#show", via: [:get]
+  namespace :oauth do
+    namespace :applications do
+      namespace :bulk do
+        resource :delete, only: [:destroy]
       end
     end
 
-    collection do
-      scope as: :bookmarks, module: :bookmarks do
-        resources :search, only: [:index]
-        resources :tags, only: [:index, :show] do
-          collection do
-            resources :autocomplete, only: [:index], module: "tags"
+    namespace :authorized_applications do
+      namespace :bulk do
+        resource :revoke, only: [:destroy]
+      end
+    end
+  end
+
+  resources :bookmarks do
+    scope module: :bookmarks do
+      resources :cache, only: [:index, :create] do
+        collection do
+          match "/*key", to: "cache#show", via: [:get]
+        end
+      end
+
+      collection do
+        scope as: :bookmarks do
+          resources :search, only: [:index]
+          resources :tags, only: [:index, :show] do
+            collection do
+              resources :autocomplete, only: [:index], module: "tags"
+            end
+          end
+
+          namespace :bulk do
+            resource :delete, only: [:destroy]
+            resource :tag, only: [:update]
+            resource :recache, only: [:create]
           end
         end
       end
@@ -49,12 +71,30 @@ Rails.application.routes.draw do
     root "home#home"
 
     resources :service_announcements do
-      resources :toggle, only: [ :create ], module: "service_announcements"
+      scope module: :service_announcements do
+        resources :toggle, only: [ :create ]
+        namespace :bulk do
+          # resource :delete, only: [:destroy]
+          # resource :disable, only: [:destroy]
+        end
+      end
     end
 
-    resources :invitations
+    resources :invitations do
+      scope module: :invitations do
+        namespace :bulk do
+          # resource :delete, only: [:destroy]
+          # resource :disable, only: [:destroy]
+        end
+      end
+    end
+
     resources :users, only: [ :index, :show, :edit, :update ] do
       resources :password, only: [ :create ], module: "users"
+
+      namespace :bulk do
+        # resource :delete, only: [:destroy]
+      end
     end
 
     resources :bookmarks
