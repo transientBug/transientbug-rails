@@ -23,6 +23,7 @@ class WebpageCacheService
       find_attachment(key: key).blob.content_type
     end
 
+    # rubocop:disable Metrics/AbcSize
     def render base_uri:
       nokogiri = Nokogiri::HTML(offline_cache.root.blob.download)
 
@@ -37,6 +38,7 @@ class WebpageCacheService
 
       nokogiri.to_html
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 

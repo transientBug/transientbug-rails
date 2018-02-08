@@ -5,7 +5,6 @@ class WebpageCacheService
     extend Forwardable
 
     attr_reader :offline_cache
-    attr_accessor :headers
 
     def initialize webpage:
       @webpage = webpage
@@ -40,6 +39,7 @@ class WebpageCacheService
 
     private
 
+    # rubocop:disable Metrics/AbcSize
     def cache
       response, root_attachment = get uri: uri
       @root_attachment = root_attachment
@@ -49,8 +49,8 @@ class WebpageCacheService
         obj.save
       end
 
-      if response&.status > 399
-        errors.add uri, "Got non-okay status back from the server: #{ response&.status }"
+      if response.status > 399
+        errors.add uri, "Got non-okay status back from the server: #{ response.status }"
         return
       end
 
@@ -58,6 +58,7 @@ class WebpageCacheService
 
       links.each { |link| get uri: link }
     end
+    # rubocop:enable Metrics/AbcSize
 
     # this has some serious memory implications since it reads the whole file
     # in, but hopefully people don't have gigabyte sized HTML pages
@@ -76,6 +77,7 @@ class WebpageCacheService
       @client ||= HTTP.headers(headers).follow
     end
 
+    # rubocop:disable Metrics/AbcSize
     def get uri:
       response = client.get uri
 
@@ -116,5 +118,6 @@ class WebpageCacheService
 
       [ response, attachment ]
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end
