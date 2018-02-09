@@ -46,26 +46,26 @@ module ApplicationHelper
   # Renders a div that contains an inner div with the models attributes as data
   # attributes on the tag, and a bulk select checkbox. Finding all the checked
   # bulk select checkboxes and grabbing their sibilings will provide you with
-  # the data for every selected row. Use only or except to include/exclude
+  # the data for every selected row. Use only to include/exclude
   # which fields in the attributes should make it to the html.
   # rubocop:disable Metrics/AbcSize
   def model_tag model, **opts, &block
-    attributes = model.attributes
+    attributes = Array(opts.delete(:only)).map(&:to_sym)
+    attributes ||= model.attribute_names.map(&:to_sym)
 
-    only = Array(opts.delete(:only)).map(&:to_s)
-    except = Array(opts.delete(:except)).map(&:to_s)
+    # force the ID to be present because reasons
+    attributes << :id
+    attributes.uniq!
+
+    attribute_values = attributes.each_with_object({}) do |attribute, memo|
+      memo[ attribute ] = model.send(attribute).to_s
+    end
 
     no_checkbox = opts.delete(:no_checkbox)
 
-    attributes.slice!(*only) if only
-    attributes.except!(*except) if except
-
-    # force the ID to be present because reasons
-    attributes["id"] = model.id
-
     # This seems silly but it turns everything into nicely formatted data,
     # rather than trying to put a Time object into HTML
-    data = JSON.parse(attributes.to_json)
+    data = JSON.parse(attribute_values.to_json)
 
     options = {
       class: "hidden model-data",
