@@ -56,9 +56,9 @@ class WebpageCacheService
         obj.save
       end
 
-      if response.status > 399
-        errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }"
-      end
+      errors.create key: uri, message: <<~MSG if response.status > 399
+        Got non-okay status back from the server: #{ response.status }
+      MSG
     end
 
     def cache_links
@@ -85,9 +85,9 @@ class WebpageCacheService
     def get uri:
       response = client.get uri
 
-      if response.status > 399
-        errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }"
-      end
+      errors.create key: uri, message: <<~MSG if response.status > 399
+        Got non-okay status back from the server: #{ response.status }
+      MSG
 
       # Without manually managing the temp file, there isn't an easy way to
       # breakup the following logic but I did my best and fuck you too rubocop
