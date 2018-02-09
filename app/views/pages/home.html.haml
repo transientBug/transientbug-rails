@@ -4,4 +4,4 @@
 %h4.ui.header Hia #{ current_user.username }!
 
 %h2.ui.dividing.header Most recent bookmarks
-= render partial: "bookmarks/actionless_bookmarks_list", locals: { bookmarks: @recent_bookmarks }
+= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @recent_bookmarks }

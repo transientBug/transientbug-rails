@@ -16,10 +16,12 @@ module ApplicationHelper
   # icons and text about the action.
   # rubocop:disable Metrics/AbcSize
   def bulk_edit_action behavior, **opts, &block
+    template = opts.delete(:template) { template_path_for(behavior) }
+
     data = {
       group: "bulk-edit-action",
       behavior: behavior,
-      template: template_path_for(behavior)
+      template: template,
     }.merge opts.except(:id, :class)
 
     options = {
@@ -87,10 +89,12 @@ module ApplicationHelper
   # trigger and display a modal including which template for the modal, and
   # what data should be available inside of the template. The JS uses the data
   # from the matching #model_tag to help give more context for the template.
-  def modal_tag model, template, **opts, &block
+  def modal_tag model, template=nil, **opts, &block
+    template = opts.delete(:template) { template_path_for(template) }
+
     data = {
       behavior: "neomodal",
-      template: template_path_for(template),
+      template: template,
       storage: "#{ model.class.to_s.underscore }-data"
     }.merge opts.except(:id, :class)
 
