@@ -9,9 +9,19 @@
     recache
 
   .menu.right
-    = modal_tag @bookmark, :delete, url: admin_bookmark_path(@bookmark) do
-      %i.trash.icon
-      delete
+    .ui.simple.dropdown.item
+      more
+      %i.dropdown.icon
+      .menu
+
+        .header
+          %i.warning.sign.icon
+          DANGERZONE
+        .divider
+
+        = modal_tag @bookmark, :delete, url: admin_bookmark_path(@bookmark) do
+          %i.trash.icon
+          delete
 
 %h2.ui.dividing.header Internal Stuff
 %table.ui.collapsing.celled.table

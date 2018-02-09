@@ -33,7 +33,7 @@
     - if @invitations.any?
       - @invitations.each do |invitation|
         %tr
-          %td.collapsing= model_tag invitation, only: [ :id, :invite_code ]
+          %td.collapsing= model_tag invitation, only: [ :id, :title, :invite_code ]
           %td.collapsing
             .ui.buttons
               = link_to admin_invitation_path(invitation), class: "ui icon button" do 
