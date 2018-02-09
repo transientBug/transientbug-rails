@@ -1,4 +1,4 @@
-class Admin::Invitationss::Bulk::DisablesController < AdminController
+class Admin::Invitations::Bulk::DisablesController < AdminController
   before_action :set_invitation
 
   # DELETE /admin/invitation/bulk/disable
