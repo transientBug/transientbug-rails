@@ -1,0 +1,39 @@
+- if bookmarks.any?
+  .ui.feed
+    - bookmarks.each do |bookmark|
+      .event
+        .label
+          %i.bookmark.icon
+        .content
+          .summary
+            = link_to bookmark.title, bookmark_path(bookmark), class: "title"
+            .date
+              = distance_of_time_in_words_to_now(bookmark.created_at)
+              ago
+
+          = link_to bookmark.uri.to_s, bookmark.uri.to_s
+
+          - if bookmark.description.present?
+            = bookmark.description&.truncate(240)
+            = link_to "read more", bookmark_path(bookmark)
+
+          .ui.fluid.text.menu
+            .ui.item
+              %i.tags.icon
+              = bookmark.tags.length
+              = "tag".pluralize(bookmark.tags.length)
+            = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
+
+          .ui.divider
+
+- else
+  %h1.huge.center.aligned.icon.header
+    %i.bookmark.icon
+    .content No bookmarks found!
+
+  %p
+    Maybe
+    = link_to "make one?", new_bookmark_path
+
+- if bookmarks.respond_to? :total_pages
+  = paginate bookmarks
