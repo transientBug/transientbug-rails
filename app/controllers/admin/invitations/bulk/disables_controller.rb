@@ -1,8 +1,9 @@
 class Admin::Invitations::Bulk::DisablesController < AdminController
   before_action :set_invitation
 
-  # DELETE /admin/invitation/bulk/disable
-  def destroy
+  # PATCH /admin/invitation/bulk/disable
+  # PUT /admin/invitation/bulk/disable
+  def update
     bulk_results = @invitation.each_with_object({}) do |model, memo|
       memo[model.id] = model.update available: 0
     end
@@ -10,10 +11,10 @@ class Admin::Invitations::Bulk::DisablesController < AdminController
     all_good = bulk_results.values.all?
 
     if all_good
-      flash[:info] = "Bulk delete of invitation was successful"
+      flash[:info] = "Bulk disable of invitations was successful"
       render json: { bulk_results: bulk_results }, status: :ok
     else
-      flash[:error] = "Some invitations could not be deleted"
+      flash[:error] = "Some invitations could not be disabled"
       render json: { bulk_results: bulk_results }, status: :unprocessable_entity
     end
   end
@@ -25,6 +26,6 @@ class Admin::Invitations::Bulk::DisablesController < AdminController
   end
 
   def set_invitation
-    @invitation = Invitations.where id: bulk_params[:ids]
+    @invitation = Invitation.where id: bulk_params[:ids]
   end
 end

@@ -39,14 +39,15 @@
       %td
         = @user.created_at.to_s(:long)
 
-%h2.ui.dividing.header Bookmarks
-%p
-  - bookmark_count = @user.bookmarks.count
-  = bookmark_count
-  = "Bookmark".pluralize bookmark_count
+%h2.ui.dividing.header High Level Stats
 
-%h2.ui.dividing.header Images
-%p
-  - image_count = @user.images.count
-  = image_count
-  = "Image".pluralize image_count
+.ui.statistics
+  .statistic
+    - bookmark_count = @user.bookmarks.count
+    .value= bookmark_count
+    .label= "Bookmark".pluralize bookmark_count
+
+  .statistic
+    - image_count = @user.images.count
+    .value= image_count
+    .label= "Image".pluralize image_count

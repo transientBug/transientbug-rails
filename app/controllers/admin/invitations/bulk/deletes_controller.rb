@@ -1,4 +1,4 @@
-class Admin::Invitationss::Bulk::DeletesController < AdminController
+class Admin::Invitations::Bulk::DeletesController < AdminController
   before_action :set_invitation
 
   # DELETE /admin/invitation/bulk/delete
@@ -10,7 +10,7 @@ class Admin::Invitationss::Bulk::DeletesController < AdminController
     all_good = bulk_results.values.all?
 
     if all_good
-      flash[:info] = "Bulk delete of invitation was successful"
+      flash[:info] = "Bulk delete of invitations was successful"
       render json: { bulk_results: bulk_results }, status: :ok
     else
       flash[:error] = "Some invitations could not be deleted"
@@ -25,6 +25,6 @@ class Admin::Invitationss::Bulk::DeletesController < AdminController
   end
 
   def set_invitation
-    @invitation = Invitations.where id: bulk_params[:ids]
+    @invitation = Invitation.where id: bulk_params[:ids]
   end
 end
