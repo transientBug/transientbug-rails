@@ -4,6 +4,8 @@ class Bookmark < ApplicationRecord
 
   has_and_belongs_to_many :tags
 
+  has_and_belongs_to_many :offline_caches
+
   after_save :schedule_cache
 
   default_scope { includes(:webpage) }
@@ -26,6 +28,10 @@ class Bookmark < ApplicationRecord
     existing = find_by user: user, webpage: webpage
     existing.update attributes.slice("title", "description").merge(tags: tags)
     existing
+  end
+
+  def current_offline_cache
+    offline_caches.last
   end
 
   def schedule_cache

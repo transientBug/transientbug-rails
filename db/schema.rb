@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_31_151111) do
+ActiveRecord::Schema.define(version: 2018_02_07_225108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,11 @@ ActiveRecord::Schema.define(version: 2018_01_31_151111) do
     t.index ["user_id", "webpage_id"], name: "index_bookmarks_on_user_id_and_webpage_id", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
     t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"
+  end
+
+  create_table "bookmarks_offline_caches", id: false, force: :cascade do |t|
+    t.bigint "bookmark_id", null: false
+    t.bigint "offline_cache_id", null: false
   end
 
   create_table "bookmarks_tags", id: false, force: :cascade do |t|
@@ -154,6 +159,15 @@ ActiveRecord::Schema.define(version: 2018_01_31_151111) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "offline_caches", force: :cascade do |t|
+    t.bigint "webpage_id"
+    t.bigint "root_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["root_id"], name: "index_offline_caches_on_root_id"
+    t.index ["webpage_id"], name: "index_offline_caches_on_webpage_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.text "name", null: false
     t.datetime "created_at", null: false
@@ -213,4 +227,6 @@ ActiveRecord::Schema.define(version: 2018_01_31_151111) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "offline_caches", "active_storage_attachments", column: "root_id"
+  add_foreign_key "offline_caches", "webpages"
 end
