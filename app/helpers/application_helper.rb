@@ -16,22 +16,10 @@ module ApplicationHelper
   # icons and text about the action.
   # rubocop:disable Metrics/AbcSize
   def bulk_edit_action behavior, **opts, &block
-    template_prefix = "public" unless controller_path.start_with? "admin/"
-    template_prefix ||= "admin"
-
-    current_controller = controller_path.gsub(%r{^admin/}, "")
-
-    template_path = [
-      template_prefix,
-      "templates",
-      current_controller,
-      behavior
-    ].compact.join "/"
-
     data = {
       group: "bulk-edit-action",
       behavior: behavior,
-      template: template_path
+      template: template_path_for(behavior)
     }.merge opts.except(:id, :class)
 
     options = {
@@ -98,18 +86,9 @@ module ApplicationHelper
   # what data should be available inside of the template. The JS uses the data
   # from the matching #model_tag to help give more context for the template.
   def modal_tag model, template, **opts, &block
-    template_prefix = "public" unless controller_path.start_with? "admin/"
-
-    template_path = [
-      template_prefix,
-      "templates",
-      controller_path,
-      template
-    ].compact.join "/"
-
     data = {
       behavior: "neomodal",
-      template: template_path,
+      template: template_path_for(template),
       storage: "#{ model.class.to_s.underscore }-data"
     }.merge opts.except(:id, :class)
 
@@ -121,4 +100,17 @@ module ApplicationHelper
     tag.div(**options, &block)
   end
   # rubocop:enable Metrics/AbcSize
+
+  def template_path_for *args
+    template_prefix = "public" unless controller_path.start_with? "admin/"
+    template_prefix ||= "admin"
+
+    current_controller = controller_path.gsub(%r{^admin/}, "")
+
+    [
+      template_prefix,
+      "templates",
+      current_controller
+    ].concat(args).flatten.compact.join "/"
+  end
 end

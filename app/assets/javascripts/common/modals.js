@@ -14,7 +14,12 @@ class AutomaticallyWiredModals {
       model: Object.assign({}, storageTarget.dataset)
     }
 
-    const renderedModal = JST[dataset.template](templateData)
+    const template = JST[dataset.template]
+
+    if(!template)
+      throw new Error(`Missing modal template for ${ dataset.template }`)
+
+    const renderedModal = template(templateData)
 
     const modal = $(renderedModal)
     $("body").append(modal)
