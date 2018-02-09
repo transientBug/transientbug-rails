@@ -7,7 +7,7 @@
     .header Bulk Actions
     .menu
       .item
-        = bulk_edit_action "disable-all", url: admin_bookmarks_bulk_recache_path, class: "ui fluid icon button" do
+        = bulk_edit_action "recache-all", url: admin_bookmarks_bulk_recache_path, class: "ui fluid icon button" do
           %i.download.icon
           recache all
 
@@ -16,7 +16,7 @@
           %i.trash.icon
           delete all
 
-%table.ui.celled.table#stickContext
+%table.ui.celled.table
   %thead
     %tr
       %th= select_all_checkbox
@@ -30,7 +30,7 @@
     - if @bookmarks.any?
       - @bookmarks.each do |bookmark|
         %tr
-          %td.collapsing= model_tag bookmark, only: [ :id ]
+          %td.collapsing= model_tag bookmark, only: [ :id, :title, :uri ]
           %td.collapsing
             .ui.buttons
               = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
@@ -40,11 +40,7 @@
               .ui.simple.dropdown.icon.button
                 %i.dropdown.icon
                 .menu
-                  = link_to edit_admin_bookmark_path(bookmark), class: "item" do
-                    %i.edit.icon
-                    edit
-
-                  .item
+                  = modal_tag bookmark, :recache, url: admin_bookmark_cache_index_path(bookmark) do
                     %i.download.icon
                     recache
 

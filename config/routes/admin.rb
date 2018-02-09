@@ -29,27 +29,27 @@ namespace :admin do
 
   resources :users, only: [ :index, :new, :create, :show, :edit, :update ] do
     scope module: :users do
-      resources :password, only: [ :create ]
+      resources :password, only: [ :index, :create ]
 
-      scope as: :users do
-        collection do
-          namespace :bulk do
-            resource :disable, only: [:destroy]
-          end
-        end
-      end
+      # scope as: :users do
+      #   collection do
+      #     namespace :bulk do
+      #       resource :disable, only: [:destroy]
+      #     end
+      #   end
+      # end
     end
   end
 
-  resources :bookmarks do
+  resources :bookmarks, only: [ :index, :show, :destroy ] do
     scope module: :bookmarks do
-      resources :cache, only: [:create]
+      resources :cache, only: [ :create ]
 
       scope as: :bookmarks do
         collection do
           namespace :bulk do
-            resource :recache, only: [:create]
-            resource :delete, only: [:destroy]
+            resource :recache, only: [ :create ]
+            resource :delete, only: [ :destroy ]
           end
         end
       end

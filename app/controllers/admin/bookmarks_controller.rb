@@ -1,6 +1,6 @@
 class Admin::BookmarksController < AdminController
   before_action :set_count
-  before_action :set_bookmark, only: [:show, :edit, :update, :destroy]
+  before_action :set_bookmark, only: [ :show, :destroy ]
 
   # GET /bookmarks
   def index
@@ -21,17 +21,12 @@ class Admin::BookmarksController < AdminController
     end
   end
 
-  # GET /bookmarks/1/edit
-  def edit
-  end
-
-  # PATCH/PUT /bookmarks/1
-  def update
+  def destroy
     respond_to do |format|
-      if @bookmark.update(bookmark_params)
-        format.html { redirect_to [:admin, @bookmark], notice: "Bookmark was successfully updated." }
+      if @bookmark.destroy
+        format.html { redirect_to admin_bookmarks_url, notice: "Bookmark was successfully deleted." }
       else
-        format.html { render :edit }
+        format.html { render :new }
       end
     end
   end
@@ -44,11 +39,5 @@ class Admin::BookmarksController < AdminController
 
   def set_count
     @count = Bookmark.count
-  end
-
-  def bookmark_params
-    params.require(:bookmark).permit(:title).tap do |obj|
-      # TODO: tags, uri
-    end
   end
 end

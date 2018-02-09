@@ -55,6 +55,8 @@ module ApplicationHelper
     only = Array(opts.delete(:only)).map(&:to_s)
     except = Array(opts.delete(:except)).map(&:to_s)
 
+    no_checkbox = opts.delete(:no_checkbox)
+
     attributes.slice!(*only) if only
     attributes.except!(*except) if except
 
@@ -76,7 +78,7 @@ module ApplicationHelper
     tag.div do
       capture do
         concat tag.div(**options, &block)
-        concat bulk_edit_checkbox model
+        concat bulk_edit_checkbox model unless no_checkbox
       end
     end
   end
