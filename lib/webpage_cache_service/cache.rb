@@ -56,6 +56,9 @@ class WebpageCacheService
         obj.save
       end
 
+      if response.status > 399
+        errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }"
+      end
     end
 
     def cache_links
