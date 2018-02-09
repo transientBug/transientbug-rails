@@ -1,21 +1,30 @@
 #!/bin/bash
 set -ev
 
-if [ ! -d directory ]; then
+if [ ! -d elasticsearch-${ES_VERSION} ]; then
+  echo "Downloading ES ${ES_VERSION}"
   wget ${ES_DOWNLOAD_URL}
   tar -xzf elasticsearch-${ES_VERSION}.tar.gz
 fi
 
+echo "Creating test database"
 psql -c 'create database travis_ci_test;' -U postgres
 
+echo "Starting ES"
 ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
 
+echo "Yarn install"
 yarn install
 
-wget -q --waitretry=2 --retry-connrefused -T 20 -O - http://127.0.0.1:9200
-
+echo "Moving CI Master key into place"
 mv config/master.ci.key config/master.key
+
+echo "Moving CI Credentials encrypted file into place"
 rm config/credentials.yml.enc
 mv config/credentials.ci.yml.enc config/credentials.yml.enc
 
+echo "Waiting for ES to finish booting"
+wget -q --waitretry=2 --retry-connrefused -T 30 -O - http://127.0.0.1:9200
+
+echo "Running Specs"
 bundle exec rspec
