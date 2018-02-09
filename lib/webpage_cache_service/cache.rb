@@ -14,7 +14,7 @@ class WebpageCacheService
     def_delegator :@webpage, :uri
 
     def errors
-      offline_cache.errors
+      offline_cache.error_messages
     end
 
     def successful?
@@ -56,7 +56,6 @@ class WebpageCacheService
         obj.save
       end
 
-      errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }" if response.status > 399
     end
 
     def cache_links
@@ -83,7 +82,9 @@ class WebpageCacheService
     def get uri:
       response = client.get uri
 
-      errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }" if response.status > 399
+      if response.status > 399
+        errors.create key: uri, message: "Got non-okay status back from the server: #{ response.status }"
+      end
 
       # Without manually managing the temp file, there isn't an easy way to
       # breakup the following logic but I did my best and fuck you too rubocop
