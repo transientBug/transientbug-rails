@@ -85,12 +85,12 @@ class WebpageCacheService
 
       # Without manually managing the temp file, there isn't an easy way to
       # breakup the following logic but I did my best and fuck you too rubocop
-      attachments = temp_file_for uri: uri do |temp_file, uri_filename|
+      attachments = binary_temp_file do |temp_file|
         write_body response: response, to: temp_file
 
         offline_cache.assets.attach(
           io: temp_file,
-          filename: uri_filename,
+          filename: Digest::SHA256.hexdigest(uri.to_s),
           content_type: get_content_type(response: response, io: temp_file),
           metadata: build_metadata(response: response)
         )
@@ -99,13 +99,11 @@ class WebpageCacheService
       [ response, attachments.first ]
     end
 
-    def temp_file_for uri:
-      uri_filename = Digest::SHA256.hexdigest uri.to_s
-
-      Tempfile.create uri_filename do |temp_file|
+    def binary_temp_file
+      Tempfile.create do |temp_file|
         temp_file.binmode
 
-        yield temp_file, uri_filename
+        yield temp_file
       end
     end
 
