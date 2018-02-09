@@ -1,6 +1,8 @@
 - content_for :page_title do
   Viewing "#{ @invitation.title }"
 
+= model_tag @invitation, no_checkbox: true, only: [ :id, :title, :code ]
+
 .ui.menu
   = link_to edit_admin_invitation_path(@invitation), class: "item" do
     %i.edit.icon
@@ -17,7 +19,7 @@
           DANGERZONE
         .divider
 
-        .item{ data: { behavior: "modal", template: "admin/templates/invitations/delete", url: admin_invitation_path(@invitation), code: @invitation.code, title: @invitation.title } }
+        = modal_tag @invitation, :delete, url: admin_invitation_path(@invitation) do
           %i.trash.icon
           delete
 

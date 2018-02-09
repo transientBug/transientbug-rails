@@ -4,6 +4,8 @@ class Bookmark < ApplicationRecord
 
   has_and_belongs_to_many :tags
 
+  has_and_belongs_to_many :offline_caches
+
   after_save :schedule_cache
 
   default_scope { includes(:webpage) }
@@ -28,7 +30,9 @@ class Bookmark < ApplicationRecord
     existing
   end
 
-  private
+  def current_offline_cache
+    offline_caches.last
+  end
 
   def schedule_cache
     WebpageCacheJob.perform_later bookmark: self

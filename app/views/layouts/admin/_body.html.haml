@@ -10,14 +10,14 @@
 
         = semantic_flash
 
-    - if lookup_context.template_exists?("admin/#{ controller_name }/menu", [], true)
+    - if lookup_context.template_exists?("#{ controller_path }/menu", [], true)
       .ui.two.wide.column
         .ui.row
           = render partial: "menu", locals: { count: @count }
 
       .ui.fourteen.wide.column
         .ui.row
-          = yield
+          #stickContext= yield
 
     - else
       = yield

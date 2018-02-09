@@ -21,6 +21,7 @@ Metrics/BlockLength:
     - db/**/*.rb
     - spec/**/**_spec.rb
     - spec/support/examples/**.rb
+    - config/routes/**/*.rb
 
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https

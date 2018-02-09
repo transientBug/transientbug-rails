@@ -5,14 +5,6 @@ class WebpageCacheJob < ApplicationJob
   attr_reader :bookmark
 
   def perform bookmark:
-    @bookmark = bookmark
-
-    download_original
-  end
-
-  private
-
-  def download_original
-    WebpageCacheService::Cache.new(uri: bookmark.uri, key: bookmark.id).cache
+    WebpageCacheService::Cache.new(webpage: bookmark.webpage).exec
   end
 end

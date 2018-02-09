@@ -2,25 +2,26 @@
   Bookmarks
 
 - content_for :menu do
-  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
     .divider
     .header Bulk Actions
     .menu
       .item
-        .ui.fluid.icon.button
+        = bulk_edit_action "recache-all", url: admin_bookmarks_bulk_recache_path, class: "ui fluid icon button" do
           %i.download.icon
           recache all
 
       .item
-        .ui.fluid.icon.negative.basic.button
+        = bulk_edit_action "delete-all", url: admin_bookmarks_bulk_delete_path, class: "ui fluid icon negative basic button" do
           %i.trash.icon
           delete all
 
-%table.ui.celled.table#stickContext
+%table.ui.celled.table
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
+      %th ID
       %th Creator
       %th URL
       %th Tags
@@ -29,7 +30,7 @@
     - if @bookmarks.any?
       - @bookmarks.each do |bookmark|
         %tr
-          %td.collapsing= check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
+          %td.collapsing= model_tag bookmark, only: [ :id, :title, :uri ]
           %td.collapsing
             .ui.buttons
               = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
@@ -39,11 +40,7 @@
               .ui.simple.dropdown.icon.button
                 %i.dropdown.icon
                 .menu
-                  = link_to edit_admin_bookmark_path(bookmark), class: "item" do
-                    %i.edit.icon
-                    edit
-
-                  .item
+                  = modal_tag bookmark, :recache, url: admin_bookmark_cache_index_path(bookmark) do
                     %i.download.icon
                     recache
 
@@ -52,10 +49,11 @@
                     %i.warning.sign.icon
                     DANGERZONE
 
-                  .item{ data: { behavior: "modal", template: "admin/templates/bookmarks/delete", url: admin_bookmark_path(bookmark), username: bookmark.user.username, title: bookmark.title } }
+                  = modal_tag bookmark, :delete, url: admin_bookmark_path(bookmark) do
                     %i.trash.icon
                     delete
 
+          %td.collapsing= bookmark.id
           %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
           %td= bookmark.uri.to_s
           %td.collapsing= bookmark.tags.map(&:label).join ", "

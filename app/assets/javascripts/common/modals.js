@@ -2,15 +2,27 @@
 // ejs templates. The templates are automatically compiled by the Rails asset
 // pipeline and placed into the global JST object
 class AutomaticallyWiredModals {
-  get _modalTriggers() { return $("[data-behavior~=modal]") }
+  get _modalTriggers() { return $("[data-behavior~=neomodal]") }
 
   handleModalTriggerClick(event) {
     const dataset = event.target.dataset
 
-    const renderedModal = JST[dataset.template](dataset)
+    const storageTarget = document.getElementById(dataset.storage)
+
+    const templateData = {
+      modal: _.omit(dataset, "behavior", "template", "storage"),
+      model: Object.assign({}, storageTarget.dataset)
+    }
+
+    const template = JST[dataset.template]
+
+    if(!template)
+      throw new Error(`Missing modal template for ${ dataset.template }`)
+
+    const renderedModal = template(templateData)
 
     const modal = $(renderedModal)
-    $('body').append(modal)
+    $("body").append(modal)
 
     modal.modal({
       onHidden: (el) => {
