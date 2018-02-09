@@ -1,6 +1,8 @@
 - content_for :page_title do
   Bookmark '#{ @bookmark.title }'
 
+= model_tag @bookmark, only: [ :uri, :title ]
+
 %h2.ui.header
   .content= @bookmark.title
 
@@ -17,7 +19,8 @@
   = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
   .right.menu
     = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
-    .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(@bookmark), uri: @bookmark.uri.to_s, title: @bookmark.title } }
+
+    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark) do
       delete
 
 - if @bookmark.description.present?

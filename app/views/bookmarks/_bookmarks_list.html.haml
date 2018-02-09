@@ -2,16 +2,16 @@
   .ui.menu
     .ui.item= select_all_checkbox
 
-    = bulk_edit_action "recache-all", url: bookmarks_bulk_recache_path do
+    = bulk_edit_action "recache-all", url: bookmarks_bulk_recache_path, template: "public/templates/bookmarks/recache-all" do
       %i.download.icon
       recache
 
-    = bulk_edit_action "tag-all", url: bookmarks_bulk_tag_path do
+    = bulk_edit_action "tag-all", url: bookmarks_bulk_tag_path, template: "public/templates/bookmarks/tag-all" do
       %i.tags.icon
       tags
 
     .right.menu
-      = bulk_edit_action "delete-all", url: bookmarks_bulk_delete_path do
+      = bulk_edit_action "delete-all", url: bookmarks_bulk_delete_path, template: "public/templates/bookmarks/delete-all" do
         %i.trash.icon
         delete all
 
@@ -43,7 +43,7 @@
             = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
             = link_to "edit", edit_bookmark_path(bookmark), class: "ui item"
             .right.menu
-              = modal_tag bookmark, :delete, url: bookmark_path(bookmark) do
+              = modal_tag bookmark, url: bookmark_path(bookmark), template: "public/templates/bookmarks/delete" do
                 delete
 
           .ui.divider

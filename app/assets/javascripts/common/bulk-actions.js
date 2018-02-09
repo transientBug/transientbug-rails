@@ -2,6 +2,7 @@ class BulkActions {
   get _selectCheckboxes() { return $("[data-behavior~=select]") }
   get _selectAllCheckbox() { return $("[data-behavior~=select-all]") }
   get _actions() { return $("[data-group~=bulk-edit-action]") }
+  get _menus() { return $("[data-group~=bulk-edit-menu]") }
 
   allSelectsChecked() {
     return _.every(this._selectCheckboxes, (value) => $(value).prop("checked"))
@@ -17,6 +18,7 @@ class BulkActions {
 
   toggleBulkActionsVisibility(shouldShow) {
     this._actions.toggleClass("hidden", !shouldShow)
+    this._menus.toggleClass("hidden", !shouldShow)
 
     const sticky = this._actions.parents("[data-behavior~=sticky]")
 
@@ -69,6 +71,9 @@ class BulkActions {
     const modelData = $("[data-behavior~=select]:checked").siblings()
       .toArray()
       .map((element) => Object.assign({}, element.dataset))
+
+    if(!BulkActions._handlers[triggerData.behavior])
+      throw new Error(`Missing handler for ${ triggerData.behavior }`)
 
     BulkActions._handlers[triggerData.behavior](triggerData, modelData)
   }

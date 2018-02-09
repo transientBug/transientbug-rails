@@ -24,6 +24,9 @@ class BulkActionsGenericModalHandler {
       models: this.modelData
     }
 
+    if(!this.template)
+      throw new Error(`Missing modal template for ${ this.triggerData.template }`)
+
     const renderedModal = this.template(templateData)
 
     this.modal = $(renderedModal)
@@ -74,3 +77,8 @@ BulkActions.registerHandlerFor("revoke-all", deleteHandler)
 const postHandler = BulkActionsGenericModalHandler.buildHandler("POST")
 
 BulkActions.registerHandlerFor("recache-all", postHandler)
+
+
+const patchHandler = BulkActionsGenericModalHandler.buildHandler("PATCH")
+
+BulkActions.registerHandlerFor("deactivate-all", patchHandler)

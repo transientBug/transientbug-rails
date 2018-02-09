@@ -5,7 +5,6 @@ class WebpageCacheJob < ApplicationJob
   attr_reader :bookmark
 
   def perform bookmark:
-    service = WebpageCacheService.new(webpage: bookmark.webpage).exec
-    bookmark.current_offline_cache = service.offline_cache
+    WebpageCacheService::Cache.new(webpage: bookmark.webpage).exec
   end
 end

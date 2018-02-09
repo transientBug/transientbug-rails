@@ -1,0 +1,28 @@
+= form_for [:admin, user], html: { class: "ui fluid form" } do |f|
+  - if user.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize user.errors.count, "error" } prohibited this user from being saved:"
+      %ul
+        - user.errors.full_messages.each do |message|
+          %li= message
+
+  %h4.ui.dividing.header User Info
+
+  .required.field
+    = f.label :username
+    = f.text_field :username, aria: { describedby: "Users Username" }
+
+  .required.field
+    = f.label :email
+    = f.email_field :email, aria: { describedby: "Users Email" }
+
+  - if user.new_record?
+    .required.field
+      = f.label :password
+      = f.password_field :password, aria: { describedby: "Users Password" }
+
+    .required.field
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }
+
+  = f.submit "Save", class: "ui positive right floated submit button"

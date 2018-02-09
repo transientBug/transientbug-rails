@@ -1,4 +1,13 @@
 - content_for :page_title do
   Editing "#{ @user.username }"
 
+- content_for :menu do
+  .item
+    .divider
+    .header User
+    .menu
+      = link_to admin_user_path(@user), class: "item" do
+        %i.expand.icon
+        view
+
 = render partial: "form", locals: { user: @user }

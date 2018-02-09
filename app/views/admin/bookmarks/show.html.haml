@@ -1,0 +1,60 @@
+- content_for :page_title do
+  Bookmarks
+
+= model_tag @bookmark, no_checkbox: true, only: [ :id, :title, :uri ]
+
+.ui.menu
+  = modal_tag @bookmark, :recache, url: admin_bookmark_cache_index_path(@bookmark) do
+    %i.download.icon
+    recache
+
+  .menu.right
+    .ui.simple.dropdown.item
+      more
+      %i.dropdown.icon
+      .menu
+
+        .header
+          %i.warning.sign.icon
+          DANGERZONE
+        .divider
+
+        = modal_tag @bookmark, :delete, url: admin_bookmark_path(@bookmark) do
+          %i.trash.icon
+          delete
+
+%h2.ui.dividing.header Internal Stuff
+%table.ui.collapsing.celled.table
+  %tbody
+    %tr
+      %td
+        %b ID
+      %td
+        = @bookmark.id
+
+    %tr
+      %td
+        %b Title
+      %td
+        = @bookmark.title
+
+    %tr
+      %td
+        %b URL
+      %td
+        = @bookmark.uri.to_s
+
+    %tr
+      %td
+        %b User
+      %td
+        = link_to @bookmark.user.username, admin_user_path(@bookmark.user)
+
+    %tr
+      %td
+        %b Created At
+      %td
+        = @bookmark.created_at.to_s(:long)
+
+%h2.ui.dividing.header Cache History
+%p Coming Soon

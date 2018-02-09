@@ -5,21 +5,21 @@
   </div>
   <div class="content">
     <p>Are you sure you want to delete this Service Announcement?</p>
-    <table class="table">
+    <table class="ui celled table">
       <tbody>
         <tr>
-          <td>Title</td>
-          <td><%= title %></td>
+          <td><b>Title</b></td>
+          <td><%= model.title %></td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="actions">
-    <div class="ui green basic cancel inverted button">
+    <div class="ui cancel inverted button">
       <i class="remove icon"></i>
       Cancel!
     </div>
-    <a href="<%= url %>" data-method="delete" rel="nofollow" class="ui red ok inverted button">
+    <a href="<%= modal.url %>" data-method="delete" rel="nofollow" class="ui red ok inverted button">
       <i class="checkmark icon"></i>
       Yes, I'm sure
     </a>
