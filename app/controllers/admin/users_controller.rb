@@ -16,6 +16,24 @@ class Admin::UsersController < AdminController
     @users = @users.order(created_at: :desc).page params[:page]
   end
 
+  # GET /users/new
+  def new
+    @user = User.new
+  end
+
+  # POST /users
+  def create
+    @user = User.new new_user_params
+
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to [:admin, @user], notice: "User was successfully created." }
+      else
+        format.html { render :new }
+      end
+    end
+  end
+
   # GET /users/1
   def show
     respond_to do |format|
@@ -24,13 +42,12 @@ class Admin::UsersController < AdminController
   end
 
   # GET /users/1/edit
-  def edit
-  end
+  def edit; end
 
   # PATCH/PUT /users/1
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(edit_user_params)
         format.html { redirect_to [:admin, @user], notice: "User was successfully updated." }
       else
         format.html { render :edit }
@@ -48,13 +65,21 @@ class Admin::UsersController < AdminController
     @count = User.count
   end
 
-  def user_params
-    params.require(:user).permit(:username, :email).tap do |obj|
-      roles = params.dig(:user).fetch(:role_ids, []).map(&:strip).reject(&:empty).map do |role_id|
-        Role.find_by(id: role_id)
-      end
+  def role_models
+    params.dig(:user).fetch(:role_ids, []).map(&:strip).reject(&:empty).map do |role_id|
+      Role.find_by(id: role_id)
+    end
+  end
 
-      obj.merge!(roles: roles)
+  def new_user_params
+    params.require(:user).permit(:username, :email, :password, :password_confirmation).tap do |obj|
+      obj.merge!(roles: role_models)
+    end
+  end
+
+  def edit_user_params
+    params.require(:user).permit(:username, :email).tap do |obj|
+      obj.merge!(roles: role_models)
     end
   end
 end

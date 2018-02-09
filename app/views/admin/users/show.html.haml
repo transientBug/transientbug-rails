@@ -6,7 +6,7 @@
     %i.edit.icon
     edit
 
-  .item
+  = link_to admin_user_password_index_path(@user), class: "item" do
     %i.unlock.alternative.icon
     change password
 
@@ -40,7 +40,13 @@
         = @user.created_at.to_s(:long)
 
 %h2.ui.dividing.header Bookmarks
-%p Coming soon
+%p
+  - bookmark_count = @user.bookmarks.count
+  = bookmark_count
+  = "Bookmark".pluralize bookmark_count
 
 %h2.ui.dividing.header Images
-%p Coming soon
+%p
+  - image_count = @user.images.count
+  = image_count
+  = "Image".pluralize image_count

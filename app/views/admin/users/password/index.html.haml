@@ -1,0 +1,17 @@
+- content_for :page_title do
+  Reseting Password for "#{ @user.username }"
+
+- content_for :menu do
+  .item
+    .divider
+    .header User
+    .menu
+      = link_to admin_user_path(@user), class: "item" do
+        %i.expand.icon
+        view
+
+      = link_to edit_admin_user_path(@user), class: "item" do
+        %i.edit.icon
+        edit
+
+= render partial: "form", locals: { user: @user }
