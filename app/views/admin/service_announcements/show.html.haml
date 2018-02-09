@@ -1,6 +1,8 @@
 - content_for :page_title do
   Viewing "#{ @service_announcement.title }"
 
+= model_tag @service_announcement, no_checkbox: true, only: [ :id, :title ]
+
 .ui.menu
   = link_to edit_admin_service_announcement_path(@service_announcement), class: "item" do
     %i.edit.icon
@@ -15,9 +17,19 @@
       activate
 
   .right.menu
-    .item{ data: { behavior: "modal", template: "admin/templates/service_announcements/delete", url: admin_service_announcement_path(@service_announcement), title: @service_announcement.title } }
-      %i.trash.icon
-      delete
+    .ui.simple.dropdown.item
+      more
+      %i.dropdown.icon
+      .menu
+
+        .header
+          %i.warning.sign.icon
+          DANGERZONE
+        .divider
+
+        = modal_tag @service_announcement, :delete, url: admin_service_announcement_path(@service_announcement) do
+          %i.trash.icon
+          delete
 
 %h2.ui.dividing.header Internal Stuff
 %table.ui.collapsing.celled.table
@@ -68,3 +80,6 @@
         %b Created At
       %td
         = @service_announcement.created_at.to_s(:long)
+
+%h2.ui.dividing.header Preview
+%p Coming Soon
