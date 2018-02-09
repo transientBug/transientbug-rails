@@ -21,7 +21,7 @@ module ApplicationHelper
     data = {
       group: "bulk-edit-action",
       behavior: behavior,
-      template: template,
+      template: template
     }.merge opts.except(:id, :class)
 
     options = {
