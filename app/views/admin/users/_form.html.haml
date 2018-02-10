@@ -28,12 +28,10 @@
   - if current_user != user
     %h4.ui.dividing.header Roles
 
-    = hidden_field_tag "user[roles][]", nil
-
-    - Role.all.each do |role|
+    = f.collection_check_boxes :role_ids, Role.all, :id, :name do |d|
       .field
         .ui.checkbox
-          = check_box_tag "user[roles][]", role.id, user.roles.include?(role), id: dom_id(role)
-          = label_tag dom_id(role), role.name
+          = d.check_box
+          = d.label
 
   = f.submit "Save", class: "ui positive right floated submit button"
