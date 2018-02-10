@@ -73,9 +73,9 @@
             - @bookmark.current_offline_cache.error_messages.each do |error_message|
               .item
                 %i.warning.circle.icon
-                  .content
-                    .header= error_message.key
-                    .description= error_message.message
+                .content
+                  .header= error_message.key
+                  .description= error_message.message
 
       .ui.column
         %h2.ui.dividing.header

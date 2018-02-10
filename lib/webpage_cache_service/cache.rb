@@ -43,6 +43,9 @@ class WebpageCacheService
       # Return self since there is an errors object and the offline cache model
       # that people might care about on this object.
       self
+    rescue => e
+      errors.create key: uri, message: e.message
+      self
     end
 
     private
