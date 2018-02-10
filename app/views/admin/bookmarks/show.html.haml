@@ -80,7 +80,11 @@
       .ui.column
         %h2.ui.dividing.header Cache History
 
-        %p Last cache attempts shown
+        .ui.label
+          - offline_cache_count = @bookmark.offline_caches.count
+          %i.download.icon
+          = offline_cache_count
+          = "Cache".pluralize offline_cache_count
 
         .ui.feed
           - @bookmark.offline_caches.reverse.each do |offline_cache|
@@ -93,10 +97,25 @@
                   Recached at
                   .date= offline_cache.created_at.to_s(:long)
 
+                .meta
+                  -# TODO: Make this have a way to see what the errors were
+                  - error_count = offline_cache.error_messages.count
+                  - if error_count > 0
+                    - icon = "warning circle"
+                    - color = "red"
+                  - else
+                    - icon = "smile"
+                    - color = "green"
+
+                  .ui.label{ class: [ color ] }
+                    %i.icon{ class: [ icon ] }
+                    = error_count
+                    = "Error".pluralize(error_count)
+
                 .extra.text
-                  - offline_cache_count = offline_cache.assets.count
-                  = offline_cache_count
-                  = "Asset".pluralize offline_cache_count
+                  - asset_count = offline_cache.assets.count
+                  = asset_count
+                  = "Asset".pluralize asset_count
                   .ui.list
                     - offline_cache.assets.each do |asset|
                       .item
@@ -104,13 +123,6 @@
                         .content
                           .header= asset.blob.metadata.dig("uri")
                           .description= asset.blob.content_type
-
-                .meta
-                  -# TODO: Make this have a way to see what the errors were
-                  %i.warning.circle.icon
-                  - error_count = offline_cache.error_messages.count
-                  = error_count
-                  = "Error".pluralize(error_count)
 - else
   %h2.ui.dividing.header Cache History
   %p None :(
