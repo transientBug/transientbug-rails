@@ -25,4 +25,15 @@
       = f.label :password_confirmation
       = f.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }
 
+  - if current_user != user
+    %h4.ui.dividing.header Roles
+
+    = hidden_field_tag "user[roles][]", nil
+
+    - Role.all.each do |role|
+      .field
+        .ui.checkbox
+          = check_box_tag "user[roles][]", role.id, user.roles.include?(role), id: dom_id(role)
+          = label_tag dom_id(role), role.name
+
   = f.submit "Save", class: "ui positive right floated submit button"
