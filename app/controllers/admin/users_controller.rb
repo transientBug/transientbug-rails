@@ -66,7 +66,7 @@ class Admin::UsersController < AdminController
   end
 
   def role_models
-    params.dig(:user).fetch(:roles, []).map(&:strip).reject(&:empty?).map do |role_id|
+    params.dig(:user).fetch(:role_ids, []).map(&:strip).reject(&:empty?).map do |role_id|
       Role.find_by(id: role_id)
     end
   end
