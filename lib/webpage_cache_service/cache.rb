@@ -74,6 +74,8 @@ class WebpageCacheService
     def links
       @links ||= ASSET_XPATHS.flat_map(&nokogiri.method(:xpath))
         .map(&:to_s)
+        .uniq
+        .compact
         .map(&Addressable::URI.method(:parse))
         .map { |link| uri + link }
     end

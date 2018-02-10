@@ -80,11 +80,10 @@
       .ui.column
         %h2.ui.dividing.header Cache History
 
-        - history_length = params.fetch(:cache_history, 5)
-        %p Last cache attempts shown (max: #{ history_length })
+        %p Last cache attempts shown
 
         .ui.feed
-          - @bookmark.offline_caches.order(created_at: :desc).limit(history_length).each do |offline_cache|
+          - @bookmark.offline_caches.reverse.each do |offline_cache|
             .event
               .label
                 %i.download.icon
@@ -95,6 +94,9 @@
                   .date= offline_cache.created_at.to_s(:long)
 
                 .extra.text
+                  - offline_cache_count = offline_cache.assets.count
+                  = offline_cache_count
+                  = "Asset".pluralize offline_cache_count
                   .ui.list
                     - offline_cache.assets.each do |asset|
                       .item

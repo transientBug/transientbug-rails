@@ -9,7 +9,7 @@ class Admin::BookmarksController < AdminController
     query_param = params[:q]
     base_where = bookmark_table[:id].eq(query_param)
 
-    @bookmarks = Bookmark.all
+    @bookmarks = Bookmark.includes(:webpage, :tags, :user).all
     @bookmarks = @bookmarks.where(base_where) if query_param.present? && !query_param.empty?
     @bookmarks = @bookmarks.order(created_at: :desc).page params[:page]
   end
@@ -34,7 +34,16 @@ class Admin::BookmarksController < AdminController
   private
 
   def set_bookmark
-    @bookmark = Bookmark.find params[:id]
+    @bookmark = Bookmark.includes(
+      :webpage,
+      :tags,
+      :user,
+      offline_caches: [
+        :error_messages,
+        :assets_attachments,
+        :assets_blobs
+      ]
+    ).find params[:id]
   end
 
   def set_count
