@@ -78,13 +78,14 @@
                     .description= error_message.message
 
       .ui.column
-        %h2.ui.dividing.header Cache History
+        %h2.ui.dividing.header
+          Cache History
 
-        .ui.label
-          - offline_cache_count = @bookmark.offline_caches.count
-          %i.download.icon
-          = offline_cache_count
-          = "Cache".pluralize offline_cache_count
+          .ui.label
+            - offline_cache_count = @bookmark.offline_caches.count
+            %i.download.icon
+            = offline_cache_count
+            = "Cache".pluralize offline_cache_count
 
         .ui.feed
           - @bookmark.offline_caches.reverse.each do |offline_cache|
@@ -94,35 +95,26 @@
 
               .content
                 .summary
-                  Recached at
+                  Recached
                   .date= offline_cache.created_at.to_s(:long)
 
-                .meta
-                  -# TODO: Make this have a way to see what the errors were
-                  - error_count = offline_cache.error_messages.count
-                  - if error_count > 0
-                    - icon = "warning circle"
-                    - color = "red"
-                  - else
-                    - icon = "smile"
-                    - color = "green"
-
-                  .ui.label{ class: [ color ] }
-                    %i.icon{ class: [ icon ] }
-                    = error_count
-                    = "Error".pluralize(error_count)
-
                 .extra.text
-                  - asset_count = offline_cache.assets.count
-                  = asset_count
-                  = "Asset".pluralize asset_count
-                  .ui.list
-                    - offline_cache.assets.each do |asset|
-                      .item
-                        %i.file.icon
-                        .content
-                          .header= asset.blob.metadata.dig("uri")
-                          .description= asset.blob.content_type
+                  .ui.accordion
+                    .title
+                      %i.dropdown.icon
+                      - asset_count = offline_cache.assets.count
+                      = asset_count
+                      = "Asset".pluralize asset_count
+                      = error_count_label offline_cache.error_messages
+
+                    .content
+                      .ui.list
+                        - offline_cache.assets.each do |asset|
+                          .item
+                            %i.file.icon
+                            .content
+                              .header= asset.blob.metadata.dig("uri")
+                              .description= asset.blob.content_type
 - else
   %h2.ui.dividing.header Cache History
   %p None :(
