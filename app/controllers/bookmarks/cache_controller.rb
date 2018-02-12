@@ -8,7 +8,7 @@ class Bookmarks::CacheController < ApplicationController
 
   # GET /bookmarks/1/cache
   def index
-    render status: :not_found unless @bookmark.current_offline_cache
+    render :unavailable, status: :not_found unless @bookmark.current_offline_cache
     render html: renderer.render.html_safe
   end
 
