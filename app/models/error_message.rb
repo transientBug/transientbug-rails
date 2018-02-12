@@ -1,0 +1,2 @@
+class ErrorMessage < ApplicationRecord
+end
