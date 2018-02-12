@@ -14,7 +14,7 @@ class WebpageCacheService
   ].freeze
 
   LINK_XPATHS = [
-    "//a/@href",
+    "//a/@href"
   ].freeze
 
   PARSABLE_MIMES = [
