@@ -5,7 +5,6 @@
         %h4.ui.inverted.header All the Links!
         .ui.inverted.link.list
           .item= link_to "Home", home_path
-          .item= link_to "Images", images_path
 
           - if signed_in?
             .item= link_to "Bookmarks", bookmarks_path
@@ -14,16 +13,8 @@
           - if Rails.env.development?
             .item= link_to "Dev Auth", auth_path(:developer)
 
-          .item= link_to "API Docs", apitome.root_path
-
-      .three.wide.column
-        %h4.ui.inverted.header All the Love!
-        %p
-          Made with
-        %p
-          %i.red.heart.icon
-        %p
-          in Boulder, Colorado
+          .item= link_to "Firefox Extension", "https://github.com/transientBug/firefox-extension"
+          .item= link_to "Images", images_path
 
       .three.wide.column
         %h4.ui.inverted.header All the Credits!
@@ -35,17 +26,27 @@
               %i.github.icon
               The codez
 
+      .three.wide.column
+        %h4.ui.inverted.header All the Love!
+        %p
+          Made with
+        %p
+          %i.red.heart.icon
+        %p
+          in Boulder, Colorado
+
       .seven.wide.column
         %h4.ui.inverted.header transientBug
-        %p Dedicated to being the personal storagemahjigger for these newfangled anima-motion stillframes called "gah-iffs" and bookmarks.
+        %p Dedicated to being the best storagemahjigger for bookmarks, with a dash of these newfangled anima-motion stillframes called "gah-iffs".
 
     .ui.inverted.section.divider
 
     = image_tag "bug_logo.png", class: "ui centered mini image"
 
     .ui.horizontal.inverted.small.divided.link.list
-      -#.item Site Map
-      .item me (at) transientbug.ninja
+      .item= link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues"
       .item= link_to "FAQ", faq_path
-      -#.item Terms and Conditions
-      -#.item Privacy Policy
+      .item= link_to "API Docs", apitome.root_path
+      .item support (at) transientbug.ninja
+      .item= link_to "Terms of Service", tos_path
+      .item= link_to "Privacy Policy", privacy_path
