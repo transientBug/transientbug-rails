@@ -20,11 +20,27 @@
 
   .field
     = f.label :icon
-    = f.text_field :icon, aria: { describedby: "Service Announcement Icon" }
+    .ui.selection.dropdown{ data: { behavior: "dropdown" } }
+      = f.select :icon, options_for_select(ServiceAnnouncement.icons.keys)
+      %i.dropdown.icon
+      .default.text Announcement
+      .menu
+        - ServiceAnnouncement.icons.each do |k, v|
+          .item{ data: { value: k } }
+            %i.icon{ class: k }
+            = k.humanize.capitalize
 
   .field
     = f.label :color
-    = f.text_field :color, aria: { describedby: "Service Announcement Color" }
+    .ui.selection.dropdown{ data: { behavior: "dropdown" } }
+      = f.select :color, options_for_select(ServiceAnnouncement.colors.keys)
+      %i.dropdown.icon
+      .default.text Plain
+      .menu
+        - ServiceAnnouncement.colors.each do |k, v|
+          .item{ data: { value: k } }
+            %i.square.icon{ class: k }
+            = k.humanize.capitalize
 
   %h4.ui.dividing.header Limits
   .ui.info.message

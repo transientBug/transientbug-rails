@@ -82,4 +82,5 @@
         = @service_announcement.created_at.to_s(:long)
 
 %h2.ui.dividing.header Preview
-%p Coming Soon
+
+= render partial: "layouts/service_announcements", locals: { service_announcements: [ @service_announcement ] }
