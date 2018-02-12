@@ -101,15 +101,20 @@ class WebpageCacheService
       attachments = binary_temp_file do |temp_file|
         write_body response: response, to: temp_file
 
+        content_type = get_content_type(response: response, io: temp_file)
+
+        temp_file.rewind
         offline_cache.assets.attach(
           io: temp_file,
           filename: Digest::SHA256.hexdigest(uri.to_s),
-          content_type: get_content_type(response: response, io: temp_file),
+          content_type: content_type,
           metadata: build_metadata(response: response)
         )
       end
 
-      [ response, attachments.first ]
+      attachment = attachments.first
+
+      [ response, attachment ]
     end
 
     def binary_temp_file
@@ -144,6 +149,7 @@ class WebpageCacheService
       return response.content_type.mime_type if response.content_type.mime_type
 
       io_handle = io
+      io_handle.rewind
 
       # some websites *cough*offline.pink*cough* don't return a content type
       # header, so we'll first see if the html doctype string is present and

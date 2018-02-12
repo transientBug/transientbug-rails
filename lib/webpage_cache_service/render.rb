@@ -39,16 +39,26 @@ class WebpageCacheService
     def rewrite_links!
       ASSET_XPATHS.each do |xpath|
         nokogiri.xpath(xpath).each do |xpath_attr|
+          xpath_attr.value = rewrite_asset_link xpath_attr.value
+        end
+      end
+
+      LINK_XPATHS.each do |xpath|
+        nokogiri.xpath(xpath).each do |xpath_attr|
           xpath_attr.value = rewrite_link xpath_attr.value
         end
       end
     end
 
-    def rewrite_link url
+    def rewrite_asset_link url
       link = uri + Addressable::URI.parse( url )
       link_key = Digest::SHA256.hexdigest link.to_s
 
       base_uri + link_key
+    end
+
+    def rewrite_link url
+      uri + Addressable::URI.parse( url )
     end
 
     def find_attachment key:
