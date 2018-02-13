@@ -37,6 +37,8 @@ services:
       - "redis"
     build:
       context: .
+    volumes:
+      - "./storage:/dropzone"
     command: bundle exec sidekiq -C config/sidekiq.yml
     networks:
       - "services"
