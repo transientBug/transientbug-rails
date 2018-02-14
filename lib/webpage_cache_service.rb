@@ -13,6 +13,10 @@ class WebpageCacheService
     "//img/@src"
   ].freeze
 
+  LINK_XPATHS = [
+    "//a/@href"
+  ].freeze
+
   PARSABLE_MIMES = [
     "text/html",
     "application/xhtml+xml"

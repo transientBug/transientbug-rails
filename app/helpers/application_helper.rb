@@ -71,7 +71,7 @@ module ApplicationHelper
 
     options = {
       class: "hidden model-data",
-      id: "#{ model.class.to_s.underscore }-data",
+      id: "#{ model.class.to_s.underscore }-data-#{ model.id }",
       data: data
     }.merge opts
 
@@ -95,7 +95,7 @@ module ApplicationHelper
     data = {
       behavior: "neomodal",
       template: template,
-      storage: "#{ model.class.to_s.underscore }-data"
+      storage: "#{ model.class.to_s.underscore }-data-#{ model.id }"
     }.merge opts.except(:id, :class)
 
     options = {

@@ -85,6 +85,18 @@ ActiveRecord::Schema.define(version: 2018_02_12_151435) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "error_messages", force: :cascade do |t|
+    t.string "key"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "error_messages_offline_caches", id: false, force: :cascade do |t|
+    t.bigint "offline_cache_id", null: false
+    t.bigint "error_message_id", null: false
+  end
+
   create_table "images", force: :cascade do |t|
     t.bigint "user_id"
     t.text "title"

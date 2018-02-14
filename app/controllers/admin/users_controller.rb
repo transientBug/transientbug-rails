@@ -66,7 +66,7 @@ class Admin::UsersController < AdminController
   end
 
   def role_models
-    params.dig(:user).fetch(:role_ids, []).map(&:strip).reject(&:empty).map do |role_id|
+    params.dig(:user).fetch(:role_ids, []).map(&:strip).reject(&:empty?).map do |role_id|
       Role.find_by(id: role_id)
     end
   end
@@ -79,7 +79,7 @@ class Admin::UsersController < AdminController
 
   def edit_user_params
     params.require(:user).permit(:username, :email).tap do |obj|
-      obj.merge!(roles: role_models)
+      obj.merge!(roles: role_models) unless @user == current_user
     end
   end
 end
