@@ -25,6 +25,7 @@
       %th Creator
       %th URL
       %th Tags
+      %th Cache
       %th Created At
   %tbody
     - if @bookmarks.any?
@@ -57,6 +58,15 @@
           %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
           %td= bookmark.uri.to_s
           %td.collapsing= bookmark.tags.map(&:label).join ", "
+
+          %td.collapsing
+            - if bookmark.offline_caches.last
+              = error_count_label bookmark.offline_caches.last.error_messages
+            - else
+              .ui.label
+                %i.meh.icon
+                Uncached
+
           %td.collapsing= bookmark.created_at.to_s(:long)
 
     - else

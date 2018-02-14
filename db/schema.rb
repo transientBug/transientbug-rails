@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_07_225108) do
+ActiveRecord::Schema.define(version: 2018_02_09_210120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,18 @@ ActiveRecord::Schema.define(version: 2018_02_07_225108) do
     t.jsonb "job_arguments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "error_messages", force: :cascade do |t|
+    t.string "key"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "error_messages_offline_caches", id: false, force: :cascade do |t|
+    t.bigint "offline_cache_id", null: false
+    t.bigint "error_message_id", null: false
   end
 
   create_table "images", force: :cascade do |t|

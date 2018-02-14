@@ -14,7 +14,7 @@ class WebpageCacheService
     def_delegator :@webpage, :uri
 
     def errors
-      @errors ||= Errors.new
+      offline_cache.error_messages
     end
 
     def successful?
@@ -33,6 +33,7 @@ class WebpageCacheService
       headers.delete key
     end
 
+    # rubocop:disable Lint/RescueWithoutErrorClass
     def exec
       cache_root
 
@@ -43,7 +44,11 @@ class WebpageCacheService
       # Return self since there is an errors object and the offline cache model
       # that people might care about on this object.
       self
+    rescue => e
+      errors.create key: uri, message: e.message
+      self
     end
+    # rubocop:enable Lint/RescueWithoutErrorClass
 
     private
 
@@ -56,7 +61,9 @@ class WebpageCacheService
         obj.save
       end
 
-      errors.add uri, "Got non-okay status back from the server: #{ response.status }" if response.status > 399
+      errors.create key: uri, message: <<~MSG if response.status > 399
+        Got non-okay status back from the server: #{ response.status }
+      MSG
     end
 
     def cache_links
@@ -72,6 +79,8 @@ class WebpageCacheService
     def links
       @links ||= ASSET_XPATHS.flat_map(&nokogiri.method(:xpath))
         .map(&:to_s)
+        .uniq
+        .compact
         .map(&Addressable::URI.method(:parse))
         .map { |link| uri + link }
     end
@@ -83,20 +92,29 @@ class WebpageCacheService
     def get uri:
       response = client.get uri
 
+      errors.create key: uri, message: <<~MSG if response.status > 399
+        Got non-okay status back from the server: #{ response.status }
+      MSG
+
       # Without manually managing the temp file, there isn't an easy way to
       # breakup the following logic but I did my best and fuck you too rubocop
       attachments = binary_temp_file do |temp_file|
         write_body response: response, to: temp_file
 
+        content_type = get_content_type(response: response, io: temp_file)
+
+        temp_file.rewind
         offline_cache.assets.attach(
           io: temp_file,
           filename: Digest::SHA256.hexdigest(uri.to_s),
-          content_type: get_content_type(response: response, io: temp_file),
+          content_type: content_type,
           metadata: build_metadata(response: response)
         )
       end
 
-      [ response, attachments.first ]
+      attachment = attachments.first
+
+      [ response, attachment ]
     end
 
     def binary_temp_file
@@ -131,6 +149,7 @@ class WebpageCacheService
       return response.content_type.mime_type if response.content_type.mime_type
 
       io_handle = io
+      io_handle.rewind
 
       # some websites *cough*offline.pink*cough* don't return a content type
       # header, so we'll first see if the html doctype string is present and
