@@ -46,14 +46,9 @@
         = @service_announcement.active
     %tr
       %td
-        %b Title
+        %b Only for Logged In Users??
       %td
-        = @service_announcement.title
-    %tr
-      %td
-        %b Message
-      %td
-        = @service_announcement.message
+        = @service_announcement.logged_in_only
     %tr
       %td
         %b Icon

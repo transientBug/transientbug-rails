@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_12_151435) do
+ActiveRecord::Schema.define(version: 2018_02_14_183218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 2018_02_12_151435) do
     t.boolean "active", default: true
     t.integer "icon", default: 0
     t.integer "color", default: 0
+    t.boolean "logged_in_only", default: false
   end
 
   create_table "tags", force: :cascade do |t|

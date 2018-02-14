@@ -16,45 +16,65 @@
     = f.label :message
     = f.text_area :message, aria: { describedby: "Service Announcement Message" }
 
-  %h5.ui.dividing.header Visual Items
+    .ui.info.message
+      %p Messages are formatted as Markdown, using the #{ link_to "Redcarpet", "https://github.com/vmg/redcarpet" } gem.
 
-  .field
-    = f.label :icon
-    .ui.selection.dropdown{ data: { behavior: "dropdown" } }
-      = f.select :icon, options_for_select(ServiceAnnouncement.icons.keys)
-      %i.dropdown.icon
-      .default.text Announcement
-      .menu
-        - ServiceAnnouncement.icons.each do |k, v|
-          .item{ data: { value: k }, class: [ service_announcement.icon == k ? "active selected" : "" ] }
-            %i.icon{ class: k }
-            = k.humanize.capitalize
+  .ui.equal.width.grid
+    .ui.column
+      %h5.ui.dividing.header Visual Items
 
-  .field
-    = f.label :color
-    .ui.selection.dropdown{ data: { behavior: "dropdown" } }
-      = f.select :color, options_for_select(ServiceAnnouncement.colors.keys)
-      %i.dropdown.icon
-      .default.text Plain
-      .menu
-        - ServiceAnnouncement.colors.each do |k, v|
-          .item{ data: { value: k }, class: [ service_announcement.color == k ? "active selected" : "" ] }
-            %i.square.icon{ class: k }
-            = k.humanize.capitalize
+      .field
+        = f.label :icon
+        .ui.selection.dropdown{ data: { behavior: "dropdown" } }
+          = f.hidden_field :icon
+          %i.dropdown.icon
+          .default.text Announcement
+          .menu
+            - ServiceAnnouncement.icons.each do |k, v|
+              .item{ data: { value: k }, class: [ service_announcement.icon == k ? "active selected" : "" ] }
+                %i.icon{ class: k }
+                = k.humanize.capitalize
 
-  %h4.ui.dividing.header Limits
-  .ui.info.message
-    %p Setting a start and end date allows the service announcement to handle the logic behind being shown and hidden automatically.
-    %ul.list
-      %li A lack of a starting date will result in the announcement being visible the from the moment it is created until the end date.
-      %li No end date will result in the announcement displaying indefinitely or until manually deactivated.
+      .field
+        = f.label :color
+        .ui.selection.dropdown{ data: { behavior: "dropdown" } }
+          = f.hidden_field :color
+          %i.dropdown.icon
+          .default.text Plain
+          .menu
+            - ServiceAnnouncement.colors.each do |k, v|
+              .item{ data: { value: k }, class: [ service_announcement.color == k ? "active selected" : "" ] }
+                %i.square.icon{ class: k }
+                = k.humanize.capitalize
 
-  .field
-    = f.label :start_at
-    = f.datetime_field :start_at, aria: { describedby: "Service Announcement Start At" }
+    .ui.column
+      %h4.ui.dividing.header Limits
 
-  .field
-    = f.label :end_at
-    = f.datetime_field :end_at, aria: { describedby: "Service Announcement End At" }
+      .ui.equal.width.relaxed.grid
+        .ui.row
+          .ui.column
+            .ui.info.message
+              %p Setting a start and end date allows the service announcement to handle the logic behind being shown and hidden automatically.
+              %ul.list
+                %li No starting: the announcement being visible the from the moment it is created until the end date.
+                %li No end date: the announcement displays indefinitely or until manually deactivated.
+
+        .ui.row
+          .ui.column
+            .field
+              = f.label :start_at
+              = f.datetime_field :start_at, aria: { describedby: "Service Announcement Start At" }
+
+          .ui.column
+            .field
+              = f.label :end_at
+              = f.datetime_field :end_at, aria: { describedby: "Service Announcement End At" }
+
+        .ui.row
+          .ui.column
+            .field
+              .ui.checkbox
+                = f.check_box :logged_in_only
+                = f.label :logged_in_only
 
   = f.submit "Save", class: "ui positive right floated submit button"
