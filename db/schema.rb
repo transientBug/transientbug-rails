@@ -192,20 +192,8 @@ ActiveRecord::Schema.define(version: 2018_02_14_183218) do
     t.bigint "user_id", null: false
   end
 
-  create_table "service_announcements", force: :cascade do |t|
-    t.text "title"
-    t.text "message"
-    t.text "color_text"
-    t.datetime "start_at"
-    t.datetime "end_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "icon_text"
-    t.boolean "active", default: true
-    t.integer "icon", default: 0
-    t.integer "color", default: 0
-    t.boolean "logged_in_only", default: false
-  end
+# Could not dump table "service_announcements" because of following StandardError
+#   Unknown type 'icon' for column 'icon'
 
   create_table "tags", force: :cascade do |t|
     t.text "label"

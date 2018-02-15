@@ -1,32 +1,32 @@
 class ServiceAnnouncement < ApplicationRecord
   # https://semantic-ui.com/globals/site.html#colors
   enum color: {
-    plain: 0,
-    red: 1,
-    orange: 2,
-    yellow: 3,
-    olive: 4,
-    green: 5,
-    teal: 6,
-    blue: 7,
-    violet: 8,
-    purple: 9,
-    pink: 10,
-    brown: 11,
-    grey: 12,
-    black: 13
+    plain: "plain",
+    red: "red",
+    orange: "orange",
+    yellow: "yellow",
+    olive: "olive",
+    green: "green",
+    teal: "teal",
+    blue: "blue",
+    violet: "violet",
+    purple: "purple",
+    pink: "pink",
+    brown: "brown",
+    grey: "grey",
+    black: "black"
   }
 
   # https://semantic-ui.com/elements/icon.html#message
   enum icon: {
-    announcement: 0,
-    help: 1,
-    info: 2,
-    warning: 3,
-    talk: 4,
-    settings: 5,
-    alarm: 6,
-    lab: 7
+    announcement: "announcement",
+    help: "help",
+    info: "info",
+    warning: "warning",
+    talk: "talk",
+    settings: "settings",
+    alarm: "alarm",
+    lab: "lab"
   }
 
   scope :active, ->{ where(active: true) }
