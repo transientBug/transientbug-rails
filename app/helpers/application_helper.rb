@@ -4,7 +4,10 @@ module ApplicationHelper
   end
 
   def render_service_announcements
-    render partial: "layouts/service_announcements", locals: { service_announcements: ServiceAnnouncement.displayable }
+    service_announcements = ServiceAnnouncement.displayable
+    service_announcements = service_announcements.where(logged_in_only: false) unless current_user
+
+    render partial: "layouts/service_announcements", locals: { service_announcements: service_announcements }
   end
 
   # Builds out a "clickable item" div which contains all of the information

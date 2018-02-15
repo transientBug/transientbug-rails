@@ -10,6 +10,7 @@ AllCops:
   Exclude:
     - bin/*
     - db/migrate/*
+    - db/schema.rb
 
 # Configuration parameters: Include, TreatCommentsAsGroupSeparators.
 # Include: **/Gemfile, **/gems.rb
