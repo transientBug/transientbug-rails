@@ -46,25 +46,21 @@
         = @service_announcement.active
     %tr
       %td
-        %b Title
+        %b Only for Logged In Users??
       %td
-        = @service_announcement.title
-    %tr
-      %td
-        %b Message
-      %td
-        = @service_announcement.message
+        = @service_announcement.logged_in_only
     %tr
       %td
         %b Icon
       %td
-        = @service_announcement.icon
         %i.icon{ class: [ @service_announcement.color, @service_announcement.icon ] }
+        = @service_announcement.icon.humanize.capitalize
     %tr
       %td
         %b Color
       %td
-        = @service_announcement.color
+        %i.square.icon{ class: @service_announcement.color }
+        = @service_announcement.color.humanize.capitalize
     %tr
       %td
         %b Start At
@@ -82,4 +78,5 @@
         = @service_announcement.created_at.to_s(:long)
 
 %h2.ui.dividing.header Preview
-%p Coming Soon
+
+= render partial: "layouts/service_announcements", locals: { service_announcements: [ @service_announcement ] }

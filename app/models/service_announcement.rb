@@ -1,6 +1,32 @@
 class ServiceAnnouncement < ApplicationRecord
-  validates :color, inclusion: {
-    in: %w( plain red orange yellow olive green teal blue violet purple pink brown grey black )
+  # https://semantic-ui.com/globals/site.html#colors
+  enum color: {
+    plain: "plain",
+    red: "red",
+    orange: "orange",
+    yellow: "yellow",
+    olive: "olive",
+    green: "green",
+    teal: "teal",
+    blue: "blue",
+    violet: "violet",
+    purple: "purple",
+    pink: "pink",
+    brown: "brown",
+    grey: "grey",
+    black: "black"
+  }
+
+  # https://semantic-ui.com/elements/icon.html#message
+  enum icon: {
+    announcement: "announcement",
+    help: "help",
+    info: "info",
+    warning: "warning",
+    talk: "talk",
+    settings: "settings",
+    alarm: "alarm",
+    lab: "lab"
   }
 
   scope :active, ->{ where(active: true) }
