@@ -6,7 +6,7 @@ class Bookmark < ApplicationRecord
 
   has_and_belongs_to_many :offline_caches
 
-  after_save :schedule_cache
+  after_create :schedule_cache
 
   default_scope { includes(:webpage) }
 
