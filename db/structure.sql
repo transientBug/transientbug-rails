@@ -59,6 +59,16 @@ CREATE TYPE icon AS ENUM (
 );
 
 
+--
+-- Name: import_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE import_type AS ENUM (
+    'pinboard',
+    'pocket'
+);
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -306,6 +316,16 @@ ALTER SEQUENCE error_messages_id_seq OWNED BY error_messages.id;
 
 
 --
+-- Name: error_messages_import_data; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE error_messages_import_data (
+    import_datum_id bigint NOT NULL,
+    error_message_id bigint NOT NULL
+);
+
+
+--
 -- Name: error_messages_offline_caches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -348,6 +368,39 @@ CREATE SEQUENCE images_id_seq
 --
 
 ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
+-- Name: import_data; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE import_data (
+    id bigint NOT NULL,
+    user_id bigint,
+    import_type import_type,
+    complete boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: import_data_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE import_data_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: import_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE import_data_id_seq OWNED BY import_data.id;
 
 
 --
@@ -799,6 +852,13 @@ ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY import_data ALTER COLUMN id SET DEFAULT nextval('import_data_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY invitations ALTER COLUMN id SET DEFAULT nextval('invitations_id_seq'::regclass);
 
 
@@ -934,6 +994,14 @@ ALTER TABLE ONLY error_messages
 
 ALTER TABLE ONLY images
     ADD CONSTRAINT images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: import_data_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY import_data
+    ADD CONSTRAINT import_data_pkey PRIMARY KEY (id);
 
 
 --
@@ -1089,6 +1157,13 @@ CREATE INDEX index_images_on_user_id ON images USING btree (user_id);
 
 
 --
+-- Name: index_import_data_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_import_data_on_user_id ON import_data USING btree (user_id);
+
+
+--
 -- Name: index_invitations_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1224,6 +1299,14 @@ ALTER TABLE ONLY images
 
 
 --
+-- Name: fk_rails_2ff3d85fb1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY import_data
+    ADD CONSTRAINT fk_rails_2ff3d85fb1 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_330c32d8d9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1347,6 +1430,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180209210120'),
 ('20180212151406'),
 ('20180212151435'),
-('20180214183218');
+('20180214183218'),
+('20180223222455');
 
 
