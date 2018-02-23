@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2.0.beta", github: "rails/rails"
+gem "rails", "~> 5.2.0.rc1", github: "rails/rails", branch: "5-2-stable"
 gem "arel", "~> 9.0.0",  github: "rails/arel"
 
 # Data Stores
@@ -33,7 +33,7 @@ gem "rack-cors"
 gem "bcrypt"
 
 # Server
-gem "puma", "~> 3.7"
+gem "puma", "~> 3.11"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
