@@ -14,9 +14,11 @@ class ImportData::PinboardJob < ApplicationJob
     json_data = JSON.parse @import_data.upload.download
 
     json_data.each do |entry|
+      href = entry["href"]
       tags = entry["tags"].split(",").map(&:chomp)
+      created_at = Time.parse entry["time"]
 
-      Bookmark.for(@import_data.user, entry["href"]).tap do |bookmark|
+      Bookmark.for(@import_data.user, href).tap do |bookmark|
         # See also https://pinboard.in/api/#posts_add
         #
         # > description: Title of the item. This field is unfortunately named
@@ -28,6 +30,8 @@ class ImportData::PinboardJob < ApplicationJob
         bookmark.description = entry["extended"]
 
         bookmark.tags = Tag.find_or_create_tags(tags: tags)
+
+        bookmark.created_at = created_at if boookmark.new_record?
       end.upsert
     end
 

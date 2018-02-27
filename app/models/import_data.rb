@@ -13,11 +13,6 @@ class ImportData < ApplicationRecord
   after_create :schedule_import
 
   def schedule_import
-    case import_type
-    when :pinboard
-      ImportData::Pinboard.perform_later import_data: self
-    when :pocket
-      ImportData::Pocket.perform_later import_data: self
-    end
+    ImportDataJob.perform_later import_data: self
   end
 end

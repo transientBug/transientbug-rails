@@ -1,0 +1,5 @@
+= form_tag profile_import_index_path, method: :post, class: "ui fluid form" do
+  .required.field
+    = file_field_tag :upload, aria: { describedby: "Upload file" }
+
+  = submit_tag "Import", class: "ui positive right floated submit button"
