@@ -1,0 +1,28 @@
+- content_for :page_title do
+  Import
+
+= render partial: "profiles/tabs"
+
+%h2.ui.dividing.header Import
+%p
+  Currently, importing from
+  = link_to "pinboard", "https://pinboard.in/"
+  and
+  = link_to "pocket", "https://getpocket.com/"
+  \.
+
+%h4.header Pinboard
+%p
+  %ol
+    %li Click "settings"
+    %li Click the "backup" tab
+    %li Click the JSON format version
+
+%h4.header Pocket
+%p
+  %ol
+    %li Click on your username in the upper right hand corner
+    %li Click "Export"
+    %li Click "Export HTML File"
+
+= render partial: "form", locals: { user: @user }

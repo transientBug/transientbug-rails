@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :images
   has_many :bookmarks
 
+  has_many :import_data
+
   has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
   validates :username, presence: true
