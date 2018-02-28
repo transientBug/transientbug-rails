@@ -11,14 +11,14 @@ class ImportData::PocketJob < ApplicationJob
   private
 
   def parse_file
-    nokogiri = Nokogiri::XML.parse import_data.upload.blob.download
+    nokogiri = Nokogiri::HTML import_data.upload.blob.download
 
     nokogiri.search("li").each do |node|
       anchor_child = node.child
 
       href = anchor_child["href"]
       tags = anchor_child["tags"].split(",").map(&:chomp)
-      created_at = Time.at anchor_child["time_at"].to_i
+      created_at = Time.at anchor_child["time_added"].to_i
 
       Bookmark.for(@import_data.user, href).tap do |bookmark|
         # Pocket doesn't have a concept of descriptions, only title and tags
