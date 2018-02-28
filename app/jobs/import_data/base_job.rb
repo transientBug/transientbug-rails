@@ -28,7 +28,7 @@ class ImportData::BaseJob < ApplicationJob
     fail NotImplementedError
   end
 
-  def parse_entry entry
+  def parse_entry _entry
     fail NotImplementedError
   end
 
