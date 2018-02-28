@@ -1,45 +1,29 @@
-class ImportData::PinboardJob < ApplicationJob
-  queue_as :default
-  attr_reader :import_data
-
-  def perform import_data:
-    @import_data = import_data
-
-    return if @import_data.complete?
-
-    parse_file
-  end
-
-  private
-
-  # rubocop:disable Metrics/AbcSize
+class ImportData::PinboardJob < ImportData::BaseJob
   def parse_file
-    json_data = JSON.parse @import_data.upload.download
-
-    json_data.each do |entry|
-      href = entry["href"]
-      tags = entry["tags"].split(",").map(&:chomp)
-      created_at = Time.parse entry["time"]
-
-      Bookmark.for(@import_data.user, href).tap do |bookmark|
-        # See also https://pinboard.in/api/#posts_add
-        #
-        # > description: Title of the item. This field is unfortunately named
-        #   'description' for backwards compatibility with the delicious API
-        #
-        # > extended: Description of the item. Called 'extended' for backwards
-        #   compatibility with delicious API
-        bookmark.title       = entry["description"]
-        bookmark.description = entry["extended"]
-
-        bookmark.tags = Tag.find_or_create_tags(tags: tags)
-
-        bookmark.created_at = created_at if bookmark.new_record?
-      end.upsert
-    end
-
-    import_data.update complete: true
-    # TODO: Imported notification?
+    JSON.parse import_data.upload.download
   end
-  # rubocop:enable Metrics/AbcSize
+
+  def parse_entry entry
+    raw_tags = entry["tags"].split(",").map(&:chomp)
+    tags = Tag.find_or_create_tags tags: raw_tags
+
+    created_at = Time.parse entry["time"]
+
+    # See also https://pinboard.in/api/#posts_add
+    #
+    # > description: Title of the item. This field is unfortunately named
+    #   'description' for backwards compatibility with the delicious API
+    #
+    # > extended: Description of the item. Called 'extended' for backwards
+    #   compatibility with delicious API
+    [
+      entry["href"],
+      {
+        title: entry["description"],
+        description: entry["extended"],
+        tags: tags
+      },
+      created_at
+    ]
+  end
 end
