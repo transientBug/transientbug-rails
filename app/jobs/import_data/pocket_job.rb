@@ -12,6 +12,7 @@ class ImportData::PocketJob < ApplicationJob
 
   private
 
+  # rubocop:disable Metrics/AbcSize
   def parse_file
     nokogiri = Nokogiri::HTML import_data.upload.blob.download
 
@@ -35,4 +36,5 @@ class ImportData::PocketJob < ApplicationJob
     import_data.update complete: true
     # TODO: Imported notification?
   end
+  # rubocop:enable Metrics/AbcSize
 end

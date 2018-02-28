@@ -12,6 +12,7 @@ class ImportData::PinboardJob < ApplicationJob
 
   private
 
+  # rubocop:disable Metrics/AbcSize
   def parse_file
     json_data = JSON.parse @import_data.upload.download
 
@@ -40,4 +41,5 @@ class ImportData::PinboardJob < ApplicationJob
     import_data.update complete: true
     # TODO: Imported notification?
   end
+  # rubocop:enable Metrics/AbcSize
 end
