@@ -99,4 +99,13 @@ Rails.application.configure do
   config.active_storage.service = :dropzone
 
   config.active_job.queue_adapter = :sidekiq
+
+  config.middleware.use ExceptionNotification::Rack,
+  slack: {
+    webhook_url: Rails.application.credentials.buggy_slack_webhook,
+    channel: "#transientbug-alerts",
+    additional_parameters: {
+      mrkdwn: true
+    }
+  }
 end
