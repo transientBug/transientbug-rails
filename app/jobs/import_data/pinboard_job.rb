@@ -5,6 +5,8 @@ class ImportData::PinboardJob < ApplicationJob
   def perform import_data:
     @import_data = import_data
 
+    return if @import_data.complete?
+
     parse_file
   end
 
