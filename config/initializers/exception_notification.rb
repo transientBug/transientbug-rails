@@ -23,13 +23,14 @@ ExceptionNotification.configure do |config|
   #   :exception_recipients => %w{exceptions@example.com}
   # }
 
-  config.add_notifier :slack, {
+  config.add_notifier(
+    :slack,
     webhook_url: Rails.application.credentials.buggy_slack_webhook,
     channel: "#transientbug-alerts",
     additional_parameters: {
       mrkdwn: true
     }
-  }
+  )
 
   # Campfire notifier sends notifications to your Campfire room. Requires 'tinder' gem.
   # config.add_notifier :campfire, {
@@ -49,5 +50,4 @@ ExceptionNotification.configure do |config|
   #   :url => 'http://example.com:5555/hubot/path',
   #   :http_method => :post
   # }
-
 end
