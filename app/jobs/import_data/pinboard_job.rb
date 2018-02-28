@@ -31,7 +31,7 @@ class ImportData::PinboardJob < ApplicationJob
 
         bookmark.tags = Tag.find_or_create_tags(tags: tags)
 
-        bookmark.created_at = created_at if boookmark.new_record?
+        bookmark.created_at = created_at if bookmark.new_record?
       end.upsert
     end
 

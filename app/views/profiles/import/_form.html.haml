@@ -1,5 +1,5 @@
-= form_tag profile_import_index_path, method: :post, class: "ui fluid form" do
+= form_with model: @import_data, url: profile_import_index_path, method: :post, class: "ui fluid form", local: true do |f|
   .required.field
-    = file_field_tag :upload, aria: { describedby: "Upload file" }
+    = f.file_field :upload, aria: { describedby: "Upload file" }
 
-  = submit_tag "Import", class: "ui positive right floated submit button"
+  = f.submit "Import", class: "ui positive right floated submit button"
