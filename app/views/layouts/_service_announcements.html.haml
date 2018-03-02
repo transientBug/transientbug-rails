@@ -8,4 +8,5 @@
         .header
           = service_announcement.title
         %p
-          = service_announcement.message
+          :markdown
+            #{ service_announcement.message }

@@ -74,6 +74,15 @@ class Admin::ServiceAnnouncementsController < AdminController
   end
 
   def service_announcement_params
-    params.require(:service_announcement).permit(:title, :message, :color, :icon, :start_at, :end_at, :active)
+    params.require(:service_announcement).permit(
+      :title,
+      :message,
+      :color,
+      :icon,
+      :start_at,
+      :end_at,
+      :active,
+      :logged_in_only
+    )
   end
 end

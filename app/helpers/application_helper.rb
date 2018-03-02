@@ -4,7 +4,10 @@ module ApplicationHelper
   end
 
   def render_service_announcements
-    render partial: "layouts/service_announcements", locals: { service_announcements: ServiceAnnouncement.displayable }
+    service_announcements = ServiceAnnouncement.displayable
+    service_announcements = service_announcements.where(logged_in_only: false) unless current_user
+
+    render partial: "layouts/service_announcements", locals: { service_announcements: service_announcements }
   end
 
   # Builds out a "clickable item" div which contains all of the information
@@ -71,7 +74,7 @@ module ApplicationHelper
 
     options = {
       class: "hidden model-data",
-      id: "#{ model.class.to_s.underscore }-data",
+      id: "#{ model.class.to_s.underscore }-data-#{ model.id }",
       data: data
     }.merge opts
 
@@ -95,7 +98,7 @@ module ApplicationHelper
     data = {
       behavior: "neomodal",
       template: template,
-      storage: "#{ model.class.to_s.underscore }-data"
+      storage: "#{ model.class.to_s.underscore }-data-#{ model.id }"
     }.merge opts.except(:id, :class)
 
     options = {

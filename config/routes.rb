@@ -31,7 +31,11 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :update] do
     post "password"
-    resources :regenerate, only: [ :create ], module: "profiles"
+
+    scope module: :profiles do
+      resources :import, only: [ :index, :create ]
+      resources :regenerate, only: [ :create ]
+    end
   end
 
   namespace :oauth do

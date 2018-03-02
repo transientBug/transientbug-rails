@@ -1,7 +1,7 @@
 FROM ruby:2.4-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 
-RUN apk add --no-cache --update build-base postgresql-dev git curl
+RUN apk add --no-cache --update build-base postgresql-dev postgresql git curl
 
 RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpinelinux.org/alpine/edge/community\nhttp://dl-cdn.alpinelinux.org/alpine/edge/testing' > /etc/apk/repositories && \
     apk add --no-cache nodejs-current yarn
