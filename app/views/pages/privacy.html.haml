@@ -4,27 +4,30 @@
 %h1.dividing.header Privacy Policy
 %p
   Privacy takes the front stage in transientBug. That being said, don't store truly sensitive information on transientBug.
-
 %p
   All user data is stored on transientBug servers, and the official web extensions only communicate with the transientBug API over an HTTPS connection.
-
 %p
   The following data is sent by the official web extension when its page action is clicked: The active tabs Title and URL. That's it.
 
 %h2.dividing.header Backups and Account deletion
 %p
-  transientBug does backup it's database to help prevent catastrophic disasters (And because I'd be really sad if my own site lost my own bookmarks). At the moment these backups are manual and happen once a week or so simply because the traffic to the site is so low. These backups are stored in a secured, private Digital Ocean Space and deleted after the next backup takes place. I am looking into setting up an automatic backup system that will keep the last 7 days of backups, taken twice a day (UTC noon and midnight). Anything older than 7 days will automatically be destroyed by this system as well.
+  transientBug does backup its database to aid in the recovery of the service should the worst happen. These backups are stored in a secured, private Digital Ocean Space and are retained for up to a week.
 %p
-  If you request your account to be closed, all your bookmarks, authorized apps, and developer apps are destroyed. Gone forever, at least unless I'm forced to restore a database backup. Due to the nature of backups, its highly difficult to remove data from them until after they're restored, however I'll make my best attempt at re-closing your account if this happens.
+  Backups will
+  <strong>not</strong>
+  be used to recover deleted accounts or bookmarks.
+%p
+  If you request your account to be closed, all your bookmarks, authorized apps, and developer apps are destroyed. Gone forever. In the event that the service is restored from a backup, accounts which were recently closed but were recovered during a database restoration will be deleted again after the restore is complete.
 
 %h2.dividing.header Additional details
 %p
   %ul.list
     %li Privacy related bugs take priority.
-    %li Everything is under SSL, including the API for extensions and apps.
+    %li Everything publically facing is under SSL, including the API for extensions and apps.
+    %li Everything internally facing is on a private, local machine only, network. This includes databases and the cache storage.
     %li No ads, ever.
-    %li No analytic scripts, third party data collection.
+    %li No analytic scripts or third party data collection.
     %li I will never share, sell or otherwise give away user data to third parties.
-    %li If there is a privacy breach, all users will be notified via the appropriate channels.
-    %li If you find a privacy leak, please be responsible and report it discreetly to: me (at) transientbug.ninja
+    %li If there is a privacy breach, all users will be notified via email.
+    %li If you find a privacy leak, please responsibly report it to: me (at) transientbug.ninja
     %li Don't be stupid, don't share your login credentials without understanding the risks.
