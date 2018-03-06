@@ -4,7 +4,7 @@ class Doorkeeper::ApplicationPolicy < ApplicationPolicy
       # return scope.where(public: true) unless user.present?
       # return scope.all if user.role? :admin
 
-      scope.where(owner: user).order(created_at: :desc)
+      scope.order(created_at: :desc)
     end
   end
 
