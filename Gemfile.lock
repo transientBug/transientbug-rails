@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/elabs/pundit.git
-  revision: 1036bd7cfbedc6579a09faf36e3c0b48dc34d908
+  revision: 001d3fc16d8fc7e2e8500c668792d1a2b8ee8d44
   specs:
     pundit (1.1.0)
       activesupport (>= 3.0.0)
@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: b2f0a8945956cd92dec71ec4e44715d764990a49
+  revision: 14873f4c0a0ab8dae6402a7a1ce68cd057f063cf
   branch: 5-2-stable
   specs:
     actioncable (5.2.0.rc1)
@@ -138,7 +138,7 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (4.2.6)
+    doorkeeper (4.3.1)
       railties (>= 4.2)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
@@ -154,7 +154,7 @@ GEM
     elasticsearch-transport (6.0.1)
       faraday
       multi_json
-    erubi (1.7.0)
+    erubi (1.7.1)
     erubis (2.7.0)
     eventmachine (1.2.5)
     exception_notification (4.2.2)
@@ -168,7 +168,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.22)
+    ffi (1.9.23)
     foreman (0.84.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
@@ -218,7 +218,7 @@ GEM
       http_parser.rb (~> 0.6.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    http-form_data (2.0.0)
+    http-form_data (2.1.0)
     http_parser.rb (0.6.0)
     httparty (0.16.0)
       multi_xml (>= 0.5.2)
@@ -314,7 +314,7 @@ GEM
       omniauth-oauth (~> 1.1)
       rack
     parallel (1.12.1)
-    parser (2.5.0.2)
+    parser (2.5.0.3)
       ast (~> 2.4.0)
     pg (0.21.0)
     powerpack (0.1.1)
@@ -337,16 +337,16 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (3.0.2)
-    puma (3.11.2)
+    puma (3.11.3)
     rack (2.0.4)
     rack-cache (1.7.1)
       rack (>= 0.4)
     rack-cors (1.0.2)
     rack-protection (2.0.1)
       rack
-    rack-proxy (0.6.3)
+    rack-proxy (0.6.4)
       rack
-    rack-test (0.8.2)
+    rack-test (0.8.3)
       rack (>= 1.0, < 3)
     rails-assets-lodash (4.17.4)
     rails-dom-testing (2.0.3)
@@ -357,7 +357,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.3.0)
-    rb-fsevent (0.10.2)
+    rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     redis (3.3.5)
@@ -405,15 +405,15 @@ GEM
       activesupport (>= 3.0.0)
       mustache (~> 1.0, >= 0.99.4)
       rspec (~> 3.0)
-    rubocop (0.52.1)
+    rubocop (0.53.0)
       parallel (~> 1.10)
-      parser (>= 2.4.0.2, < 3.0)
+      parser (>= 2.5)
       powerpack (~> 0.1)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    rubocop-rspec (1.22.2)
-      rubocop (>= 0.52.1)
+    rubocop-rspec (1.24.0)
+      rubocop (>= 0.53.0)
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     ruby_parser (3.11.0)
@@ -435,10 +435,10 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
-    selenium-webdriver (3.9.0)
+    selenium-webdriver (3.10.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
-    semantic-ui-sass (2.2.14)
+    semantic-ui-sass (2.3.0.0)
       sass (>= 3.2)
     sexp_processor (4.10.1)
     shellany (0.0.1)
@@ -457,9 +457,9 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.1)
       tilt (~> 2.0)
-    skinny (0.2.4)
-      eventmachine (~> 1.0.0)
-      thin (>= 1.5, < 1.7)
+    skinny (0.2.2)
+      eventmachine (~> 1.0)
+      thin
     slack-notifier (2.3.2)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
@@ -504,7 +504,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
-    webpacker (3.2.2)
+    webpacker (3.3.0)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)

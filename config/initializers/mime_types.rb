@@ -5,6 +5,5 @@
 
 jsonapi_mime = Mime::Type.register "application/vnd.api+json", :json
 
-ActionDispatch::Request.parameter_parsers[jsonapi_mime.symbol] = lambda do |body|
-  ActiveSupport::JSON.decode body
-end
+json_parser = ActionDispatch::Http::Parameters::DEFAULT_PARSERS[ Mime[:json].symbol ]
+ActionDispatch::Request.parameter_parsers[jsonapi_mime.symbol] = json_parser
