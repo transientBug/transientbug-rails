@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get "/home", to: "pages#home"
   get "/faq", to: "pages#faq"
 
+  get "/privacy", to: "pages#privacy"
+  get "/tos", to: "pages#tos"
+
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
@@ -28,7 +31,11 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :update] do
     post "password"
-    resources :regenerate, only: [ :create ], module: "profiles"
+
+    scope module: :profiles do
+      resources :import, only: [ :index, :create ]
+      resources :regenerate, only: [ :create ]
+    end
   end
 
   namespace :oauth do

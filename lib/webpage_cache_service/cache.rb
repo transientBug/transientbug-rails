@@ -37,7 +37,7 @@ class WebpageCacheService
     def exec
       cache_root
 
-      return unless PARSABLE_MIMES.include? @root_attachment.blob.content_type
+      return self unless PARSABLE_MIMES.include? @root_attachment.blob.content_type
 
       cache_links
 

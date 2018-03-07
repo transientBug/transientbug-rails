@@ -157,6 +157,9 @@ GEM
     erubi (1.7.0)
     erubis (2.7.0)
     eventmachine (1.2.5)
+    exception_notification (4.2.2)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     execjs (2.7.0)
     factory_bot (4.8.2)
       activesupport (>= 3.0.0)
@@ -454,9 +457,10 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.1)
       tilt (~> 2.0)
-    skinny (0.2.2)
-      eventmachine (~> 1.0)
-      thin
+    skinny (0.2.4)
+      eventmachine (~> 1.0.0)
+      thin (>= 1.5, < 1.7)
+    slack-notifier (2.3.2)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -533,6 +537,7 @@ DEPENDENCIES
   doorkeeper
   dotenv-rails
   ejs
+  exception_notification
   factory_bot_rails
   foreman
   guard
@@ -577,6 +582,7 @@ DEPENDENCIES
   semantic-ui-sass
   sidekiq
   simplecov
+  slack-notifier
   timecop
   turbolinks (~> 5)
   tzinfo-data

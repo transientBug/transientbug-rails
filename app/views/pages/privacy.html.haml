@@ -1,0 +1,33 @@
+- content_for :page_title do
+  Privacy Policy
+
+%h1.dividing.header Privacy Policy
+%p
+  Privacy takes the front stage in transientBug. That being said, don't store truly sensitive information on transientBug.
+%p
+  All user data is stored on transientBug servers, and the official web extensions only communicate with the transientBug API over an HTTPS connection.
+%p
+  The following data is sent by the official web extension when its page action is clicked: The active tabs Title and URL. That's it.
+
+%h2.dividing.header Backups and Account deletion
+%p
+  transientBug does backup its database to aid in the recovery of the service should the worst happen. These backups are stored in a secured, private Digital Ocean Space and are retained for up to a week.
+%p
+  Backups will
+  <strong>not</strong>
+  be used to recover deleted accounts or bookmarks.
+%p
+  If you request your account to be closed, all your bookmarks, authorized apps, and developer apps are destroyed. Gone forever. In the event that the service is restored from a backup, accounts which were recently closed but were recovered during a database restoration will be deleted again after the restore is complete.
+
+%h2.dividing.header Additional details
+%p
+  %ul.list
+    %li Privacy related bugs take priority.
+    %li Everything publically facing is under SSL, including the API for extensions and apps.
+    %li Everything internally facing is on a private, local machine only, network. This includes databases and the cache storage.
+    %li No ads, ever.
+    %li No analytic scripts or third party data collection.
+    %li I will never share, sell or otherwise give away user data to third parties.
+    %li If there is a privacy breach, all users will be notified via email.
+    %li If you find a privacy leak, please responsibly report it to: me (at) transientbug.ninja
+    %li Don't be stupid, don't share your login credentials without understanding the risks.
