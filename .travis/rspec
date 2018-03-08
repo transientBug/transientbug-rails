@@ -24,7 +24,7 @@ rm config/credentials.yml.enc
 mv config/credentials.ci.yml.enc config/credentials.yml.enc
 
 echo "Waiting for ES to finish booting"
-wget -q --waitretry=2 --retry-connrefused -T 30 -O - http://127.0.0.1:9200
+wget -q --waitretry=10 --retry-connrefused -T 60 -O - http://127.0.0.1:9200
 
 echo "Running Specs"
 bundle exec rspec
