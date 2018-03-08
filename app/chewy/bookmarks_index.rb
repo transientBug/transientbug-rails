@@ -1,5 +1,5 @@
 class BookmarksIndex < Chewy::Index
-   settings analysis: {
+  settings analysis: {
     analyzer: {
       title: {
         tokenizer: :standard,
