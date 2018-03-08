@@ -19,6 +19,8 @@ class BookmarkSearcher
   end.freeze
 
   class QueryParser < Parslet::Parser
+    rule(:eof) { any.absent? }
+
     rule(:operator) { (str("+") | str("-")).as(:operator) }
 
     rule(:space)  { match("\s").repeat(1) }
@@ -35,7 +37,7 @@ class BookmarkSearcher
       (term >> colon).as(:field)
     end
 
-    rule(:clause) { (operator.maybe >> field.maybe >> (phrase | term) ).as(:clause) }
+    rule(:clause) { (operator.maybe >> field.maybe >> (eof | phrase | term) ).as(:clause) }
 
     rule(:query) { (clause >> space.maybe).repeat.as(:query) }
 
@@ -51,10 +53,10 @@ class BookmarkSearcher
       klass = nil
 
       if clause[:term]
-        terms = clause[:term].to_s
+        terms = clause[:term]&.to_s
         klass = TermClause
       elsif clause[:phrase]
-        terms = clause[:phrase].map { |p| p[:term].to_s }.join " "
+        terms = clause[:phrase]&.map { |p| p[:term].to_s }&.join " "
         klass = PhraseClause
       else
         fail ArgumentError, "Unexpected clause type: `#{ clause }'"
@@ -95,7 +97,7 @@ class BookmarkSearcher
         @fields ||= USER_SEARCHABLE_FIELDS
       end
 
-      @terms    = terms
+      @terms = terms
     end
   end
 
@@ -130,18 +132,21 @@ class BookmarkSearcher
     end
   end
 
-  attr_reader :query
-
-  def initialize query
-    @query = query
+  def initialize initial_scope
+    @scope = initial_scope
   end
 
-  def to_elasticsearch
+  def search params
+    results = query_search params[:q]
+    binding.pry
+  end
+
+  private
+
+  def query_search query
     parse_tree = QueryParser.new.parse query
-    QueryTransformer.new.apply(parse_tree).to_elasticsearch
-  end
+    query = QueryTransformer.new.apply parse_tree
 
-  def search
-    BookmarksIndex::Bookmark.query(to_elasticsearch)
+    BookmarksIndex::Bookmark.query query.to_elasticsearch
   end
 end

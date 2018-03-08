@@ -2,10 +2,18 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    @bookmarks = BookmarkSearcher.new(params[:q])
-      .search
-      .objects
-      .page params[:page]
+    scope = policy_scope(Bookmark)
+
+    @bookmarks = BookmarkSearcher.new(scope)
+      .search(params)
+      .includes(
+        :webpage,
+        :tags,
+        :user,
+        offline_caches: [
+          :error_messages
+        ]
+      )
 
     respond_to do |format|
       format.html { render :index }
