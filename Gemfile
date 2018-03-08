@@ -159,7 +159,7 @@ group :test do
   # gem "chromedriver-helper"
 
   # Test rack things
-  gem "rack-test"
+  gem "rack-test", "~> 0.7.0"
 
   # A Mockery of Time
   gem "timecop"
