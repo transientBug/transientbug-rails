@@ -15,8 +15,15 @@ class BookmarkSearcher
   }.freeze
 
   FIELD_TO_TYPE = USER_SEARCHABLE_FIELDS.each_with_object({}) do |field, memo|
-    memo[ field ] = BookmarksIndex::Bookmark.mappings_hash[:bookmark][:properties][ field ][:type].to_sym
+    properties = BookmarksIndex::Bookmark.mappings_hash[:bookmark][:properties]
+    memo[ field ] = properties[ field ][:type].to_sym
   end.freeze
+
+  OP_MAP = {
+    "+" => :must,
+    "-" => :must_not,
+    nil => :should
+  }.freeze
 
   class QueryParser < Parslet::Parser
     rule(:eof) { any.absent? }
@@ -30,16 +37,19 @@ class BookmarkSearcher
     rule(:term) { match("[^\s\:\"]").repeat(1).as(:term) }
 
     rule(:phrase) do
-      (quote >> (term >> space.maybe).repeat >> quote).as(:phrase)
+      (quote >> (term >> space.maybe).repeat(0) >> quote).as(:phrase)
     end
 
     rule(:field) do
       (term >> colon).as(:field)
     end
 
-    rule(:clause) { (operator.maybe >> field.maybe >> (eof | phrase | term) ).as(:clause) }
+    rule(:field_term_clause) { operator.maybe >> field.maybe >> (phrase | term) }
+    rule(:field_only_clause) { operator.maybe >> field >> space.maybe }
 
-    rule(:query) { (clause >> space.maybe).repeat.as(:query) }
+    rule(:clause) { (field_term_clause | field_only_clause).as(:clause) }
+
+    rule(:query) { ((clause >> space.maybe)).repeat.as(:query) }
 
     root(:query)
   end
@@ -48,51 +58,36 @@ class BookmarkSearcher
     rule(clause: subtree(:clause)) do
       operator = clause[:operator]&.to_s
       field = clause.dig(:field, :term)&.to_s
-      terms = nil
 
+      terms = nil
       klass = nil
 
-      if clause[:term]
-        terms = clause[:term]&.to_s
-        klass = TermClause
-      elsif clause[:phrase]
-        terms = clause[:phrase]&.map { |p| p[:term].to_s }&.join " "
+      if clause[:phrase].present?
+        terms = "" unless clause[:phrase].respond_to? :map
+        terms ||= clause[:phrase]&.map { |p| p[:term].to_s }&.join " "
         klass = PhraseClause
       else
-        fail ArgumentError, "Unexpected clause type: `#{ clause }'"
+        terms = clause[:term].to_s
+        klass = TermClause
       end
 
       klass.new operator, field, terms
     end
 
-    rule(query: sequence(:terms)) { Query.new(terms) }
-  end
-
-  class Operator
-    def self.symbol(str)
-      case str
-      when "+"
-        :must
-      when "-"
-        :must_not
-      when nil
-        :should
-      else
-        fail ArgumentError, "Unknown operator: `#{ str }'"
-      end
-    end
+    rule(query: sequence(:clauses)) { Query.new(clauses) }
   end
 
   class Clause
     attr_accessor :operator, :fields, :terms
 
     def initialize operator, fields, terms
-      @operator = Operator.symbol operator
+      @operator = OP_MAP[ operator ].tap do |op_symbol|
+        fail ArgumentError, "Unknown operator: `#{ operator }'" unless op_symbol
+      end
 
       if fields
-      @fields   = Array(fields)
-        .map(&:to_sym)
-        .select { |field| USER_SEARCHABLE_FIELDS.include? field }
+        @fields = Array(fields).map(&:to_sym)
+          .select { |field| USER_SEARCHABLE_FIELDS.include? field }
       else
         @fields ||= USER_SEARCHABLE_FIELDS
       end
@@ -132,13 +127,8 @@ class BookmarkSearcher
     end
   end
 
-  def initialize initial_scope
-    @scope = initial_scope
-  end
-
   def search params
-    results = query_search params[:q]
-    binding.pry
+    query_search(params[:q])
   end
 
   private
