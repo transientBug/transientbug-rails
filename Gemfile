@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2.0.beta", github: "rails/rails"
+gem "rails", "~> 5.2.0.rc1", github: "rails/rails", branch: "5-2-stable"
 gem "arel", "~> 9.0.0",  github: "rails/arel"
 
 # Data Stores
@@ -33,7 +33,7 @@ gem "rack-cors"
 gem "bcrypt"
 
 # Server
-gem "puma", "~> 3.7"
+gem "puma", "~> 3.11"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -51,7 +51,7 @@ gem "webpacker"
 #
 gem "coffee-rails" # uuuuuuugh
 gem "turbolinks", "~> 5"
-gem "semantic-ui-sass"
+gem "semantic-ui-sass", "~> 2.2.12.0"
 gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
 gem "ejs" # javascript templates for things like fancy delete modals
@@ -159,7 +159,7 @@ group :test do
   # gem "chromedriver-helper"
 
   # Test rack things
-  gem "rack-test"
+  gem "rack-test", "~> 0.7.0"
 
   # A Mockery of Time
   gem "timecop"
