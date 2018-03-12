@@ -1,30 +1,4 @@
 class BookmarkSearcher
-  USER_SEARCHABLE_FIELDS = [
-    :uri,
-    :title,
-    :description,
-    :tags
-  ].freeze
-
-  TYPE_TO_QUERY = {
-    keyword: ->(field, clause) { { term: { field => clause.terms } } },
-    text: lambda do |field, clause|
-      type = clause.is_a?(PhraseClause) ? :match_phrase : :match
-      { type => { field => clause.terms } }
-    end,
-  }.freeze
-
-  FIELD_TO_TYPE = USER_SEARCHABLE_FIELDS.each_with_object({}) do |field, memo|
-    properties = BookmarksIndex::Bookmark.mappings_hash[:bookmark][:properties]
-    memo[ field ] = properties[ field ][:type].to_sym
-  end.freeze
-
-  OP_MAP = {
-    "+" => :must,
-    "-" => :must_not,
-    nil => :should
-  }.freeze
-
   class QueryParser < Parslet::Parser
     rule(:eof) { any.absent? }
 
@@ -60,24 +34,27 @@ class BookmarkSearcher
       field = clause.dig(:field, :term)&.to_s
 
       terms = nil
-      klass = nil
 
       if clause[:phrase].present?
         terms = "" unless clause[:phrase].respond_to? :map
-        terms ||= clause[:phrase]&.map { |p| p[:term].to_s }&.join " "
-        klass = PhraseClause
+        terms ||= clause[:phrase]&.map { |p| p[:term].to_s }
       else
         terms = clause[:term].to_s
-        klass = TermClause
       end
 
-      klass.new operator, field, terms
+      Clause.new operator, field, terms
     end
 
     rule(query: sequence(:clauses)) { Query.new(clauses) }
   end
 
   class Clause
+    OP_MAP = {
+      "+" => :must,
+      "-" => :must_not,
+      nil => :should
+    }.freeze
+
     attr_accessor :operator, :fields, :terms
 
     def initialize operator, fields, terms
@@ -85,19 +62,19 @@ class BookmarkSearcher
         fail ArgumentError, "Unknown operator: `#{ operator }'" unless op_symbol
       end
 
-      if fields
-        @fields = Array(fields).map(&:to_sym)
-          .select { |field| USER_SEARCHABLE_FIELDS.include? field }
-      else
-        @fields ||= USER_SEARCHABLE_FIELDS
-      end
+      @fields = Array(fields).map(&:to_sym)
 
       @terms = terms
     end
-  end
 
-  class TermClause < Clause; end
-  class PhraseClause < Clause; end
+    def phrase?
+      terms.length > 1
+    end
+
+    def term?
+      ! phrase?
+    end
+  end
 
   class Query
     attr_accessor :should_terms, :must_not_terms, :must_terms
@@ -109,19 +86,42 @@ class BookmarkSearcher
       @must_terms     = grouped.fetch(:must, [])
       @must_not_terms = grouped.fetch(:must_not, [])
     end
+  end
+
+  class ElasticsearchQuery
+    attr_reader :query
+
+    TYPE_TO_QUERY = {
+      nil: ->(field, clause) { { exists: { field: field } } },
+      keyword: ->(field, clause) { { term: { field => clause.terms } } },
+      text: lambda do |field, clause|
+        type = clause.phrase? ? :match_phrase : :match
+        { type => { field => clause.terms } }
+      end
+    }.freeze
+
+    def self.builder_for field_to_type_map
+      Class.new self do
+        def field_to_type_mappings_hash
+          field_to_type_map
+        end
+      end
+    end
+
+    def initialize query
+      @query = query
+    end
 
     def clause_to_query clause
-      clause.fields.flat_map do |field|
-        TYPE_TO_QUERY[ FIELD_TO_TYPE[ field ] ].call field, clause
-      end
+      binding.pry
     end
 
     def to_elasticsearch
       bool = {}
 
-      bool[:should]   = should_terms.flat_map(&method(:clause_to_query)) if should_terms.any?
-      bool[:must]     = must_terms.flat_map(&method(:clause_to_query)) if must_terms.any?
-      bool[:must_not] = must_not_terms.flat_map(&method(:clause_to_query)) if must_not_terms.any?
+      bool[:should]   = query.should_terms.flat_map(&method(:clause_to_query)) if query.should_terms.any?
+      bool[:must]     = query.must_terms.flat_map(&method(:clause_to_query)) if query.must_terms.any?
+      bool[:must_not] = query.must_not_terms.flat_map(&method(:clause_to_query)) if query.must_not_terms.any?
 
       { bool: bool }
     end
@@ -133,10 +133,25 @@ class BookmarkSearcher
 
   private
 
+  USER_SEARCHABLE_FIELDS = [
+    :uri,
+    :title,
+    :description,
+    :tags
+  ].freeze
+
+  FIELD_TO_TYPE = USER_SEARCHABLE_FIELDS.each_with_object({}) do |field, memo|
+    properties = BookmarksIndex::Bookmark.mappings_hash[:bookmark][:properties]
+    memo[ field ] = properties[ field ][:type].to_sym
+  end.freeze
+
+  ESQueryBuilder = ElasticsearchQuery.builder_for(FIELD_TO_TYPE)
+
   def query_search query
     parse_tree = QueryParser.new.parse query
     query = QueryTransformer.new.apply parse_tree
+    elasticsearch_query = ESQueryBuilder.new(query).to_elasticsearch
 
-    BookmarksIndex::Bookmark.query query.to_elasticsearch
+    BookmarksIndex::Bookmark.query elasticsearch_query
   end
 end
