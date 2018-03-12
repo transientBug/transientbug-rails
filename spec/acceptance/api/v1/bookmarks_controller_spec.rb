@@ -9,6 +9,13 @@ resource "v1 Bookmarks" do
 
   parameter :auth_token, "Authentication Token", required: true
 
+  before do
+    # Send auth token in URL
+    # This is to get around https://github.com/rack-test/rack-test/pull/223
+    # and https://github.com/zipmark/rspec_api_documentation/issues/342
+    # example.metadata[:route] += "?auth_token=#{ auth_token }" if example/metadata[:method] == :delete
+  end
+
   get "/api/v1/bookmarks" do
     before do
       bookmark
@@ -111,7 +118,7 @@ resource "v1 Bookmarks" do
     end
   end
 
-  get "/api/v1/bookmarks/check", focus: true do
+  get "/api/v1/bookmarks/check" do
     parameter :url, "URL to check", required: true
 
     let(:url) { bookmark.uri }

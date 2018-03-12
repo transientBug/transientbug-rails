@@ -51,7 +51,7 @@ gem "webpacker"
 #
 gem "coffee-rails" # uuuuuuugh
 gem "turbolinks", "~> 5"
-gem "semantic-ui-sass"
+gem "semantic-ui-sass", "~> 2.2.12.0"
 gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
 gem "ejs" # javascript templates for things like fancy delete modals

@@ -438,7 +438,7 @@ GEM
     selenium-webdriver (3.10.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
-    semantic-ui-sass (2.3.0.0)
+    semantic-ui-sass (2.2.12.1)
       sass (>= 3.2)
     sexp_processor (4.10.1)
     shellany (0.0.1)
@@ -579,7 +579,7 @@ DEPENDENCIES
   rubocop-rspec
   sass-rails (~> 5.0)
   selenium-webdriver
-  semantic-ui-sass
+  semantic-ui-sass (~> 2.2.12.0)
   sidekiq
   simplecov
   slack-notifier
