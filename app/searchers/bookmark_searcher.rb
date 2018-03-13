@@ -7,23 +7,24 @@ class BookmarkSearcher
     rule(:space)  { match("\s").repeat(1) }
     rule(:quote) { str("\"") }
     rule(:colon) { str(":") }
+    rule(:word) { match("[^\s\"]").repeat(1) }
 
-    rule(:term) { match("[^\s\:\"]").repeat(1).as(:term) }
+    rule(:term) { (word >> colon).absent? >> word.as(:term) }
 
     rule(:phrase) do
-      (quote >> (term >> space.maybe).repeat(0) >> quote).as(:phrase)
+      (quote >> (word >> space.maybe).as(:term).repeat >> quote.present?)
     end
 
     rule(:field) do
-      (term >> colon).as(:field)
+      word.as(:field) >> colon >> str("//").absent?
     end
 
-    rule(:field_term_clause) { operator.maybe >> field.maybe >> (phrase | term) }
     rule(:field_only_clause) { operator.maybe >> field >> space.maybe }
+    rule(:field_term_clause) { operator.maybe >> field.maybe >> (phrase | term) }
 
-    rule(:clause) { (field_term_clause | field_only_clause).as(:clause) }
+    rule(:clause) { (field_only_clause | field_term_clause).as(:clause) }
 
-    rule(:query) { ((clause >> space.maybe)).repeat.as(:query) }
+    rule(:query) { (clause >> space.maybe).repeat.as(:query) }
 
     root(:query)
   end
@@ -36,7 +37,7 @@ class BookmarkSearcher
       terms = nil
 
       if clause[:phrase].present?
-        terms = "" unless clause[:phrase].respond_to? :map
+        terms = [] unless clause[:phrase].respond_to? :map
         terms ||= clause[:phrase]&.map { |p| p[:term].to_s }
       else
         terms = clause[:term].to_s
@@ -55,24 +56,32 @@ class BookmarkSearcher
       nil => :should
     }.freeze
 
-    attr_accessor :operator, :fields, :terms
+    attr_accessor :operator, :field, :terms
 
-    def initialize operator, fields, terms
+    def initialize operator, field, terms
       @operator = OP_MAP[ operator ].tap do |op_symbol|
         fail ArgumentError, "Unknown operator: `#{ operator }'" unless op_symbol
       end
 
-      @fields = Array(fields).map(&:to_sym)
+      @field = field&.to_sym
 
-      @terms = terms
+      @terms = Array(terms).reject(&:empty?).compact
+    end
+
+    def terms
+      @terms.join " "
     end
 
     def phrase?
-      terms.length > 1
+      @terms.length > 1
     end
 
     def term?
       ! phrase?
+    end
+
+    def empty?
+      @terms.empty?
     end
   end
 
@@ -86,34 +95,70 @@ class BookmarkSearcher
       @must_terms     = grouped.fetch(:must, [])
       @must_not_terms = grouped.fetch(:must_not, [])
     end
+
+    def normalize fields
+      @should_terms = normalize_terms @should_terms, fields
+      @must_terms = normalize_terms @must_terms, fields
+      @must_not_terms = normalize_terms @must_not_terms, fields
+    end
+
+    private
+
+    def normalize_terms terms, fields
+      terms.flat_map do |clause|
+        next clause if clause.field
+
+        fields.map do |field|
+          clause.dup.tap do |dup_clause|
+            dup_clause.field = field
+          end
+        end
+      end
+    end
+  end
+
+  class KeywordHeuristics
+    def initialize clause
+      @clause = clause
+    end
+
+    def to_elasticsearch
+      return { exists: { field: @clause.field } } if @clause.empty?
+
+      { term: { @clause.field => @clause.terms } }
+    end
+  end
+
+  class TextHeuristics
+    def initialize clause
+      @clause = clause
+    end
+
+    def to_elasticsearch
+      return { exists: { field: @clause.field } } if @clause.empty?
+
+      type = @clause.phrase? ? :match_phrase : :match
+      { type => { @clause.field => @clause.terms } }
+    end
   end
 
   class ElasticsearchQuery
     attr_reader :query
 
-    TYPE_TO_QUERY = {
-      nil: ->(field, clause) { { exists: { field: field } } },
-      keyword: ->(field, clause) { { term: { field => clause.terms } } },
-      text: lambda do |field, clause|
-        type = clause.phrase? ? :match_phrase : :match
-        { type => { field => clause.terms } }
-      end
+    HEURISTICS_MAP = {
+      text: TextHeuristics,
+      keyword: KeywordHeuristics
     }.freeze
 
-    def self.builder_for field_to_type_map
-      Class.new self do
-        def field_to_type_mappings_hash
-          field_to_type_map
-        end
-      end
-    end
-
-    def initialize query
+    def initialize field_mappings, query
+      @mappings = field_mappings
       @query = query
     end
 
     def clause_to_query clause
-      binding.pry
+      field_type = @mappings[ clause.field ]
+      clause_heuristics = HEURISTICS_MAP[ field_type ].new clause
+      clause_heuristics.to_elasticsearch
     end
 
     def to_elasticsearch
@@ -145,13 +190,20 @@ class BookmarkSearcher
     memo[ field ] = properties[ field ][:type].to_sym
   end.freeze
 
-  ESQueryBuilder = ElasticsearchQuery.builder_for(FIELD_TO_TYPE)
-
   def query_search query
-    parse_tree = QueryParser.new.parse query
-    query = QueryTransformer.new.apply parse_tree
-    elasticsearch_query = ESQueryBuilder.new(query).to_elasticsearch
+    query_ast = Query.new []
 
-    BookmarksIndex::Bookmark.query elasticsearch_query
+    begin
+      parse_tree = QueryParser.new.parse query
+      binding.pry
+      query_ast = QueryTransformer.new.apply parse_tree
+    rescue Parslet::ParseFailed => e
+      Rails.logger.error e
+    end
+
+    query_ast.normalize USER_SEARCHABLE_FIELDS
+    elasticsearch_query = ElasticsearchQuery.new FIELD_TO_TYPE, query_ast
+
+    BookmarksIndex::Bookmark.query elasticsearch_query.to_elasticsearch
   end
 end
