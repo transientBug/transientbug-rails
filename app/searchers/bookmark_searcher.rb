@@ -9,17 +9,24 @@ class BookmarkSearcher
     rule(:colon) { str(":") }
     rule(:word) { match("[^\s\"]").repeat(1) }
 
-    rule(:term) { (word >> colon).absent? >> word.as(:term) }
+    rule(:term) { word.as(:term) }
 
     rule(:phrase) do
-      (quote >> (word >> space.maybe).as(:term).repeat >> quote.present?)
+      (quote >> (word >> space.maybe).repeat.as(:phrase) >> quote)
     end
 
-    rule(:field) do
-      word.as(:field) >> colon >> str("//").absent?
+    def self.fields *args
+      args.each do |arg|
+        rule("#{ arg }_field") { str(arg).as(:field) >> colon }
+      end
+
+      rule(:field) do
+        first = send(:"#{ args.first }_field")
+        args[1..-1].reduce(first) { |memo, arg| memo.| send(:"#{ arg }_field") }
+      end
     end
 
-    rule(:field_only_clause) { operator.maybe >> field >> space.maybe }
+    rule(:field_only_clause) { operator.maybe >> field >> (space | eof).present? }
     rule(:field_term_clause) { operator.maybe >> field.maybe >> (phrase | term) }
 
     rule(:clause) { (field_only_clause | field_term_clause).as(:clause) }
@@ -32,18 +39,13 @@ class BookmarkSearcher
   class QueryTransformer < Parslet::Transform
     rule(clause: subtree(:clause)) do
       operator = clause[:operator]&.to_s
-      field = clause.dig(:field, :term)&.to_s
+      field = clause[:field]&.to_s
 
-      terms = nil
-
-      if clause[:phrase].present?
-        terms = [] unless clause[:phrase].respond_to? :map
-        terms ||= clause[:phrase]&.map { |p| p[:term].to_s }
+      if clause[:phrase]
+        PhraseClause.new operator, field, clause[:phrase]
       else
-        terms = clause[:term].to_s
+        TermClause.new operator, field, clause[:term]
       end
-
-      Clause.new operator, field, terms
     end
 
     rule(query: sequence(:clauses)) { Query.new(clauses) }
@@ -56,32 +58,46 @@ class BookmarkSearcher
       nil => :should
     }.freeze
 
-    attr_accessor :operator, :field, :terms
+    attr_accessor :operator, :field, :term
 
-    def initialize operator, field, terms
+    def initialize operator, field
       @operator = OP_MAP[ operator ].tap do |op_symbol|
         fail ArgumentError, "Unknown operator: `#{ operator }'" unless op_symbol
       end
 
       @field = field&.to_sym
-
-      @terms = Array(terms).reject(&:empty?).compact
     end
 
-    def terms
-      @terms.join " "
+    def blank?
+      fail NotImplementedError
+    end
+  end
+
+  class TermClause < Clause
+    attr_reader :term
+
+    def initialize operator, field, term
+      super(operator, field)
+
+      @term = term
     end
 
-    def phrase?
-      @terms.length > 1
+    def blank?
+      term.blank?
+    end
+  end
+
+  class PhraseClause < Clause
+    attr_reader :phrase
+
+    def initialize operator, field, phrase
+      super(operator, field)
+
+      @phrase = phrase
     end
 
-    def term?
-      ! phrase?
-    end
-
-    def empty?
-      @terms.empty?
+    def blank?
+      phrase.blank?
     end
   end
 
@@ -97,8 +113,8 @@ class BookmarkSearcher
     end
 
     def normalize fields
-      @should_terms = normalize_terms @should_terms, fields
-      @must_terms = normalize_terms @must_terms, fields
+      @should_terms   = normalize_terms @should_terms, fields
+      @must_terms     = normalize_terms @must_terms, fields
       @must_not_terms = normalize_terms @must_not_terms, fields
     end
 
@@ -123,9 +139,10 @@ class BookmarkSearcher
     end
 
     def to_elasticsearch
-      return { exists: { field: @clause.field } } if @clause.empty?
+      return { exists: { field: @clause.field } } if @clause.blank?
 
-      { term: { @clause.field => @clause.terms } }
+      return { term: { @clause.field => @clause.phrase.to_s } } if @clause.is_a? PhraseClause
+      { term: { @clause.field => @clause.term.to_s } }
     end
   end
 
@@ -135,10 +152,10 @@ class BookmarkSearcher
     end
 
     def to_elasticsearch
-      return { exists: { field: @clause.field } } if @clause.empty?
+      return { exists: { field: @clause.field } } if @clause.blank?
 
-      type = @clause.phrase? ? :match_phrase : :match
-      { type => { @clause.field => @clause.terms } }
+      return { match_phrase: { @clause.field => @clause.phrase.to_s } } if @clause.is_a? PhraseClause
+      { match: { @clause.field => @clause.term.to_s } }
     end
   end
 
@@ -190,18 +207,21 @@ class BookmarkSearcher
     memo[ field ] = properties[ field ][:type].to_sym
   end.freeze
 
+  class BookmarksQueryParser < QueryParser
+    fields(*USER_SEARCHABLE_FIELDS)
+  end
+
   def query_search query
     query_ast = Query.new []
 
     begin
-      parse_tree = QueryParser.new.parse query
-      binding.pry
+      parse_tree = BookmarksQueryParser.new.parse query
       query_ast = QueryTransformer.new.apply parse_tree
+      query_ast.normalize USER_SEARCHABLE_FIELDS
     rescue Parslet::ParseFailed => e
       Rails.logger.error e
     end
 
-    query_ast.normalize USER_SEARCHABLE_FIELDS
     elasticsearch_query = ElasticsearchQuery.new FIELD_TO_TYPE, query_ast
 
     BookmarksIndex::Bookmark.query elasticsearch_query.to_elasticsearch
