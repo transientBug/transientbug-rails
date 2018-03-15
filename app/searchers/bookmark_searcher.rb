@@ -12,7 +12,7 @@ class BookmarkSearcher
     rule(:term) { word.as(:term) }
 
     rule(:phrase) do
-      (quote >> (word >> space.maybe).repeat.as(:phrase) >> quote)
+      quote >> (word >> space.maybe).repeat.as(:phrase) >> quote
     end
 
     def self.fields *args
