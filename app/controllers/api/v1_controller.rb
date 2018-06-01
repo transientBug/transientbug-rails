@@ -29,7 +29,7 @@ class Api::V1Controller < ApiController
     @current_user ||= basic_auth
     @current_user ||= oauth_auth
 
-    render_unauthorized "Invalid API Credentials" unless @current_user
+    render_unauthorized "Invalid API Credentials" unless @current_user.present?
   end
 
   def token_auth
@@ -48,11 +48,9 @@ class Api::V1Controller < ApiController
   end
 
   def oauth_auth
-    doorkeeper_authorize!
+    return nil unless valid_doorkeeper_token?
+
     token = Doorkeeper.authenticate(request)
-
-    return nil unless token
-
     User.find token.resource_owner_id
   end
 end
