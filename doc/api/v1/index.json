@@ -19,6 +19,13 @@
           "method": "get"
         },
         {
+          "description": "Check with no URL",
+          "link": "v1_bookmarks/check_with_no_url.json",
+          "groups": "api_v1",
+          "route": "/api/v1/bookmarks/check",
+          "method": "get"
+        },
+        {
           "description": "Delete a bookmark",
           "link": "v1_bookmarks/delete_a_bookmark.json",
           "groups": "api_v1",
