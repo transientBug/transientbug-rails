@@ -189,9 +189,27 @@ class BookmarkSearcher
     end
   end
 
+  # Basic extension of a hash the provides a basic ActiveModel::Errors like
+  # interface which remaining serializable and easy to work with.
+  class Errors < Hash
+    def add key, value
+      self[key] ||= []
+      self[key] << value
+      self[key].uniq!
+    end
+
+    def each
+      each_key do |field|
+        self[field].each { |message| yield field, message }
+      end
+    end
+  end
+
   def search params
     query_search(params[:q])
   end
+
+  attr_reader :errors
 
   private
 
@@ -211,15 +229,21 @@ class BookmarkSearcher
     fields(*USER_SEARCHABLE_FIELDS)
   end
 
+  def initialize
+    @errors = Errors.new
+  end
+
   def query_search query
     query_ast = Query.new []
 
     begin
+      binding.pry
       parse_tree = BookmarksQueryParser.new.parse query
       query_ast = QueryTransformer.new.apply parse_tree
       query_ast.normalize USER_SEARCHABLE_FIELDS
     rescue Parslet::ParseFailed => e
       Rails.logger.error e
+      errors.add :query, "Unable to parse query. Are you missing a quote?"
     end
 
     elasticsearch_query = ElasticsearchQuery.new FIELD_TO_TYPE, query_ast
