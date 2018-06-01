@@ -13,14 +13,6 @@ class Api::V1Controller < ApiController
 
   protected
 
-  def authenticate
-    @current_user = token_auth
-    @current_user ||= basic_auth
-    @current_user ||= oauth_auth
-
-    render_unauthorized "Invalid API Credentials" unless @current_user
-  end
-
   def set_headers
     response.headers["Content-Type"]      = "application/vnd.api+json"
     response.headers["X-Dino-Says"]       = "Rawr!"
@@ -32,6 +24,14 @@ class Api::V1Controller < ApiController
     render json: payload, status: :unauthorized
   end
 
+  def authenticate
+    @current_user   = token_auth
+    @current_user ||= basic_auth
+    @current_user ||= oauth_auth
+
+    render_unauthorized "Invalid API Credentials" unless @current_user
+  end
+
   def token_auth
     return nil unless params[:auth_token]
 
@@ -40,7 +40,7 @@ class Api::V1Controller < ApiController
   end
 
   def basic_auth
-    return nil unless request.headers["Authorization"].match? %r{^Basic}
+    return nil unless request.headers["Authorization"]&.match? %r{^Basic}
 
     authenticate_with_http_basic do |email, password|
       User.find_by(email: email)&.authenticate password
@@ -50,6 +50,9 @@ class Api::V1Controller < ApiController
   def oauth_auth
     doorkeeper_authorize!
     token = Doorkeeper.authenticate(request)
+
+    return nil unless token
+
     User.find token.resource_owner_id
   end
 end
