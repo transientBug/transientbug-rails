@@ -102,7 +102,10 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     permitted_attributes(@bookmark || Bookmark).tap do |obj|
-      tags = Tag.find_or_create_tags tags: params.dig(:bookmark).fetch(:tags, [])
+      tag_input = params.dig(:bookmark).fetch(:tags, [])
+      tag_input = tag_input.split(",") if tag_input.is_a? String
+
+      tags = Tag.find_or_create_tags tags: tag_input
 
       webpage = Webpage.upsert uri: params.dig(:bookmark, :uri)
 
