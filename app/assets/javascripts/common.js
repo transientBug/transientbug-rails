@@ -36,14 +36,7 @@ document.addEventListener("turbolinks:load", () => {
   $("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
     apiSettings: {
       cache: false,
-      action: "autocomplete bookmark tags",
-      beforeSend: (settings) => {
-        settings.urlData = {
-          query: encodeURIComponent(settings.urlData.query)
-        }
-
-        return settings
-      }
+      action: "autocomplete bookmark tags"
     },
     fields: {
       name: "label",
