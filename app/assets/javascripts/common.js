@@ -33,16 +33,31 @@ document.addEventListener("turbolinks:load", () => {
     }
   })
 
-  $("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
-    apiSettings: {
-      cache: false,
-      action: "autocomplete bookmark tags"
-    },
-    fields: {
-      name: "label",
-      value: "label"
-    }
-  })
+  const bookmarkTagInput = $("[data-behavior~=autocomplete-bookmark-tags] input[type~=hidden]")
+  if (bookmarkTagInput.length > 0) {
+    const currentBookmarkTags = bookmarkTagInput.val()
+      .split(",")
+      .map(v => { return { label: v, selected: true, name: v, value: v } })
+
+    bookmarkTagInput.parent().dropdown({
+      apiSettings: {
+        cache: false,
+        action: "autocomplete bookmark tags",
+        beforeSend: (settings) => {
+          settings.urlData = {
+            query: encodeURIComponent(settings.urlData.query)
+          }
+
+          return settings
+        }
+      },
+      fields: {
+        name: "label",
+        value: "label"
+      },
+      values: currentBookmarkTags
+    })
+  }
 
   // Setup searching for things. This could probably be simplified with data attributes.
   $("[data-behavior~=search-images]").search({
