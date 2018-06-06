@@ -1,5 +1,10 @@
 require "sidekiq/web"
 
+def draw name
+  path = Rails.root.join "config", "routes", "#{ name }.rb"
+  instance_eval path.read, path.to_s
+end
+
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers(
@@ -14,6 +19,9 @@ Rails.application.routes.draw do
   get "/home", to: "pages#home"
   get "/faq", to: "pages#faq"
 
+  get "/privacy", to: "pages#privacy"
+  get "/tos", to: "pages#tos"
+
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
@@ -23,57 +31,56 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :update] do
     post "password"
-    resources :regenerate, only: [ :create ], module: "profiles"
+
+    scope module: :profiles do
+      resources :import, only: [ :index, :create ]
+      resources :regenerate, only: [ :create ]
+    end
+  end
+
+  namespace :oauth do
+    namespace :applications do
+      namespace :bulk do
+        resource :delete, only: [:destroy]
+      end
+    end
+
+    namespace :authorized_applications do
+      namespace :bulk do
+        resource :revoke, only: [:destroy]
+      end
+    end
   end
 
   resources :bookmarks do
-    resources :cache, only: [:index, :create], module: "bookmarks" do
+    scope module: :bookmarks do
+      resources :cache, only: [:index, :create] do
+        collection do
+          match "/*key", to: "cache#show", via: [:get]
+        end
+      end
+
       collection do
-        match "/*key", to: "cache#show", via: [:get]
-      end
-    end
+        scope as: :bookmarks do
+          resources :search, only: [:index]
+          resources :tags, only: [:index, :show] do
+            collection do
+              resources :autocomplete, only: [:index], module: "tags"
+            end
+          end
 
-    collection do
-      scope as: :bookmarks, module: :bookmarks do
-        resources :search, only: [:index]
-        resources :tags, only: [:index, :show] do
-          collection do
-            resources :autocomplete, only: [:index], module: "tags"
+          namespace :bulk do
+            resource :tag, only: [:update]
+            resource :recache, only: [:create]
+            resource :delete, only: [:destroy]
           end
         end
       end
     end
   end
 
-  namespace :admin do
-    root "home#home"
-
-    resources :service_announcements do
-      resources :toggle, only: [ :create ], module: "service_announcements"
-    end
-
-    resources :invitations
-    resources :users, only: [ :index, :show, :edit, :update ] do
-      resources :password, only: [ :create ], module: "users"
-    end
-
-    resources :bookmarks
-  end
-
-  namespace :api do
-    namespace :v1 do
-      # Disable having to .json the request url but default to JSON. Don't
-      # include the new and edit routes that normal html routes expect
-      scope format: false, except: [ :new, :edit ], defaults: { format: :jsonapi } do
-        resource :profile, only: [ :show ]
-        resources :bookmarks do
-          collection do
-            resources :check, only: [ :index ], module: "bookmarks"
-          end
-        end
-      end
-    end
-  end
+  draw :admin
+  draw :api
 
   resources :images do
     collection do

@@ -2,17 +2,17 @@
   Service Announcements
 
 - content_for :menu do
-  .item.hidden{ data: { behavior: "bulk-edit-menu" } }
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
     .divider
     .header Bulk Actions
     .menu
       .item
-        .ui.fluid.icon.button
+        = bulk_edit_action "deactivate-all", url: admin_service_announcements_bulk_deactivate_path, class: "ui fluid icon button" do
           %i.hide.icon
           deactivate all
 
       .item
-        .ui.fluid.icon.negative.basic.button
+        = bulk_edit_action "delete-all", url: admin_service_announcements_bulk_delete_path, class: "ui fluid icon negative basic button" do
           %i.trash.icon
           delete all
 
@@ -20,18 +20,20 @@
 %table.ui.celled.table#stickContext
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
+      %th ID
       %th Title
       %th Message
       %th Active?
       %th Effective During
       %th Created At
+
   %tbody
     - if @service_announcements.any?
       - @service_announcements.each do |service_announcement|
         %tr
-          %td.collapsing= check_box_tag "select-#{ service_announcement.id }", nil, false, data: { id: service_announcement.id, behavior: "select" }
+          %td.collapsing= model_tag service_announcement, only: [ :id, :title ]
           %td.collapsing
             .ui.buttons
               = link_to admin_service_announcement_path(service_announcement), class: "ui icon button" do 
@@ -58,10 +60,11 @@
                     %i.warning.sign.icon
                     DANGERZONE
 
-                  .item{ data: { behavior: "modal", template: "admin/templates/service_announcements/delete", url: admin_service_announcement_path(service_announcement), title: service_announcement.title } }
+                  = modal_tag service_announcement, :delete, url: admin_service_announcement_path(service_announcement) do
                     %i.trash.icon
                     delete
 
+          %td.collapsing= service_announcement.id
           %td= service_announcement.title
           %td= service_announcement.message&.truncate(240)
           %td.collapsing= service_announcement.active

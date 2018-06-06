@@ -10,6 +10,7 @@ AllCops:
   Exclude:
     - bin/*
     - db/migrate/*
+    - db/schema.rb
 
 # Configuration parameters: Include, TreatCommentsAsGroupSeparators.
 # Include: **/Gemfile, **/gems.rb
@@ -21,6 +22,7 @@ Metrics/BlockLength:
     - db/**/*.rb
     - spec/**/**_spec.rb
     - spec/support/examples/**.rb
+    - config/routes/**/*.rb
 
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https

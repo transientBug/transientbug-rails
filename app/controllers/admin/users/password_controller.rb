@@ -2,8 +2,7 @@ class Admin::Users::PasswordController < AdminController
   before_action :set_user
 
   # GET /admin/users/1/password
-  def index
-  end
+  def index; end
 
   # POST /admin/users/1/password
   def create
@@ -19,10 +18,10 @@ class Admin::Users::PasswordController < AdminController
   private
 
   def set_user
-    @user = User.find params[:id]
+    @user = User.find params[:user_id]
   end
 
   def password_params
-    params.permit(:password, :password_confirmation)
+    params.require(:user).permit(:password, :password_confirmation)
   end
 end

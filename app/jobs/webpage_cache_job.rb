@@ -4,15 +4,13 @@ class WebpageCacheJob < ApplicationJob
   queue_as :default
   attr_reader :bookmark
 
-  def perform bookmark:
-    @bookmark = bookmark
-
-    download_original
+  rescue_from(ActiveJob::DeserializationError) do |exception|
+    Rails.logger.debug "Failed to find parameters"
+    Rails.logger.debug exception
   end
 
-  private
-
-  def download_original
-    WebpageCacheService::Cache.new(uri: bookmark.uri, key: bookmark.id).cache
+  def perform bookmark:
+    service = WebpageCacheService::Cache.new(webpage: bookmark.webpage).exec
+    bookmark.offline_caches << service.offline_cache
   end
 end

@@ -4,7 +4,15 @@ class Admin::ServiceAnnouncementsController < AdminController
 
   # GET /service_announcements
   def index
-    @service_announcements = ServiceAnnouncement.all.order(created_at: :desc).page params[:page]
+    service_announcement_table = ServiceAnnouncement.arel_table
+
+    query_param = params[:q]
+    base_where = service_announcement_table[:id].eq(query_param)
+      .or(service_announcement_table[:title].matches("%#{ query_param }%"))
+
+    @service_announcements = ServiceAnnouncement.all
+    @service_announcements = @service_announcements.where(base_where) if query_param.present? && !query_param.empty?
+    @service_announcements = @service_announcements.order(created_at: :desc).page params[:page]
   end
 
   # GET /service_announcements/1
@@ -66,6 +74,15 @@ class Admin::ServiceAnnouncementsController < AdminController
   end
 
   def service_announcement_params
-    params.require(:service_announcement).permit(:title, :message, :color, :icon, :start_at, :end_at, :active)
+    params.require(:service_announcement).permit(
+      :title,
+      :message,
+      :color,
+      :icon,
+      :start_at,
+      :end_at,
+      :active,
+      :logged_in_only
+    )
   end
 end

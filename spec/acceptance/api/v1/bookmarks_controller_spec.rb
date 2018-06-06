@@ -134,4 +134,12 @@ resource "v1 Bookmarks" do
       expect(status).to eq(404)
     end
   end
+
+  get "/api/v1/bookmarks/check" do
+    example "Check with no URL" do
+      do_request
+
+      expect(status).to eq(400)
+    end
+  end
 end

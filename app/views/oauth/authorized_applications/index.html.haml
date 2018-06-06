@@ -6,14 +6,15 @@
 %h2.ui.dividing.header Authorized Apps
 
 .ui.menu
-  .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
-    %i.trash.icon
-    revoke
+  .right.menu
+    = bulk_edit_action "revoke-all", url: oauth_authorized_applications_bulk_revoke_path do
+      %i.trash.icon
+      revoke all
 
 %table.ui.celled.table
   %thead
     %tr
-      %th= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+      %th= select_all_checkbox
       %th Actions
       %th Application Name
       %th Created At (UTC)
@@ -21,10 +22,10 @@
     - if @applications.any?
       - @applications.each do |application|
         %tr
-          %td.collapsing= check_box_tag "select-#{ application.id }", nil, false, data: { id: application.id, behavior: "select" }
+          %td.collapsing= model_tag application, only: [:name]
           %td.collapsing
             .ui.buttons
-              .ui.icon.button{ data: { behavior: "modal", template: "public/templates/oauth/authorized_applications/delete", url: oauth_authorized_application_path(application), model: JSON.parse(application.to_json) } }
+              = modal_tag application, :revoke, url: oauth_authorized_application_path(application), class: "ui icon button" do
                 %i.trash.icon
                 revoke
 

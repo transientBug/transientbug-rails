@@ -43,6 +43,6 @@ jobs:
     - stage: test
       script: .travis/rspec
     - stage: stylistic
-      script: bundle exec pronto run -f github_status -c origin/master --exit-code
+      script: bundle exec pronto run -f github_status -c origin/master
     - stage: docs
       script: bundle exec yard

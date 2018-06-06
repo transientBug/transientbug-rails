@@ -5,7 +5,15 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmarks = policy_scope(Bookmark).page params[:page]
+    @bookmarks = policy_scope(Bookmark)
+      .includes(
+        :webpage,
+        :tags,
+        :user,
+        offline_caches: [
+          :error_messages
+        ]
+      ).page params[:page]
   end
 
   # GET /bookmarks/new
@@ -78,7 +86,17 @@ class BookmarksController < ApplicationController
   private
 
   def set_bookmark
-    @bookmark = current_user.bookmarks.find(params[:id])
+    @bookmark = current_user.bookmarks.includes(
+      :webpage,
+      :tags,
+      :user,
+      offline_caches: [
+        :error_messages,
+        :assets_attachments,
+        :assets_blobs
+      ]
+    ).find(params[:id])
+
     authorize @bookmark
   end
 

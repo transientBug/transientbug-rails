@@ -14,3 +14,8 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.irregular "cache", "caches"
+  inflect.irregular "import_data", "import_data"
+end

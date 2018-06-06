@@ -92,9 +92,12 @@ gem "addressable"
 # gem "loofah"
 # gem "ruby-readability"
 # gem "stopwords-filter"
+gem "mimemagic"
 
 # Utils
 gem "mustermann" # Used by the autumn moon bot framework for pattern matching
+gem "exception_notification"
+gem "slack-notifier"
 
 # API Documentation from RAD
 gem "apitome"

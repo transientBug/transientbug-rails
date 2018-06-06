@@ -1,15 +1,19 @@
 - if bookmarks.any?
   .ui.menu
-    .ui.item= check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
-    .ui.item.hidden{ data: { group: "bulk-edit-menu", behavior: "recache-all" } }
+    .ui.item= select_all_checkbox
+
+    = bulk_edit_action "recache-all", url: bookmarks_bulk_recache_path, template: "public/templates/bookmarks/recache-all" do
       %i.download.icon
       recache
-    .ui.item.hidden{ data: { group: "bulk-edit-menu", behavior: "retag-all" } }
+
+    = bulk_edit_action "tag-all", url: bookmarks_bulk_tag_path, template: "public/templates/bookmarks/tag-all" do
       %i.tags.icon
       tags
-    .ui.right.item.hidden{ data: { group: "bulk-edit-menu", behavior: "delete-all" } }
-      %i.trash.icon
-      delete
+
+    .right.menu
+      = bulk_edit_action "delete-all", url: bookmarks_bulk_delete_path, template: "public/templates/bookmarks/delete-all" do
+        %i.trash.icon
+        delete all
 
   .ui.feed
     - bookmarks.each do |bookmark|
@@ -18,7 +22,8 @@
           %i.bookmark.icon
         .content
           .summary
-            = check_box_tag "select-#{ bookmark.id }", nil, false, data: { id: bookmark.id, behavior: "select" }
+            = model_tag bookmark, only: [:uri, :title]
+
             = link_to bookmark.title, bookmark_path(bookmark), class: "title"
             .date
               = distance_of_time_in_words_to_now(bookmark.created_at)
@@ -35,10 +40,14 @@
               %i.tags.icon
               = bookmark.tags.length
               = "tag".pluralize(bookmark.tags.length)
-            = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
+
+            - if bookmark.offline_caches.any?
+              = link_to "offline cache", bookmark_cache_index_path(bookmark), data: { turbolinks: false }, class: "ui item"
+
             = link_to "edit", edit_bookmark_path(bookmark), class: "ui item"
+
             .right.menu
-              .ui.red.item{ data: { behavior: "modal", template: "public/templates/bookmarks/delete", url: bookmark_path(bookmark), uri: bookmark.uri.to_s, title: bookmark.title } }
+              = modal_tag bookmark, url: bookmark_path(bookmark), template: "public/templates/bookmarks/delete" do
                 delete
 
           .ui.divider

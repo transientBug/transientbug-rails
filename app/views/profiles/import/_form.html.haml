@@ -1,0 +1,5 @@
+= form_with model: @import_data, url: profile_import_index_path, method: :post, class: "ui fluid form", local: true do |f|
+  .required.field
+    = f.file_field :upload, aria: { describedby: "Upload file" }
+
+  = f.submit "Import", class: "ui positive right floated submit button"

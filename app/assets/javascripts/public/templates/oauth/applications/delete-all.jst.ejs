@@ -1,0 +1,34 @@
+<div class="ui modal">
+  <div class="ui header">
+    <i class="trash icon"></i>
+    Delete Applications?
+  </div>
+  <div class="scrolling content">
+    <p>Are you REALLY sure you want to delete these applications?</p>
+    <p>Any deployed applications using <strong>ANY</strong> of these credentials will be invalidated and unable to interact with transientBug anymore.</p>
+    <table class="ui celled table">
+      <thead>
+        <th>Name</th>
+        <th>Client ID</th>
+      </thead>
+      <tbody>
+        <% models.forEach((model) => { %>
+          <tr>
+            <td><%= model.name %></td>
+            <td><%= model.uid %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <div class="ui cancel button">
+      <i class="remove icon"></i>
+      Cancel!
+    </div>
+    <div class="ui red ok button">
+      <i class="checkmark icon"></i>
+      Yes, I'm sure
+    </div>
+  </div>
+</div>
