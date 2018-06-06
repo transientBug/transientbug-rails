@@ -1,20 +1,22 @@
 - content_for :page_title do
   Bookmark '#{ @bookmark.title }'
 
-= model_tag @bookmark, only: [ :uri, :title ]
+= model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
 %h2.ui.header
   .content= @bookmark.title
 
-= link_to @bookmark.uri.to_s
-.date= @bookmark.created_at.to_s(:long)
+= link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+.date
+  = @bookmark.created_at.to_s(:long)
+  UTC
 
 .ui.small.tag.labels
   - @bookmark.tags.each do |tag|
     = link_to bookmarks_tag_path(tag) do
       .ui.label{ class: [tag.color] }= tag.label
 
-.ui.fluid.text.menu
+.ui.fluid.menu
   - if @bookmark.offline_caches.any?
     = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
 
@@ -27,4 +29,4 @@
       delete
 
 - if @bookmark.description.present?
-  %p= @bookmark.description
+  = simple_format @bookmark.description

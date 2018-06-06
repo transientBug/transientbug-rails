@@ -20,6 +20,9 @@
 
   .field
     = f.label :tags
-    = f.select :tags, bookmark.tags.map { |t| [ t.label, t.label ] }, {}, { multiple: true, class: "ui multiple search selection dropdown", data: { behavior: "autocomplete-bookmark-tags" } }
+    .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-bookmark-tags" } }
+      = f.hidden_field :tags, value: bookmark.tags.map(&:label).join(",")
+      %i.dropdown.icon
+      .default.text Search Tags
 
   = f.submit "Save", class: "ui positive right floated submit button"

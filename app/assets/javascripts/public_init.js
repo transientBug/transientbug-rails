@@ -9,4 +9,11 @@ App.registerInitializer("semantic-ui api", () => {
   $.fn.api.settings.cache = false
   $.fn.api.settings.debug = true
   $.fn.api.settings.verbose = true
+  $.fn.api.settings.beforeSend = (settings) => {
+    settings.urlData = {
+      query: encodeURIComponent(settings.urlData.query)
+    }
+
+    return settings
+  }
 })
