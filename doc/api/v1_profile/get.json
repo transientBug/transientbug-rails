@@ -18,19 +18,19 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/profile?auth_token=person9%40example.com%3Abbb023721983da6a6a6dc05b02d2876aa8fcb40d680d4656a9a8d63c4bcda16e",
+      "request_path": "/api/v1/profile?auth_token=person9%40example.com%3A5958baf82f921de448abc6eee4655ded3dbbb872f2facc53fa71bd5682ad8153",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person9@example.com:bbb023721983da6a6a6dc05b02d2876aa8fcb40d680d4656a9a8d63c4bcda16e"
+        "auth_token": "person9@example.com:5958baf82f921de448abc6eee4655ded3dbbb872f2facc53fa71bd5682ad8153"
       },
       "request_content_type": "application/vnd.api+json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\"data\":{\"type\":\"profile\",\"id\":9,\"attributes\":{\"api_token\":\"bbb023721983da6a6a6dc05b02d2876aa8fcb40d680d4656a9a8d63c4bcda16e\",\"username\":\"person9\",\"email\":\"person9@example.com\"},\"links\":{\"self\":\"http://example.org/api/v1/profile\"}}}",
+      "response_body": "{\"data\":{\"type\":\"profile\",\"id\":9,\"attributes\":{\"api_token\":\"5958baf82f921de448abc6eee4655ded3dbbb872f2facc53fa71bd5682ad8153\",\"username\":\"person9\",\"email\":\"person9@example.com\"},\"links\":{\"self\":\"http://example.org/api/v1/profile\"}}}",
       "response_headers": {
         "Content-Type": "application/vnd.api+json"
       },

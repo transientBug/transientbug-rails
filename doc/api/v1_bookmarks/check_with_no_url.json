@@ -18,14 +18,14 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/bookmarks/check?auth_token=person8%40example.com%3A0d4474c06142eeba573ec64657db24c05918ca68e5496239f9c5e65b50e94300",
+      "request_path": "/api/v1/bookmarks/check?auth_token=person8%40example.com%3Afb306810000059000a6d10c0fe32c07a608dfa0e20e7911daff60889c8c7ff23",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person8@example.com:0d4474c06142eeba573ec64657db24c05918ca68e5496239f9c5e65b50e94300"
+        "auth_token": "person8@example.com:fb306810000059000a6d10c0fe32c07a608dfa0e20e7911daff60889c8c7ff23"
       },
       "request_content_type": "application/vnd.api+json",
       "response_status": 400,
