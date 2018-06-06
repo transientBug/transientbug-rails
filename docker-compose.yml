@@ -21,7 +21,7 @@ services:
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
+      #test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -40,9 +40,7 @@ services:
       - "redis"
     build:
       context: .
-    volumes:
-      - "./storage:/dropzone"
-    command: bundle exec sidekiq -C config/sidekiq.yml
+      dockerfile: Dockerfile.sidekiq
     networks:
       - "services"
     env_file:
@@ -56,7 +54,7 @@ services:
       - "sidekiq"
     build:
       context: .
-    command: bundle exec clockwork clock.rb
+      dockerfile: Dockerfile.clockwork
     networks:
       - "services"
     env_file:
@@ -69,6 +67,7 @@ services:
       - "redis"
     build:
       context: .
+      dockerfile: Dockerfile.rails
     ports:
       - "8000:3000"
     volumes:
@@ -78,18 +77,13 @@ services:
       - "services"
     env_file:
       - ".env.production"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost", "||", "exit", "1"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
 
   cable:
     depends_on:
       - "redis"
     build:
       context: .
-    command: bundle exec puma -p 28080 cable/config.ru
+      dockerfile: Dockerfile.cable
     ports:
       - "28080:28080"
     #volumes:

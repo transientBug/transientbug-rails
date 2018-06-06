@@ -1,0 +1,27 @@
+FROM ruby:2.4-alpine3.6
+LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
+
+RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories &&\
+    echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories &&\
+    echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories &&\
+    apk add --no-cache --update build-base \
+                                postgresql-dev \
+                                git \
+                                curl \
+                                nodejs-current \
+                                yarn
+
+RUN mkdir /app &&\
+    mkdir /dropzone
+
+WORKDIR /app
+
+COPY . .
+
+RUN echo "install: --no-document" > $HOME/.gemrc &&\
+    echo "update: --no-document" >> $HOME/.gemrc &&\
+    bundle install --binstubs --jobs 4 --without development test
+
+VOLUME ["/dropzone"]
+
+CMD bundle exec puma -p 28080 cable/config.ru
