@@ -28,16 +28,23 @@ class BookmarksIndex < Chewy::Index
   }
 
   define_type Bookmark do
-    field :uri, type: "keyword", value: ->(bookmark) { bookmark.uri.to_s }
+    field :uri, type: :keyword, value: ->(bookmark) { bookmark.uri.to_s }
 
-    field :title, type: "text", term_vector: "yes", analyzer: :title
-    field :description, type: "text", analyzer: :description
+    field :scheme, type: :keyword, value: ->(bookmark) { bookmark.uri.scheme }
+    field :host, type: :keyword, value: ->(bookmark) { bookmark.uri.host }
+    field :port, type: :integer, value: ->(bookmark) { bookmark.uri.port }
+    field :path, type: :keyword, value: ->(bookmark) { bookmark.uri.path }
+    field :query, type: :keyword, value: ->(bookmark) { bookmark.uri.query }
+    field :fragment, type: :keyword, value: ->(bookmark) { bookmark.uri.fragment }
 
-    field :tags, type: "text", analyzer: :tag, value: ->(bookmark) { bookmark.tags.map(&:label) }
+    field :title, type: :text, term_vector: :yes, analyzer: :title
+    field :description, type: :text, analyzer: :description
+
+    field :tags, type: :text, analyzer: :tag, value: ->(bookmark) { bookmark.tags.map(&:label) }
 
     field :user_id, type: :integer
 
-    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(bookmark) {
+    field :suggest, type: :completion, contexts: [ { name: :type, type: :category } ], value: ->(bookmark) {
       {
         input: [bookmark.title&.downcase, bookmark.uri.to_s].concat(bookmark.tags.map(&:label)),
         contexts: {
@@ -46,13 +53,13 @@ class BookmarksIndex < Chewy::Index
       }
     }
 
-    field :created_at, type: "date", include_in_all: false
+    field :created_at, type: :date, include_in_all: false
   end
 
   define_type Tag do
-    field :label, type: "keyword"
+    field :label, type: :keyword
 
-    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(tag) {
+    field :suggest, type: :completion, contexts: [ { name: :type, type: :category } ], value: ->(tag) {
       {
         input: tag.label.downcase,
         contexts: {
