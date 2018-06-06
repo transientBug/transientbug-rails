@@ -3,18 +3,13 @@
   "resource_explanation": null,
   "http_method": "GET",
   "route": "/api/v1/bookmarks/check",
-  "description": "Check for a non-existent bookmark",
+  "description": "Check with no URL",
   "explanation": null,
   "parameters": [
     {
       "required": true,
       "name": "auth_token",
       "description": "Authentication Token"
-    },
-    {
-      "required": true,
-      "name": "url",
-      "description": "URL to check"
     }
   ],
   "response_fields": [
@@ -23,19 +18,18 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/bookmarks/check?auth_token=person7%40example.com%3A3fd77fd51f38879bb36daf1fe2f709496f617697b53ad9a0d1105479071c35e6&url=http%3A%2F%2Fnot.found",
+      "request_path": "/api/v1/bookmarks/check?auth_token=person8%40example.com%3Afb306810000059000a6d10c0fe32c07a608dfa0e20e7911daff60889c8c7ff23",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/vnd.api+json",
         "Accept": "application/vnd.api+json"
       },
       "request_query_parameters": {
-        "auth_token": "person7@example.com:3fd77fd51f38879bb36daf1fe2f709496f617697b53ad9a0d1105479071c35e6",
-        "url": "http://not.found"
+        "auth_token": "person8@example.com:fb306810000059000a6d10c0fe32c07a608dfa0e20e7911daff60889c8c7ff23"
       },
       "request_content_type": "application/vnd.api+json",
-      "response_status": 404,
-      "response_status_text": "Not Found",
+      "response_status": 400,
+      "response_status_text": "Bad Request",
       "response_body": null,
       "response_headers": {
         "Content-Type": "application/vnd.api+json"

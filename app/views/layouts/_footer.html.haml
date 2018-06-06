@@ -13,16 +13,16 @@
           - if Rails.env.development?
             .item= link_to "Dev Auth", auth_path(:developer)
 
-          .item= link_to "Firefox Extension", "https://github.com/transientBug/firefox-extension"
+          .item= link_to "Firefox Extension", "https://github.com/transientBug/firefox-extension", data: { turbolinks: false }
           .item= link_to "Images", images_path
 
       .three.wide.column
         %h4.ui.inverted.header All the Credits!
         .ui.inverted.link.list
-          .item=link_to "Semantic UI", "https://semantic-ui.com/"
-          .item= link_to "Rails 5.2", "https://github.com/rails/rails"
+          .item=link_to "Semantic UI", "https://semantic-ui.com/", data: { turbolinks: false }
+          .item= link_to "Rails 5.2", "https://github.com/rails/rails", data: { turbolinks: false }
           .item
-            = link_to "https://github.com/transientBug/transientbug-rails" do
+            = link_to "https://github.com/transientBug/transientbug-rails", data: { turbolinks: false } do
               %i.github.icon
               The codez
 
@@ -44,9 +44,9 @@
     = image_tag "bug_logo.png", class: "ui centered mini image"
 
     .ui.horizontal.inverted.small.divided.link.list
-      .item= link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues"
+      .item= link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues", data: { turbolinks: false }
       .item= link_to "FAQ", faq_path
-      .item= link_to "API Docs", apitome.root_path
+      .item= link_to "API Docs", apitome.root_path, data: { turbolinks: false }
       .item support (at) transientbug.ninja
       .item= link_to "Terms of Service", tos_path
       .item= link_to "Privacy Policy", privacy_path
