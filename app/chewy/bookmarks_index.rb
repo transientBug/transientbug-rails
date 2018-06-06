@@ -27,11 +27,26 @@ class BookmarksIndex < Chewy::Index
     }
   }
 
+  def self.build_host_iterations bookmark
+    url = bookmark.uri.host
+    host_iterations = [ url ]
+
+    loop do
+      break if url.count(".") < 1
+      url = url.split(".", 2).last
+      host_iterations << url
+    end
+
+    host_iterations
+  end
+
   define_type Bookmark do
     field :uri, type: :keyword, value: ->(bookmark) { bookmark.uri.to_s }
 
     field :scheme, type: :keyword, value: ->(bookmark) { bookmark.uri.scheme }
-    field :host, type: :keyword, value: ->(bookmark) { bookmark.uri.host }
+
+    field :host, type: :keyword, value: ->(bookmark) { build_host_iterations bookmark }
+
     field :port, type: :integer, value: ->(bookmark) { bookmark.uri.port }
     field :path, type: :keyword, value: ->(bookmark) { bookmark.uri.path }
     field :query, type: :keyword, value: ->(bookmark) { bookmark.uri.query }

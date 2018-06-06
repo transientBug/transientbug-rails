@@ -5,4 +5,12 @@
 
 %h1 Search Results
 
-= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+- if @bookmarks.errors.any?
+  %ul
+    - @bookmarks.errors.each do |k, v|
+      %li
+        = k
+        = v.join ", "
+
+- else
+  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks.each }

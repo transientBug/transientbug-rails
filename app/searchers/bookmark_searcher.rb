@@ -16,6 +16,11 @@ class BookmarkSearcher < ApplicationSearcher
     fields(*USER_SEARCHABLE_FIELDS)
   end
 
+  def objects
+    ids = @results.pluck(:_id)
+    Bookmark.where(id: ids).includes(*@includes)
+  end
+
   def query_search query
     query_ast = ApplicationSearcher::Query.new []
 

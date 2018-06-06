@@ -1,10 +1,10 @@
-json.success true
+json.success false
 
 json.results do
   json.bookmarks do
     json.name "Bookmarks"
     json.results do
-      json.array! @bookmarks.each, partial: "bookmarks/bookmark", as: :bookmark
+      json.array! @bookmarks, partial: "bookmarks/bookmark", as: :bookmark
     end
   end
 

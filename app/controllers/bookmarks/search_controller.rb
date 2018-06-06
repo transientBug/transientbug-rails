@@ -5,19 +5,22 @@ class Bookmarks::SearchController < ApplicationController
     @bookmarks = BookmarkSearcher.new
       .search(params)
       .query( term: { user_id: current_user.id } )
-      .objects
-      # .includes(
-      #   :webpage,
-      #   :tags,
-      #   :user,
-      #   offline_caches: [
-      #     :error_messages
-      #   ]
-      # )
+      .includes(
+        :webpage,
+        :tags,
+        :user,
+        offline_caches: [
+          :error_messages
+        ]
+      )
 
     respond_to do |format|
       format.html { render :index }
-      format.json { render :index, status: :ok }
+      if @bookmarks.errors.any?
+        format.json { render :error, status: 500 }
+      else
+        format.json { render :index, status: :ok }
+      end
     end
   end
 end
