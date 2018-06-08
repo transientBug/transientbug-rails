@@ -5,12 +5,19 @@
 
 %h1 Search Results
 
-- if @bookmarks.errors.any?
-  %ul
-    - @bookmarks.errors.each do |k, v|
-      %li
-        = k
-        = v.join ", "
+.ui.search
+  .ui.fluid.icon.input
+    = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
+      = search_field_tag "q", @query, class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
+    %i.search.icon
 
-- else
-  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks.each }
+- if @searcher.errors.any?
+  .ui.negative.message
+    - @searcher.errors.each do |field, message|
+      .header A wild error appeared!
+      %p
+        %b #{ field.to_s.titleize }:
+        = message
+
+- if @bookmarks.any?
+  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

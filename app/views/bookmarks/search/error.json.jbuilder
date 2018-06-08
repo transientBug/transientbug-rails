@@ -17,6 +17,6 @@ json.results do
 end
 
 json.action do
-  json.url bookmarks_search_index_path(q: params[:q])
+  json.url bookmarks_search_index_path(q: @query)
   json.text "See all results"
 end
