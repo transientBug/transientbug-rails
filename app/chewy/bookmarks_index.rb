@@ -3,11 +3,11 @@ class BookmarksIndex < Chewy::Index
     analyzer: {
       title: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :edgeNGram3x6]
+        filter: [:lowercase, :trim]
       },
       description: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :english_stop, :edgeNGram3x6]
+        filter: [:lowercase, :trim, :english_stop]
       },
       tag: {
         tokenizer: :standard,
@@ -55,7 +55,7 @@ class BookmarksIndex < Chewy::Index
     field :title, type: :text, term_vector: :yes, analyzer: :title
     field :description, type: :text, analyzer: :description
 
-    field :tags, type: :text, analyzer: :tag, value: ->(bookmark) { bookmark.tags.map(&:label) }
+    field :tags, type: :keyword, value: ->(bookmark) { bookmark.tags.map(&:label) }
 
     field :user_id, type: :integer
 
@@ -73,6 +73,7 @@ class BookmarksIndex < Chewy::Index
 
   define_type Tag do
     field :label, type: :keyword
+    field :label_edge_gram, type: :text, analyzer: :tag, value: ->(tag) { tag.label }
 
     field :suggest, type: :completion, contexts: [ { name: :type, type: :category } ], value: ->(tag) {
       {
