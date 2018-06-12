@@ -159,4 +159,8 @@ class ApplicationSearcher
 
     self
   end
+
+  def blank_query?
+    @input.empty? || @input.blank?
+  end
 end
