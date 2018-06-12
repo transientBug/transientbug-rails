@@ -11,13 +11,13 @@
       = search_field_tag "q", @query, class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
     %i.search.icon
 
-- if @searcher.errors.any?
+- if @bookmarks.errors.any?
   .ui.negative.message
-    - @searcher.errors.each do |field, message|
+    - @bookmarks.errors.each do |field, message|
       .header A wild error appeared!
       %p
         %b #{ field.to_s.titleize }:
         = message
 
-- if @bookmarks.any?
+- if @bookmarks.any? && @query.present?
   = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

@@ -4,11 +4,9 @@ class ApplicationSearcher
       operator = clause[:operator]&.to_s
       field = clause[:field]&.to_s
 
-      if clause[:phrase]
-        PhraseClause.new operator, field, clause[:phrase]
-      else
-        TermClause.new operator, field, clause[:term]
-      end
+      next PhraseClause.new operator, field, clause[:phrase] if clause[:phrase]
+
+      TermClause.new operator, field, clause[:term]
     end
 
     rule(query: sequence(:clauses)) { Query.new(clauses) }

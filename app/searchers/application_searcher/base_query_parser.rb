@@ -19,11 +19,12 @@ class ApplicationSearcher
       args.each do |arg|
         rule("#{ arg }_field") { str(arg).as(:field) >> colon }
       end
+    end
 
-      rule(:field) do
-        first = send(:"#{ args.first }_field")
-        args[1..-1].reduce(first) { |memo, arg| memo.| send(:"#{ arg }_field") }
-      end
+    rule(:field) do
+      args = methods.select { |m| m.to_s.end_with? "_field" }
+      first = send(args.first)
+      args[1..-1].reduce(first) { |memo, arg| memo.| send(arg) }
     end
 
     rule(:field_only_clause) { operator.maybe >> field >> (space | eof).present? }
