@@ -1,14 +1,12 @@
 class ApplicationSearcher
   include Enumerable
+  include Concerns::ActiveRecord
+  include Concerns::Pagination
 
   UNBALANCED_QUOTES_ERROR = "Quotation marks were unbalanced, an extra quote was added to the end of the query".freeze
 
   class << self
-    attr_reader :index_klass, :model_klass
-
-    def model klass
-      @model_klass = klass
-    end
+    attr_reader :index_klass
 
     def index klass
       @index_klass = klass
@@ -62,10 +60,6 @@ class ApplicationSearcher
     @chewy_modifiers ||= []
   end
 
-  def activerecord_modifiers
-    @activerecord_modifiers ||= []
-  end
-
   def query str=nil, &block
     chewy_modifiers << block if block_given?
 
@@ -76,17 +70,13 @@ class ApplicationSearcher
     return self unless str.is_a? String
 
     if str.count('"').odd?
-      str = str + '"'
+      str += '"'
       errors.add :query, UNBALANCED_QUOTES_ERROR
     end
 
     @input = str
 
     self
-  end
-
-  def activerecord_modifier &block
-    activerecord_modifiers << block if block_given?
   end
 
   def chewy_results
@@ -102,12 +92,7 @@ class ApplicationSearcher
       end
 
       query.expand_and_alias self.class.search_keywords
-
-      ap query
-
       elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
-
-      ap elasticsearch_query.to_elasticsearch
 
       es_results = self.class.index_klass.query elasticsearch_query.to_elasticsearch
       Array(queries).each do |additional_query|
@@ -117,17 +102,6 @@ class ApplicationSearcher
       return es_results unless chewy_modifiers.any?
       chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
     end
-  end
-
-  def fetch res
-    if res.none?
-      records = self.class.model_klass.none
-    else
-      records = self.class.model_klass.where self.class.model_klass.primary_key => res.pluck(:_id)
-    end
-
-    return records unless activerecord_modifiers.any?
-    activerecord_modifiers.reverse.inject(records) { |memo, modifier| modifier.call memo }
   end
 
   def results
@@ -144,34 +118,6 @@ class ApplicationSearcher
     results.each do |result|
       yield result
     end
-  end
-
-  def total_pages
-    chewy_results.total_pages
-  end
-
-  def current_page
-    chewy_results.current_page
-  end
-
-  def limit_value
-    chewy_results.limit_value
-  end
-
-  def page val
-    query do |chewy|
-      chewy.page val
-    end
-
-    self
-  end
-
-  def per val
-    query do |chewy|
-      chewy.per val
-    end
-
-    self
   end
 
   def blank_query?

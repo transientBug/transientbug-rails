@@ -27,17 +27,37 @@ class BookmarksIndex < Chewy::Index
     }
   }
 
-  def self.build_host_iterations bookmark
-    url = bookmark.uri.host
-    host_iterations = [ url ]
+  class << self
+    def build_host_iterations bookmark
+      url = bookmark.uri.host
+      host_iterations = [ url ]
 
-    loop do
-      break if url.count(".") < 1
-      url = url.split(".", 2).last
-      host_iterations << url
+      loop do
+        break if url.count(".") < 1
+        url = url.split(".", 2).last
+        host_iterations << url
+      end
+
+      host_iterations
     end
 
-    host_iterations
+    def build_bookmark_suggest bookmark
+      {
+        input: [bookmark.title&.downcase, bookmark.uri.to_s].concat(bookmark.tags.map(&:label)),
+        contexts: {
+          type: [:bookmark]
+        }
+      }
+    end
+
+    def build_tag_suggest tag
+      {
+        input: tag.label.downcase,
+        contexts: {
+          type: [ :tag ]
+        }
+      }
+    end
   end
 
   define_type Bookmark do
@@ -45,7 +65,7 @@ class BookmarksIndex < Chewy::Index
 
     field :scheme, type: :keyword, value: ->(bookmark) { bookmark.uri.scheme }
 
-    field :host, type: :keyword, value: ->(bookmark) { build_host_iterations bookmark }
+    field :host, type: :keyword, value: ->(b) { build_host_iterations b }
 
     field :port, type: :integer, value: ->(bookmark) { bookmark.uri.port }
     field :path, type: :keyword, value: ->(bookmark) { bookmark.uri.path }
@@ -59,14 +79,9 @@ class BookmarksIndex < Chewy::Index
 
     field :user_id, type: :integer
 
-    field :suggest, type: :completion, contexts: [ { name: :type, type: :category } ], value: ->(bookmark) {
-      {
-        input: [bookmark.title&.downcase, bookmark.uri.to_s].concat(bookmark.tags.map(&:label)),
-        contexts: {
-          type: [:bookmark]
-        }
-      }
-    }
+    field :suggest, type: :completion,
+      contexts: [ { name: :type, type: :category } ],
+      value: ->(b) { build_bookmark_suggest b }
 
     field :created_at, type: :date, include_in_all: false
   end
@@ -74,13 +89,8 @@ class BookmarksIndex < Chewy::Index
   define_type Tag do
     field :label, type: :keyword
 
-    field :suggest, type: :completion, contexts: [ { name: :type, type: :category } ], value: ->(tag) {
-      {
-        input: tag.label.downcase,
-        contexts: {
-          type: [ :tag ]
-        }
-      }
-    }
+    field :suggest, type: :completion,
+      contexts: [ { name: :type, type: :category } ],
+      value: ->(t) { build_tag_suggest t }
   end
 end

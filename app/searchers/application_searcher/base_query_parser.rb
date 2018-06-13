@@ -4,7 +4,7 @@ class ApplicationSearcher
 
     rule(:operator) { (str("+") | str("-")).as(:operator) }
 
-    rule(:space)  { match("\s").repeat(1) }
+    rule(:space) { match("\s").repeat(1) }
     rule(:quote) { str("\"") }
     rule(:colon) { str(":") }
     rule(:word) { match("[^\s\"]").repeat(1) }
