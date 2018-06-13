@@ -54,14 +54,20 @@ class ApplicationSearcher
     @errors ||= Errors.new
   end
 
-  def query str=nil, &block
+  def queries
+    @queries ||= []
+  end
+
+  def chewy_modifiers
     @chewy_modifiers ||= []
-    @chewy_modifiers << block if block_given?
+  end
+
+  def query str=nil, &block
+    chewy_modifiers << block if block_given?
 
     return self unless str.present?
-    @queries ||= []
-    @queries << str if str.is_a? Hash
-    @queries.concat str if str.is_a? Array
+    queries << str if str.is_a? Hash
+    queries.concat str if str.is_a? Array
 
     return self unless str.is_a? String
 
@@ -75,9 +81,12 @@ class ApplicationSearcher
     self
   end
 
-  def activerecord_modifier &block
+  def activerecord_modifiers
     @activerecord_modifiers ||= []
-    @activerecord_modifiers << block if block_given?
+  end
+
+  def activerecord_modifier &block
+    activerecord_modifiers << block if block_given?
   end
 
   def chewy_results
@@ -95,13 +104,15 @@ class ApplicationSearcher
       query.expand_and_alias self.class.search_keywords
       elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
 
+      ap elasticsearch_query.to_elasticsearch
+
       es_results = self.class.index_klass.query elasticsearch_query.to_elasticsearch
-      Array(@queries).each do |additional_query|
+      Array(queries).each do |additional_query|
         es_results = es_results.query additional_query
       end
 
-      return es_results unless @chewy_modifiers.any?
-      @chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
+      return es_results unless chewy_modifiers.any?
+      chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
     end
   end
 
@@ -112,13 +123,13 @@ class ApplicationSearcher
       records = self.class.model_klass.where self.class.model_klass.primary_key => res.pluck(:_id)
     end
 
-    return records unless @activerecord_modifiers.any?
-    @activerecord_modifiers.reverse.inject(records) { |memo, modifier| modifier.call memo }
+    return records unless activerecord_modifiers.any?
+    activerecord_modifiers.reverse.inject(records) { |memo, modifier| modifier.call memo }
   end
 
   def results
     @results ||= begin
-      return fetch [] if @input.blank? || @input.empty?
+      return fetch [] if blank_query?
 
       fetch chewy_results
     end
@@ -161,6 +172,6 @@ class ApplicationSearcher
   end
 
   def blank_query?
-    @input.empty? || @input.blank?
+    input.empty? || input.blank?
   end
 end

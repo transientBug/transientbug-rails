@@ -6,9 +6,10 @@ class ApplicationSearcher
       nil => :should
     }.freeze
 
-    attr_accessor :operator, :field, :term
+    attr_accessor :op, :operator, :field, :term
 
     def initialize operator, field
+      @op = operator
       @operator = OP_MAP[ operator ].tap do |op_symbol|
         fail ArgumentError, "Unknown operator: `#{ operator }'" unless op_symbol
       end

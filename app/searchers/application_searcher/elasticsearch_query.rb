@@ -39,6 +39,10 @@ class ApplicationSearcher
     end
 
     def clause_to_query clause
+      if clause.is_a? NestedClause
+        return self.class.new(@mappings, clause.query).to_elasticsearch
+      end
+
       field_type = @mappings[ clause.field ]
       clause_heuristics = HEURISTICS_MAP[ field_type ].new clause
       clause_heuristics.to_elasticsearch

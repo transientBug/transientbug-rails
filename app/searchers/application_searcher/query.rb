@@ -28,11 +28,15 @@ class ApplicationSearcher
           end
         end
 
-        fields.map do |field|
+        should_terms = fields.map do |field|
           clause.dup.tap do |dup_clause|
             dup_clause.field = field
+            dup_clause.operator = :should
+            dup_clause.op = '+'
           end
         end
+
+        NestedClause.new clause.op, should_terms
       end.chunk { |c| c.operator }.to_h
 
       @should_terms   = grouped_expanded_clauses.fetch(:should, [])
