@@ -62,6 +62,10 @@ class ApplicationSearcher
     @chewy_modifiers ||= []
   end
 
+  def activerecord_modifiers
+    @activerecord_modifiers ||= []
+  end
+
   def query str=nil, &block
     chewy_modifiers << block if block_given?
 
@@ -79,10 +83,6 @@ class ApplicationSearcher
     @input = str
 
     self
-  end
-
-  def activerecord_modifiers
-    @activerecord_modifiers ||= []
   end
 
   def activerecord_modifier &block
@@ -103,8 +103,6 @@ class ApplicationSearcher
 
       query.expand_and_alias self.class.search_keywords
       elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
-
-      ap elasticsearch_query.to_elasticsearch
 
       es_results = self.class.index_klass.query elasticsearch_query.to_elasticsearch
       Array(queries).each do |additional_query|
