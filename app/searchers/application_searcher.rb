@@ -102,7 +102,12 @@ class ApplicationSearcher
       end
 
       query.expand_and_alias self.class.search_keywords
+
+      ap query
+
       elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
+
+      ap elasticsearch_query.to_elasticsearch
 
       es_results = self.class.index_klass.query elasticsearch_query.to_elasticsearch
       Array(queries).each do |additional_query|
@@ -170,6 +175,6 @@ class ApplicationSearcher
   end
 
   def blank_query?
-    input.empty? || input.blank?
+    input.blank? || input.empty?
   end
 end
