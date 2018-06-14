@@ -4,13 +4,10 @@ class ApplicationSearcher
 
     def initialize clauses
       @clauses = clauses
-      grouped = @clauses.chunk(&:operator).to_h
-
-      @should_terms   = grouped.fetch(:should, [])
-      @must_terms     = grouped.fetch(:must, [])
-      @must_not_terms = grouped.fetch(:must_not, [])
+      assign_groups clauses
     end
 
+    # rubocop:disable Metrics/AbcSize
     def expand_and_alias search_keywords
       fields = search_keywords.keys
       alias_map = search_keywords.each_with_object({}) do |(field, aliases), memo|
@@ -38,11 +35,17 @@ class ApplicationSearcher
 
         NestedClause.new clause.op, should_terms
       end
-        .chunk(&:operator).to_h
 
-      @should_terms   = grouped_expanded_clauses.fetch(:should, [])
-      @must_terms     = grouped_expanded_clauses.fetch(:must, [])
-      @must_not_terms = grouped_expanded_clauses.fetch(:must_not, [])
+      assign_groups grouped_expanded_clauses
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    def assign_groups ungrouped_clauses
+      grouped = ungrouped_clauses.chunk(&:operator).to_h
+
+      @should_terms   = grouped.fetch(:should, [])
+      @must_terms     = grouped.fetch(:must, [])
+      @must_not_terms = grouped.fetch(:must_not, [])
     end
   end
 end

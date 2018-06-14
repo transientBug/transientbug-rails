@@ -22,16 +22,14 @@ class ApplicationSearcher
         activerecord_modifiers << block if block_given?
       end
 
+      # rubocop:disable Metrics/AbcSize
       def fetch res
-        if res.none?
-          records = self.class.model_klass.none
-        else
-          records = self.class.model_klass.where self.class.model_klass.primary_key => res.pluck(:_id)
-        end
+        records = self.class.model_klass.none if res.none?
+        records ||= self.class.model_klass.where self.class.model_klass.primary_key => res.pluck(:_id)
 
-        return records unless activerecord_modifiers.any?
         activerecord_modifiers.reverse.inject(records) { |memo, modifier| modifier.call memo }
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

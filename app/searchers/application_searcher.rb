@@ -63,43 +63,48 @@ class ApplicationSearcher
   def query str=nil, &block
     chewy_modifiers << block if block_given?
 
-    return self unless str.present?
     queries << str if str.is_a? Hash
     queries.concat str if str.is_a? Array
 
     return self unless str.is_a? String
 
-    if str.count('"').odd?
-      str += '"'
-      errors.add :query, UNBALANCED_QUOTES_ERROR
-    end
-
-    @input = str
+    queries << parse(normalized(str))
 
     self
   end
 
+  def parslet_parse str
+    parse_tree = self.class.parser_klass.new.parse str
+    ApplicationSearcher::QueryTransformer.new.apply parse_tree
+  rescue Parslet::ParseFailed => e
+    Rails.logger.error e
+    errors.add :query, "Unable to parse query"
+  end
+
+  def normalized str
+    return str unless str.count('"').odd?
+
+    errors.add :query, UNBALANCED_QUOTES_ERROR
+    str + '"'
+  end
+
+  def parse str
+    @input = str
+
+    query = parslet_parse str, query
+    query ||= ApplicationSearcher::Query.new []
+
+    query.expand_and_alias self.class.search_keywords
+    elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
+
+    elasticsearch_query.to_elasticsearch
+  end
+
   def chewy_results
     @chewy_results ||= begin
-      query = ApplicationSearcher::Query.new []
+      queries << parse_input
 
-      begin
-        parse_tree = self.class.parser_klass.new.parse input
-        query = ApplicationSearcher::QueryTransformer.new.apply parse_tree
-      rescue Parslet::ParseFailed => e
-        Rails.logger.error e
-        errors.add :query, "Unable to parse query"
-      end
-
-      query.expand_and_alias self.class.search_keywords
-      elasticsearch_query = ApplicationSearcher::ElasticsearchQuery.new self.class.field_type_mappings, query
-
-      es_results = self.class.index_klass.query elasticsearch_query.to_elasticsearch
-      Array(queries).each do |additional_query|
-        es_results = es_results.query additional_query
-      end
-
-      return es_results unless chewy_modifiers.any?
+      es_results = queries.inject(self.class.index_klass) { |memo, query| memo.query query }
       chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
     end
   end

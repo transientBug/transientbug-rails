@@ -39,23 +39,23 @@ class ApplicationSearcher
     end
 
     def clause_to_query clause
-      if clause.is_a? NestedClause
-        return self.class.new(@mappings, clause.query).to_elasticsearch
-      end
+      return self.class.new(@mappings, clause.query).to_elasticsearch if clause.is_a? NestedClause
 
       field_type = @mappings[ clause.field ]
       clause_heuristics = HEURISTICS_MAP[ field_type ].new clause
       clause_heuristics.to_elasticsearch
     end
 
+    # rubocop:disable Metrics/AbcSize
     def to_elasticsearch
       bool = {}
 
-      bool[:should]   = query.should_terms.flat_map(&method(:clause_to_query)) if query.should_terms.any?
-      bool[:must]     = query.must_terms.flat_map(&method(:clause_to_query)) if query.must_terms.any?
+      bool[:should]   = query.should_terms.flat_map(&method(:clause_to_query))   if query.should_terms.any?
+      bool[:must]     = query.must_terms.flat_map(&method(:clause_to_query))     if query.must_terms.any?
       bool[:must_not] = query.must_not_terms.flat_map(&method(:clause_to_query)) if query.must_not_terms.any?
 
       { bool: bool }
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

@@ -79,9 +79,10 @@ class BookmarksIndex < Chewy::Index
 
     field :user_id, type: :integer
 
-    field :suggest, type: :completion,
-      contexts: [ { name: :type, type: :category } ],
-      value: ->(b) { build_bookmark_suggest b }
+    field :suggest,
+          type: :completion,
+          contexts: [ { name: :type, type: :category } ],
+          value: ->(b) { build_bookmark_suggest b }
 
     field :created_at, type: :date, include_in_all: false
   end
@@ -89,8 +90,9 @@ class BookmarksIndex < Chewy::Index
   define_type Tag do
     field :label, type: :keyword
 
-    field :suggest, type: :completion,
-      contexts: [ { name: :type, type: :category } ],
-      value: ->(t) { build_tag_suggest t }
+    field :suggest,
+          type: :completion,
+          contexts: [ { name: :type, type: :category } ],
+          value: ->(t) { build_tag_suggest t }
   end
 end
