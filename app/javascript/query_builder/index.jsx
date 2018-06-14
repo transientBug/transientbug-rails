@@ -1,12 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-const pick = (obj, props) => props.reduce((a, e) => (a[e] = obj[e], a), {})
-
-const TextWidget = ({ value, onChange }) => <input type="text" value={ value } onChange={ onChange } />
-const NumberWidget = ({ value, onChange }) => <input type="number" value={ value } onChange={ onChange } />
-const DateWidget = ({ value, onChange }) => <input type="date" value={ value } onChange={ onChange } />
-
 const BuilderConfig = {
   "operations": {
     "[between]": { "display_name": "After til Before", "description": "", "composed_of": ["greater_than", "less_than"] },
@@ -23,19 +17,19 @@ const BuilderConfig = {
   "types": {
     "text": {
       "supported_operations": [ "match" ],
-      "widget": TextWidget
+      "widget": (props) => <TextWidget {...props} />
     },
     "keyword": {
       "supported_operations": [ "equal" ],
-      "widget": TextWidget
+      "widget": (props) => <TextWidget {...props} />
     },
     "number": {
       "supported_operations": [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ],
-      "widget": NumberWidget
+      "widget": (props) => <NumberWidget {...props} />
       },
     "date": {
       "supported_operations": [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ],
-      "widget": DateWidget
+      "widget": (props) => <DateWidget {...props} />
     },
   },
   "joiners": {
@@ -45,108 +39,50 @@ const BuilderConfig = {
   }
 }
 
+const pick = (obj, props) => props.reduce((a, e) => (a[e] = obj[e], a), {})
+const entryMap = (obj, mapFunc) => Object.entries(obj).map(mapFunc)
+
+const TextWidget = ({ value, onChange }) => <input type="text" value={ value } onChange={ onChange } />
+const NumberWidget = ({ value, onChange }) => <input type="number" value={ value } onChange={ onChange } />
+const DateWidget = ({ value, onChange }) => <input type="date" value={ value } onChange={ onChange } />
+
 class Operation extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = props.clause
-    this.clause = props.clause
-    this.operation = props.operation
-    this.type = props.type
-
-    this.i = props.i || 0
-  }
-
   get opData() {
-    return BuilderConfig.operations[ this.operation ]
+    return BuilderConfig.operations[ this.props.operation ]
   }
 
   get typeData() {
-    return BuilderConfig.types[ this.type ]
+    return BuilderConfig.types[ this.props.type ]
   }
 
   render() {
     if (this.opData.composed_of) {
       return (
-        <div>
-          <Operation operation={ this.opData.composed_of[0] } type={ this.type } i={ 0 } clause={ this.clause } />
+        <div className="qb composed operator">
+          <Operation operation={ this.opData.composed_of[0] } type={ this.props.type } i={ 0 } clause={ this.props.clause } />
           { this.opData.display_name }
-          <Operation operation={ this.opData.composed_of[1] } type={ this.type } i={ 1 } clause={ this.clause } />
+          <Operation operation={ this.opData.composed_of[1] } type={ this.props.type } i={ 1 } clause={ this.props.clause } />
         </div>
       )
     }
 
-    const TagName = this.typeData.widget
-    console.log(this.state, this.type, this.operation)
+    const widgetFactory = this.typeData.widget
 
     return (
-      <div>
-        <TagName value={ this.state.values[ this.i ] } />
+      <div className="qb operator">
+        { widgetFactory({ value: this.props.clause.values[ this.props.i || 0 ] }) }
       </div>
     )
   }
 }
 
-class Clause extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = props.clause
-    this.clause = props.clause
-    this.fields = props.fields
-
-    this.selectField = this.selectField.bind(this)
-    this.selectOperation = this.selectOperation.bind(this)
-  }
-
-  selectField(event) {
-    const field = event.target.value
-
-    if (field == this.state.field)
-      return
-
-    const type = BuilderConfig.types[ this.fields[ field ].type ]
-    const operation = type.supported_operations[0]
-
-    this.setState({ field, operation })
-  }
-
-  selectOperation(event) {
-    const operation = event.target.value
-
-    if (operation == this.state.operation)
-      return
-
-    this.setState({ operation })
-  }
-
-  get supportedOperations() {
-    const field_type = this.fields[ this.state.field ].type
-    const supported_operation_names = BuilderConfig.types[ field_type ].supported_operations
-
-    return pick(BuilderConfig.operations, supported_operation_names)
-  }
-
-  render() {
-    return (
-      <div>
-        <select name="field" value={ this.state.field } onChange={ this.selectField }>
-          { Object.entries(this.fields).map(([field, fieldData], i) => {
-            return ( <option key={ i } value={ field }>{ fieldData.display_name }</option> )
-          }) }
-        </select>
-
-        <select name="operation" value={ this.state.operation } onChange={ this.selectOperation }>
-          { Object.entries(this.supportedOperations).map(([operation, opData], i) => {
-            return ( <option key={ i } value={ operation }>{ opData.display_name }</option> )
-          }) }
-        </select>
-
-        <Operation operation={ this.state.operation } type={ this.fields[ this.state.field ].type } clause={ this.clause } />
-      </div>
-    )
-  }
-}
+const FieldSelect = ({ value, onChange, fields }) => (
+  <select name={ name } value={ value } onChange={ onChange }>
+    { entryMap(fields, ([field, fieldData], i) => (
+      <option key={ i } value={ field }>{ fieldData.display_name }</option>
+    )) }
+  </select>
+)
 
 const GroupOrClause = ({ fields, data }) => {
   if(data.field)
@@ -155,37 +91,75 @@ const GroupOrClause = ({ fields, data }) => {
   return ( <Group group={ data } fields={ fields } /> )
 }
 
-class Group extends React.Component {
+class Clause extends React.Component {
   constructor(props) {
     super(props)
 
-    this.group = props.group
-    this.fields = props.fields
+    this.selectField = this.selectField.bind(this)
+    this.selectOperation = this.selectOperation.bind(this)
+  }
+
+  selectField(event) {
+    const field = event.target.value
+
+    if (field == this.props.field)
+      return
+
+    const type = BuilderConfig.types[ this.fieldData.type ]
+    const operation = type.supported_operations[0]
+
+    console.log("Set state", { field, operation })
+    //this.setState({ field, operation })
+  }
+
+  selectOperation(event) {
+    const operation = event.target.value
+
+    if (operation == this.props.operation)
+      return
+
+    console.log("Set state", { operation })
+    //this.setState({ operation })
+  }
+
+  get fieldData() {
+    return this.props.fields[ this.props.clause.field ]
+  }
+
+  get supportedOperations() {
+    const supported_operation_names = BuilderConfig.types[ this.fieldData.type ].supported_operations
+
+    return pick(BuilderConfig.operations, supported_operation_names)
   }
 
   render() {
     return (
-      <div className="qb group">
-        { Object.entries(BuilderConfig.joiners).map(([joiner, joinerData], i) => {
-          return (
-            <div key={ i }>
-              <h2>{ joinerData.display_name }</h2>
-              { (this.group[ joiner ] || []).map((group_or_clause, i) => {
-                return ( <GroupOrClause key={ i } group_or_clause data={ group_or_clause } fields={ this.fields } /> )
-              }) }
-            </div>
-          )
-        }) }
+      <div className="qb clause">
+        <FieldSelect name="field" fields={ this.props.fields } value={ this.props.clause.field } onChange={ this.selectField } />
+        <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.clause.operation } onChange={ this.selectOperation } />
+
+        <Operation operation={ this.props.clause.operation } type={ this.fieldData.type } clause={ this.props.clause } />
       </div>
     )
   }
 }
 
+const Group = (props) => (
+  <div className="qb group">
+    { entryMap(BuilderConfig.joiners, ([joiner, joinerData], i) => (
+      <div key={ i }>
+        <h2>{ joinerData.display_name }</h2>
+        { (props.group[ joiner ] || []).map((group_or_clause, i) => (
+          <GroupOrClause key={ i } data={ group_or_clause } fields={ props.fields } />
+        )) }
+      </div>
+    )) }
+  </div>
+)
+
 class QueryBuilder extends React.Component {
   constructor(props) {
     super(props)
-
-    this.fields = props.fields
 
     this.state = {
       rootJoiner: {
@@ -210,8 +184,8 @@ class QueryBuilder extends React.Component {
 
   render() {
     return (
-      <div>
-        <Group group={ this.state.rootJoiner } fields={ this.fields } />
+      <div className="qb root">
+        <Group group={ this.state.rootJoiner } fields={ this.props.fields } />
       </div>
     )
   }
