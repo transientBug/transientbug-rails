@@ -5,4 +5,9 @@
 
 %h1 Search Results
 
+#query_builder
+  { "uri": { "type": "keyword", "display_name": "URI", "description": "" }, "host": { "type": "keyword", "display_name": "Host", "description": "" }, "title": { "type": "text", "display_name": "Title", "description": "" }, "description": { "type": "text", "display_name": "Description", "description": "" }, "tags": { "type": "keyword", "display_name": "Tags", "description": "" }, "created_at": { "type": "date", "display_name": "Created At Date", "description": "" } }
+-#= javascript_pack_tag "query_builder"
+%script{ src: "/packs/query_builder.js" }
+
 = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
