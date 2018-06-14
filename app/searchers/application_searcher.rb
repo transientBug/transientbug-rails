@@ -91,7 +91,7 @@ class ApplicationSearcher
   def parse str
     @input = str
 
-    query = parslet_parse str, query
+    query = parslet_parse str
     query ||= ApplicationSearcher::Query.new []
 
     query.expand_and_alias self.class.search_keywords
@@ -102,8 +102,6 @@ class ApplicationSearcher
 
   def chewy_results
     @chewy_results ||= begin
-      queries << parse_input
-
       es_results = queries.inject(self.class.index_klass) { |memo, query| memo.query query }
       chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
     end
