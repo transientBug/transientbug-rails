@@ -42,54 +42,40 @@ const BuilderConfig = {
 const pick = (obj, props) => props.reduce((a, e) => (a[e] = obj[e], a), {})
 const entryMap = (obj, mapFunc) => Object.entries(obj).map(mapFunc)
 
+const queryToIdHash = (query) => {
+  const joinerKeys = Object.keys(BuilderConfig.joiners)
+
+  return Object.entries(query)
+    .filter((i) => joinerKeys.includes(i[0]))
+    .flatMap((joinerData, i) => {
+      return joinerData[1].flatMap((clause, j) => {
+        return Object.assign({ joiner: joinerData[0] }, clause)
+      })
+    })
+    .reduce((memo, val) => { memo[ val.id ] = val; return memo }, {})
+}
+
+const idHashToQuery = (hash) => {
+  return Object.entries(hash).reduce((memo, [key, val]) => {
+    memo[ val.joiner ] = (memo[ val.joiner ] || [])
+    memo[ val.joiner ].push(val)
+    return memo
+  }, {})
+}
+
 const TextWidget = ({ value, onChange }) => <input type="text" value={ value } onChange={ onChange } />
 const NumberWidget = ({ value, onChange }) => <input type="number" value={ value } onChange={ onChange } />
 const DateWidget = ({ value, onChange }) => <input type="date" value={ value } onChange={ onChange } />
 
-class Operation extends Component {
-  get opData() {
-    return BuilderConfig.operations[ this.props.operation ]
-  }
-
-  get typeData() {
-    return BuilderConfig.types[ this.props.type ]
-  }
-
-  render() {
-    if (this.opData.composed_of) {
-      return (
-        <div className="qb composed operator">
-          <Operation operation={ this.opData.composed_of[0] } type={ this.props.type } i={ 0 } clause={ this.props.clause } />
-          { this.opData.display_name }
-          <Operation operation={ this.opData.composed_of[1] } type={ this.props.type } i={ 1 } clause={ this.props.clause } />
-        </div>
-      )
-    }
-
-    const widgetFactory = this.typeData.widget
-
-    return (
-      <div className="qb operator">
-        { widgetFactory({ value: this.props.clause.values[ this.props.i || 0 ] }) }
-      </div>
-    )
-  }
-}
-
 const FieldSelect = ({ value, onChange, fields }) => (
-  <select name={ name } value={ value } onChange={ onChange }>
-    { entryMap(fields, ([field, fieldData], i) => (
-      <option key={ i } value={ field }>{ fieldData.display_name }</option>
-    )) }
-  </select>
+  <div className="ui input">
+    <select name={ name } value={ value } onChange={ onChange }>
+      { entryMap(fields, ([field, fieldData], i) => (
+        <option key={ i } value={ field }>{ fieldData.display_name }</option>
+      )) }
+    </select>
+  </div>
 )
-
-const QueryOrClause = ({ fields, data }) => {
-  if(data.field)
-    return ( <Clause data={ data } fields={ fields } /> )
-
-  return ( <Query data={ data } fields={ fields } /> )
-}
 
 class Clause extends Component {
   constructor(props) {
@@ -97,48 +83,74 @@ class Clause extends Component {
 
     this.selectField = this.selectField.bind(this)
     this.selectOperation = this.selectOperation.bind(this)
+    this.changeValue = this.changeValue.bind(this)
+  }
+
+  get fieldData() {
+    return this.props.fields[ this.props.data.field ]
+  }
+
+  get typeData() {
+    return BuilderConfig.types[ this.fieldData.type ]
+  }
+
+  get supportedOperations() {
+    const supported_operation_names = this.typeData.supported_operations
+
+    return pick(BuilderConfig.operations, supported_operation_names)
   }
 
   selectField(event) {
     const field = event.target.value
 
-    if (field == this.props.field)
+    if (field === this.props.data.field)
       return
 
-    const type = BuilderConfig.types[ this.fieldData.type ]
+    const type = BuilderConfig.types[ this.props.fields[ field ].type ]
     const operation = type.supported_operations[0]
 
-    console.log("Set state", { field, operation })
-    //this.setState({ field, operation })
+    this.props.onChange({ id: this.props.data.id, field, operation, values: [] })
   }
 
   selectOperation(event) {
     const operation = event.target.value
 
-    if (operation == this.props.operation)
+    if (operation === this.props.data.operation)
       return
 
-    console.log("Set state", { operation })
-    //this.setState({ operation })
+    const values = this.props.data.values
+    values.length = (BuilderConfig.operations[ operation ].composed_of || [0]).length
+
+    this.props.onChange({ id: this.props.data.id, operation, values: values })
   }
 
-  get fieldData() {
-    return this.props.fields[ this.props.clause.field ]
-  }
+  changeValue(i) {
+    return (event) => {
+      const values = this.props.data.values
+      values[i] = event.target.value
 
-  get supportedOperations() {
-    const supported_operation_names = BuilderConfig.types[ this.fieldData.type ].supported_operations
-
-    return pick(BuilderConfig.operations, supported_operation_names)
+      this.props.onChange({ id: this.props.data.id, values: values })
+    }
   }
 
   render() {
+    const length = (BuilderConfig.operations[ this.props.data.operation ].composed_of || [0]).length
+    const values = Array(length).fill().map((_, i, values) => this.props.data.values[ i ] || "")
+
+    let operation
+    if (Object.keys(this.supportedOperations).length > 1)
+      operation = <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.data.operation } onChange={ this.selectOperation } />
+    else
+      operation = this.supportedOperations[this.props.data.operation].display_name
+
     return (
       <div className="qb clause">
-        <FieldSelect name="field" fields={ this.props.fields } value={ this.props.clause.field } onChange={ this.selectField } />
-        <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.clause.operation } onChange={ this.selectOperation } />
+        <FieldSelect name="field" fields={ this.props.fields } value={ this.props.data.field } onChange={ this.selectField } />
+        { operation }
 
-        <Operation operation={ this.props.clause.operation } type={ this.fieldData.type } clause={ this.props.clause } />
+        { values.map((val, i) => (
+          this.typeData.widget({ value: val, onChange: this.changeValue(i), key: i })
+        )) }
       </div>
     )
   }
@@ -148,25 +160,44 @@ class Query extends Component {
   constructor(props) {
     super(props)
 
-    this.state = Object.entries(props.data)
-      .flatMap((joinerData, i) => joinerData[1].flatMap((clause, j) => {
-        return Object.assign({ id: `${i}${j}`, joiner: joinerData[0] }, clause)
-      }))
-      .reduce((memo, val) => { memo[ val.id ] = val; return memo }, {})
-
     this.onChange = this.onChange.bind(this)
   }
 
   onChange(val) {
-    console.log(val)
+    const idHash = queryToIdHash(this.props.data)
+
+    const newData = {}
+    newData[ val.id ] = Object.assign({}, idHash[ val.id ], val)
+
+    Object.assign(idHash, newData)
+
+    this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
   }
 
   render() {
     return (
-      <div className="qb query">
-        { entryMap(this.state, ([id, group_or_clause]) => (
-          <QueryOrClause key={ id } data={ group_or_clause } fields={ this.props.fields } onChange={ this.onChange } />
-        )) }
+      <div className="qb query ui list">
+        { Object.entries(BuilderConfig.joiners).map(([joiner, joinerData]) => {
+          if (!this.props.data[ joiner ])
+            return
+
+          return (
+            <div className="qb group item" key={ joiner }>
+              <i className="folder icon" />
+              <div className="content">
+                <div className="header">{ joinerData.display_name }</div>
+                { this.props.data[ joiner ].map((clause) => {
+                  const newProps = { data: clause, fields: this.props.fields, onChange: this.onChange, key: clause.id }
+
+                  return ( clause.field
+                    ? <Clause { ...newProps } />
+                    : <Query { ...newProps } />
+                  )
+                }) }
+              </div>
+            </div>
+          )
+        }).filter((i) => i) }
       </div>
     )
   }
@@ -178,29 +209,37 @@ class QueryBuilder extends Component {
 
     this.state = {
       rootJoiner: {
+        id: 0,
         should: [
-          { field: "title", operation: "match", values: ["earth"] },
-          { field: "description", operation: "match", values: ["earth"] }
+          { id: 1, field: "title", operation: "match", values: ["earth"] },
+          { id: 2, field: "description", operation: "match", values: ["earth"] }
         ],
         must: [
-          { field: "tags", operation: "equal", values: ["computers"] },
+          { id: 3, field: "tags", operation: "equal", values: ["computers"] },
           {
+            id: 4,
             must: [
-              { field: "created_at", operation: "[between]", values: ["2014-01-01", "2018-06-14"] },
+              { id: 5, field: "created_at", operation: "[between]", values: ["2014-01-01", "2018-06-14"] },
             ]
           }
         ],
         must_not: [
-          { field: "host", operation: "equal", values: ["wired.com"] }
+          { id: 6, field: "host", operation: "equal", values: ["wired.com"] }
         ]
       }
     }
+
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onChange(val) {
+    this.setState({ rootJoiner: val })
   }
 
   render() {
     return (
       <div className="qb root">
-        <Query data={ this.state.rootJoiner } fields={ this.props.fields } />
+        <Query data={ this.state.rootJoiner } fields={ this.props.fields } onChange={ this.onChange } />
       </div>
     )
   }
