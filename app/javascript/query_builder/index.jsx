@@ -140,9 +140,7 @@ class Clause extends Component {
 
     return (
       <div className="qb clause inline fields">
-        <button className="ui tiny basic negative icon button" onClick={ this.props.onRemove }>
-          <i className="trash icon" />
-        </button>
+        <RemoveButton onClick={ this.props.onRemove } />
 
         <FieldSelect name="field" fields={ this.props.fields } value={ this.props.data.field } onChange={ this.selectField } />
         <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.data.operation } onChange={ this.selectOperation } />
@@ -156,6 +154,13 @@ class Clause extends Component {
     )
   }
 }
+
+const RemoveButton = (props) => (
+  <button className={ ["ui tiny basic negative button", (props.children ? "" : "icon")].join(" ") } { ...props } >
+    <i className="trash icon" />
+    { props.children }
+  </button>
+)
 
 class Query extends Component {
   constructor(props) {
@@ -219,8 +224,6 @@ class Query extends Component {
 
       Object.assign(idHash, newData)
 
-      console.log(newData, idHash)
-
       this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
     }
   }
@@ -239,10 +242,7 @@ class Query extends Component {
     let removeButton
     if (this.props.onRemove)
       removeButton = (
-        <button className="ui tiny basic negative button" onClick={ this.props.onRemove }>
-          <i className="trash icon" />
-          Remove Group
-        </button>
+        <RemoveButton onClick={ this.props.onRemove }>Remove Group</RemoveButton>
       )
 
     return (
@@ -252,7 +252,7 @@ class Query extends Component {
           if (!joinerClauses)
             return (
               <div className="qb group item" key={ joiner }>
-                <i className="folder icon" />
+                <i className="filter icon" />
                 <div className="content">
                   <div className="header">
                     { joinerData.display_name }
@@ -271,7 +271,7 @@ class Query extends Component {
 
           return (
             <div className="qb group item" key={ joiner }>
-              <i className="folder icon" />
+              <i className="filter icon" />
               <div className="content">
                 <div className="header">
                   { joinerData.display_name }
@@ -314,7 +314,7 @@ class QueryBuilder extends Component {
     super(props)
 
     this.state = {
-      rootJoiner: {
+      query: {
         id: 0,
         should: [
           { id: 1, field: "title", operation: "match", values: ["earth"] },
@@ -339,13 +339,18 @@ class QueryBuilder extends Component {
   }
 
   onChange(val) {
-    this.setState({ rootJoiner: val })
+    this.setState({ query: val })
   }
 
   render() {
     return (
       <div className="qb root ui form">
-        <Query data={ this.state.rootJoiner } fields={ this.props.fields } onChange={ this.onChange } />
+        <Query data={ this.state.query } fields={ this.props.fields } onChange={ this.onChange } />
+        <code>
+          <pre>
+            { JSON.stringify(this.state.query, null, 2) }
+          </pre>
+        </code>
       </div>
     )
   }
