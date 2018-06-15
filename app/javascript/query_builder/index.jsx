@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import ReactDOM from "react-dom"
 
 const BuilderConfig = {
@@ -26,7 +26,7 @@ const BuilderConfig = {
     "number": {
       "supported_operations": [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ],
       "widget": (props) => <NumberWidget {...props} />
-      },
+    },
     "date": {
       "supported_operations": [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ],
       "widget": (props) => <DateWidget {...props} />
@@ -46,7 +46,7 @@ const TextWidget = ({ value, onChange }) => <input type="text" value={ value } o
 const NumberWidget = ({ value, onChange }) => <input type="number" value={ value } onChange={ onChange } />
 const DateWidget = ({ value, onChange }) => <input type="date" value={ value } onChange={ onChange } />
 
-class Operation extends React.Component {
+class Operation extends Component {
   get opData() {
     return BuilderConfig.operations[ this.props.operation ]
   }
@@ -84,14 +84,14 @@ const FieldSelect = ({ value, onChange, fields }) => (
   </select>
 )
 
-const GroupOrClause = ({ fields, data }) => {
+const QueryOrClause = ({ fields, data }) => {
   if(data.field)
-    return ( <Clause clause={ data } fields={ fields } /> )
+    return ( <Clause data={ data } fields={ fields } /> )
 
-  return ( <Group group={ data } fields={ fields } /> )
+  return ( <Query data={ data } fields={ fields } /> )
 }
 
-class Clause extends React.Component {
+class Clause extends Component {
   constructor(props) {
     super(props)
 
@@ -144,20 +144,35 @@ class Clause extends React.Component {
   }
 }
 
-const Group = (props) => (
-  <div className="qb group">
-    { entryMap(BuilderConfig.joiners, ([joiner, joinerData], i) => (
-      <div key={ i }>
-        <h2>{ joinerData.display_name }</h2>
-        { (props.group[ joiner ] || []).map((group_or_clause, i) => (
-          <GroupOrClause key={ i } data={ group_or_clause } fields={ props.fields } />
+class Query extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = Object.entries(props.data)
+      .flatMap((joinerData, i) => joinerData[1].flatMap((clause, j) => {
+        return Object.assign({ id: `${i}${j}`, joiner: joinerData[0] }, clause)
+      }))
+      .reduce((memo, val) => { memo[ val.id ] = val; return memo }, {})
+
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onChange(val) {
+    console.log(val)
+  }
+
+  render() {
+    return (
+      <div className="qb query">
+        { entryMap(this.state, ([id, group_or_clause]) => (
+          <QueryOrClause key={ id } data={ group_or_clause } fields={ this.props.fields } onChange={ this.onChange } />
         )) }
       </div>
-    )) }
-  </div>
-)
+    )
+  }
+}
 
-class QueryBuilder extends React.Component {
+class QueryBuilder extends Component {
   constructor(props) {
     super(props)
 
@@ -185,7 +200,7 @@ class QueryBuilder extends React.Component {
   render() {
     return (
       <div className="qb root">
-        <Group group={ this.state.rootJoiner } fields={ this.props.fields } />
+        <Query data={ this.state.rootJoiner } fields={ this.props.fields } />
       </div>
     )
   }
