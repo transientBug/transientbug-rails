@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
+import uuidv4 from "uuid/v4"
 
 const BuilderConfig = {
   "operations": {
@@ -68,8 +69,8 @@ const NumberWidget = ({ value, onChange }) => <input type="number" value={ value
 const DateWidget = ({ value, onChange }) => <input type="date" value={ value } onChange={ onChange } />
 
 const FieldSelect = ({ value, onChange, fields }) => (
-  <div className="ui input">
-    <select name={ name } value={ value } onChange={ onChange }>
+  <div className="field">
+    <select className="ui dropdown" name={ name } value={ value } onChange={ onChange } disabled={ Object.keys(fields).length <= 1 }>
       { entryMap(fields, ([field, fieldData], i) => (
         <option key={ i } value={ field }>{ fieldData.display_name }</option>
       )) }
@@ -137,19 +138,19 @@ class Clause extends Component {
     const length = (BuilderConfig.operations[ this.props.data.operation ].composed_of || [0]).length
     const values = Array(length).fill().map((_, i, values) => this.props.data.values[ i ] || "")
 
-    let operation
-    if (Object.keys(this.supportedOperations).length > 1)
-      operation = <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.data.operation } onChange={ this.selectOperation } />
-    else
-      operation = this.supportedOperations[this.props.data.operation].display_name
-
     return (
-      <div className="qb clause">
+      <div className="qb clause inline fields">
+        <button className="ui tiny basic negative icon button" onClick={ this.props.onRemove }>
+          <i className="trash icon" />
+        </button>
+
         <FieldSelect name="field" fields={ this.props.fields } value={ this.props.data.field } onChange={ this.selectField } />
-        { operation }
+        <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.data.operation } onChange={ this.selectOperation } />
 
         { values.map((val, i) => (
-          this.typeData.widget({ value: val, onChange: this.changeValue(i), key: i })
+          <div className="field" key={ i }>
+            { this.typeData.widget({ value: val, onChange: this.changeValue(i) }) }
+          </div>
         )) }
       </div>
     )
@@ -161,6 +162,9 @@ class Query extends Component {
     super(props)
 
     this.onChange = this.onChange.bind(this)
+    this.onAdd = this.onAdd.bind(this)
+    this.onAddGroup = this.onAddGroup.bind(this)
+    this.onRemove = this.onRemove.bind(this)
   }
 
   onChange(val) {
@@ -174,30 +178,132 @@ class Query extends Component {
     this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
   }
 
+  onAdd(joiner) {
+    return () => {
+      const idHash = queryToIdHash(this.props.data)
+
+      const [field, fieldData] = Object.entries(this.props.fields)[0]
+
+      const fieldType = BuilderConfig.types[ fieldData.type ]
+      const operation = fieldType.supported_operations[0]
+
+      const id = uuidv4()
+      const newData = {}
+      newData[ id ] = {
+        id,
+        joiner,
+        field,
+        operation,
+        values: []
+      }
+
+      Object.assign(idHash, newData)
+
+      this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
+    }
+  }
+
+  onAddGroup(joiner) {
+    return () => {
+      const idHash = queryToIdHash(this.props.data)
+
+      const id = uuidv4()
+      const newData = {}
+      newData[ id ] = {
+        id,
+        joiner,
+        must: [],
+        should: [],
+        must_not: []
+      }
+
+      Object.assign(idHash, newData)
+
+      console.log(newData, idHash)
+
+      this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
+    }
+  }
+
+  onRemove(id) {
+    return () => {
+      const idHash = queryToIdHash(this.props.data)
+
+      delete idHash[ id ]
+
+      this.props.onChange(Object.assign({}, this.props.data, idHashToQuery(idHash)))
+    }
+  }
+
   render() {
+    let removeButton
+    if (this.props.onRemove)
+      removeButton = (
+        <button className="ui tiny basic negative button" onClick={ this.props.onRemove }>
+          <i className="trash icon" />
+          Remove Group
+        </button>
+      )
+
     return (
       <div className="qb query ui list">
         { Object.entries(BuilderConfig.joiners).map(([joiner, joinerData]) => {
-          if (!this.props.data[ joiner ])
-            return
+          const joinerClauses = this.props.data[ joiner ]
+          if (!joinerClauses)
+            return (
+              <div className="qb group item" key={ joiner }>
+                <i className="folder icon" />
+                <div className="content">
+                  <div className="header">
+                    { joinerData.display_name }
+                  </div>
+                  <button className="ui tiny button" onClick={ this.onAdd(joiner) }>
+                    <i className="plus icon" />
+                    Add { joinerData.display_name } Clause
+                  </button>
+                  <button className="ui tiny button" onClick={ this.onAddGroup(joiner) }>
+                    <i className="plus icon" />
+                    Add Group
+                  </button>
+                </div>
+              </div>
+             )
 
           return (
             <div className="qb group item" key={ joiner }>
               <i className="folder icon" />
               <div className="content">
-                <div className="header">{ joinerData.display_name }</div>
-                { this.props.data[ joiner ].map((clause) => {
-                  const newProps = { data: clause, fields: this.props.fields, onChange: this.onChange, key: clause.id }
+                <div className="header">
+                  { joinerData.display_name }
+                </div>
+                { joinerClauses.map((clause) => {
+                  const newProps = {
+                    data: clause,
+                    fields: this.props.fields,
+                    onChange: this.onChange,
+                    onRemove: this.onRemove(clause.id),
+                    key: clause.id
+                  }
 
                   return ( clause.field
                     ? <Clause { ...newProps } />
                     : <Query { ...newProps } />
                   )
                 }) }
+                <button className="ui tiny button" onClick={ this.onAdd(joiner) }>
+                  <i className="plus icon" />
+                  Add { joinerData.display_name } Clause
+                </button>
+                <button className="ui tiny button" onClick={ this.onAddGroup(joiner) }>
+                  <i className="plus icon" />
+                  Add Group
+                </button>
               </div>
             </div>
           )
         }).filter((i) => i) }
+
+        { removeButton }
       </div>
     )
   }
@@ -238,7 +344,7 @@ class QueryBuilder extends Component {
 
   render() {
     return (
-      <div className="qb root">
+      <div className="qb root ui form">
         <Query data={ this.state.rootJoiner } fields={ this.props.fields } onChange={ this.onChange } />
       </div>
     )
