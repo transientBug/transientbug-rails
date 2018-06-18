@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import { Component } from "react"
 import uuidv4 from "uuid/v4"
 
 import { queryToIdHash, idHashToQuery } from "../utils"
@@ -8,9 +8,6 @@ import { AddButton, RemoveButton, Clause, Group } from "."
 export class Query extends Component {
   constructor(props) {
     super(props)
-
-    this.updateData = this.updateData.bind(this)
-    this.removeData = this.removeData.bind(this)
 
     this.onAddClause = this.onAddClause.bind(this)
     this.onAddGroup = this.onAddGroup.bind(this)

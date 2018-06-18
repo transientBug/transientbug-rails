@@ -1,5 +1,3 @@
-import React from "react"
-
 export const RemoveButton = (props) => (
   <button className={ ["ui tiny basic negative button", (props.children ? "" : "icon")].join(" ") } { ...props } >
     <i className="trash icon" />

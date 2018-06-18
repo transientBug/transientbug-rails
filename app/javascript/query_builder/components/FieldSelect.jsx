@@ -1,5 +1,3 @@
-import React from "react"
-
 import { entryMap } from "../utils"
 
 export const FieldSelect = ({ value, onChange, fields }) => (

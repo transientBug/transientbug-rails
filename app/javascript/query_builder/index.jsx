@@ -1,6 +1,3 @@
-import React from "react"
-import ReactDOM from "react-dom"
-
 import { QueryBuilder } from "./components"
 import { TextWidget, NumberWidget, DateWidget } from "./widgets"
 
