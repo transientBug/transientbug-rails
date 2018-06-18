@@ -1,9 +1,11 @@
 import { Component } from "react"
+import { Button, Dropdown, Header, Icon } from 'semantic-ui-react'
+
 import uuidv4 from "uuid/v4"
 
 import { queryToIdHash, idHashToQuery } from "../utils"
 
-import { AddButton, RemoveButton, Clause, Group } from "."
+import { Clause, Group } from "."
 
 export class Query extends Component {
   constructor(props) {
@@ -16,7 +18,7 @@ export class Query extends Component {
   }
 
   updateData(data) {
-    const idHash = queryToIdHash(this.props.data)
+    const idHash = queryToIdHash(this.props.config, this.props.data)
 
     const id = data.id || uuidv4()
     data.id = id
@@ -30,7 +32,7 @@ export class Query extends Component {
   }
 
   removeData(id) {
-    const idHash = queryToIdHash(this.props.data)
+    const idHash = queryToIdHash(this.props.config, this.props.data)
 
     delete idHash[ id ]
 
@@ -76,16 +78,24 @@ export class Query extends Component {
     let removeButton
     if (this.props.onRemove)
       removeButton = (
-        <RemoveButton onClick={ this.props.onRemove }>Remove Group</RemoveButton>
+        <Button negative basic onClick={ this.props.onRemove }><Icon trash alternate outline/> Remove Group</Button>
       )
 
     return (
       <div className="qb query ui list">
         { Object.entries(this.props.config.joiners).map(([joiner, joinerData]) => (
           <Group key={ joiner }>
-            <div className="header">
+            <Header>
+              <Icon filter />
               { joinerData.display_name }
-            </div>
+              <Dropdown>
+                <Dropdown.Menu>
+                  <Dropdown.Item text='Add Nested Group' icon='plus' onClick={ this.onAddGroup(joiner) } />
+                  <Dropdown.Item text='Add Clause' icon='plus' onClick={ this.onAddClause(joiner) } />
+                </Dropdown.Menu>
+              </Dropdown>
+            </Header>
+
             { (this.props.data[ joiner ] || []).map((clause) => {
               const newProps = {
                 data: clause,
@@ -101,12 +111,6 @@ export class Query extends Component {
                 : <Query { ...newProps } />
               )
             }) }
-            <AddButton onClick={ this.onAddClause(joiner) }>
-              Add { joinerData.display_name } Clause
-            </AddButton>
-            <AddButton onClick={ this.onAddGroup(joiner) }>
-              Add Group
-            </AddButton>
           </Group>
         )) }
 
@@ -115,5 +119,3 @@ export class Query extends Component {
     )
   }
 }
-
-

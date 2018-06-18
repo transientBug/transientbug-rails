@@ -3,6 +3,14 @@ import uuidv4 from "uuid/v4"
 
 import { Query } from "."
 
+const QueryDebug = ({ query }) => (
+  <code>
+    <pre>
+      { JSON.stringify(query, null, 2) }
+    </pre>
+  </code>
+)
+
 export class QueryBuilder extends Component {
   constructor(props) {
     super(props)
@@ -40,11 +48,7 @@ export class QueryBuilder extends Component {
     return (
       <div className="qb root ui form">
         <Query data={ this.state.query } fields={ this.props.fields } config={ this.props.config } onChange={ this.onChange } />
-        <code>
-          <pre>
-            { JSON.stringify(this.state.query, null, 2) }
-          </pre>
-        </code>
+        <QueryDebug query={ this.state.query } />
       </div>
     )
   }

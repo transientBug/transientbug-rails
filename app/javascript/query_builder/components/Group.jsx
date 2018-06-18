@@ -1,8 +1,10 @@
+import { Icon, Item } from "semantic-ui-react"
+
 export const Group = (props) => (
-  <div className="qb group item">
-    <i className="filter icon" />
+  <Item className="qb group">
+    <Icon filter />
     <div className="content">
       { props.children }
     </div>
-  </div>
+  </Item>
 )

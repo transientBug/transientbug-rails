@@ -1,8 +1,7 @@
 import { Component } from "react"
+import { Form, Button } from "semantic-ui-react"
 
 import { pick } from "../utils"
-
-import { RemoveButton, FieldSelect } from "."
 
 export class Clause extends Component {
   constructor(props) {
@@ -27,8 +26,8 @@ export class Clause extends Component {
     return pick(this.props.config.operations, supported_operation_names)
   }
 
-  selectField(event) {
-    const field = event.target.value
+  selectField(event, { value }) {
+    const field = value
 
     if (field === this.props.data.field)
       return
@@ -39,8 +38,8 @@ export class Clause extends Component {
     this.props.onChange({ id: this.props.data.id, field, operation, values: [] })
   }
 
-  selectOperation(event) {
-    const operation = event.target.value
+  selectOperation(event, { value }) {
+    const operation = value
 
     if (operation === this.props.data.operation)
       return
@@ -64,19 +63,29 @@ export class Clause extends Component {
     const length = (this.props.config.operations[ this.props.data.operation ].composed_of || [0]).length
     const values = Array(length).fill().map((_, i, values) => this.props.data.values[ i ] || "")
 
-    return (
-      <div className="qb clause inline fields">
-        <RemoveButton onClick={ this.props.onRemove } />
+    const fieldOptions = Object.entries(this.props.fields).reduce((memo, [field, fieldData]) => {
+      memo.push({ key: field, value: field, text: fieldData.display_name })
+      return memo
+    }, [])
 
-        <FieldSelect name="field" fields={ this.props.fields } value={ this.props.data.field } onChange={ this.selectField } />
-        <FieldSelect name="operation" fields={ this.supportedOperations } value={ this.props.data.operation } onChange={ this.selectOperation } />
+    const operationOptions = Object.entries(this.supportedOperations).reduce((memo, [op, opData]) => {
+      memo.push({ key: op, value: op, text: opData.display_name })
+      return memo
+    }, [])
+
+    return (
+      <Form.Group className="qb clause">
+        <Button icon='trash' basic negative onClick={ this.props.onRemove }/>
+
+        <Form.Select name="field" options={ fieldOptions } onChange={ this.selectField } value={ this.props.data.field } />
+        <Form.Select name="operation" options={ operationOptions } onChange={ this.selectOperation } value={ this.props.data.operation } />
 
         { values.map((val, i) => (
-          <div className="field" key={ i }>
+          <Form.Field key={ i }>
             { this.typeData.widget({ value: val, onChange: this.changeValue(i) }) }
-          </div>
+          </Form.Field>
         )) }
-      </div>
+      </Form.Group>
     )
   }
 }
