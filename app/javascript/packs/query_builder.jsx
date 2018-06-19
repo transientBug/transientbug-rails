@@ -3,4 +3,4 @@
 // of the page.
 import { renderQueryBuilder } from "../query_builder/"
 
-renderQueryBuilder("#query_builder")
+renderQueryBuilder(".query_builder")
