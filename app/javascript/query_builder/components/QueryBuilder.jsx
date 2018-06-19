@@ -1,7 +1,4 @@
 import { Component } from "react"
-import { Button, Form } from "semantic-ui-react"
-
-import uuidv4 from "uuid/v4"
 
 import { Query } from "."
 
@@ -17,17 +14,13 @@ export class QueryBuilder extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      query: this.props.query
-    }
+    this.state = { query: this.props.query }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onChange(val) {
-    this.setState({ query: val })
-  }
+  onChange(val) { this.setState({ query: val }) }
 
   onSubmit(event) {
     console.log("Search!", this.state.query, this.props.meta.url)
@@ -38,10 +31,7 @@ export class QueryBuilder extends Component {
 
     return (
       <div>
-        <Form className="qb root" onSubmit={ this.onSubmit }>
-          <Query { ...props } />
-          <Button type="submit">Search</Button>
-        </Form>
+        <Query { ...props } />
         <QueryDebug query={ this.state.query } />
       </div>
     )

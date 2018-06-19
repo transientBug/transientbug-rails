@@ -14,8 +14,14 @@ export const queryToIdHash = (config, query) => {
     .reduce((memo, val) => { memo[ val.id ] = val; return memo }, {})
 }
 
-export const idHashToQuery = (hash) => Object.entries(hash).reduce((memo, [key, val]) => {
+export const idHashToQuery = (config, hash) => {
+  const joinerKeys = Object.keys(config.joiners)
+
+  const startingMemo = joinerKeys.reduce((memo, joiner) => (memo[joiner] = [], memo), {})
+
+  return Object.entries(hash).reduce((memo, [key, val]) => {
     memo[ val.joiner ] = (memo[ val.joiner ] || [])
     memo[ val.joiner ].push(val)
     return memo
-  }, {})
+  }, startingMemo)
+}
