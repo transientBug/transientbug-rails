@@ -5,8 +5,7 @@
 
 %h1 Search Results
 
-.query_builder
-  = query_builder_config.to_json
+.query_builder= query_builder_config.to_json
 = javascript_pack_tag "query_builder"
 
 = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

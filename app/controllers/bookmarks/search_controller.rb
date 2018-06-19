@@ -37,16 +37,17 @@ class Bookmarks::SearchController < ApplicationController
       },
       config: {
         operations: {
-          "[between]": { display_name: "After til Before", description: "", composed_of: ["greater_than", "less_than"] },
-          "[between)": { display_name: "After til Before or On", description: "", composed_of: ["greater_than", "less_than_or_equal"] },
-          "(between]": { display_name: "On or After til Before", description: "", composed_of: ["greater_than_or_equal", "less_than"] },
-          "(between)": { display_name: "On or After til Before or On", description: "", composed_of: ["greater_than_or_equal", "less_than_or_equal"] },
+          "[between]": { display_name: "After til Before", description: "", values: 2 },
+          "[between)": { display_name: "After til Before or On", description: "", values: 2 },
+          "(between]": { display_name: "On or After til Before", description: "", values: 2 },
+          "(between)": { display_name: "On or After til Before or On", description: "", values: 2 },
           "less_than": { display_name: "Less Than", description: "" },
           "less_than_or_equal": { display_name: "Less Than or Equal", description: "" },
           "equal": { display_name: "Equals", description: "" },
           "greater_than_or_equal": { display_name: "Greater Than or Equal", description: "" },
           "greater_than": { display_name: "Greater Than", description: "" },
-          "match": { display_name: "Matches", description: "" }
+          "match": { display_name: "Matches", description: "" },
+          "exist": { display_name: "Exists", description: "", values: 0 }
         },
         types: {
           text: {
