@@ -28,39 +28,39 @@ class Bookmarks::SearchController < ApplicationController
   def query_builder_config
     {
       fields: {
-        uri: { type: :keyword, display_name: "URI", description: "" },
-        host: { type: :keyword, display_name: "Host", description: "" },
+        uri: { type: :keyword, display_name: "URI", description: "", exclude_operations: [ "exist" ] },
+        host: { type: :keyword, display_name: "Host", description: "", exclude_operations: [ "exist" ] },
         title: { type: :text, display_name: "Title", description: "" },
         description: { type: :text, display_name: "Description", description: "" },
         tags: { type: :keyword, display_name: "Tags", description: "" },
-        created_at: { type: :date, display_name: "Created At Date", description: "" }
+        created_at: { type: :date, display_name: "Created At Date", description: "", exclude_operations: [ "exist" ] }
       },
       config: {
         operations: {
-          "[between]": { display_name: "After til Before", description: "", values: 2 },
-          "[between)": { display_name: "After til Before or On", description: "", values: 2 },
-          "(between]": { display_name: "On or After til Before", description: "", values: 2 },
-          "(between)": { display_name: "On or After til Before or On", description: "", values: 2 },
+          "[between]": { display_name: "After til Before", description: "", parameters: 2 },
+          "[between)": { display_name: "After til Before or On", description: "", parameters: 2 },
+          "(between]": { display_name: "On or After til Before", description: "", parameters: 2 },
+          "(between)": { display_name: "On or After til Before or On", description: "", parameters: 2 },
           "less_than": { display_name: "Less Than", description: "" },
           "less_than_or_equal": { display_name: "Less Than or Equal", description: "" },
           "equal": { display_name: "Equals", description: "" },
           "greater_than_or_equal": { display_name: "Greater Than or Equal", description: "" },
           "greater_than": { display_name: "Greater Than", description: "" },
           "match": { display_name: "Matches", description: "" },
-          "exist": { display_name: "Exists", description: "", values: 0 }
+          "exist": { display_name: "Exists", description: "", parameters: 0 }
         },
         types: {
           text: {
-            supported_operations: [ "match" ]
+            supported_operations: [ "match", "exist" ]
           },
           keyword: {
-            supported_operations: [ "equal" ]
+            supported_operations: [ "equal", "exist" ]
           },
           number: {
-            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ]
+            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ]
           },
           date: {
-            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than" ]
+            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ]
           },
         },
         joiners: {
@@ -83,6 +83,7 @@ class Bookmarks::SearchController < ApplicationController
           {
             id: 4,
             must: [
+              { id: 7, field: "title", operation: "exist" },
               { id: 5, field: "created_at", operation: "[between]", values: ["2014-01-01", "2018-06-14"] },
             ]
           }
