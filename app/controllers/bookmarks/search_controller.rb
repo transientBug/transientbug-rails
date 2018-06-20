@@ -5,28 +5,8 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    query = {
-      should: [
-        { id: 1, field: "title", operation: "match", values: ["earth"] },
-        { id: 2, field: "description", operation: "match", values: ["earth"] }
-      ],
-      must: [
-        { id: 3, field: "tags", operation: "equal", values: ["computers"] },
-        {
-          id: 4,
-          must: [
-            { id: 7, field: "title", operation: "exist" },
-            { id: 5, field: "created_at", operation: "[between]", values: ["2014-01-01", "2018-06-14"] },
-          ]
-        }
-      ],
-      must_not: [
-        { id: 6, field: "host", operation: "equal", values: ["wired.com"] }
-      ]
-    }
-
     unless params[:q].blank? || params[:q].empty?
-      query = {
+      @query = {
         should: [
           { id: 1, field: "title", operation: "match", values: [params[:q]] },
           { id: 2, field: "description", operation: "match", values: [params[:q]] },
@@ -35,9 +15,9 @@ class Bookmarks::SearchController < ApplicationController
       }
     end
 
-    @config_and_query = query_builder_config query
+    @query ||= {}
 
-    @bookmarks = fetch_bookmarks(query)
+    @bookmarks = fetch_bookmarks(@query)
 
     respond_to do |format|
       format.html { render :index }
@@ -46,9 +26,9 @@ class Bookmarks::SearchController < ApplicationController
   end
 
   def create
-    query = params[:query].to_unsafe_h
+    @query = params[:query].to_unsafe_h
 
-    @search = current_user.searches.new query: query
+    @search = current_user.searches.new query: @query
 
     authorize @search
 
@@ -64,11 +44,9 @@ class Bookmarks::SearchController < ApplicationController
   end
 
   def show
-    query = @search.query.with_indifferent_access
+    @query = @search.query.with_indifferent_access
 
-    @config_and_query = query_builder_config query
-
-    @bookmarks = fetch_bookmarks(query)
+    @bookmarks = fetch_bookmarks(@query)
 
     respond_to do |format|
       format.html { render :index }
@@ -95,6 +73,6 @@ class Bookmarks::SearchController < ApplicationController
   def fetch_bookmarks query
     es_query = BookmarksSearcher.build query
 
-    BookmarksIndex.query( es_query ).page(params[:page]).objects
+    BookmarksIndex.query(term: { user_id: current_user.id }).query( es_query ).page(params[:page]).objects
   end
 end

@@ -10,8 +10,19 @@ const WidgetMap = {
 
 export const renderQueryBuilder = (selector) => {
   const appDiv = document.querySelector(selector)
-  const config = JSON.parse(appDiv.innerText)
-  Object.assign(config, appDiv.dataset)
 
-  ReactDOM.render(<QueryBuilder widgetMap={ WidgetMap } { ...config } />, appDiv)
+  const parsedConfig = {
+    fields: JSON.parse(appDiv.dataset.fields),
+    config: JSON.parse(appDiv.dataset.config),
+    query: JSON.parse(appDiv.dataset.query),
+    widgetMap: WidgetMap
+  }
+
+  const props = Object.assign({}, appDiv.dataset, parsedConfig)
+
+  console.dir(props)
+
+  ReactDOM.render(<QueryBuilder { ...props } />, appDiv, () => {
+    appDiv.classList.remove("hidden")
+  })
 }
