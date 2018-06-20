@@ -5,16 +5,18 @@ import { pick } from "../utils"
 import { isNil } from "lodash"
 
 export class Clause extends Component {
-  constructor(props) {
-    super(props)
-
-    this.selectField = this.selectField.bind(this)
-    this.selectOperation = this.selectOperation.bind(this)
-    this.changeValue = this.changeValue.bind(this)
-  }
-
   get queryValues() {
     return this.props.query.values || []
+  }
+
+  get currentValues() {
+    let values = []
+    let length = this.parameterCount(this.props.query.operation)
+
+    if (length > 0)
+      values = Array(length).fill().map((_, i, values) => this.queryValues[ i ] || "")
+
+    return values
   }
 
   typeData(field) {
@@ -43,7 +45,7 @@ export class Clause extends Component {
     return length
   }
 
-  selectField(event, { value }) {
+  selectField = (event, { value }) => {
     const field = value
 
     if (field === this.props.query.field)
@@ -60,7 +62,7 @@ export class Clause extends Component {
     this.props.onChange({ id: this.props.query.id, field, operation, values })
   }
 
-  selectOperation(event, { value }) {
+  selectOperation = (event, { value }) => {
     const operation = value
 
     if (operation === this.props.query.operation)
@@ -72,23 +74,13 @@ export class Clause extends Component {
     this.props.onChange({ id: this.props.query.id, operation, values })
   }
 
-  changeValue(i) {
+  changeValue = (i) => {
     return (event) => {
       const values = this.queryValues
       values[i] = event.target.value
 
       this.props.onChange({ id: this.props.query.id, values })
     }
-  }
-
-  get currentValues() {
-    let values = []
-    let length = this.parameterCount(this.props.query.operation)
-
-    if (length > 0)
-      values = Array(length).fill().map((_, i, values) => this.queryValues[ i ] || "")
-
-    return values
   }
 
   render() {

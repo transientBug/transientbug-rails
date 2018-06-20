@@ -1,14 +1,6 @@
 import { Component } from "react"
 
-import { Query } from "."
-
-const QueryDebug = ({ query }) => (
-  <code>
-    <pre>
-      { JSON.stringify(query, null, 2) }
-    </pre>
-  </code>
-)
+import { Query, QueryDebug } from "."
 
 export class QueryBuilder extends Component {
   constructor(props) {
@@ -23,8 +15,14 @@ export class QueryBuilder extends Component {
   onChange(val) { this.setState({ query: val }) }
 
   onSubmit(event) {
-    console.log("Search!", this.state.query, this.props.meta.url)
-    event.target.submit()
+    console.log("Search!", this.state.query, this.props.url)
+
+    App.buildRequest({ url: this.props.url, method: this.props.method, payload: this.state }).then((response) => {
+      response.json().then((body) => {
+        if(response.ok)
+          Turbolinks.visit(body.location)
+      })
+    })
   }
 
   render() {
