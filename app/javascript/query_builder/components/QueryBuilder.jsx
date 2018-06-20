@@ -27,7 +27,7 @@ export class QueryBuilder extends Component {
   }
 
   render() {
-    const props = Object.assign({}, this.props, { onChange: this.onChange, query: this.state.query })
+    const props = Object.assign({}, this.props, { onSubmit: this.onSubmit, onChange: this.onChange, query: this.state.query })
 
     return (
       <div>

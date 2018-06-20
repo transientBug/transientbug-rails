@@ -4,6 +4,7 @@ import { Button, Dropdown, Header, Icon, List } from 'semantic-ui-react'
 import uuidv4 from "uuid/v4"
 
 import { queryToIdHash, idHashToQuery } from "../utils"
+import { isNil } from "lodash"
 
 import { Clause } from "."
 
@@ -15,6 +16,20 @@ export class SubQuery extends Component {
     this.onAddGroup = this.onAddGroup.bind(this)
     this.onRemove = this.onRemove.bind(this)
     this.onChange = this.onChange.bind(this)
+  }
+
+  typeData(field) {
+    return this.props.config.types[ field.type ]
+  }
+
+  supportedOperationNames(fieldData) {
+    const supported_operations = this.typeData(fieldData).supported_operations
+
+    const exclude = fieldData.exclude_operations
+    if (isNil(exclude))
+      return supported_operations
+
+    return supported_operations.filter((i) => !exclude.includes(i))
   }
 
   updateQueryData(func) {
@@ -54,8 +69,9 @@ export class SubQuery extends Component {
     return () => {
       const [field, fieldData] = Object.entries(this.props.fields)[0]
 
-      const fieldType = this.props.config.types[ fieldData.type ]
-      const operation = fieldType.supported_operations[0]
+      let operation = this.typeData(fieldData).default_operation
+      if(isNil(operation))
+        operation = this.supportedOperationNames(fieldData)[0]
 
       this.updateData({
         joiner,

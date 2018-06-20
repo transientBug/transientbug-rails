@@ -50,7 +50,10 @@ export class Clause extends Component {
       return
 
     const fieldData = this.props.fields[ field ]
-    const operation = this.supportedOperationNames(fieldData)[0]
+
+    let operation = this.typeData(fieldData).default_operation
+    if(isNil(operation))
+      operation = this.supportedOperationNames(fieldData)[0]
 
     const values = []
 
@@ -64,7 +67,7 @@ export class Clause extends Component {
       return
 
     const values = this.queryValues
-    values.length = parameterCount(operation)
+    values.length = this.parameterCount(operation)
 
     this.props.onChange({ id: this.props.query.id, operation, values })
   }

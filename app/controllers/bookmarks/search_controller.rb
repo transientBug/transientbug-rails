@@ -28,6 +28,7 @@ class Bookmarks::SearchController < ApplicationController
   def query_builder_config
     {
       fields: {
+        user_id: { type: :number, display_name: "User ID", description: "" },
         uri: { type: :keyword, display_name: "URI", description: "", exclude_operations: [ "exist" ] },
         host: { type: :keyword, display_name: "Host", description: "", exclude_operations: [ "exist" ] },
         title: { type: :text, display_name: "Title", description: "" },
@@ -51,22 +52,26 @@ class Bookmarks::SearchController < ApplicationController
         },
         types: {
           text: {
-            supported_operations: [ "match", "exist" ]
+            supported_operations: [ "match", "exist" ],
+            default_operation: "match"
           },
           keyword: {
-            supported_operations: [ "equal", "exist" ]
+            supported_operations: [ "equal", "exist" ],
+            default_operation: "equal"
           },
           number: {
-            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ]
+            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ],
+            default_operation: "equal"
           },
           date: {
-            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ]
+            supported_operations: [ "[between]", "[between)", "(between]", "(between)", "less_than", "less_than_or_equal", "equal", "greater_than_or_equal", "greater_than", "exist" ],
+            default_operation: "equal"
           },
         },
         joiners: {
-          should: { display_name: "Should", description: "" },
-          must: { display_name: "Must", description: "" },
-          must_not: { display_name: "Must Not", description: "" }
+          should: { display_name: "Or", description: "" },
+          must: { display_name: "And", description: "" },
+          must_not: { display_name: "Not", description: "" }
         }
       },
       meta: {
