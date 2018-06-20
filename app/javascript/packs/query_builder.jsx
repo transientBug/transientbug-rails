@@ -3,4 +3,6 @@
 // of the page.
 import { renderQueryBuilder } from "../query_builder/"
 
-renderQueryBuilder(".query_builder")
+document.addEventListener("turbolinks:load", () => {
+  renderQueryBuilder(".query_builder")
+})

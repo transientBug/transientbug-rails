@@ -24,10 +24,15 @@ export class QueryBuilder extends Component {
 
   onSubmit(event) {
     console.log("Search!", this.state.query, this.props.meta.url)
+    event.target.submit()
   }
 
   render() {
-    const props = Object.assign({}, this.props, { onSubmit: this.onSubmit, onChange: this.onChange, query: this.state.query })
+    const props = Object.assign({}, this.props, {
+      onSubmit: this.onSubmit,
+      onChange: this.onChange,
+      query: this.state.query
+    })
 
     return (
       <div>

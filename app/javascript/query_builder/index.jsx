@@ -11,6 +11,7 @@ const WidgetMap = {
 export const renderQueryBuilder = (selector) => {
   const appDiv = document.querySelector(selector)
   const config = JSON.parse(appDiv.innerText)
+  Object.assign(config, appDiv.dataset)
 
   ReactDOM.render(<QueryBuilder widgetMap={ WidgetMap } { ...config } />, appDiv)
 }

@@ -77,7 +77,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "less_than" do |field, value|
+  operation "less_than" do |field, (value)|
     {
       range: {
         field => {
@@ -87,7 +87,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "less_than_or_equal" do |field, value|
+  operation "less_than_or_equal" do |field, (value)|
     {
       range: {
         field => {
@@ -97,7 +97,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "equals" do |field, value|
+  operation "equal" do |field, (value)|
     {
       term: {
         field => value
@@ -105,7 +105,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "greater_than_or_equal" do |field, value|
+  operation "greater_than_or_equal" do |field, (value)|
     {
       range: {
         field => {
@@ -115,7 +115,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "greater_than" do |field, value|
+  operation "greater_than" do |field, (value)|
     {
       range: {
         field => {
@@ -125,7 +125,7 @@ class BookmarksSearcher
     }
   end
 
-  operation "match" do |field, value|
+  operation "match" do |field, (value)|
     {
       match: {
         field => value

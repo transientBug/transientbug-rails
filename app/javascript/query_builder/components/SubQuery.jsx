@@ -108,6 +108,8 @@ export class SubQuery extends Component {
               </Header>
 
               { (this.props.query[ joiner ] || []).map((clause) => {
+                clause.joiner = joiner
+
                 const newProps = {
                   query: clause,
                   widgetMap: this.props.widgetMap,
@@ -115,7 +117,8 @@ export class SubQuery extends Component {
                   config: this.props.config,
                   onChange: this.onChange(clause.id),
                   onRemove: this.onRemove(clause.id),
-                  key: clause.id
+                  key: clause.id,
+                  root: (this.props.root + `[${ joiner }][]`)
                 }
 
                 return ( clause.field
