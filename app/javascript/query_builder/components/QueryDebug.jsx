@@ -13,7 +13,7 @@ export class QueryDebug extends Component {
     this.setState({ activeIndex: newIndex })
   }
 
-  render = () => {
+  render() {
     const { activeIndex } = this.state
 
     return (

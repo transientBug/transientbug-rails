@@ -48,19 +48,23 @@ class Bookmarks::SearchController < ApplicationController
   def create
     query = params[:query].to_unsafe_h
 
-    @search = current_user.searches.new query: query.to_json
+    @search = current_user.searches.new query: query
 
     authorize @search
 
-    if @search.save
-      render json: { location: bookmarks_search_path(@search) }, status: :created, location: bookmarks_search_path(@search)
-    else
-      render json: { errors: @search.errors }, status: :unprocessable_entity
+    respond_to do |format|
+      if @search.save
+        format.html { redirect_to bookmarks_search_path(@search) }
+        format.json { render :show, status: :created, location: bookmarks_search_path(@search) }
+      else
+        format.html { render :new }
+        format.json { render json: @search.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def show
-    query = JSON.parse(@search.query).with_indifferent_access
+    query = @search.query.with_indifferent_access
 
     @config_and_query = query_builder_config query
 
@@ -88,24 +92,8 @@ class Bookmarks::SearchController < ApplicationController
     }
   end
 
-  def elastic_query query
-    bool = query.slice(*BookmarksSearcher.config[:joiners].keys).each_with_object({}) do |(joiner, values), memo|
-      memo[ joiner ] = values.map do |value|
-        unless value.key? :field
-          next elastic_query value
-        end
-
-        BookmarksSearcher.operations[ value[:operation] ][:block].call value[:field], value[:values]
-      end
-    end
-
-    {
-      bool: bool
-    }
-  end
-
   def fetch_bookmarks query
-    es_query = elastic_query(query)
+    es_query = BookmarksSearcher.build query
 
     BookmarksIndex.query( es_query ).page(params[:page]).objects
   end

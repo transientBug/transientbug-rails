@@ -663,6 +663,40 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: searches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE searches (
+    id bigint NOT NULL,
+    user_id bigint,
+    name character varying,
+    description text,
+    query jsonb,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE searches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE searches_id_seq OWNED BY searches.id;
+
+
+--
 -- Name: service_announcements; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -908,6 +942,13 @@ ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY searches ALTER COLUMN id SET DEFAULT nextval('searches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY service_announcements ALTER COLUMN id SET DEFAULT nextval('service_announcements_id_seq'::regclass);
 
 
@@ -1066,6 +1107,14 @@ ALTER TABLE ONLY roles
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY searches
+    ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
 
 
 --
@@ -1262,6 +1311,13 @@ CREATE UNIQUE INDEX index_roles_on_name ON roles USING btree (name);
 
 
 --
+-- Name: index_searches_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_searches_on_user_id ON searches USING btree (user_id);
+
+
+--
 -- Name: index_users_on_auth_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1371,6 +1427,14 @@ ALTER TABLE ONLY bookmarks
 
 
 --
+-- Name: fk_rails_e192b86393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY searches
+    ADD CONSTRAINT fk_rails_e192b86393 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_ee63f25419; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1431,6 +1495,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180212151406'),
 ('20180212151435'),
 ('20180214183218'),
-('20180223222455');
+('20180223222455'),
+('20180620161718');
 
 

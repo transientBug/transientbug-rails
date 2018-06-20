@@ -62,7 +62,8 @@ Rails.application.routes.draw do
 
       collection do
         scope as: :bookmarks do
-          resources :search, only: [:index, :create]
+          resources :search
+
           resources :tags, only: [:index, :show] do
             collection do
               resources :autocomplete, only: [:index], module: "tags"

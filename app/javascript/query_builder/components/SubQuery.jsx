@@ -9,15 +9,6 @@ import { isNil } from "lodash"
 import { Clause } from "."
 
 export class SubQuery extends Component {
-  constructor(props) {
-    super(props)
-
-    this.onAddClause = this.onAddClause.bind(this)
-    this.onAddGroup = this.onAddGroup.bind(this)
-    this.onRemove = this.onRemove.bind(this)
-    this.onChange = this.onChange.bind(this)
-  }
-
   typeData(field) {
     return this.props.config.types[ field.type ]
   }
@@ -65,7 +56,7 @@ export class SubQuery extends Component {
     this.props.onChange(newQuery)
   }
 
-  onAddClause(joiner) {
+  onAddClause = (joiner) => {
     return () => {
       const [field, fieldData] = Object.entries(this.props.fields)[0]
 
@@ -82,11 +73,11 @@ export class SubQuery extends Component {
     }
   }
 
-  onAddGroup(joiner) { return () => this.updateData({ joiner }) }
+  onAddGroup = (joiner) => { return () => this.updateData({ joiner }) }
 
-  onRemove(id) { return () => this.removeData(id) }
+  onRemove = (id) => { return () => this.removeData(id) }
 
-  onChange(id) { return (data) => this.updateData(data) }
+  onChange = (id) => { return (data) => this.updateData(data) }
 
   render() {
     // Todo: This could probably be made to automatically group by iterating
@@ -121,9 +112,14 @@ export class SubQuery extends Component {
                   root: (this.props.root + `[${ joiner }][]`)
                 }
 
-                return ( clause.field
-                  ? <Clause { ...newProps } />
-                  : <SubQuery { ...newProps } />
+                return  (clause.field
+                    ? <Clause { ...newProps } />
+                    : (
+                      <div key={ clause.id }>
+                        <input type='hidden' name={ this.props.root + `[${ joiner }][][id]` } value={ clause.id } />
+                        <SubQuery { ...newProps } />
+                      </div>
+                    )
                 )
               }) }
             </List.Content>
