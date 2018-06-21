@@ -52,9 +52,9 @@ class Bookmarks::SearchController < ApplicationController
   end
 
   def default_query
-    return {} if params[:q].blank? || params[:q].empty?
+    return @query = {} if params[:q].blank? || params[:q].empty?
 
-    {
+    @query ||= {
       should: [
         { id: 1, field: "title", operation: "match", values: [params[:q]] },
         { id: 2, field: "description", operation: "match", values: [params[:q]] },

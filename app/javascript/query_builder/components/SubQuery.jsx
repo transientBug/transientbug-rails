@@ -9,20 +9,6 @@ import { isNil } from "lodash"
 import { Clause } from "."
 
 export class SubQuery extends Component {
-  typeData(field) {
-    return this.props.config.types[ field.type ]
-  }
-
-  supportedOperationNames(fieldData) {
-    const supported_operations = this.typeData(fieldData).supported_operations
-
-    const exclude = fieldData.exclude_operations
-    if (isNil(exclude))
-      return supported_operations
-
-    return supported_operations.filter((i) => !exclude.includes(i))
-  }
-
   updateQueryData(func) {
     const idHash = queryToIdHash(this.props.config, this.props.query)
 
@@ -58,11 +44,8 @@ export class SubQuery extends Component {
 
   onAddClause = (joiner) => {
     return () => {
-      const [field, fieldData] = Object.entries(this.props.fields)[0]
-
-      let operation = this.typeData(fieldData).default_operation
-      if(isNil(operation))
-        operation = this.supportedOperationNames(fieldData)[0]
+      const [field, fieldData] = Object.entries(this.props.config.fields)[0]
+      const operation = fieldData.default_operation
 
       this.updateData({
         joiner,
@@ -103,8 +86,6 @@ export class SubQuery extends Component {
 
                 const newProps = {
                   query: clause,
-                  widgetMap: this.props.widgetMap,
-                  fields: this.props.fields,
                   config: this.props.config,
                   onChange: this.onChange(clause.id),
                   onRemove: this.onRemove(clause.id),

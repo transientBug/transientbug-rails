@@ -19,24 +19,6 @@ export class Clause extends Component {
     return values
   }
 
-  typeData(field) {
-    return this.props.config.types[ field.type ]
-  }
-
-  supportedOperationNames(fieldData) {
-    const supported_operations = this.typeData(fieldData).supported_operations
-
-    const exclude = fieldData.exclude_operations
-    if (isNil(exclude))
-      return supported_operations
-
-    return supported_operations.filter((i) => !exclude.includes(i))
-  }
-
-  supportedOperations(fieldData) {
-    return pick(this.props.config.operations, this.supportedOperationNames(fieldData))
-  }
-
   parameterCount(operation) {
     let length = this.props.config.operations[ operation ].parameters
     if(isNil(length))
@@ -46,58 +28,47 @@ export class Clause extends Component {
   }
 
   selectField = (event, { value }) => {
-    const field = value
+    const fieldData = this.props.config.fields[ value ]
+    const operation = fieldData.default_operation
 
-    if (field === this.props.query.field)
-      return
-
-    const fieldData = this.props.fields[ field ]
-
-    let operation = this.typeData(fieldData).default_operation
-    if(isNil(operation))
-      operation = this.supportedOperationNames(fieldData)[0]
-
-    const values = []
-
-    this.props.onChange({ id: this.props.query.id, field, operation, values })
+    this.props.onChange({
+      id: this.props.query.id,
+      field: value,
+      operation,
+      values: []
+    })
   }
 
   selectOperation = (event, { value }) => {
-    const operation = value
-
-    if (operation === this.props.query.operation)
-      return
-
     const values = this.queryValues
-    values.length = this.parameterCount(operation)
+    values.length = this.parameterCount(value)
 
-    this.props.onChange({ id: this.props.query.id, operation, values })
+    this.props.onChange({ id: this.props.query.id, operation: value, values })
   }
 
   changeValue = (i) => {
-    return (event) => {
+    return (event, { value }) => {
       const values = this.queryValues
-      values[i] = event.target.value
+      values[i] = value
 
       this.props.onChange({ id: this.props.query.id, values })
     }
   }
 
   render() {
-    const fieldData = this.props.fields[ this.props.query.field ]
-    const fieldOptions = Object.entries(this.props.fields)
+    const currentFieldData = this.props.config.fields[ this.props.query.field ]
+
+    const fieldOptions = Object.entries(this.props.config.fields)
       .reduce((memo, [field, fieldData]) => {
         memo.push({ key: field, value: field, text: fieldData.display_name })
         return memo
       }, [])
 
-    const operationOptions = Object.entries(this.supportedOperations(fieldData))
+    const operationOptions = Object.entries(currentFieldData.operations)
       .reduce((memo, [op, opData]) => {
         memo.push({ key: op, value: op, text: opData.display_name })
         return memo
       }, [])
-
-    const widget = this.props.widgetMap[ fieldData.type ]
 
     return (
       <Form.Group className="qb clause">
@@ -113,7 +84,7 @@ export class Clause extends Component {
 
         { this.currentValues.map((val, i) => (
           <Form.Field key={ i }>
-            { widget({ name: `${ this.props.root }[values][]`,  value: val, onChange: this.changeValue(i) }) }
+            { currentFieldData.widget({ name: `${ this.props.root }[values][]`,  value: val, onChange: this.changeValue(i) }) }
           </Form.Field>
         )) }
       </Form.Group>

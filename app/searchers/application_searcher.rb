@@ -41,7 +41,7 @@ class ApplicationSearcher
     end
 
     def operation_options
-      dup(operations).transform_values do |i|
+      operations.dup.transform_values do |i|
         i[:options].tap do |opts|
           opts[:parameters] ||= 1
         end
