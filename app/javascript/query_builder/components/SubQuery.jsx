@@ -93,7 +93,8 @@ export class SubQuery extends Component {
                   root: (this.props.root + `[${ joiner }][]`)
                 }
 
-                return  (clause.field
+                return (
+                  clause.field
                     ? <Clause { ...newProps } />
                     : (
                       <div key={ clause.id }>
@@ -108,11 +109,10 @@ export class SubQuery extends Component {
         )) }
 
         { (this.props.onRemove
-          ? <Button negative basic icon onClick={ this.props.onRemove }>
+          && <Button negative basic icon onClick={ this.props.onRemove }>
               <Icon name='trash alternate outline'/>
               Remove Group
-            </Button>
-          : "") }
+            </Button>) }
       </List>
     )
   }

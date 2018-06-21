@@ -74,13 +74,13 @@ export class Clause extends Component {
       <Form.Group className="qb clause">
         <Button icon='trash' basic negative onClick={ this.props.onRemove }/>
 
-        <Form.Input type="hidden" name={ `${ this.props.root }[id]` } value={ this.props.query.id } />
+        <input type="hidden" name={ `${ this.props.root }[id]` } value={ this.props.query.id } />
 
         <Form.Select options={ fieldOptions } onChange={ this.selectField } value={ this.props.query.field } />
-        <Form.Input type="hidden" name={ `${ this.props.root }[field]` } value={ this.props.query.field } />
+        <input type="hidden" name={ `${ this.props.root }[field]` } value={ this.props.query.field } />
 
         <Form.Select options={ operationOptions } onChange={ this.selectOperation } value={ this.props.query.operation } />
-        <Form.Input type="hidden" name={ `${ this.props.root }[operation]` } value={ this.props.query.operation } />
+        <input type="hidden" name={ `${ this.props.root }[operation]` } value={ this.props.query.operation } />
 
         { this.currentValues.map((val, i) => (
           <Form.Field key={ i }>
