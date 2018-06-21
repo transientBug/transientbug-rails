@@ -9,20 +9,27 @@ const WidgetMap = {
 }
 
 export const renderQueryBuilder = (selector) => {
-  const appDiv = document.querySelector(selector)
+  const appDivs = document.querySelectorAll(selector)
 
-  const parsedConfig = {
-    fields: JSON.parse(appDiv.dataset.fields),
-    config: JSON.parse(appDiv.dataset.config),
-    query: JSON.parse(appDiv.dataset.query),
-    widgetMap: WidgetMap
-  }
+  appDivs.forEach((appDiv) => {
+    const query = JSON.parse(appDiv.dataset.query)
+    const config = JSON.parse(appDiv.dataset.config)
 
-  const props = Object.assign({}, appDiv.dataset, parsedConfig)
+    Object.keys(config.fields).forEach((key) => {
+      const fieldType = config.fields[ key ].type
 
-  console.dir(props)
+      config.fields[ key ].widget = WidgetMap[ fieldType ]
+    })
 
-  ReactDOM.render(<QueryBuilder { ...props } />, appDiv, () => {
-    appDiv.classList.remove("hidden")
+    const parsedConfig = {
+      query: query,
+      config: config
+    }
+
+    const props = Object.assign({}, appDiv.dataset, parsedConfig)
+
+    console.log(props)
+
+    ReactDOM.render(<QueryBuilder { ...props } />, appDiv, () => appDiv.classList.remove("hidden"))
   })
 }

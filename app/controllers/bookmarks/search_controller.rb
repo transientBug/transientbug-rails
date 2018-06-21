@@ -5,19 +5,7 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    unless params[:q].blank? || params[:q].empty?
-      @query = {
-        should: [
-          { id: 1, field: "title", operation: "match", values: [params[:q]] },
-          { id: 2, field: "description", operation: "match", values: [params[:q]] },
-          { id: 3, field: "tags", operation: "equal", values: [params[:q]] }
-        ]
-      }
-    end
-
-    @query ||= {}
-
-    @bookmarks = fetch_bookmarks(@query)
+    @bookmarks = fetch_bookmarks(default_query)
 
     respond_to do |format|
       format.html { render :index }
@@ -25,11 +13,11 @@ class Bookmarks::SearchController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def create
     @query = params[:query].to_unsafe_h
 
     @search = current_user.searches.new query: @query
-
     authorize @search
 
     respond_to do |format|
@@ -42,6 +30,7 @@ class Bookmarks::SearchController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def show
     @query = @search.query.with_indifferent_access
@@ -62,11 +51,15 @@ class Bookmarks::SearchController < ApplicationController
     authorize @search
   end
 
-  def query_builder_config query
+  def default_query
+    return {} if params[:q].blank? || params[:q].empty?
+
     {
-      fields: BookmarksSearcher.fields,
-      config: BookmarksSearcher.config,
-      query: query
+      should: [
+        { id: 1, field: "title", operation: "match", values: [params[:q]] },
+        { id: 2, field: "description", operation: "match", values: [params[:q]] },
+        { id: 3, field: "tags", operation: "equal", values: [params[:q]] }
+      ]
     }
   end
 

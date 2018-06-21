@@ -17,20 +17,19 @@ class ApplicationSearcher
     end
 
     def field name, title, **opts
-      type = index_klass.mappings_hash.values.first[:properties][ name ][:type].to_sym
-      fields[ name ] = opts.merge( display_name: title, type: type )
+      fields[ name ] = opts.merge( display_name: title )
     end
 
     def operations
-      @operations ||= {}
+      @operations ||= ancestor_hash :operations
     end
 
     def types
-      @types ||= {}
+      @types ||= ancestor_hash :types
     end
 
     def joiners
-      @joiners ||= {}
+      @joiners ||= ancestor_hash :joiners
     end
 
     def index_klass
@@ -38,16 +37,48 @@ class ApplicationSearcher
     end
 
     def fields
-      @fields ||= {}
+      @fields ||= ancestor_hash :fields
     end
 
-    def config
-      ops = operations.transform_values { |i| i[:options] }
+    def operation_options
+      dup(operations).transform_values do |i|
+        i[:options].tap do |opts|
+          opts[:parameters] ||= 1
+        end
+      end
+    end
 
+    def type_mappings
+      index_klass.mappings_hash.values.first[:properties]
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def normalized_fields
+      fields.each_with_object({}) do |(name, data), memo|
+        field_type = type_mappings[ name ][:type].to_sym
+
+        available_operations = types[ field_type ][:supported_operations] - data.fetch(:exclude_operations, [])
+
+        normalized_operations = available_operations.each_with_object({}) do |operation, ops_memo|
+          ops_memo[ operation ] = operation_options[ operation ]
+        end
+
+        normalized_field_config = {
+          operations: normalized_operations,
+          default_operation: types[ field_type ].fetch(:default_operation, available_operations.first),
+          type: field_type
+        }.merge data.slice(:display_name, :description)
+
+        memo[ name ] = normalized_field_config
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    def normalized_config
       {
-        operations: ops,
-        types: types,
-        joiners: joiners
+        operations: operation_options,
+        joiners: joiners,
+        fields: normalized_fields
       }
     end
 
@@ -65,6 +96,14 @@ class ApplicationSearcher
       {
         bool: bool
       }
+    end
+
+    protected
+
+    def ancestor_hash func
+      (ancestors - [self])
+        .select { |i| i.ancestors.include? ApplicationSearcher }
+        .inject({}) { |memo, i| memo.merge i.send func }
     end
   end
 end

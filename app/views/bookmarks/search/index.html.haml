@@ -5,7 +5,8 @@
 
 %h1 Search Results
 
-.query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.config.to_json, fields: BookmarksSearcher.fields.to_json, query: @query.to_json } }
+.query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.config.to_json, query: @query.to_json } }
+.query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.config.to_json, query: @query.to_json } }
 = javascript_pack_tag "query_builder"
 
 = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
