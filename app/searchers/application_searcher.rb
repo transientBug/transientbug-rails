@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class ApplicationSearcher
   include Enumerable
   include Concerns::ActiveRecord
@@ -113,6 +114,7 @@ class ApplicationSearcher
     self
   end
 
+  # rubocop:disable Metrics/AbcSize
   def compile query_ast
     bool = query_ast.slice(*self.class.joiners.keys).each_with_object({}) do |(joiner, values), memo|
       memo[ joiner ] = values.map do |value|
@@ -126,6 +128,7 @@ class ApplicationSearcher
       bool: bool
     }
   end
+  # rubocop:enable Metrics/AbcSize
 
   def chewy_results
     @chewy_results ||= begin
@@ -154,3 +157,4 @@ class ApplicationSearcher
     queries.empty?
   end
 end
+# rubocop:enable Metrics/ClassLength

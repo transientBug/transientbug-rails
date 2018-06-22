@@ -20,7 +20,7 @@ class ApplicationSearcher
 
       def activerecord_modifier &block
         activerecord_modifiers << block if block_given?
-        return self
+        self
       end
 
       # rubocop:disable Metrics/AbcSize
