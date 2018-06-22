@@ -1,5 +1,6 @@
 class BookmarksSearcher < ElasticsearchSearcher
   index BookmarksIndex::Bookmark
+  model Bookmark
 
   field :uri, "URI", description: "", exclude_operations: [ "exist" ]
   field :host, "Host", description: "", exclude_operations: [ "exist" ]

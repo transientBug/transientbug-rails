@@ -5,7 +5,7 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    @bookmarks = fetch_bookmarks(default_query)
+    @bookmarks = fetch_bookmarks default_query
 
     respond_to do |format|
       format.html { render :index }
@@ -13,12 +13,13 @@ class Bookmarks::SearchController < ApplicationController
     end
   end
 
+  # POST /bookmarks/search
+  # POST /bookmarks/search.json
   # rubocop:disable Metrics/AbcSize
   def create
     @query = params[:query].to_unsafe_h
 
-    @search = current_user.searches.new query: @query
-    authorize @search
+    @search = authorize current_user.searches.new(query: @query)
 
     respond_to do |format|
       if @search.save
@@ -32,9 +33,10 @@ class Bookmarks::SearchController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
+  # GET /bookmarks/search/1
+  # GET /bookmarks/search/1.json
   def show
     @query = @search.query.with_indifferent_access
-
     @bookmarks = fetch_bookmarks(@query)
 
     respond_to do |format|
@@ -46,13 +48,11 @@ class Bookmarks::SearchController < ApplicationController
   protected
 
   def set_search
-    @search = current_user.searches.find(params[:id])
-
-    authorize @search
+    @search = authorize current_user.searches.find(params[:id])
   end
 
   def default_query
-    return @query = {} if params[:q].blank? || params[:q].empty?
+    return @query ||= {} if params[:q].blank? || params[:q].empty?
 
     @query ||= {
       should: [
@@ -64,8 +64,20 @@ class Bookmarks::SearchController < ApplicationController
   end
 
   def fetch_bookmarks query
-    es_query = BookmarksSearcher.build query
+    searcher = policy_scope(BookmarksSearcher).query query
+    searcher.page(params[:page]).per(params[:per_page])
 
-    BookmarksIndex.query(term: { user_id: current_user.id }).query( es_query ).page(params[:page]).objects
+    searcher.activerecord_modifier do |ar_results|
+      ar_results.includes(
+        :webpage,
+        :tags,
+        :user,
+        offline_caches: [
+          :error_messages
+        ]
+      )
+    end
+
+    searcher
   end
 end

@@ -1,4 +1,8 @@
 class ApplicationSearcher
+  include Enumerable
+  include Concerns::ActiveRecord
+  include Concerns::Pagination
+
   class << self
     def operation name, title, **opts, &block
       operations[ name ] = { options: opts.merge( display_name: title ), block: block }
@@ -82,20 +86,6 @@ class ApplicationSearcher
       }
     end
 
-    def build query_ast
-      bool = query_ast.slice(*joiners.keys).each_with_object({}) do |(joiner, values), memo|
-        memo[ joiner ] = values.map do |value|
-          next build value unless value.key? :field
-
-          operations[ value[:operation] ][:block].call value[:field], value[:values]
-        end
-      end
-
-      {
-        bool: bool
-      }
-    end
-
     protected
 
     def ancestor_hash func
@@ -103,5 +93,64 @@ class ApplicationSearcher
         .select { |i| i.ancestors.include? ApplicationSearcher }
         .inject({}) { |memo, i| memo.merge i.send func }
     end
+  end
+
+  def queries
+    @queries ||= []
+  end
+
+  def chewy_modifiers
+    @chewy_modifiers ||= []
+  end
+
+  def query input=nil, &block
+    chewy_modifiers << block if block_given?
+
+    return self unless input
+
+    queries << compile(input)
+
+    self
+  end
+
+  def compile query_ast
+    bool = query_ast.slice(*self.class.joiners.keys).each_with_object({}) do |(joiner, values), memo|
+      memo[ joiner ] = values.map do |value|
+        next compile value unless value.key? :field
+
+        self.class.operations[ value[:operation] ][:block].call value[:field], value[:values]
+      end
+    end
+
+    {
+      bool: bool
+    }
+  end
+
+  def chewy_results
+    @chewy_results ||= begin
+      es_results = queries.inject(self.class.index_klass) { |memo, query| memo.query query }
+      chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
+    end
+  end
+
+  def results
+    @results ||= begin
+      return fetch [] if blank_query?
+
+      fetch chewy_results
+    end
+  end
+
+  def each
+    return enum_for(:each) unless block_given?
+
+    results.each do |result|
+      yield result
+    end
+  end
+
+  def blank_query?
+    queries.empty?
   end
 end
