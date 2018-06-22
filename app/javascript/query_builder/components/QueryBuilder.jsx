@@ -19,7 +19,7 @@ export class QueryBuilder extends Component {
     return (
       <div>
         <Query { ...props } />
-        <QueryDebug query={ this.state.query } />
+        <QueryDebug query={ this.state.query } config={ this.props.config } />
       </div>
     )
   }

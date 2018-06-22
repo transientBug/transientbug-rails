@@ -8,7 +8,9 @@ export const queryToIdHash = (config, query) => {
     .filter(([joiner, joinerData]) => joinerKeys.includes(joiner))
     .flatMap(([joiner, joinerData], i) => {
       return joinerData.flatMap((clause, j) => {
-        return Object.assign({ joiner }, clause)
+        if (clause.field)
+          return Object.assign({ joiner }, clause)
+        return Object.assign({ id: clause.id, joiner }, queryToIdHash(config, clause))
       })
     })
     .reduce((memo, val) => { memo[ val.id ] = val; return memo }, {})

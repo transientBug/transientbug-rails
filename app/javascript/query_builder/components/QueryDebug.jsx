@@ -1,6 +1,8 @@
 import { Component } from "react"
 import { Accordion, Icon } from "semantic-ui-react"
 
+import { queryToIdHash, idHashToQuery } from "../utils"
+
 export class QueryDebug extends Component {
   state = { activeIndex: -1 }
 
@@ -26,6 +28,12 @@ export class QueryDebug extends Component {
           <code>
             <pre>
               { JSON.stringify(this.props.query, null, 2) }
+            </pre>
+          </code>
+          <h2>idHash</h2>
+          <code>
+            <pre>
+              { JSON.stringify(queryToIdHash(this.props.config, this.props.query), null, 2) }
             </pre>
           </code>
         </Accordion.Content>
