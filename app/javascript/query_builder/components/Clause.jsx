@@ -11,20 +11,13 @@ export class Clause extends Component {
 
   get currentValues() {
     let values = []
-    let length = this.parameterCount(this.props.query.operation)
+
+    const length = this.props.config.operations[ this.props.operation ].parameters
 
     if (length > 0)
       values = Array(length).fill().map((_, i, values) => this.queryValues[ i ] || "")
 
     return values
-  }
-
-  parameterCount(operation) {
-    let length = this.props.config.operations[ operation ].parameters
-    if(isNil(length))
-      length = 1
-
-    return length
   }
 
   selectField = (event, { value }) => {
@@ -41,7 +34,7 @@ export class Clause extends Component {
 
   selectOperation = (event, { value }) => {
     const values = this.queryValues
-    values.length = this.parameterCount(value)
+    values.length = this.props.config.operations[ value ].parameters
 
     this.props.onChange({ id: this.props.query.id, operation: value, values })
   }

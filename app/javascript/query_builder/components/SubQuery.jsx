@@ -44,7 +44,7 @@ export class SubQuery extends Component {
 
   onAddClause = (joiner) => {
     return () => {
-      const [field, fieldData] = Object.entries(this.props.config.fields)[0]
+      const [[field, fieldData], ...tail] = Object.entries(this.props.config.fields)
       const operation = fieldData.default_operation
 
       this.updateData({
