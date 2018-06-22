@@ -85,7 +85,7 @@ class ApplicationSearcher
     def build query_ast
       bool = query_ast.slice(*joiners.keys).each_with_object({}) do |(joiner, values), memo|
         memo[ joiner ] = values.map do |value|
-          next build value if value.key? :field
+          next build value unless value.key? :field
 
           operations[ value[:operation] ][:block].call value[:field], value[:values]
         end

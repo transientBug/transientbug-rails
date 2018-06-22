@@ -55,20 +55,19 @@ export class Clause extends Component {
     }
   }
 
-  render() {
-    const currentFieldData = this.props.config.fields[ this.props.query.field ]
-
-    const fieldOptions = Object.entries(this.props.config.fields)
+  toOptions(config) {
+    return Object.entries(config)
       .reduce((memo, [field, fieldData]) => {
         memo.push({ key: field, value: field, text: fieldData.display_name })
         return memo
       }, [])
+  }
 
-    const operationOptions = Object.entries(currentFieldData.operations)
-      .reduce((memo, [op, opData]) => {
-        memo.push({ key: op, value: op, text: opData.display_name })
-        return memo
-      }, [])
+  render() {
+    const currentFieldData = this.props.config.fields[ this.props.query.field ]
+
+    const fieldOptions = this.toOptions(this.props.config.fields)
+    const operationOptions = this.toOptions(currentFieldData.operations)
 
     return (
       <Form.Group className="qb clause">
