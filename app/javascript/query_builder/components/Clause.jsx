@@ -12,7 +12,7 @@ export class Clause extends Component {
   get currentValues() {
     let values = []
 
-    const length = this.props.config.operations[ this.props.operation ].parameters
+    const length = this.props.config.operations[ this.props.query.operation ].parameters
 
     if (length > 0)
       values = Array(length).fill().map((_, i, values) => this.queryValues[ i ] || "")
