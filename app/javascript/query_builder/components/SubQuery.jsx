@@ -86,13 +86,13 @@ export class SubQuery extends Component {
 
             return ( clause.field ? <Clause { ...newProps } /> : <SubQuery {...newProps } /> )
           }) }
-        </Grouper>
 
-        { (this.props.onRemove
-          && <Button negative basic icon onClick={ this.props.onRemove }>
-              <Icon name="trash alternate outline"/>
-              Remove Group
-             </Button>) }
+          { (this.props.onRemove
+            && <Button negative basic icon onClick={ this.props.onRemove }>
+                <Icon name="trash alternate outline"/>
+                Remove Group
+               </Button>) }
+        </Grouper>
       </div>
     )
   }
