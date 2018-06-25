@@ -1,4 +1,4 @@
-resource "v1 Bookmarks" do
+RSpec.resource "v1 Bookmarks" do
   let(:user) { create(:user) }
   let(:auth_token) { "#{ user.email }:#{ user.api_token }" }
 
@@ -111,7 +111,7 @@ resource "v1 Bookmarks" do
     end
   end
 
-  get "/api/v1/bookmarks/check", focus: true do
+  get "/api/v1/bookmarks/check" do
     parameter :url, "URL to check", required: true
 
     let(:url) { bookmark.uri }

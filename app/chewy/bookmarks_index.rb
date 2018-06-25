@@ -30,6 +30,7 @@ class BookmarksIndex < Chewy::Index
   class << self
     def build_host_iterations bookmark
       url = bookmark.uri.host
+      # binding.pry
       host_iterations = [ url ]
 
       loop do
