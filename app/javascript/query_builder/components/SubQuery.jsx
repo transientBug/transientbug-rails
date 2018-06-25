@@ -46,13 +46,6 @@ const Grouper = ({ children }) => {
   )
 }
 
-const SubSubQuery = (props) => (
-  <div>
-    <input type='hidden' name={ props.root + `[${ props.clause.joiner }][][props.query.id]` } value={ props.query.id } />
-    <SubQuery { ...props } />
-  </div>
-)
-
 export class SubQuery extends Component {
   updateQueryData(func) {
     return Object.assign({}, this.props.query, func(this.props.query))
@@ -96,9 +89,7 @@ export class SubQuery extends Component {
   }
 
   onAddGroup = (joiner) => { return () => this.updateData({ joiner }) }
-
   onRemove = (id) => { return () => this.removeData(id) }
-
   onChange = (id) => { return (data) => this.updateData(data) }
 
   render() {
@@ -106,95 +97,43 @@ export class SubQuery extends Component {
     const headers = Object.entries(this.props.config.joiners)
 
     return (
-      <Grouper>
-        { headers.map(([joiner, joinerData]) => (
-          <Header group={ joiner }>
-            { joinerData.display_name }
-            <Dropdown>
-              <Dropdown.Menu>
-                <Dropdown.Item text='Add Clause' icon='plus' onClick={ this.onAddClause(joiner) } />
-                <Dropdown.Item text='Add Nested Group' icon='plus' onClick={ this.onAddGroup(joiner) } />
-              </Dropdown.Menu>
-            </Dropdown>
-          </Header>
-        )) }
+      <React.Fragment>
+        { (this.props.query.joiner
+          && <input type='hidden' name={ this.props.root + `[${ this.props.query.joiner }][][ this.props.query.id ]` } value={ this.props.query.id } />) }
 
-        { clauses.map(([id, clause]) => {
-          const newProps = {
-            query: clause,
-            config: this.props.config,
-            onChange: this.onChange(id),
-            onRemove: this.onRemove(id),
-            root: (this.props.root + `[${ clause.joiner }][]`),
-            group: clause.joiner
-          }
+        <Grouper>
+          { headers.map(([joiner, joinerData]) => (
+            <Header group={ joiner }>
+              { joinerData.display_name }
+              <Dropdown>
+                <Dropdown.Menu>
+                  <Dropdown.Item text='Add Clause' icon='plus' onClick={ this.onAddClause(joiner) } />
+                  <Dropdown.Item text='Add Nested Group' icon='plus' onClick={ this.onAddGroup(joiner) } />
+                </Dropdown.Menu>
+              </Dropdown>
+            </Header>
+          )) }
 
-          return (
-            clause.field
-              ? <Clause { ...newProps } />
-              : <SubSubQuery {...newProps } root={ this.props.root + `[${ clause.joiner }][][id]` } />
-          )
-        }) }
+          { clauses.map(([id, clause]) => {
+            const newProps = {
+              query: clause,
+              config: this.props.config,
+              onChange: this.onChange(id),
+              onRemove: this.onRemove(id),
+              root: (this.props.root + `[${ clause.joiner }][]`),
+              group: clause.joiner
+            }
 
-        { (this.props.onRemove
-          && <Button negative basic icon onClick={ this.props.onRemove }>
-              <Icon name='trash alternate outline'/>
-              Remove Group
-            </Button>) }
-      </Grouper>
+            return ( clause.field ? <Clause { ...newProps } /> : <SubQuery {...newProps } /> )
+          }) }
+
+          { (this.props.onRemove
+            && <Button negative basic icon onClick={ this.props.onRemove }>
+                <Icon name='trash alternate outline'/>
+                Remove Group
+              </Button>) }
+        </Grouper>
+      </React.Fragment>
     )
-
-    // Todo: This could probably be made to automatically group by iterating
-    // and collecting the children in a Grouper component or something?
-    //return (
-      //<List className="qb sub query">
-        //{ Object.entries(this.props.config.joiners).map(([joiner, joinerData]) => (
-          //<List.Item className={ ["qb clause group", joiner].join(" ") } key={ joiner }>
-            //<List.Icon name='filter' />
-            //<List.Content>
-              //<Header>
-                //{ joinerData.display_name }
-                //<Dropdown>
-                  //<Dropdown.Menu>
-                    //<Dropdown.Item text='Add Clause' icon='plus' onClick={ this.onAddClause(joiner) } />
-                    //<Dropdown.Item text='Add Nested Group' icon='plus' onClick={ this.onAddGroup(joiner) } />
-                  //</Dropdown.Menu>
-                //</Dropdown>
-              //</Header>
-
-              //{ (this.props.query[ joiner ] || []).map((clause) => {
-                //clause.joiner = joiner
-
-                //const newProps = {
-                  //query: clause,
-                  //config: this.props.config,
-                  //onChange: this.onChange(clause.id),
-                  //onRemove: this.onRemove(clause.id),
-                  //key: clause.id,
-                  //root: (this.props.root + `[${ joiner }][]`)
-                //}
-
-                //return (
-                  //clause.field
-                    //? <Clause { ...newProps } />
-                    //: (
-                      //<div key={ clause.id }>
-                        //<input type='hidden' name={ this.props.root + `[${ joiner }][][id]` } value={ clause.id } />
-                        //<SubQuery { ...newProps } />
-                      //</div>
-                    //)
-                //)
-              //}) }
-            //</List.Content>
-          //</List.Item>
-        //)) }
-
-        //{ (this.props.onRemove
-          //&& <Button negative basic icon onClick={ this.props.onRemove }>
-              //<Icon name='trash alternate outline'/>
-              //Remove Group
-            //</Button>) }
-      //</List>
-    //)
   }
 }
