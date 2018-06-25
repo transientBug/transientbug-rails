@@ -28,8 +28,6 @@ export const renderQueryBuilder = (selector) => {
 
     const props = Object.assign({}, appDiv.dataset, parsedConfig)
 
-    console.log(props)
-
     ReactDOM.render(<QueryBuilder { ...props } />, appDiv, () => appDiv.classList.remove("hidden"))
   })
 }

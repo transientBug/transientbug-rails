@@ -64,7 +64,7 @@ export class Clause extends Component {
 
     return (
       <Form.Group className="qb clause">
-        <Button icon='trash' basic negative onClick={ this.props.onRemove }/>
+        <Button icon="trash" basic negative onClick={ this.props.onRemove }/>
 
         <input type="hidden" name={ `${ this.props.root }[id]` } value={ this.props.query.id } />
 
