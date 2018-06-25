@@ -2,8 +2,10 @@ import { Component } from "react"
 
 import { Query, QueryDebug } from "."
 
+import { queryToIdHash, idHashToQuery } from "../utils"
+
 export class QueryBuilder extends Component {
-  state = { query: this.props.query }
+  state = { query: queryToIdHash(this.props.config, this.props.query) }
 
   onChange = (val) => this.setState({ query: val })
 
@@ -19,7 +21,7 @@ export class QueryBuilder extends Component {
     return (
       <div>
         <Query { ...props } />
-        <QueryDebug query={ this.state.query } config={ this.props.config } />
+        <QueryDebug query={ this.state.query } />
       </div>
     )
   }
