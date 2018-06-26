@@ -13,8 +13,6 @@ export DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com
 export CURRENT_DATE=$(date -u +%FT%H%M%S)
 export PACKAGE=package-${CURRENT_DATE}.tar.gz
 
-ls public/
-
 echo "Building package $PACKAGE"
 tar -zcvf $PACKAGE public doc
 echo $PACKAGE > current_package

@@ -17,15 +17,18 @@
 /yarn-error.log
 
 .byebug_history
+
+# Compiled things
 /public/packs
-/node_modules
+/public/assets
+/doc/api
+/docs
+/.yardoc
+/spec/examples.txt
 
 /.env*
 /storage
 /coverage
-
-/spec/examples.txt
-/.yardoc
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
