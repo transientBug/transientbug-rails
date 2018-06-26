@@ -1,0 +1,23 @@
+#!/bin/bash
+set -ev
+
+export DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com 
+
+./.travis/common
+
+echo "Building API Docs"
+bundle exec rake docs:generate
+
+echo "Building new assets"
+bundle exec rake assets:precompile
+
+export CURRENT_DATE=$(date -u +%FT%T)
+export PACKAGE=package-$CURRENT_DATE.tgz
+
+echo "Building tar"
+tar -czf $PACKAGE public/packs public/assets doc
+echo $PACKAGE > current_package 
+
+echo "Uploading $PACKAGE to DO space"
+aws s3 cp $PACKAGE s3://transientbug-assets/ --endpoint $DO_SPACES_ENDPOINT
+aws s3 cp current_package s3://transientbug-assets/ --endpoint $DO_SPACES_ENDPOINT

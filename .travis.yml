@@ -42,7 +42,13 @@ jobs:
   include:
     - stage: test
       script: .travis/rspec
+
     - stage: stylistic
       script: bundle exec pronto run -f github_status -c origin/master
+
     - stage: docs
       script: bundle exec yard
+
+    - stage: compile
+      script: .travis/assets
+      #if: branch = master

@@ -24,5 +24,8 @@
 /storage
 /coverage
 
+/spec/examples.txt
+/.yardoc
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
