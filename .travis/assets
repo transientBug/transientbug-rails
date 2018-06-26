@@ -14,7 +14,7 @@ env RAILS_ENV=production bundle exec rake assets:precompile
 export CURRENT_DATE=$(date -u +%FT%T)
 export PACKAGE=package-$CURRENT_DATE.tgz
 
-ls
+ls public/
 
 echo "Building tar"
 tar -czf $PACKAGE public/packs public/assets doc
