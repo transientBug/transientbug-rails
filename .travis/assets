@@ -1,22 +1,21 @@
 #!/bin/bash
 set -ev
 
-export DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com 
-
 ./.travis/common
 
 echo "Building API Docs"
 bundle exec rake docs:generate
 
 echo "Building new assets"
-env RAILS_ENV=production bundle exec rake assets:precompile
+bundle exec rake assets:precompile
 
+
+export DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com 
 export CURRENT_DATE=$(date -u +%FT%T)
-export PACKAGE=package-$CURRENT_DATE.tgz
+export PACKAGE=package-${CURRENT_DATE}.tar.gz
 
-ls public/
 
-echo "Building tar"
+echo "Building tar $PACKAGE"
 tar -czf $PACKAGE public/packs public/assets doc
 echo $PACKAGE > current_package 
 
