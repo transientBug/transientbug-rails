@@ -7,7 +7,7 @@ echo "Building API docs"
 bundle exec rake docs:generate
 
 echo "Building new assets"
-bundle exec rake assets:precompile
+env RAILS_ENV=production bundle exec rake assets:precompile
 
 export DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com
 export CURRENT_DATE=$(date -u +%FT%H%M%S)
@@ -18,6 +18,10 @@ ls public/
 echo "Building package $PACKAGE"
 tar -zcvf $PACKAGE public doc
 echo $PACKAGE > current_package
+
+echo "Installing awscli"
+pip install --user awscli # Install awscli w/o sudo
+export PATH=$PATH:$HOME/.local/bin # Ensure we can call awscli
 
 echo "Uploading $PACKAGE to DO space"
 aws s3 cp $PACKAGE s3://transientbug-assets/ --endpoint $DO_SPACES_ENDPOINT
