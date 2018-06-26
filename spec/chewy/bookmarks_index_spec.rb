@@ -1,17 +1,38 @@
 RSpec.describe BookmarksIndex, type: :chewy do
   describe ".build_host_iterations" do
-    let(:webpage) { create :webpage, uri: uri }
+    subject { described_class.build_host_iterations bookmark }
+
+    let(:webpage) { create :webpage, uri: Addressable::URI.parse(uri) }
     let(:bookmark) { create :bookmark, webpage: webpage }
 
     context "normal uri" do
-      # subject { described_class.build_host_iterations bookmark }
-
-      let(:uri) { "7.test.com" }
+      let(:uri) { "http://7.test.com" }
       let(:expected) { ["7.test.com", "test.com", "com" ] }
 
-      it { expect(true).to be }
-      # fit { binding.pry }
-      # fit { is_expected.to eq(expected) }
+      it { is_expected.to be_an(Array) }
+      it { is_expected.to eq(expected) }
+    end
+  end
+
+  describe ".build_bookmark_suggest" do
+    subject { described_class.build_bookmark_suggest bookmark }
+
+    let(:bookmark) { create :bookmark }
+
+    context "normal" do
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(input: a_kind_of(Array), contexts: a_kind_of(Hash)) }
+    end
+  end
+
+  describe ".build_tag_suggest" do
+    subject { described_class.build_tag_suggest tag }
+
+    let(:tag) { create :tag }
+
+    context "normal" do
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(input: a_kind_of(String), contexts: a_kind_of(Hash)) }
     end
   end
 end
