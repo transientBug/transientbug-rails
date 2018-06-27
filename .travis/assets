@@ -15,7 +15,6 @@ export PACKAGE=package-${CURRENT_DATE}.tar.gz
 
 echo "Building package $PACKAGE"
 tar -zcvf $PACKAGE public doc
-echo $PACKAGE > current_package
 
 echo "Installing awscli"
 pip install --user awscli # Install awscli w/o sudo
@@ -23,4 +22,4 @@ export PATH=$PATH:$HOME/.local/bin # Ensure we can call awscli
 
 echo "Uploading $PACKAGE to DO space"
 aws s3 cp $PACKAGE s3://transientbug-assets/ --endpoint $DO_SPACES_ENDPOINT
-aws s3 cp current_package s3://transientbug-assets/ --endpoint $DO_SPACES_ENDPOINT
+aws s3 cp $PACKAGE s3://transientbug-assets/current_package.tar.gz --endpoint $DO_SPACES_ENDPOINT
