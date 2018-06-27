@@ -51,4 +51,4 @@ jobs:
 
     - stage: compile
       script: .travis/assets
-      #if: branch = master
+      if: branch = master AND type != pull_request
