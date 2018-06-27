@@ -16,9 +16,6 @@ RUN bundle install --binstubs --jobs 4 --without development test
 
 COPY . .
 
-#ARG rails_master_key
-#RUN bundle exec rake RAILS_ENV=production RAILS_MASTER_KEY=$rails_master_key DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname assets:precompile
-
 VOLUME ["/app/public", "/dropzone"]
 
 CMD bundle exec puma -C config/puma.rb

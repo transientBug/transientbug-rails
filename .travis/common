@@ -3,8 +3,8 @@ set -ev
 
 if [ ! -d elasticsearch-${ES_VERSION}/bin ]; then
   echo "Downloading ES ${ES_VERSION}"
-  wget ${ES_DOWNLOAD_URL}
-  tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+  wget "${ES_DOWNLOAD_URL}"
+  tar -xzf "elasticsearch-${ES_VERSION}.tar.gz"
 fi
 
 echo "Creating test database"
