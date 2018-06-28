@@ -1,4 +1,4 @@
-FROM ruby:2.4-alpine
+FROM ruby:2.5-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 
 RUN apk add --no-cache --update build-base postgresql-dev postgresql git curl
