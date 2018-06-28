@@ -37,6 +37,11 @@ module.exports = {
 
   plugins: [
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(env))),
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      React: 'react',
+      ReactDOM: 'react-dom'
+    }),
     new ExtractTextPlugin(env.NODE_ENV === 'production' ? '[name]-[hash].css' : '[name].css'),
     new webpack.ProvidePlugin({
       _: 'lodash',
