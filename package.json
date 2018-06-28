@@ -8,9 +8,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "semantic-ui-react": "^0.81.1",
-    "uuid": "^3.2.1"
-  },
-  "devDependencies": {
+    "uuid": "^3.2.1",
     "@rails/webpacker": "3.5",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.25.0",
