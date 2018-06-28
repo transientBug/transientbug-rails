@@ -17,8 +17,14 @@
 /yarn-error.log
 
 .byebug_history
+
+# Compiled things
 /public/packs
-/node_modules
+/public/assets
+/doc/api
+/docs
+/.yardoc
+/spec/examples.txt
 
 /.env*
 /storage

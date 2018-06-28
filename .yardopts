@@ -1,0 +1,4 @@
+--output-dir ./docs
+lib/**/*.rb
+test/mocks/**/*.rb
+- README.md
