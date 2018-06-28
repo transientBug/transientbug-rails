@@ -4,5 +4,139 @@
 = render "bookmarks/navbar"
 
 %h1 Search Results
+.ui.search
+  .ui.fluid.icon.input
+    = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
+      = search_field_tag "q", @query, class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
+    %i.search.icon
 
-= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+.ui.fluid.accordion
+  .title
+    %i.dropdown.icon
+    Search Query Language
+  .content
+    %p
+      Search allows for building up moderately complex queries using the following syntax:
+      %code
+        [op][field]:[term]
+      or
+      %code
+        [op][field]:"[phrase]"
+
+      Where
+      %code [op]
+      is one of the following:
+
+      %table.ui.celled.table
+        %thead
+          %tr
+            %th
+              %code op
+            %th
+              desc
+
+        %tbody
+          %tr
+            %td
+              %code
+                +
+            %td
+              Field
+              %b MUST
+              match the term or phrase
+
+          %tr
+            %td
+            %td
+              Field
+              %b SHOULD
+              match the term or phrase
+
+          %tr
+            %td
+              %code -
+            %td
+              Field
+              %b MUST NOT
+              match the term or phrase
+
+      And
+      %code [field]
+      Is one of the following
+
+      %table.ui.celled.table
+        %thead
+          %tr
+            %th
+              %code field
+            %th
+              desc
+
+        %tbody
+          %tr
+            %td
+              %code uri
+            %td
+              The full uri of the bookmark, this is treated as a single term and does not include fuzzy matching.
+
+          %tr
+            %td
+              %code host
+            %td
+              The host, more commonly referred to as the bookmarks domain name, this works with both top level domains and sub-domains
+
+          %tr
+            %td
+              %code title
+            %td
+
+          %tr
+            %td
+              %code description
+            %td
+
+          %tr
+            %td
+              %code tags
+              %br
+              %code tag
+            %td
+
+
+      %h3 Examples
+      %table.ui.celled.table
+        %thead
+          %tr
+            %th
+              %code query
+            %th
+              desc
+
+        %tbody
+          %tr
+            %td
+              = link_to bookmarks_search_index_path(q: "-tags:") do
+                %code -tags:
+            %td
+              Find all bookmarks without tags
+
+          %tr
+            %td
+              = link_to bookmarks_search_index_path(q: "+host:mozilla.org -host:developer.mozilla.org") do
+                %code +host:mozilla.org -host:developer.mozilla.org
+            %td
+              Find all bookmarks from mozilla.org but exclude bookmarks from developer.mozilla.org
+
+
+- if @bookmarks.errors.any?
+  .ui.negative.message
+    - @bookmarks.errors.each do |field, message|
+      .header A wild error appeared!
+      %p
+        %b #{ field.to_s.titleize }:
+        = message
+
+- if @bookmarks.blank_query?
+  = render partial: "zero_state"
+- else
+  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

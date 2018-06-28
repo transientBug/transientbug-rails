@@ -2,6 +2,6 @@
   .ui.category.search.item{ data: { behavior: "search-bookmarks" } }
     .ui.icon.input
       = form_tag bookmarks_search_index_path, method: :get do
-        = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "Search" }
+        = search_field_tag "q", @query, class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "Search" }
       %i.search.icon
     .results

@@ -2,14 +2,20 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    @bookmarks = BookmarksIndex.query(
-      bool: {
-        should: [
-          { match: { title: params[:q] } },
-          { match: { tags: params[:q] } }
+    @query = params[:q]
+    @bookmarks = policy_scope(BookmarkSearcher).query @query
+    @bookmarks.page(params[:page]).per(params[:per_page])
+
+    @bookmarks.activerecord_modifier do |ar_results|
+      ar_results.includes(
+        :webpage,
+        :tags,
+        :user,
+        offline_caches: [
+          :error_messages
         ]
-      }
-    ).objects.page params[:page]
+      )
+    end
 
     respond_to do |format|
       format.html { render :index }
