@@ -51,6 +51,7 @@ class Bookmarks::SearchController < ApplicationController
     @search = authorize current_user.searches.find(params[:id])
   end
 
+  # rubocop:disable Naming/MemoizedInstanceVariableName
   def default_query
     return @query ||= {} if params[:q].blank? || params[:q].empty?
 
@@ -62,6 +63,7 @@ class Bookmarks::SearchController < ApplicationController
       ]
     }
   end
+  # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def fetch_bookmarks query
     searcher = policy_scope(BookmarksSearcher).query query

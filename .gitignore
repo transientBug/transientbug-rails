@@ -30,11 +30,6 @@
 /storage
 /coverage
 
-# Rspec and yard items
-/doc
-/.yardoc
-/spec/examples.txt
-
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /public/packs

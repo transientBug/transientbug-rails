@@ -5,7 +5,7 @@ RSpec.describe BookmarksIndex, type: :chewy do
     let(:webpage) { create :webpage, uri: Addressable::URI.parse(uri) }
     let(:bookmark) { create :bookmark, webpage: webpage }
 
-    context "normal uri" do
+    context "with a normal uri" do
       let(:uri) { "http://7.test.com" }
       let(:expected) { ["7.test.com", "test.com", "com" ] }
 
@@ -19,7 +19,7 @@ RSpec.describe BookmarksIndex, type: :chewy do
 
     let(:bookmark) { create :bookmark }
 
-    context "normal" do
+    context "with a normal" do
       it { is_expected.to be_a(Hash) }
       it { is_expected.to include(input: a_kind_of(Array), contexts: a_kind_of(Hash)) }
     end
@@ -30,7 +30,7 @@ RSpec.describe BookmarksIndex, type: :chewy do
 
     let(:tag) { create :tag }
 
-    context "normal" do
+    context "with a normal" do
       it { is_expected.to be_a(Hash) }
       it { is_expected.to include(input: a_kind_of(String), contexts: a_kind_of(Hash)) }
     end
