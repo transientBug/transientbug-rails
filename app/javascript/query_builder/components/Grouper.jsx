@@ -1,16 +1,17 @@
 import { List } from "semantic-ui-react"
 
-import { GrouperHeader } from "."
+import GrouperHeader from "./GrouperHeader"
 
-export const Grouper = ({ children }) => {
+const Grouper = ({ children }) => {
   const childrenArray = React.Children.toArray(children)
 
-  const headers = childrenArray.filter((i) => i.type === GrouperHeader)
-  const items = childrenArray.filter((i) => i.type !== GrouperHeader)
+  const headers = childrenArray.filter(i => i.type === GrouperHeader)
+  const items = childrenArray.filter(i => i.type !== GrouperHeader)
 
   const groups = items.reduce((memo, header) => {
-    const group = header.props.group
+    const { group } = header.props
 
+    /* eslint no-param-reassign:0 */
     if (!memo[ group ])
       memo[ group ] = []
 
@@ -21,12 +22,12 @@ export const Grouper = ({ children }) => {
 
   return (
     <List className="qb sub query">
-      { headers.map((header) => (
+      { headers.map(header => (
         <List.Item className={ ["qb clause group", header.props.group].join(" ") } key={ header.props.group }>
           <List.Icon name="filter" />
           <List.Content>
             { header }
-            { groups[ header.props.group ] && groups[ header.props.group ].map((elem) => elem) }
+            { groups[ header.props.group ] && groups[ header.props.group ].map(elem => elem) }
           </List.Content>
         </List.Item>
       )) }
@@ -37,3 +38,5 @@ export const Grouper = ({ children }) => {
     </List>
   )
 }
+
+export default Grouper

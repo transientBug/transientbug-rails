@@ -1,14 +1,14 @@
-import { QueryBuilder } from "./components"
+import QueryBuilder from "./components/QueryBuilder"
 import { TextWidget, NumberWidget, DateWidget } from "./widgets"
 
 const WidgetMap = {
-  text: (props) => <TextWidget {...props} />,
-  keyword: (props) => <TextWidget {...props} />,
-  number: (props) => <NumberWidget {...props} />,
-  date: (props) => <DateWidget {...props} />
+  text: props => <TextWidget { ...props } />,
+  keyword: props => <TextWidget { ...props } />,
+  number: props => <NumberWidget { ...props } />,
+  date: props => <DateWidget { ...props } />,
 }
 
-export const renderQueryBuilder = (selector) => {
+const renderQueryBuilder = (selector) => {
   const appDivs = document.querySelectorAll(selector)
 
   appDivs.forEach((appDiv) => {
@@ -22,8 +22,8 @@ export const renderQueryBuilder = (selector) => {
     })
 
     const parsedConfig = {
-      query: query,
-      config: config
+      query,
+      config,
     }
 
     const props = Object.assign({}, appDiv.dataset, parsedConfig)
@@ -31,3 +31,5 @@ export const renderQueryBuilder = (selector) => {
     ReactDOM.render(<QueryBuilder { ...props } />, appDiv, () => appDiv.classList.remove("hidden"))
   })
 }
+
+export default renderQueryBuilder

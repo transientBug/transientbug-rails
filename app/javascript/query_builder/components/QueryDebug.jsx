@@ -1,10 +1,10 @@
 import { Component } from "react"
 import { Accordion, Icon } from "semantic-ui-react"
 
-export class QueryDebug extends Component {
+export default class QueryDebug extends Component {
   state = { activeIndex: -1 }
 
-  handleClick = (e, titleProps) => {
+  handleClick = (_event, titleProps) => {
     const { index } = titleProps
     const { activeIndex } = this.state
 

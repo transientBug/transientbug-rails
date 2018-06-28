@@ -1,6 +1,6 @@
 import { Dropdown, Header } from "semantic-ui-react"
 
-export const GrouperHeader = ({ group, data, addClause, addGroup }) => (
+const GrouperHeader = ({ data, addClause, addGroup }) => (
   <Header>
     { data.display_name }
     <Dropdown>
@@ -11,3 +11,5 @@ export const GrouperHeader = ({ group, data, addClause, addGroup }) => (
     </Dropdown>
   </Header>
 )
+
+export default GrouperHeader

@@ -1,21 +1,22 @@
 import { Component } from "react"
 
-import { Query, QueryDebug } from "."
+import Query from "./Query"
+import QueryDebug from "./QueryDebug"
 
-import { queryToIdHash, idHashToQuery } from "../utils"
+import { queryToIdHash } from "../utils"
 
-export class QueryBuilder extends Component {
+export default class QueryBuilder extends Component {
   state = { query: queryToIdHash(this.props.config, this.props.query) }
 
-  onChange = (val) => this.setState({ query: val })
+  onChange = val => this.setState({ query: val })
 
-  onSubmit = (event) => event.target.submit()
+  onSubmit = event => event.target.submit()
 
   render() {
     const props = Object.assign({}, this.props, {
       onSubmit: this.onSubmit,
       onChange: this.onChange,
-      query: this.state.query
+      query: this.state.query,
     })
 
     return (
