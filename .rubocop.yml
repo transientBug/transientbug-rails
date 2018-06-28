@@ -92,6 +92,9 @@ Layout/SpaceInsideStringInterpolation:
 Layout/SpaceInsideReferenceBrackets:
   Enabled: false
 
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
 Layout/SpaceInsideParens:
   Enabled: false
 
