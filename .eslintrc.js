@@ -46,6 +46,9 @@ module.exports = {
     "react/destructuring-assignment": "off",
 
     // Lets not check prop types just yet, m'kay?
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+
+    // Fuck no i want to be able to do an one line <Button>text</Button>
+    "react/jsx-one-expression-per-line": "off"
   }
 }

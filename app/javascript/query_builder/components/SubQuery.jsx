@@ -101,7 +101,7 @@ export default class SubQuery extends Component {
             && (
             <Button negative basic icon onClick={ this.props.onRemove }>
               <Icon name="trash alternate outline" />
-                Remove Group
+              Remove Group
             </Button>
             )) }
         </Grouper>

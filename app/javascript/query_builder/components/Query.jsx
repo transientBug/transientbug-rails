@@ -9,9 +9,7 @@ const Query = props => (
 
     <SubQuery { ...props } root="query" />
 
-    <Button type="submit">
-Search
-    </Button>
+    <Button type="submit">Search</Button>
   </Form>
 )
 
