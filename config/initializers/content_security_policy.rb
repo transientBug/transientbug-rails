@@ -6,6 +6,8 @@ Rails.application.config.content_security_policy do |p|
   p.script_src  :self, :https, :unsafe_inline, :unsafe_eval, "http://localhost:*", "http://0.0.0.0:*"
   p.style_src   :self, :https, :unsafe_inline, "fonts.googleapis.com"
 
+  p.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
+
   # Specify URI for violation reports
   # p.report_uri  "/csp-violation-report-endpoint"
 end
