@@ -89,7 +89,7 @@ Layout/SpaceBeforeBlockBraces:
 Layout/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
-Layout/SpaceInsideBrackets:
+Layout/SpaceInsideReferenceBrackets:
   Enabled: false
 
 Layout/SpaceInsideParens:
