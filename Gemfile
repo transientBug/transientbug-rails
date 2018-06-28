@@ -12,7 +12,7 @@ gem "rails", "~> 5.2"
 #  * Postgres
 #  * Elasticsearch
 #  * Redis
-gem "pg", "~> 0.18"
+gem "pg"
 gem "chewy"
 gem "redis", "~> 3.0"
 gem "hiredis"
@@ -182,4 +182,5 @@ group :test do
   # gem "pronto-flay", require: false
   # gem "pronto-reek", require: false
   gem "pronto-rubocop", require: false
+  gem "pronto-eslint_npm", require: false
 end
