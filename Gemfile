@@ -12,7 +12,7 @@ gem "rails", "~> 5.2"
 #  * Postgres
 #  * Elasticsearch
 #  * Redis
-gem "pg", "~> 0.18"
+gem "pg"
 gem "chewy"
 gem "redis", "~> 3.0"
 gem "hiredis"
