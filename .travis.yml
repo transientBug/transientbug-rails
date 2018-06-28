@@ -44,7 +44,7 @@ jobs:
       script: .travis/rspec
 
     - stage: stylistic
-      script: bundle exec pronto run -f github_status -c origin/master && ./node_modules/.bin/eslint app/javascript/**/*
+      script: bundle exec pronto run -f github_status -c origin/master
 
     - stage: docs
       script: bundle exec yard
