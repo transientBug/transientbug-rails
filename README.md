@@ -1,5 +1,6 @@
 # transientBug Rails Project
-This is the main server and frontend for the transientBug.ninja website.
+This is the main server and frontend for the transientBug.ninja bookmarking
+service.
 
 [![Build Status](https://travis-ci.org/transientBug/transientbug-rails.svg?branch=master)](https://travis-ci.org/transientBug/transientbug-rails)
 
@@ -7,19 +8,29 @@ This is the main server and frontend for the transientBug.ninja website.
 General principles:
  - Try to keep it simple, mkay?
 
-Stack:
+## Stack:
+ - Docker for dev/deployments
+
+### Backend:
  - Ruby on Rails 5.2
-   - Ruby 2.4.1 (aim is to upgrade to 2.5 soonish)
-   - Node 8 for webpacker gem
+   - Ruby 2.5.1
    - Sidekiq for ActiveJob
    - Clockwork.rb for periodic tasks
-   - Docker for dev/deployments
  - Postgresql 9.6
  - Elasticsearch 5.6
  - Redis 4
 
-A Paw.app file is provided and I try to keep it up to date with the current
-API.
+### Frontend
+ - Semantic-UI
+ - JQuery for basic stuff
+ - React for advanced stuff
+ - Webpack 4 & Sprockets
+   - Node 8 with the webpacker gem
+   - Current thoughts are to ditch Sprockets, idk.
+
+~A Paw.app file is provided and I try to keep it up to date with the current
+API.~ Currently the paw file has been removed but I'm working on a better
+replacement.
 
 # Testing
 Chrome headless is being setup for the capybara tests, you should install it
