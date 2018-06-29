@@ -36,3 +36,5 @@
 
     .ui.list
       = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
+
+= javascript_pack_tag "application"
