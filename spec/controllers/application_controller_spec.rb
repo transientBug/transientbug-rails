@@ -8,9 +8,9 @@ RSpec.describe ApplicationController do
       end
     end
 
-    before(:each) do
+    before do
       routes.draw do
-        get 'action_requiring_user' => 'anonymous#action_requiring_user'
+        get "action_requiring_user" => "anonymous#action_requiring_user"
       end
     end
 

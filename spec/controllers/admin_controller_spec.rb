@@ -5,12 +5,12 @@ RSpec.describe AdminController do
     end
   end
 
-  before(:each) do
+  before do
     routes.draw do
-      get 'action_requiring_admin' => 'admin#action_requiring_admin'
+      get "action_requiring_admin" => "admin#action_requiring_admin"
     end
 
-    controller.append_view_path 'spec/views'
+    controller.append_view_path "spec/views"
   end
 
   describe "#require_admin" do
