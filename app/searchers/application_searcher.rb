@@ -25,6 +25,14 @@ class ApplicationSearcher
       fields[ name ] = opts.merge( display_name: title )
     end
 
+    def default &block
+      @defaulter = block
+    end
+
+    def default_query input
+      @defaulter.call input
+    end
+
     def operations
       @operations ||= ancestor_hash :operations
     end

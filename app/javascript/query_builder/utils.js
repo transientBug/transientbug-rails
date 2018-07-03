@@ -1,3 +1,5 @@
+import uuidv4 from "uuid/v4"
+
 export const pick = (obj, props) => props.reduce((a, e) => { a[ e ] = obj[ e ]; return a }, {}) // eslint-disable-line
 export const entryMap = (obj, mapFunc) => Object.entries(obj).map(mapFunc)
 
@@ -7,6 +9,9 @@ export const queryToIdHash = (config, query) => {
   return Object.entries(query)
     .filter(([joiner]) => joinerKeys.includes(joiner))
     .flatMap(([joiner, joinerData]) => joinerData.flatMap((clause) => {
+      if (!clause.id)
+        clause.id = uuidv4() // eslint-disable-line
+
       if (clause.field)
         return Object.assign({ joiner }, clause)
 
