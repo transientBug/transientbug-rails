@@ -6,11 +6,14 @@ RSpec.describe Bookmarks::SearchController do
   end
 
   describe "#index" do
+    skip "is this real life"
   end
 
   describe "#create" do
+    skip "is this just fantasy"
   end
 
   describe "#show" do
+    skip "caught in a landslide"
   end
 end
