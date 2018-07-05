@@ -15,7 +15,6 @@ class Bookmarks::SearchController < ApplicationController
 
   # POST /bookmarks/search
   # POST /bookmarks/search.json
-  # rubocop:disable Metrics/AbcSize
   def create
     @search = authorize current_user.searches.new(query: query)
 
@@ -29,7 +28,6 @@ class Bookmarks::SearchController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   # GET /bookmarks/search/1
   # GET /bookmarks/search/1.json

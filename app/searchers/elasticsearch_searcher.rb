@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 class ElasticsearchSearcher < ApplicationSearcher
   operation "[between]", "After till Before", parameters: 2 do |field, (lower, higher)|
     {
@@ -141,4 +140,3 @@ class ElasticsearchSearcher < ApplicationSearcher
   joiner :must, "And"
   joiner :must_not, "Not"
 end
-# rubocop:enable Metrics/ClassLength

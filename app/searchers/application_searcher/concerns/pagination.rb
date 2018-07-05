@@ -3,12 +3,6 @@ class ApplicationSearcher
     module Pagination
       extend ActiveSupport::Concern
 
-      included do
-      end
-
-      class_methods do
-      end
-
       def total_pages
         chewy_results.total_pages
       end

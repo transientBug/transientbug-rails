@@ -17,12 +17,21 @@ AllCops:
 Bundler/OrderedGems:
   TreatCommentsAsGroupSeparators: true
 
+Metrics/AbcSize:
+  Max: 30
+
 Metrics/BlockLength:
   Exclude:
     - db/**/*.rb
     - spec/**/**_spec.rb
     - spec/support/examples/**.rb
     - config/routes/**/*.rb
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
 
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
@@ -37,6 +46,9 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 30
+
+Metrics/ModuleLength:
+  Enabled: false
 
 Naming/FileName:
   Exclude:
