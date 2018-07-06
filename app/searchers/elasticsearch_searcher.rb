@@ -1,4 +1,8 @@
 class ElasticsearchSearcher < ApplicationSearcher
+  include ApplicationSearcher::Concerns::Chewy
+  include ApplicationSearcher::Concerns::ActiveRecord
+  include ApplicationSearcher::Concerns::Pagination
+
   operation "[between]", "After till Before", parameters: 2 do |field, (lower, higher)|
     {
       range: {
@@ -139,4 +143,18 @@ class ElasticsearchSearcher < ApplicationSearcher
   joiner :should, "Or"
   joiner :must, "And"
   joiner :must_not, "Not"
+
+  def compile query_ast
+    bool = query_ast.slice(*self.class.joiners.keys).each_with_object({}) do |(joiner, values), memo|
+      memo[ joiner ] = values.map do |value|
+        next compile value unless value.key? :field
+
+        self.class.operations[ value[:operation] ][:block].call value[:field], value[:values]
+      end
+    end
+
+    {
+      bool: bool
+    }
+  end
 end

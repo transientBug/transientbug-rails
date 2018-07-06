@@ -1,7 +1,5 @@
 class ApplicationSearcher
   include Enumerable
-  include Concerns::ActiveRecord
-  include Concerns::Pagination
 
   class << self
     def operation name, title, **opts, &block
@@ -14,10 +12,6 @@ class ApplicationSearcher
 
     def joiner name, title, **opts
       joiners[ name ] = opts.merge( display_name: title )
-    end
-
-    def index klass
-      @index_klass = klass
     end
 
     def field name, title, **opts
@@ -44,10 +38,6 @@ class ApplicationSearcher
       @joiners ||= ancestor_hash :joiners
     end
 
-    def index_klass
-      @index_klass ||= nil
-    end
-
     def fields
       @fields ||= ancestor_hash :fields
     end
@@ -61,12 +51,12 @@ class ApplicationSearcher
     end
 
     def type_mappings
-      index_klass.mappings_hash.values.first[:properties]
+      fail NotImplementedError, "#type_mappings should return a hash"
     end
 
     def normalized_fields
       fields.each_with_object({}) do |(name, data), memo|
-        field_type = type_mappings[ name ][:type].to_sym
+        field_type = type_mappings[ name ]
 
         available_operations = types[ field_type ][:supported_operations] - data.fetch(:exclude_operations, [])
 
@@ -94,6 +84,13 @@ class ApplicationSearcher
 
     protected
 
+    # Allow classes to inherit their ancestors fields, joiners, types and
+    # operations. This allows for progressively building searchers up, such as
+    # having an ElasticsearchSearcher that defines the operations to build ES
+    # queries, a BookmarksSearcher that inherits those operations while
+    # defining public user facing searchable fields, and an
+    # Admin::BookmarksSearcher which defines additional fields that are
+    # available within the admin panel
     def ancestor_hash func
       (ancestors - [self])
         .select { |i| i.ancestors.include? ApplicationSearcher }
@@ -105,13 +102,11 @@ class ApplicationSearcher
     @queries ||= []
   end
 
-  def chewy_modifiers
-    @chewy_modifiers ||= []
+  def compile _input
+    fail NotImplementedError, "should convert the input query AST to a finished query"
   end
 
-  def query input=nil, &block
-    chewy_modifiers << block if block_given?
-
+  def query input=nil, &_block
     return self unless input
 
     queries << compile(input)
@@ -119,33 +114,8 @@ class ApplicationSearcher
     self
   end
 
-  def compile query_ast
-    bool = query_ast.slice(*self.class.joiners.keys).each_with_object({}) do |(joiner, values), memo|
-      memo[ joiner ] = values.map do |value|
-        next compile value unless value.key? :field
-
-        self.class.operations[ value[:operation] ][:block].call value[:field], value[:values]
-      end
-    end
-
-    {
-      bool: bool
-    }
-  end
-
-  def chewy_results
-    @chewy_results ||= begin
-      es_results = queries.inject(self.class.index_klass) { |memo, query| memo.query query }
-      chewy_modifiers.reverse.inject(es_results) { |memo, modifier| modifier.call memo }
-    end
-  end
-
   def results
-    @results ||= begin
-      return fetch [] if blank_query?
-
-      fetch chewy_results
-    end
+    fail NotImplementedError, "#results should return an array like object that responds to #each"
   end
 
   def each
