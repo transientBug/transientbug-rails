@@ -29,16 +29,18 @@ class BookmarksIndex < Chewy::Index
 
   class << self
     def build_host_iterations bookmark
-      url = bookmark.uri.host
-      host_iterations = [ url ]
+      host = bookmark.uri.host
+      host_iterations = [ host ].compact
+
+      return host_iterations unless host
 
       loop do
-        break if url.count(".") < 1
-        url = url.split(".", 2).last
-        host_iterations << url
+        break if host.count(".") < 1
+        host = host.split(".", 2).last
+        host_iterations << host
       end
 
-      host_iterations
+      host_iterations.compact
     end
 
     def build_bookmark_suggest bookmark
