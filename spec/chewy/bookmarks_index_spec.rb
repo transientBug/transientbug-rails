@@ -14,7 +14,10 @@ RSpec.describe BookmarksIndex, type: :chewy do
     end
 
     context "with no host" do
-      let(:uri) { "about:reader?url=https%3A%2F%2Fnymag.com%2Fdaily%2Fintelligencer%2F2018%2F02%2Famericas-opioid-epidemic.html" }
+      let(:uri) do
+        "about:reader?url=https%3A%2F%2Fnymag.com%2Fdaily%2Fintelligencer%2F2018%2F02%2Famericas-opioid-epidemic.html"
+      end
+
       let(:expected) { [] }
 
       it { is_expected.to be_an(Array) }
