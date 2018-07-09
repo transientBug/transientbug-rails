@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :images
   has_many :bookmarks
+  has_many :searches
 
   has_many :import_data
 
