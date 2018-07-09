@@ -1,7 +1,6 @@
 import { Component } from "react"
 
 import Query from "./Query"
-import QueryDebug from "./QueryDebug"
 
 import { queryToIdHash } from "../utils"
 
@@ -22,7 +21,6 @@ export default class QueryBuilder extends Component {
     return (
       <div>
         <Query { ...props } />
-        <QueryDebug query={ this.state.query } />
       </div>
     )
   }
