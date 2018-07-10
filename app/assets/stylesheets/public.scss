@@ -14,3 +14,18 @@
  *= require_self
  */
 @import "common";
+
+
+.bookmarks.list {
+  .item {
+    .inline {
+      .header {
+        display: inline-block;
+      }
+
+      .date {
+        display: inline-block;
+      }
+    }
+  }
+}

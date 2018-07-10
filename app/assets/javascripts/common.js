@@ -81,5 +81,11 @@ document.addEventListener("turbolinks:load", () => {
     inline: true
   })
 
+  $("[data-behavior~=tag-edit-popup]").popup({
+    inline: true,
+    position: "bottom left",
+    on: 'click'
+  })
+
   $("[data-behavior~=dropdown]").dropdown()
 })
