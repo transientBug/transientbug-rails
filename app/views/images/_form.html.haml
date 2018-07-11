@@ -12,7 +12,10 @@
 
   .field
     = f.label :tags
-    = f.select :tags, image.tags.map { |t| [ t, t ] }, {}, { multiple: true, class: "ui multiple search selection dropdown", data: { behavior: "autocomplete-image-tags" } }
+    .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-image-tags" } }
+      = f.text_field :tags, value: image.tags.join(","), style: "display: none", autocomplete: "off", data: { behaviour: "init" }
+      %i.dropdown.icon
+      .default.text Search Tags
 
   .field
     = f.label :source

@@ -70,7 +70,7 @@ class ImagesController < ApplicationController
   # POST /images.json
   def create
     image_param = params.dig(:image, :image)
-    tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
+    tags = params.dig(:image, :tags).split(",").reject(&:empty?).map(&:strip)
 
     @image = current_user.images.new(image_params.merge(tags: tags))
 
@@ -90,7 +90,7 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1.json
   def update
     image_param = params.dig(:image, :image)
-    tags = params.dig(:image, :tags).reject(&:empty?).map(&:strip)
+    tags = params.dig(:image, :tags).split(",").reject(&:empty?).map(&:strip)
 
     respond_to do |format|
       if @image.update(image_params.merge(tags: tags))
