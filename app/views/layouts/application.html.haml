@@ -3,9 +3,9 @@
   %head
     = render partial: "layouts/head"
 
+    = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+
   %body{ class: [  controller_name, action_name ] }
     = render partial: "layouts/body"
 
     = render partial: "layouts/footer"
-
-  = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false

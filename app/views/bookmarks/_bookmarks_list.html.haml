@@ -15,13 +15,15 @@
         %i.trash.icon
         delete all
 
-  .ui.relaxed.divided.selection.bookmarks.list
+  .ui.relaxed.divided.bookmarks.list
     - bookmarks.each do |bookmark|
       .ui.item
         .right.floated.content
-          - bookmark.tags.each do |tag|
-            = link_to bookmarks_tag_path(tag) do
-              .ui.label{ class: [tag.color] }= tag.label
+          .ui.labels
+            - bookmark.tags.each do |tag|
+              = link_to bookmarks_tag_path(tag) do
+                .ui.label{ class: [tag.color] }= tag.label
+
         .content
           .inline
             = model_tag bookmark, only: [:uri, :title]

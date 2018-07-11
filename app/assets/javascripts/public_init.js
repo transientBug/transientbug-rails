@@ -16,4 +16,6 @@ App.registerInitializer("semantic-ui api", () => {
 
     return settings
   }
+
+  $.fn.dropdown.settings.selector.input = "> input[data-behaviour~=\"init\"], > select"
 })

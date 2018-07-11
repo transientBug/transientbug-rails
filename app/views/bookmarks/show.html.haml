@@ -11,7 +11,7 @@
   = @bookmark.created_at.to_s(:long)
   UTC
 
-.ui.small.tag.labels
+.ui.small.labels
   - @bookmark.tags.each do |tag|
     = link_to bookmarks_tag_path(tag) do
       .ui.label{ class: [tag.color] }= tag.label
