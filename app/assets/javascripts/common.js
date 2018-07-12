@@ -21,28 +21,21 @@ document.addEventListener("turbolinks:load", () => {
     $(element).sticky(stickySettings)
   })
 
-  // Setup autocomplete forms for image and bookmark tags. This could probably be simplified with data attributes.
-  $("[data-behavior~=autocomplete-image-tags]").dropdown({
-    apiSettings: {
-      cache: false,
-      action: "autocomplete image tags"
-    },
-    fields: {
+  tagDropdown(
+    "[data-behavior~=autocomplete-image-tags]",
+    "autocomplete image tags", {
       name: "title",
       value: "title"
     }
-  })
+  )
 
-  $("[data-behavior~=autocomplete-bookmark-tags]").dropdown({
-    apiSettings: {
-      cache: false,
-      action: "autocomplete bookmark tags"
-    },
-    fields: {
+  tagDropdown(
+    "[data-behavior~=autocomplete-bookmark-tags]",
+    "autocomplete bookmark tags", {
       name: "label",
       value: "label"
     }
-  })
+  )
 
   // Setup searching for things. This could probably be simplified with data attributes.
   $("[data-behavior~=search-images]").search({
@@ -83,3 +76,22 @@ document.addEventListener("turbolinks:load", () => {
 
   $("[data-behavior~=dropdown]").dropdown()
 })
+
+const tagDropdown = (selector, action, fields) => {
+  // This is a massive hack to get around FireFox caching hidden input field
+  // data because its all awful
+  const tagInput = $(`${ selector } > input[data-behaviour~=\"init\"]`)
+  if(tagInput.length != 0) {
+    const rawTags = tagInput.val()
+    const tags = rawTags.split(",").map((t) => ({ name: t, value: t, label: t, title: t, selected: true }))
+
+    $(selector).dropdown({
+      apiSettings: {
+        cache: false,
+        action
+      },
+      fields,
+      values: tags
+    })
+  }
+}

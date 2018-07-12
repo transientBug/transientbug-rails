@@ -4,6 +4,6 @@
 = render "bookmarks/navbar"
 
 %h1
-  .ui.massive.label.tag{ class: [ @tag.color ] }= @tag.label
+  .ui.massive.tag{ class: [ @tag.color ] }= @tag.label
 
 = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

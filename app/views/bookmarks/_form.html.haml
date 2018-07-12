@@ -1,4 +1,4 @@
-= form_for bookmark, html: { class: "ui fluid form" } do |f|
+= form_with model: bookmark, class: "ui fluid form", html: { autocomplete: "off" } do |f|
   - if bookmark.errors.any?
     .ui.message.error
       %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
@@ -6,23 +6,24 @@
         - bookmark.errors.full_messages.each do |message|
           %li= message
 
-  .required.field
-    = f.label :uri
-    = f.url_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
+  .two.fields
+    .required.field
+      = f.label :uri
+      = f.url_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
 
-  .required.field
-    = f.label :title
-    = f.text_field :title, aria: { describedby: "Bookmark title" }
-
-  .field
-    = f.label :description
-    = f.text_area :description, aria: { describedby: "Bookmark description" }
+    .required.field
+      = f.label :title
+      = f.text_field :title, aria: { describedby: "Bookmark title" }
 
   .field
     = f.label :tags
     .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-bookmark-tags" } }
-      = f.hidden_field :tags, value: bookmark.tags.map(&:label).join(",")
+      = f.text_field :tags, value: bookmark.tags.map(&:label).join(","), style: "display: none", autocomplete: "off", data: { behaviour: "init" }
       %i.dropdown.icon
       .default.text Search Tags
+
+  .field
+    = f.label :description
+    = f.text_area :description, aria: { describedby: "Bookmark description" }
 
   = f.submit "Save", class: "ui positive right floated submit button"
