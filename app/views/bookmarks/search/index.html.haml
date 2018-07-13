@@ -1,14 +1,6 @@
 - content_for :page_title do
   Searching Bookmarks
 
-= render "bookmarks/navbar"
-
-.ui.search
-  .ui.fluid.icon.input
-    = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
-      = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
-    %i.search.icon
-
 %h3 Advanced Search
 .query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: query.to_json } }
 = javascript_pack_tag "query_builder"

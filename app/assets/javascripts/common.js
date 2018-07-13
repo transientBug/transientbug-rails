@@ -83,7 +83,7 @@ const tagDropdown = (selector, action, fields) => {
   const tagInput = $(`${ selector } > input[data-behaviour~=\"init\"]`)
   if(tagInput.length != 0) {
     const rawTags = tagInput.val()
-    const tags = rawTags.split(",").map((t) => ({ name: t, value: t, label: t, title: t, selected: true }))
+    const tags = rawTags.split(",").filter((t) => !(_.isEmpty(t) || _.isNil(t))).map((t) => ({ name: t, value: t, label: t, title: t, selected: true }))
 
     $(selector).dropdown({
       apiSettings: {

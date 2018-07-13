@@ -29,3 +29,30 @@
     }
   }
 }
+
+.bookmark.search {
+  flex-grow: 1;
+  border-bottom: 1px solid black;
+  display: flex;
+
+  & > .input {
+    flex-grow: 1;
+    display: flex;
+
+    & > form {
+      flex-grow: 1;
+
+      & > input[type="search"] {
+        border-width: 0;
+        border-radius: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &.category > .results {
+    width: 100%;
+    flex-grow: 1;
+  }
+}
