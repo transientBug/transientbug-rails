@@ -9,7 +9,7 @@
   - if signed_in?
     = active_link_to "Bookmarks", bookmarks_path, class: "item"
 
-    .ui.category.bookmark.search{ data: { behavior: "search-bookmarks" } }
+    .ui.tb.nav.category.search{ data: { behavior: "search-bookmarks" } }
       .ui.icon.input
         = form_with url: bookmarks_search_index_path, method: :get, local: true do
           = search_field_tag "q", params[:q], placeholder: "Search Bookmarks ...", class: "prompt", aria: { label: "Search" }

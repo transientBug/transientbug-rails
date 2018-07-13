@@ -1,19 +1,7 @@
 json.success true
 
 json.results do
-  json.bookmarks do
-    json.name "Bookmarks"
-    json.results do
-      json.array! @bookmarks, partial: "bookmarks/bookmark", as: :bookmark
-    end
-  end
-
-  json.tags do
-    json.name "Tags"
-    json.results do
-      json.array! @tags, partial: "bookmarks/tags/tag", as: :tag
-    end
-  end
+  json.array! @bookmarks, partial: "bookmarks/bookmark", as: :bookmark
 end
 
 json.action do

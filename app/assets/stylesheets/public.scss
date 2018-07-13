@@ -30,7 +30,7 @@
   }
 }
 
-.bookmark.search {
+.tb.nav.search {
   display: flex;
   flex-grow: 1;
 
@@ -61,8 +61,58 @@
     }
   }
 
-  &.category > .results {
+  & > .results {
     width: 100%;
     flex-grow: 1;
+
+    background: rgb(27, 28, 29);
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, 0.9);
+    display: block;
+    flex-grow: 1;
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    transform-origin: center top;
+    visibility: visible;
+    z-index: 998;
+
+    margin-top: 0;
+    border-radius: 0;
+
+    border: 0;
+
+    & > :first-child, & > :last-child {
+      border-radius: 0;
+    }
+
+    & > .action {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.9);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+    }
+
+    & > .message.empty {
+      & > .header, & > .description {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    & > .result {
+      color: rgba(255, 255, 255, 0.9);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      & > .content {
+        & > .title, & > .description {
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
   }
 }

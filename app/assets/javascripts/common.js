@@ -55,7 +55,6 @@ document.addEventListener("turbolinks:load", () => {
   })
 
   $("[data-behavior~=search-bookmarks]").search({
-    type: "category",
     minCharacters: 2,
     cache: false,
     searchFields   : [
