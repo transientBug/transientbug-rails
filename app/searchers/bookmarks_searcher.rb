@@ -21,3 +21,13 @@ class BookmarksSearcher < ElasticsearchSearcher
     }
   end
 end
+
+__END__
+
+# Early thoughts
+earth +tag:computers +( created_date:[2014-01-01,2018-06-14] ) -host:wired.com
+
+earth tags:computers 2014-01-01<created_date<=2018-06-14 NOT host:wired.com
+
+# SQL like thoughts
+((title ~= "hallo") OR (description ~= "hallo") OR NOT (host = "wired.com")) AND (user_is = 1) AND NOT (tags EXIST)

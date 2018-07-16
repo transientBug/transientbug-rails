@@ -9,12 +9,23 @@
   - if signed_in?
     = active_link_to "Bookmarks", bookmarks_path, class: "item"
 
-    .ui.tb.nav.category.search{ data: { behavior: "search-bookmarks" } }
+    -#.ui.tb.nav.category.search{ data: { behavior: "search-bookmarks" } }
       .ui.icon.input
         = form_with url: bookmarks_search_index_path, method: :get, local: true do
           = search_field_tag "q", params[:q], placeholder: "Search Bookmarks ...", class: "prompt", aria: { label: "Search" }
         %i.search.icon
       .results
+
+    .tb.navbar.search
+      .tb.info
+        .tb.title Earth Rendering
+        .tb.query
+          %small earth +tag:computers +( created_date:[2014-01-01,2018-06-14] ) -host:wired.com
+
+      .tb.dropdown
+        .query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: "{}" } }
+        = javascript_pack_tag "query_builder"
+
 
   = content_for :navbar
 
