@@ -1,6 +1,8 @@
 - if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
   = render partial: "navbar"
 
+= javascript_pack_tag "query_builder"
+
 .ui.top.fixed.inverted.menu
   = link_to root_path, class: "header item" do
     = image_tag "bug_logo.png", class: "logo"
@@ -16,15 +18,52 @@
         %i.search.icon
       .results
 
-    .tb.navbar.search
-      .tb.info
-        .tb.title Earth Rendering
-        .tb.query
-          %small earth +tag:computers +( created_date:[2014-01-01,2018-06-14] ) -host:wired.com
+
+    .tb.navbar.search.active
+      .tb.navbar-item
+        .tb.header
+          .tb.title Earth Rendering
+          .tb.query
+            %small earth +tag:computers +( created_date:[2014-01-01,2018-06-14] ) -host:wired.com
+
+        .tb.key
+          .key-combo
+            %kbd.dark /
 
       .tb.dropdown
-        .query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: "{}" } }
-        = javascript_pack_tag "query_builder"
+        .tb.content
+          Query builder goes here
+          -#.query_builder{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: "{}" } }
+
+        .tb.tips
+          .left
+            .key-combo
+              %kbd.dark &#8984;
+              +
+              %kbd.dark k
+              Up one Clause
+
+            .key-combo
+              %kbd.dark &#8984;
+              +
+              %kbd.dark j
+              Down one Clause
+
+          .center
+            .key-combo
+              %kbd.dark &#8984;
+              +
+              %kbd.dark &crarr;
+              Search
+
+          .right
+            .key-combo
+              %kbd.dark ?
+              Help
+
+            .key-combo
+              %kbd.dark esc
+              Close search
 
 
   = content_for :navbar
