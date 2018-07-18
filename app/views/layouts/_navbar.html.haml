@@ -11,15 +11,9 @@
   - if signed_in?
     = active_link_to "Bookmarks", bookmarks_path, class: "item"
 
-    -#.ui.tb.nav.category.search{ data: { behavior: "search-bookmarks" } }
-      .ui.icon.input
-        = form_with url: bookmarks_search_index_path, method: :get, local: true do
-          = search_field_tag "q", params[:q], placeholder: "Search Bookmarks ...", class: "prompt", aria: { label: "Search" }
-        %i.search.icon
-      .results
+    .app-div{ data: { behavior: "navbar-search" }, style: "display:flex; flex-grow:1;" }
 
-
-    .tb.navbar.search.active
+    -#.tb.navbar.search
       .tb.navbar-item
         .tb.header
           .tb.title Earth Rendering
@@ -32,29 +26,9 @@
 
       .tb.dropdown.hidden
         .tb.content
-          -#Query builder goes here
-          -#.query_builder{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: "{}" } }
-
-          -#.ui.icon.input
-            = form_with url: bookmarks_search_index_path, method: :get, local: true do
-              = search_field_tag "q", params[:q], placeholder: "Search Bookmarks ...", class: "prompt", aria: { label: "Search" }
-            %i.search.icon
 
         .tb.tips
           .left
-            .key-combo
-              %kbd.dark &#8984;
-              +
-              %kbd.dark k
-              Up one Clause
-
-            .key-combo
-              %kbd.dark &#8984;
-              +
-              %kbd.dark j
-              Down one Clause
-
-          .center
             .key-combo
               %kbd.dark &#8984;
               +
