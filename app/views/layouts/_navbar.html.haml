@@ -1,7 +1,7 @@
 - if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
   = render partial: "navbar"
 
-= javascript_pack_tag "query_builder"
+= javascript_pack_tag "application"
 
 .ui.top.fixed.inverted.menu
   = link_to root_path, class: "header item" do
@@ -30,10 +30,15 @@
           .key-combo
             %kbd.dark /
 
-      .tb.dropdown
+      .tb.dropdown.hidden
         .tb.content
-          Query builder goes here
+          -#Query builder goes here
           -#.query_builder{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: "{}" } }
+
+          -#.ui.icon.input
+            = form_with url: bookmarks_search_index_path, method: :get, local: true do
+              = search_field_tag "q", params[:q], placeholder: "Search Bookmarks ...", class: "prompt", aria: { label: "Search" }
+            %i.search.icon
 
         .tb.tips
           .left
