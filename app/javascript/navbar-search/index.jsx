@@ -2,48 +2,42 @@
 import * as Mousetrap from "mousetrap"
 import { Component } from "react"
 
-const List = ({ data, joiner }) => data.reduce((prev, curr) => [prev, joiner, curr])
+import { isArray } from "lodash"
 
 const Kbd = props => (
-  <kbd className={ (props.dark ? "dark" : "") }>
-    { props.children }
-  </kbd>
+  <kbd className={ (props.dark ? "dark" : "") } dangerouslySetInnerHTML={ { __html: props.children } } />
 )
 
 class KeyboardShortcut extends Component {
   constructor(props) {
     super(props)
 
-    Mousetrap.bind(this.props.keys, props.onKey)
+    if (isArray(this.props.keys)) {
+      this.keys = this.props.keys
+      this.displayKeys = this.props.keys
+    } else {
+      this.keys = Object.keys(this.props.keys)[0] // eslint-disable-line
+      this.displayKeys = this.props.keys[ this.keys ]
+    }
+
+    Mousetrap.bind(this.keys, props.onKey)
   }
 
   componentWillUnmount() {
-    Mousetrap.unbind(this.props.keys)
+    Mousetrap.unbind(this.keys)
   }
 
   render = () => (
     <div className="key-combo">
-      <List data={ this.props.keys.map(key => (<Kbd dark>{ key }</Kbd>)) } joiner=" + " />
-      { this.props.text }
+      { this.displayKeys.map(key => (
+        <Kbd key={ key } dark>{ key }</Kbd>
+      )).reduce((prev, curr) => [prev, " + ", curr]) }
+      { this.props.children }
     </div>
   )
 }
 
 class NavbarSearch extends Component {
-  constructor() {
-    super()
-
-    Mousetrap.bind(["?"], () => {
-      console.log("Is dropdown visible?", this.state.visible)
-
-      if (!this.state.visible)
-        return true
-
-      console.log("Help dialogue toggle")
-      return false
-    })
-  }
-
   state = { visible: false }
 
   onShow = (_e) => {
@@ -53,6 +47,16 @@ class NavbarSearch extends Component {
 
   onHide = (_e) => {
     this.setState({ visible: false })
+    return false
+  }
+
+  onSearch = (_e) => {
+    console.log("Search!")
+    return false
+  }
+
+  getHelp = (_e) => {
+    console.log("Help dialogue toggled")
     return false
   }
 
@@ -73,14 +77,10 @@ class NavbarSearch extends Component {
         </div>
         <div className="tb tips">
           <div className="left">
-            <div className="key-combo">
-              <kbd className="dark">&#8984;</kbd>+<kbd className="dark">&crarr;</kbd> Search
-            </div>
+            <KeyboardShortcut keys={ { [ ["meta+enter"] ]: ["&#8984;", "&crarr;"] } } onKey={ this.onSearch }>Search</KeyboardShortcut>
           </div>
           <div className="right">
-            <div className="key-combo">
-              <kbd className="dark">?</kbd> Help
-            </div>
+            <KeyboardShortcut keys={ ["?"] } onKey={ this.getHelp }>Help</KeyboardShortcut>
             <KeyboardShortcut keys={ ["esc"] } onKey={ this.onHide }>Close</KeyboardShortcut>
           </div>
         </div>
