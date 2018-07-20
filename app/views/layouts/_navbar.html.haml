@@ -11,21 +11,170 @@
   - if signed_in?
     = active_link_to "Bookmarks", bookmarks_path, class: "item"
 
-    .app-div{ data: { behavior: "navbar-search" }, style: "display:flex; flex-grow:1;" }
+    -#.app-div{ data: { behavior: "navbar-search" }, style: "display:flex; flex-grow:1;" }
 
-    -#.tb.navbar.search
+    .tb.navbar.search
       .tb.navbar-item
         .tb.header
           .tb.title Earth Rendering
           .tb.query
-            %small earth +tag:computers +( created_date:[2014-01-01,2018-06-14] ) -host:wired.com
+            %small title:earth AND tag:computers AND (created_date:[2018-01-01,2018-07-01] OR NOT host:wired.com)
 
         .tb.key
           .key-combo
             %kbd.dark /
 
-      .tb.dropdown.hidden
+      .tb.dropdown
         .tb.content
+          %h1 Query Builder
+
+          .ui.form.tb.query-builder
+            .tb.group
+              .tb.conjoiner
+                .inline.fields
+                  .field
+                    %select.dropdown{ data: { behavior: "dropdown" } }
+                      %option{ value: "and" } All
+                      %option{ value: "or" } Any
+
+                  .field
+                    rules should match in this group
+
+              .tb.clauses
+                .inline.fields.tb.clause
+                  .field
+                    .ui.basic.negative.icon.button
+                      %i.trash.icon
+
+                  .field
+                    %select.dropdown{ data: { behavior: "dropdown" } }
+                      %option{ value: "title" } Title
+                      %option{ value: "tags" } Tags
+                      %option{ value: "description" } Description
+                      %option{ value: "host" } Host/Domain Name
+                      %option{ value: "uri" } URL
+                      %option{ value: "created_at" } Created Date
+
+                  .field
+                    %select.dropdown{ data: { behavior: "dropdown" } }
+                      %option{ value: "matches" } Matches
+                      %option{ value: "exists" } Exists
+
+                  .field
+                    %input{ type: "text", value: "earth" }
+
+                .inline.fields.tb.clause
+                  .field
+                    .ui.basic.negative.icon.button
+                      %i.trash.icon
+
+                  .field
+                    %select.dropdown{ data: { behavior: "dropdown" } }
+                      %option{ value: "tags" } Tags
+                      %option{ value: "title" } Title
+                      %option{ value: "description" } Description
+                      %option{ value: "host" } Host/Domain Name
+                      %option{ value: "uri" } URL
+                      %option{ value: "created_at" } Created Date
+
+                  .field
+                    %select.dropdown{ data: { behavior: "dropdown" } }
+                      %option{ value: "matches" } Matches
+                      %option{ value: "exists" } Exists
+
+                  .field
+                    %input{ type: "text", value: "computers" }
+
+                .tb.group
+                  .tb.conjoiner
+                    .inline.fields
+                      .field
+                        .ui.basic.negative.icon.button
+                          %i.trash.icon
+
+                      .field
+                        %select.dropdown{ data: { behavior: "dropdown" } }
+                          %option{ value: "or" } Any
+                          %option{ value: "and" } All
+
+                      .field
+                        rule should match in this group
+
+                  .tb.clauses
+                    .inline.fields.tb.clause
+                      .field
+                        .ui.basic.negative.icon.button
+                          %i.trash.icon
+
+                      .field
+                        %select.dropdown{ data: { behavior: "dropdown" } }
+                          %option{ value: "created_at" } Created Date
+                          %option{ value: "title" } Title
+                          %option{ value: "description" } Description
+                          %option{ value: "tags" } Tags
+                          %option{ value: "host" } Host/Domain Name
+                          %option{ value: "uri" } URL
+
+                      .field
+                        %select.dropdown{ data: { behavior: "dropdown" } }
+                          %option{ value: "matches" } Is Between
+
+                      .field
+                        %input{ type: "date", value: "2018-01-01" }
+
+                      .field
+                        and
+
+                      .field
+                        %input{ type: "date", value: "2018-07-01" }
+
+                    .inline.fields.tb.clause
+                      .field
+                        .ui.basic.negative.icon.button
+                          %i.trash.icon
+
+                      .field
+                        %select.dropdown{ data: { behavior: "dropdown" } }
+                          %option{ value: "host" } Host/Domain Name
+                          %option{ value: "tags" } Tags
+                          %option{ value: "title" } Title
+                          %option{ value: "description" } Description
+                          %option{ value: "uri" } URL
+                          %option{ value: "created_at" } Created Date
+
+                      .field
+                        %select.dropdown{ data: { behavior: "dropdown" } }
+                          %option{ value: "not_match" } Does Not Match
+                          %option{ value: "exists" } Exists
+
+                      .field
+                        %input{ type: "text", value: "wired.com" }
+
+                    .inline.fields.tb.clause
+                      .field
+                        %i.plus.icon
+
+                        .ui.buttons
+                          .ui.button
+                            Rule
+
+                          .or
+
+                          .ui.button
+                            Sub-Group
+
+                .inline.fields.tb.clause
+                  .field
+                    %i.plus.icon
+
+                    .ui.buttons
+                      .ui.button
+                        Rule
+
+                      .or
+
+                      .ui.button
+                        Sub-Group
 
         .tb.tips
           .left
