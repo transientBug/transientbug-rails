@@ -98,6 +98,8 @@ gem "mustermann" # Used by the autumn moon bot framework for pattern matching
 gem "exception_notification"
 gem "slack-notifier"
 
+gem "parslet"
+
 # API Documentation from RAD
 gem "apitome"
 
