@@ -1,8 +1,12 @@
 RSpec.describe QueryGrammar::Parser do
-  describe "rule: clause", focus: true do
+  describe "rule: clause" do
     subject { super().clause.parse input }
 
     context "when term only" do
+      let(:input) { "thing" }
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(clause: a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice)))) }
     end
 
     context "when term list only" do

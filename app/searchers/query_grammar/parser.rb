@@ -12,16 +12,16 @@ module QueryGrammar
   #
   #      Group ::= Negator? '(' Space* Expression Space* ')'
   #
-  #      AndExpression ::= (Clause | Group | OrExpression) (Space+ 'AND' Space+ (Clause | Group | OrExpression))+
+  #      OrExpression ::= (Clause | Group | AndExpression) (Space+ 'OR' Space+ (Clause | Group | AndExpression))+
   #
-  #      OrExpression ::= (Group | AndExpression | Clause) ((Space+ 'OR')? Space+ (Group | AndExpression | Clause))+
+  #      AndExpression ::= (Group | OrExpression | Clause) ((Space+ 'AND')? Space+ (Group | OrExpression | Clause))+
   #
-  #      Clause ::= Negator? Unary? ((Prefix ':' ( Term | TermList )?) | Term)
+  #      Clause ::= Negator? ((Prefix ( Term | TermList )?) | Term)
   #
-  #      Prefix ::= Word
+  #      Prefix ::= Unary? Word ':'
   #
   #      Negator ::= 'NOT' Space+
-  #      Unary ::= '+' | '-'
+  #      Unary ::= [^a-fA-F0-9]
   #
   #      TermList ::= '(' Space* (Term Space*)+ ')'
   #
@@ -38,7 +38,7 @@ module QueryGrammar
     end
 
     rule :expression do
-      and_expression | or_expression | group | clause
+      or_expression | and_expression | group | clause
     end
 
     rule :group do
@@ -46,28 +46,28 @@ module QueryGrammar
     end
 
     rule :and_expression do
-      ((clause | group | or_expression) >>
-       (space >> str("AND") >> space >>
-        (clause | group | or_expression)).repeat(1)).as(:and_expression)
+      ((group | or_expression | clause) >>
+       ((space >> str("AND")).maybe >> space >>
+        (group | or_expression | clause)).repeat(1)).as(:and_expression)
     end
 
     rule :or_expression do
-      ((group | and_expression | clause) >>
-       ((space >> str("OR")).maybe >> space >>
-        (group | and_expression | group | clause)).repeat(1)).as(:or_expression)
+      ((clause | group | and_expression) >>
+       (space >> str("OR") >> space >>
+        (clause | group | and_expression)).repeat(1)).as(:or_expression)
     end
 
     ##################################
 
     rule :clause do
-      (negator.maybe >> unary.maybe >>
-       ((prefix >> str(":") >> ( term | term_list ).maybe) |
+      (negator.maybe >>
+       ((prefix >> ( term | term_list ).maybe) |
          term
        )).as(:clause)
     end
 
     rule :prefix do
-      word
+      unary.maybe >> word.as(:prefix) >> str(":")
     end
 
     rule :negator do
@@ -75,7 +75,7 @@ module QueryGrammar
     end
 
     rule :unary do
-      (str("+") | str("-")).as(:unary)
+      match["^[:alnum:]"].as(:unary)
     end
 
     rule :term_list do
