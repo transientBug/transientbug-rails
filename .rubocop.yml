@@ -74,6 +74,9 @@ Layout/EmptyLineBetweenDefs:
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
 Style/MethodDefParentheses:

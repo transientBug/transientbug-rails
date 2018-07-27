@@ -1,8 +1,35 @@
 RSpec.describe QueryGrammar::Parser do
-  describe "rule: clause" do
+  describe "rule: clause", focus: true do
     subject { super().clause.parse input }
 
-    context "when " do
+    context "when term only" do
+    end
+
+    context "when term list only" do
+    end
+
+    context "when prefix only" do
+    end
+
+    context "when unary prefix only" do
+    end
+
+    context "when negator prefix only" do
+    end
+
+    context "when negator unary prefix only" do
+    end
+
+    context "when prefixed term" do
+    end
+
+    context "when prefixed term list" do
+    end
+
+    context "when unary prefixed field" do
+    end
+
+    context "when negator unary prefixed field" do
     end
   end
 
@@ -33,21 +60,92 @@ RSpec.describe QueryGrammar::Parser do
   describe "rule: term_list" do
     subject { super().term_list.parse input }
 
-    context "when " do
+    # rubocop:disable RSpec/ExampleLength
+    context "when balanced parenthesis" do
+      context "when single item" do
+        let(:input) { "(term)" }
+
+        it { is_expected.to be_a(Hash) }
+        it do
+          is_expected.to include(
+            term_list: a_kind_of(Array).and(
+              match_array([
+                a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice)))
+              ])
+            )
+          )
+        end
+      end
+
+      context "when multiple items" do
+        let(:input) { '(term "phrase")' }
+
+        it { is_expected.to be_a(Hash) }
+        it do
+          is_expected.to include(
+            term_list: a_kind_of(Array).and(
+              match_array([
+                a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice))),
+                a_kind_of(Hash).and(include(phrase: a_kind_of(Parslet::Slice)))
+              ])
+            )
+          )
+        end
+      end
+    end
+    # rubocop:enable RSpec/ExampleLength
+
+    context "when one unbalanced ( parenthesis" do
+      let(:input) { "(" }
+
+      it { expect { subject }.to raise_exception(Parslet::ParseFailed) }
+    end
+
+    context "when one unbalanced ) parenthesis" do
+      let(:input) { ")" }
+
+      it { expect { subject }.to raise_exception(Parslet::ParseFailed) }
     end
   end
 
   describe "rule: term" do
     subject { super().term.parse input }
 
-    context "when " do
+    context "when a single term" do
+      let(:input) { "term" }
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(term: a_kind_of(Parslet::Slice)) }
+    end
+
+    context "when a phrase" do
+      let(:input) { '"this is a phrase"' }
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(phrase: a_kind_of(Parslet::Slice)) }
     end
   end
 
   describe "rule: phrase" do
     subject { super().phrase.parse input }
 
-    context "when " do
+    context "when perfect quotes" do
+      let(:input) { '"this is a phrase"' }
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to include(phrase: a_kind_of(Parslet::Slice)) }
+    end
+
+    context "when one quote too short" do
+      let(:input) { '"this is a ' }
+
+      it { expect { subject }.to raise_exception(Parslet::ParseFailed) }
+    end
+
+    context "when three is outright" do
+      let(:input) { '"this is" a"' }
+
+      it { expect { subject }.to raise_exception(Parslet::ParseFailed) }
     end
   end
 
