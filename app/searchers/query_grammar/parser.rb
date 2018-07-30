@@ -34,40 +34,53 @@ module QueryGrammar
     root :query
 
     rule :query do
-      expression
+      any.absent? | expression
     end
 
     rule :expression do
-      or_expression | and_expression | group | clause
+      (or_group | and_group | group | clause).as(:expression)
     end
 
     rule :group do
       negator.maybe >> str("(") >> space? >> expression >> space? >> str(")")
     end
 
-    rule :and_expression do
-      ((group | or_expression | clause) >>
+    rule :and_group do
+      ((group | or_group | clause) >>
        ((space >> str("AND")).maybe >> space >>
-        (group | or_expression | clause)).repeat(1)).as(:and_expression)
+        (group | or_group | clause)).repeat(1)).as(:and_group)
     end
 
-    rule :or_expression do
-      ((clause | group | and_expression) >>
+    rule :or_group do
+      ((group | clause | and_group) >>
        (space >> str("OR") >> space >>
-        (clause | group | and_expression)).repeat(1)).as(:or_expression)
+        (group | clause | and_group)).repeat(1)).as(:or_group)
     end
 
-    ##################################
+    # This causes stack too deep errors still since expression includes infix
+    # rule :infix_group do
+    #   infix_expression(
+    #     expression,
+    #     [(space >> str("OR") >> space), 2, :left],
+    #     [((space >> str("AND")).maybe >> space), 1, :left]
+    #   ) do |l, o, r|
+    #     { group: { conjoiner: o, values: [ l, r ].flatten } }
+    #   end
+    # end
+
+    # #################################################################################################################
+    # Base functionality
+    # #################################################################################################################
 
     rule :clause do
-      (negator.maybe >>
-       ((prefix >> ( term | term_list ).maybe) |
-         term
+      negator.maybe >> (
+         ((unary.as(:unary).maybe >> prefix >> ( term | term_list ).maybe.as(:value)) |
+        term.as(:value)
        )).as(:clause)
     end
 
     rule :prefix do
-      unary.maybe >> word.as(:prefix) >> str(":")
+      (word.as(:term)).as(:prefix) >> str(":")
     end
 
     rule :negator do
@@ -75,7 +88,7 @@ module QueryGrammar
     end
 
     rule :unary do
-      match["^[:alnum:]"].as(:unary)
+      match["^[:alnum:]"].as(:term)
     end
 
     rule :term_list do
@@ -101,19 +114,5 @@ module QueryGrammar
     rule :space do
       match["\s"].repeat(1)
     end
-
-    # rule :prefix do
-    #   args = methods.select { |m| m.to_s.end_with? "_prefix" }
-    #   first = send(args.first)
-    #   args[1..-1].reduce(first) { |memo, arg| memo.| send(arg) }.as(:prefix)
-    # end
-
-    # def self.prefixes *args
-    #   args.each do |arg|
-    #     rule("#{ arg }_prefix") { str(arg) }
-    #   end
-    # end
-
-    # prefixes :title, :description, :tag, :tags, :after, :before, :host, :url, :has
   end
 end

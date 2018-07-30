@@ -6,7 +6,7 @@ RSpec.describe QueryGrammar::Parser do
       let(:input) { "thing" }
 
       it { is_expected.to be_a(Hash) }
-      it { is_expected.to include(clause: a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice)))) }
+      it { is_expected.to include(clause: a_kind_of(Hash).and(include(value: a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice)))))) }
     end
 
     context "when term list only" do
