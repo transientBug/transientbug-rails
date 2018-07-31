@@ -38,35 +38,36 @@ module QueryGrammar
     end
 
     rule :expression do
-      (or_group | and_group | group | clause).as(:expression)
+      space? >> (infix_group | group | clause).as(:expression) >> space?
     end
 
     rule :group do
       negator.maybe >> str("(") >> space? >> expression >> space? >> str(")")
     end
 
-    rule :and_group do
-      ((group | or_group | clause) >>
-       ((space >> str("AND")).maybe >> space >>
-        (group | or_group | clause)).repeat(1)).as(:and_group)
-    end
+    rule :infix_group do
+      infix_expression(
+        (group | clause),
+        [(space >> str("OR") >> space), 2, :left],
+        [((space >> str("AND")).maybe >> space), 1, :left]
+      ) do |l, o, r|
+        op = o.to_s.strip
+        op = "AND" if op.empty?
 
-    rule :or_group do
-      ((group | clause | and_group) >>
-       (space >> str("OR") >> space >>
-        (group | clause | and_group)).repeat(1)).as(:or_group)
-    end
+        # Merge similar logic into one array rather than deeply nested
+        if l[:group] && l[:group][:conjoiner] == op && !r[:group]
+          values = [ l[:group][:values], r ].flatten
+        elsif l[:group] && l[:group][:conjoiner] == op && r[:group] && r[:group][:conjoiner] == op
+          values = [ l[:group][:values], r[:group][:values] ].flatten
+        elsif r[:group] && r[:group][:conjoiner] == op && !l[:group]
+          values = [ r[:group][:values], l ].flatten
+        else
+          values = [ l, r ]
+        end
 
-    # This causes stack too deep errors still since expression includes infix
-    # rule :infix_group do
-    #   infix_expression(
-    #     expression,
-    #     [(space >> str("OR") >> space), 2, :left],
-    #     [((space >> str("AND")).maybe >> space), 1, :left]
-    #   ) do |l, o, r|
-    #     { group: { conjoiner: o, values: [ l, r ].flatten } }
-    #   end
-    # end
+        { group: { conjoiner: op, values: values } }
+      end
+    end
 
     # #################################################################################################################
     # Base functionality

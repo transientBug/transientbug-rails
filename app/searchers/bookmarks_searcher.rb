@@ -3,8 +3,7 @@ class BookmarksSearcher < ElasticsearchSearcher
   model Bookmark
 
   def search input
-    parser_tree = QueryGrammar::Parser.new.parse input
-    query_ast = QueryGrammar::Transformer.new.apply parser_tree
+    query_ast = QueryGrammar.parse input
 
     es_query = ESQueryCompiler.new.compile self.fields, query_ast
 

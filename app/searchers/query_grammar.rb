@@ -67,10 +67,18 @@ module QueryGrammar
     fail ParseError, "unexpected input at line 1 column 1"
   end
 
-  def self.deepest_cause cause
+  def self.deepest_cause cause, depth=0
+    # puts "#{ " |"*depth } ^"
+    # puts "#{ " |"*depth } |---> At depth #{ depth } with #{ cause.children.length } children"
+
     if cause.children.any?
-      deepest_cause cause.children.first
+      causes = cause.children.map { |xcause| deepest_cause xcause, depth+1 }
+      cause = causes.max { |xcause, other| xcause.pos.bytepos <=> other.pos.bytepos }
+
+      # puts "#{ " |"*depth }---= Found #{ cause.pos.bytepos } pos"
+      cause
     else
+      # puts "#{ " |"*depth }---$ Found #{ cause.pos.bytepos } pos"
       cause
     end
   end
