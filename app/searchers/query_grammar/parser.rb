@@ -16,7 +16,7 @@ module QueryGrammar
   #
   #      AndExpression ::= (Group | OrExpression | Clause) ((Space+ 'AND')? Space+ (Group | OrExpression | Clause))+
   #
-  #      Clause ::= Negator? ((Prefix ( Term | TermList )?) | Term)
+  #      Clause ::= Negator? (Prefix (( Term | TermList )?) | Term)
   #
   #      Prefix ::= Unary? Word ':'
   #
@@ -54,12 +54,15 @@ module QueryGrammar
         op = o.to_s.strip
         op = "AND" if op.empty?
 
+        left_joiner = l.dig(:group, :conjoiner)
+        right_joiner = r.dig(:group, :conjoiner)
+
         # Merge similar logic into one array rather than deeply nested
-        if l[:group] && l[:group][:conjoiner] == op && !r[:group]
+        if left_joiner == op && !right_joiner
           values = [ l[:group][:values], r ].flatten
-        elsif l[:group] && l[:group][:conjoiner] == op && r[:group] && r[:group][:conjoiner] == op
+        elsif left_joiner == op && right_joiner == op
           values = [ l[:group][:values], r[:group][:values] ].flatten
-        elsif r[:group] && r[:group][:conjoiner] == op && !l[:group]
+        elsif right_joiner == op && !left_joiner
           values = [ r[:group][:values], l ].flatten
         else
           values = [ l, r ]
@@ -74,8 +77,8 @@ module QueryGrammar
     # #################################################################################################################
 
     rule :clause do
-      negator.maybe >> (
-         ((unary.as(:unary).maybe >> prefix >> ( term | term_list ).maybe.as(:value)) |
+      negator.maybe >> (unary.as(:unary).maybe >>
+         ((prefix >> ( term | term_list ).maybe.as(:value)) |
         term.as(:value)
        )).as(:clause)
     end
@@ -89,7 +92,7 @@ module QueryGrammar
     end
 
     rule :unary do
-      match["^[:alnum:]"].as(:term)
+      match["^[:alnum:]\":)(\s"].as(:term)
     end
 
     rule :term_list do

@@ -3,51 +3,7 @@ module QueryGrammar
   ParseError     = Class.new Error
   # TransformError = Class.new Error
 
-  module AST
-    class Clause
-      def initialize  unary: nil, prefix: nil, value: nil
-        @unary = unary
-        @prefix = prefix
-        @value = value
-      end
-
-      def as_json(*)
-        {
-          "clause" => {
-            "unary" => @unary,
-            "prefix" => @prefix,
-            "value" => @value.as_json
-          }.compact
-        }
-      end
-    end
-
-    class Negator
-      def initialize value:
-        @value = value
-      end
-
-      def as_json(*)
-        {
-          "not" => @value.as_json
-        }
-      end
-    end
-
-    class Group
-      def initialize items:, conjoiner:
-        @items = items
-        @conjoiner = conjoiner
-      end
-
-      def as_json(*)
-        {
-          @conjoiner.to_s => @items.as_json
-        }
-      end
-    end
-  end
-
+  autoload :AST, "query_grammar/ast"
   autoload :Parser, "query_grammar/parser"
   autoload :Transformer, "query_grammar/transformer"
 
@@ -57,14 +13,17 @@ module QueryGrammar
   end
 
   def self.parse input
-    QueryGrammar::Transformer.new.apply QueryGrammar::Parser.new.parse(input)
+    QueryGrammar::Transformer.new.apply QueryGrammar::Parser.new.parse(input.strip)
   rescue Parslet::ParseFailed => e
     deepest = deepest_cause e.parse_failure_cause
     line, column = deepest.source.line_and_column deepest.pos
 
-    fail ParseError, "unexpected input at line #{line} column #{column}"
+    # TODO: Make this fail with a more informative error rather than just a
+    # message. An object with a reference to the Parslet error and info such as
+    # the column and line for highlighting in the UI
+    fail ParseError, "unexpected input at line #{line} column #{column} - #{deepest.message} #{input[column-1..-1]}"
   rescue SystemStackError => e
-    fail ParseError, "unexpected input at line 1 column 1"
+    fail ParseError, "unexpected input at line 1 column 1 - #{e}: #{input}"
   end
 
   def self.deepest_cause cause, depth=0

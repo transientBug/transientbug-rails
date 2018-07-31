@@ -8,24 +8,24 @@ module QueryGrammar
       phrase.to_s
     end
 
+    rule phrase: sequence(:phrase) do
+      ""
+    end
+
     rule term_list: subtree(:term_list) do
       term_list
     end
 
     rule clause: subtree(:clause) do
-      AST::Clause.new unary: clause[:unary], prefix: clause[:prefix], value: clause[:value]
+      QueryGrammar::AST::Clause.new unary: clause[:unary], prefix: clause[:prefix], value: clause[:value]
     end
 
     rule negator: simple(:negator), clause: subtree(:clause) do
-      AST::Negator.new value: AST::Clause.new(unary: clause[:unary], prefix: clause[:prefix], value: clause[:value])
+      QueryGrammar::AST::Negator.new items: QueryGrammar::AST::Clause.new(unary: clause[:unary], prefix: clause[:prefix], value: clause[:value])
     end
 
-    rule and_group: subtree(:group) do
-      AST::Group.new items: group, conjoiner: :and
-    end
-
-    rule or_group: subtree(:group) do
-      AST::Group.new items: group, conjoiner: :or
+    rule group: subtree(:group) do
+      QueryGrammar::AST::Group.new items: group[:values], conjoiner: group[:conjoiner].downcase.to_sym
     end
 
     rule expression: subtree(:expression) do
@@ -33,7 +33,7 @@ module QueryGrammar
     end
 
     rule negator: simple(:negator), expression: subtree(:expression) do
-      AST::Negator.new value: expression
+      QueryGrammar::AST::Negator.new items: expression
     end
   end
 end
