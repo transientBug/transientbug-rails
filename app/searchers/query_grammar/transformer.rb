@@ -4,6 +4,10 @@ module QueryGrammar
       term.to_s
     end
 
+    rule date: simple(:date) do
+      Date.strptime date, "%Y-%m-%d"
+    end
+
     rule phrase: simple(:phrase) do
       phrase.to_s
     end

@@ -1,7 +1,7 @@
 module QueryGrammar
   Error          = Class.new StandardError
   ParseError     = Class.new Error
-  # TransformError = Class.new Error
+  CompileError   = Class.new Error
 
   autoload :AST, "query_grammar/ast"
   autoload :Parser, "query_grammar/parser"
@@ -42,7 +42,7 @@ module QueryGrammar
     end
   end
 
-  class Visitor
+  class Compiler
     class Cloaker < BasicObject
       attr_reader :bind, :closure
 
@@ -99,25 +99,23 @@ module QueryGrammar
       visitors[ klass ] = block
     end
 
-    def self.accept ast
-      ast.accept new
-    end
-
     def visit node
       visitor = self.class.visitors[ node.class ]
       Cloaker.new(bind: self).cloak node, &visitor
     end
   end
 
-  class PrintVisitor < Visitor
+  # Two example visitors, these should output the same content as the AST #to_s
+  # and #to_h outputs, respecfully.
+  class PrintCompiler < Compiler
     visit QueryGrammar::AST::Group do |group|
-      inside = group.items.map { |i| i.accept self }.join " #{ group.conjoiner.to_s.upcase } "
+      inside = group.items.map { |i| visit i }.join " #{ group.conjoiner.to_s.upcase } "
 
       "(#{ inside })"
     end
 
     visit QueryGrammar::AST::Negator do |negator|
-      "NOT #{ negator.items.map { |i| i.accept self } }"
+      "NOT #{ negator.items.map { |i| visit i } }"
     end
 
     visit QueryGrammar::AST::Clause do |clause|
@@ -132,16 +130,16 @@ module QueryGrammar
     end
   end
 
-  class HashVisitor < Visitor
+  class HashCompiler < Compiler
     visit QueryGrammar::AST::Group do |group|
       {
-        group.conjoiner => group.items.map { |i| i.accept self }
+        group.conjoiner => group.items.map { |i| visit i }
       }
     end
 
     visit QueryGrammar::AST::Negator do |negator|
       {
-        not: negator.items.map { |i| i.accept self }
+        not: negator.items.map { |i| visit i }
       }
     end
 
@@ -152,10 +150,55 @@ module QueryGrammar
     end
   end
 
-  class ESVisitor < Visitor
+  class ESIndex
+    def sortable_fields
+      [ "created_at", "title", "host" ]
+    end
+
+    def existable_fields
+      [ "tags", "description" ]
+    end
+
+    def default_fields
+      [ "title", "tags" ]
+    end
+
+    def aliases
+      # alias => field
+      {
+        "created_date" => "created_at",
+        "tag" => "tags"
+      }
+    end
+
+    def resolve_field field_or_alias
+      return field_or_alias unless aliases.key? field_or_alias
+      aliases[ field_or_alias ]
+    end
+  end
+
+  class ESCompiler < Compiler
+    attr_reader :context, :index
+
+    def initialize
+      @context = {
+        query: {},
+        sort: {}
+      }
+
+      @index = ESIndex.new
+    end
+
+    def compile ast
+      result = visit ast
+      context[:query] = result
+
+      context
+    end
+
     visit QueryGrammar::AST::Group do |group|
       joiner = group.conjoiner == :or ? :should : :must
-      inside = group.items.map { |i| i.accept self }
+      inside = group.items.map { |i| visit i }.compact
 
       {
         bool: {
@@ -165,7 +208,7 @@ module QueryGrammar
     end
 
     visit QueryGrammar::AST::Negator do |negator|
-      inside = negator.items.map { |i| i.accept self }
+      inside = negator.items.map { |i| visit i }.compact
 
       {
         bool: {
@@ -175,8 +218,93 @@ module QueryGrammar
     end
 
     visit QueryGrammar::AST::Clause do |clause|
+      # if index.has_field? clause.prefix
+        # index.check_arity clause.value
+        # index.check_type clause.value
+
+        # operation = index.operation_for clause.prefix
+      # end
+
+      if clause.prefix.blank?
+        next {
+          bool: {
+            should: index.default_fields.map do |field|
+              {
+                term: { field => clause.value }
+              }
+            end
+          }
+        }
+      elsif clause.prefix == "after"
+        value = clause.value
+
+        if value.is_a? Array
+          throw "too many dates given" if value.length > 1
+          value = value.first
+        end
+
+        throw "date required" unless value.is_a? Date
+
+        next {
+          range: {
+            created_at: {
+              gt: value
+            }
+          }
+        }
+      elsif clause.prefix == "before"
+        value = clause.value
+
+        if value.is_a? Array
+          throw "too many dates given" if value.length > 1
+          value = value.first
+        end
+
+        throw "date required" unless value.is_a? Date
+
+        next {
+          range: {
+            created_at: {
+              lt: value
+            }
+          }
+        }
+      elsif clause.prefix == "has"
+        fields = clause.values.map do |value|
+          field = index.resolve_field value
+          fail "unable to existance check #{ value }" unless index.existable_fields.include? field
+
+          field
+        end
+
+        next {
+          bool: {
+            must: fields.map do |field|
+              { exists: { field: field } }
+            end
+          }
+        }
+      elsif clause.prefix == "sort"
+        fields = clause.values.map do |value|
+          field = index.resolve_field value
+          fail "unsortable field #{ value }" unless index.sortable_fields.include? field
+
+          field
+        end
+
+        direction = clause.unary == "+" ? :asc : :desc
+
+        sorts = fields.each_with_object({}) do |value, memo|
+          memo[ value ] = { order: direction }
+        end
+
+        context[:sort].merge! sorts
+
+        next
+      end
+
       {
-        term: { clause.prefix => clause.value }
+        term: { index.resolve_field(clause.prefix) => clause.value }
       }
     end
   end

@@ -9,6 +9,10 @@ module QueryGrammar
         @value = value
       end
 
+      def values
+        Array(value)
+      end
+
       def to_h
         {
           clause: {

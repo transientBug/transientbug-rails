@@ -100,7 +100,7 @@ module QueryGrammar
     end
 
     rule :term do
-      word.as(:term) | phrase
+      date.as(:date) | word.as(:term) | phrase
     end
 
     rule :phrase do
@@ -109,6 +109,14 @@ module QueryGrammar
 
     rule :word do
       match["^:\s\")("].repeat(1)
+    end
+
+    rule :date do
+      digit.repeat(4) >> str("-") >> digit.repeat(2) >> str("-") >> digit.repeat(2)
+    end
+
+    rule :digit do
+      match("[0-9]")
     end
 
     rule :space? do
