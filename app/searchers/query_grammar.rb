@@ -258,7 +258,11 @@ module QueryGrammar
     end
 
     visit QueryGrammar::AST::Negator do |negator|
-      inside = negator.items.map { |i| visit i }.compact
+      if negator.items.is_a?(Array)
+        inside = negator.items.map { |i| visit i }.compact
+      else
+        inside = visit negator.items
+      end
 
       {
         bool: {
