@@ -1,7 +1,13 @@
 module QueryGrammar
   class JSONHydrator < Parslet::Transform
     rule clause: subtree(:clause) do
-      QueryGrammar::AST::Clause.new unary: clause[:unary], prefix: clause[:prefix], value: clause[:value]
+      values = clause[:values].map do |value|
+        next Date.strptime value[:value], "%Y-%m-%d" if value[:type] == :date
+
+        value[:value]
+      end
+
+      QueryGrammar::AST::Clause.new unary: clause[:unary], prefix: clause[:prefix], value: values
     end
 
     rule not: subtree(:negated) do

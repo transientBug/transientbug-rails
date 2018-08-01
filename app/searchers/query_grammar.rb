@@ -6,6 +6,7 @@ module QueryGrammar
   autoload :AST, "query_grammar/ast"
   autoload :Parser, "query_grammar/parser"
   autoload :Transformer, "query_grammar/transformer"
+  autoload :Compiler, "query_grammar/compiler"
 
   def self.rehydrate json
     parsed_json = json.is_a?(String) ? JSON.parse(json) : json
@@ -42,133 +43,84 @@ module QueryGrammar
     end
   end
 
-  class Compiler
-    class Cloaker < BasicObject
-      attr_reader :bind, :closure
-
-      def initialize bind:, closure: nil
-        @bind = bind
-        @closure = closure
-      end
-
-      def cloak *args, &block
-        closure ||= block.binding
-
-        # Ruby blocks don't closure over more than local variables, but we can
-        # get around that with this "cloaker" hack. First we make an
-        # unboundmethod which we rebind to our current instance. We also keep the
-        # blocks original binding and with the method missing magic, proxy out to
-        # it, which allows us to closure over methods and more from where the
-        # block was defined at.
-        executor = bind.class.class_eval do
-          define_method :dsl_executor, &block
-          meth = instance_method :dsl_executor
-          remove_method :dsl_executor
-          meth
-        end
-
-        with_closure_from closure do
-          executor.bind(bind).call(*args)
-        end
-      end
-
-      def with_closure_from binding
-        @_parent_binding = binding
-        result = yield
-        @_parent_binding = nil
-        result
-      end
-
-      # rubocop:disable Style/MethodMissing
-      def respond_to_missing? *args
-        @_parent_binding.respond_to_missing?(*args)
-      end
-
-      def method_missing method, *args, **opts, &block
-        args << opts if opts.any?
-        @_parent_binding.send method, *args, &block
-      end
-      # rubocop:enable Style/MethodMissing
-    end
-
-    def self.visitors
-      @visitors ||= {}
-    end
-
-    def self.visit klass, &block
-      visitors[ klass ] = block
-    end
-
-    def visit node
-      visitor = self.class.visitors[ node.class ]
-      Cloaker.new(bind: self).cloak node, &visitor
-    end
-  end
-
-  # Two example visitors, these should output the same content as the AST #to_s
-  # and #to_h outputs, respecfully.
-  class PrintCompiler < Compiler
-    visit QueryGrammar::AST::Group do |group|
-      inside = group.items.map { |i| visit i }.join " #{ group.conjoiner.to_s.upcase } "
-
-      "(#{ inside })"
-    end
-
-    visit QueryGrammar::AST::Negator do |negator|
-      "NOT #{ negator.items.map { |i| visit i } }"
-    end
-
-    visit QueryGrammar::AST::Clause do |clause|
-      val = Array(clause.value).map do |entry|
-        next "\"#{ entry }\"" if entry.index(" ")
-        entry
-      end.join " "
-
-      val = "(#{ val })" if clause.value.is_a? Array
-
-      "#{ clause.unary }#{ clause.prefix }#{ clause.prefix ? ":" : "" }#{ val }"
-    end
-  end
-
-  class HashCompiler < Compiler
-    visit QueryGrammar::AST::Group do |group|
-      {
-        group.conjoiner => group.items.map { |i| visit i }
-      }
-    end
-
-    visit QueryGrammar::AST::Negator do |negator|
-      {
-        not: negator.items.map { |i| visit i }
-      }
-    end
-
-    visit QueryGrammar::AST::Clause do |clause|
-      {
-        clause: { unary: clause.unary, prefix: clause.prefix, value: clause.value }.compact
-      }
-    end
-  end
-
   class ESIndex
+    def fields
+      {
+        "uri" => {
+          aliases: [],
+          type: :keyword,
+          existable: false,
+          sortable: false,
+          default: false,
+        },
+
+        "host" => {
+          aliases: [],
+          type: :keyword,
+          existable: false,
+          sortable: true,
+          default: false,
+        },
+
+        "title" => {
+          aliases: [],
+          type: :text,
+          existable: false,
+          sortable: true,
+          default: true,
+        },
+
+        "description" => {
+          aliases: [],
+          type: :text,
+          existable: true,
+          sortable: false,
+          default: false,
+        },
+
+        "tags" => {
+          aliases: [ "tag" ],
+          type: :keyword,
+          existable: true,
+          sortable: false,
+          default: true,
+        },
+
+        "created_at" => {
+          aliases: [ "created_date" ],
+          type: :date,
+          existable: false,
+          sortable: true,
+          default: false,
+        }
+      }
+    end
+
     def sortable_fields
-      [ "created_at", "title", "host" ]
+      fields.map do |(field, data)|
+        field if data[:sortable]
+      end.compact
     end
 
     def existable_fields
-      [ "tags", "description" ]
+      fields.map do |(field, data)|
+        field if data[:existable]
+      end.compact
     end
 
     def default_fields
-      [ "title", "tags" ]
+      fields.map do |(field, data)|
+        field if data[:default]
+      end.compact
     end
 
     def aliases
       # alias => field
-      {
-        "created_date" => "created_at",
-        "tag" => "tags"
-      }
+      fields.each_with_object({}) do |(field, data), memo|
+        data[:aliases].each do |aliass|
+          memo[ aliass ] = field
+        end
+      end
     end
 
     def resolve_field field_or_alias
@@ -196,10 +148,108 @@ module QueryGrammar
       context
     end
 
+    def after_op clause
+      value = clause.value
+
+      if value.is_a? Array
+        throw "too many dates given" if value.length > 1
+        value = value.first
+      end
+
+      throw "date required" unless value.is_a? Date
+
+      {
+        range: {
+          created_at: {
+            gt: value
+          }
+        }
+      }
+    end
+
+    def before_op clause
+      value = clause.value
+
+      if value.is_a? Array
+        throw "too many dates given" if value.length > 1
+        value = value.first
+      end
+
+      throw "date required" unless value.is_a? Date
+
+      {
+        range: {
+          created_at: {
+            lt: value
+          }
+        }
+      }
+    end
+
+    def has_op clause
+      fields = clause.values.map do |value|
+        field = index.resolve_field value
+        fail "unable to existance check #{ value }" unless index.existable_fields.include? field
+
+        field
+      end
+
+      {
+        bool: {
+          must: fields.map do |field|
+            { exists: { field: field } }
+          end
+        }
+      }
+    end
+
+    def sort_op clause
+      fields = clause.values.map do |value|
+        field = index.resolve_field value
+        fail "unsortable field #{ value }" unless index.sortable_fields.include? field
+
+        field
+      end
+
+      direction = clause.unary == "+" ? :asc : :desc
+
+      sorts = fields.each_with_object({}) do |value, memo|
+        memo[ value ] = { order: direction }
+      end
+
+      context[:sort].merge! sorts
+
+      nil
+    end
+
+    def operation_for field, values
+      field_data = index.fields[ index.resolve_field field ]
+
+      throw "unable to search on non-existant field #{ field }" unless field_data
+
+      case field_data[:type]
+      when :text
+        {
+          match: { field => values }
+        }
+      when :keyword
+        {
+          term: { field => values }
+        }
+      when :date
+        {
+          term: { field => values }
+        }
+      else throw "unknown type #{ field_data[:type] }"
+      end
+    end
+
     visit QueryGrammar::AST::Group do |group|
       joiner = group.conjoiner == :or ? :should : :must
       inside = group.items.map { |i| visit i }.compact
 
+      # todo: flatten, if there is a nested bool in `inside` then it should be
+      # merged with this outer layer according to bool logic and precedence
       {
         bool: {
           joiner => inside
@@ -218,94 +268,19 @@ module QueryGrammar
     end
 
     visit QueryGrammar::AST::Clause do |clause|
-      # if index.has_field? clause.prefix
-        # index.check_arity clause.value
-        # index.check_type clause.value
-
-        # operation = index.operation_for clause.prefix
-      # end
-
       if clause.prefix.blank?
         next {
           bool: {
             should: index.default_fields.map do |field|
-              {
-                term: { field => clause.value }
-              }
+              operation_for field, clause.value
             end
           }
         }
-      elsif clause.prefix == "after"
-        value = clause.value
-
-        if value.is_a? Array
-          throw "too many dates given" if value.length > 1
-          value = value.first
-        end
-
-        throw "date required" unless value.is_a? Date
-
-        next {
-          range: {
-            created_at: {
-              gt: value
-            }
-          }
-        }
-      elsif clause.prefix == "before"
-        value = clause.value
-
-        if value.is_a? Array
-          throw "too many dates given" if value.length > 1
-          value = value.first
-        end
-
-        throw "date required" unless value.is_a? Date
-
-        next {
-          range: {
-            created_at: {
-              lt: value
-            }
-          }
-        }
-      elsif clause.prefix == "has"
-        fields = clause.values.map do |value|
-          field = index.resolve_field value
-          fail "unable to existance check #{ value }" unless index.existable_fields.include? field
-
-          field
-        end
-
-        next {
-          bool: {
-            must: fields.map do |field|
-              { exists: { field: field } }
-            end
-          }
-        }
-      elsif clause.prefix == "sort"
-        fields = clause.values.map do |value|
-          field = index.resolve_field value
-          fail "unsortable field #{ value }" unless index.sortable_fields.include? field
-
-          field
-        end
-
-        direction = clause.unary == "+" ? :asc : :desc
-
-        sorts = fields.each_with_object({}) do |value, memo|
-          memo[ value ] = { order: direction }
-        end
-
-        context[:sort].merge! sorts
-
-        next
+      elsif respond_to? :"#{ clause.prefix }_op"
+        next send :"#{ clause.prefix }_op", clause
       end
 
-      {
-        term: { index.resolve_field(clause.prefix) => clause.value }
-      }
+      operation_for clause.prefix, clause.value
     end
   end
 end

@@ -18,7 +18,16 @@ module QueryGrammar
           clause: {
             unary: unary,
             prefix: prefix,
-            value: value.as_json
+            values: values.map do |val|
+              type = :date if val.is_a? Date
+              type ||= :phrase if val.index(" ")
+              type ||= :term
+
+              {
+                type: type,
+                value: val.as_json
+              }
+            end
           }.compact
         }
       end
