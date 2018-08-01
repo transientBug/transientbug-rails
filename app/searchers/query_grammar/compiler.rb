@@ -1,5 +1,7 @@
 module QueryGrammar
   class Compiler
+    autoload :ES, "query_grammar/compiler/es"
+
     class Cloaker < BasicObject
       attr_reader :bind, :closure
 
@@ -48,12 +50,29 @@ module QueryGrammar
       # rubocop:enable Style/MethodMissing
     end
 
-    def self.visitors
-      @visitors ||= {}
-    end
+    class << self
+      def visitors
+        @visitors ||= ancestor_hash :visitors
+      end
 
-    def self.visit klass, &block
-      visitors[ klass ] = block
+      def visit klass, &block
+        visitors[ klass ] = block
+      end
+
+      protected
+
+      # Allow classes to inherit their ancestors fields, joiners, types and
+      # operations. This allows for progressively building searchers up, such as
+      # having an ElasticsearchSearcher that defines the operations to build ES
+      # queries, a BookmarksSearcher that inherits those operations while
+      # defining public user facing searchable fields, and an
+      # Admin::BookmarksSearcher which defines additional fields that are
+      # available within the admin panel
+      def ancestor_hash func
+        (ancestors - [self])
+          .select { |i| i.ancestors.include? Compiler }
+          .inject({}) { |memo, i| memo.merge i.send func }
+      end
     end
 
     def visit node
