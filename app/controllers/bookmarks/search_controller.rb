@@ -55,7 +55,10 @@ class Bookmarks::SearchController < ApplicationController
   end
 
   def fetch_bookmarks query
-    searcher = policy_scope(BookmarksSearcher).query query
+    searcher = policy_scope(BookmarksSearcher).query query do |chewy|
+      chewy.order(created_at: { order: :desc })
+    end
+
     searcher.page(params[:page]).per(params[:per_page])
 
     searcher.activerecord_modifier do |ar_results|
