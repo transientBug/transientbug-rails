@@ -82,7 +82,7 @@ end
 class SortOperation < Operation
 end
 
-class BookmarksSearcher
+class QueryGrammarCompiler
   class << self
     attr_reader :index
 
@@ -107,7 +107,9 @@ class BookmarksSearcher
       (@clauses ||= []) << ClauseDSL.build(**opts, &block)
     end
   end
+end
 
+class BookmarksSearcher < QueryGrammarCompiler
   define_index do
     # Sets up information about which types from the search index can have what
     # operations performed on them
