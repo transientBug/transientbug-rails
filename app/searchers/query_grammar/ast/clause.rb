@@ -13,6 +13,38 @@ module QueryGrammar
         Array(value)
       end
 
+      def accept visitor
+        if value.is_a? Array
+          visitor.visit_value_list value, self
+        elsif value.is_a? Date
+          visitor.visit_value_date value, self
+        elsif value.index " "
+          visitor.visit_value_phrase value, self
+        end
+
+        visitor.visit_value value, self
+
+        unless prefix.blank?
+          prefix_visitor = :"visit_prefix_#{ prefix }"
+          if visitor.respond_to? prefix_visitor
+            visitor.send prefix_visitor, self
+          end
+
+          visitor.visit_prefix prefix, self
+        end
+
+        unless unary.blank?
+          unary_visitor = :"visit_unary_#{ unary }"
+          if visitor.respond_to? unary_visitor
+            visitor.send unary_visitor, self
+          end
+
+          visitor.visit_unary unary, self
+        end
+
+        visitor.visit_clause self
+      end
+
       def to_h
         {
           clause: {
@@ -34,6 +66,7 @@ module QueryGrammar
 
       def to_s
         val = Array(value).map do |entry|
+          next entry.to_s if entry.is_a? Date
           next "\"#{ entry }\"" if entry.index(" ")
           entry
         end.join " "

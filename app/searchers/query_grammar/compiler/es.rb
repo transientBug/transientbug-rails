@@ -98,27 +98,22 @@ module QueryGrammar
       end
 
       def initialize prefix:, **opts
-        @clause = { prefix: prefix.to_s }.merge(opts)
+        @clause = {
+          prefix: prefix.to_s,
+          name: nil,
+          description: nil,
+          arity: nil,
+          input_format: nil,
+          compile: nil
+        }.merge(opts)
       end
 
-      def name val
-        @clause[:name] = val
+      def respond_to_missing? func, **args
+        return true
       end
 
-      def description val
-        @clause[:description] = val
-      end
-
-      def arity val
-        @clause[:arity] = val
-      end
-
-      def input_format val
-        @clause[:input_form] = val
-      end
-
-      def compile &block
-        @clause[:compile] = block
+      def method_missing func, *args, **opts, &block
+        @clause[ func ] = args.first || block
       end
     end
 
@@ -137,6 +132,20 @@ module QueryGrammar
         end
       end
 
+      def initialize
+        @context = {
+          query: {},
+          sort: {}
+        }
+      end
+
+      def compile ast
+        result = visit ast
+        context[:query] = result
+
+        context
+      end
+
       def index
         self.class.index
       end
@@ -152,20 +161,6 @@ module QueryGrammar
       def handle_clause clause
         handler = clause_handlers.find { |clause_handler| clause_handler[:prefix] == clause.prefix }
         QueryGrammar::Compiler::Cloaker.new(bind: self).cloak(clause, &handler[:compile])
-      end
-
-      def initialize
-        @context = {
-          query: {},
-          sort: {}
-        }
-      end
-
-      def compile ast
-        result = visit ast
-        context[:query] = result
-
-        context
       end
 
       def operation_for field, values

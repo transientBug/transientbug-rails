@@ -7,6 +7,12 @@ module QueryGrammar
         @items = items
       end
 
+      def accept visitor
+        items.accept visitor
+
+        visitor.visit_negator self
+      end
+
       def to_h
         {
           not: items.to_h
