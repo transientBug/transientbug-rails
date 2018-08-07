@@ -1,8 +1,99 @@
 module QueryGrammar
   class Compiler
     class Index
+      class IndexDSL
+        class OperatorDSL
+          attr_reader :operator
+
+          def self.build **opts, &block
+            new(**opts).tap do |obj|
+              obj.instance_eval(&block)
+            end.operator
+          end
+
+          def initialize prefix, **opts
+            @operator = {
+              name: nil,
+              description: nil,
+              arity: nil,
+              type: nil,
+              compile: nil
+            }.merge(opts)
+          end
+
+          def respond_to_missing? func, **args
+            return true
+          end
+
+          def method_missing func, *args, **opts, &block
+            @operator[ func ] = args.first || block
+          end
+        end
+
+        def self.build &block
+          new.tap do |obj|
+            obj.instance_eval(&block)
+          end.index
+        end
+
+        def index
+          @index ||= Index.new
+        end
+
+        def type key, &block
+          index.types[ key ] = block
+        end
+
+        def default *args
+          args.each do |field|
+            index.fields[ field.to_s ][:default] = true
+          end
+        end
+
+        def operator prefix, **opts, &block
+          index.operators[ prefix ] = OperatorDSL.build(**opts, &block)
+        end
+
+        def respond_to_missing? func, *args
+          return true if index.types[ func ]
+
+          super(func, *args)
+        end
+
+        def method_missing func, *args, **opts, &block
+          if index.types[ func ]
+            field = {
+              aliases: (opts.delete(:aliases) || []).map(&:to_s),
+              existable: false,
+              sortable: false,
+              default: false,
+              type: func,
+              compile: index.types[ func ]
+            }.merge opts
+
+            index.fields[ args.first.to_s ] = field
+
+            return field
+          end
+
+          super(func, *args, **opts, &block)
+        end
+      end
+
+      def self.build &block
+        IndexDSL.build(&block)
+      end
+
+      def types
+        @types ||= {}
+      end
+
       def fields
         @fields ||= {}
+      end
+
+      def operators
+        @operators ||= {}
       end
 
       def sortable_fields
@@ -38,109 +129,24 @@ module QueryGrammar
       end
     end
 
-    class IndexDSL
-      def self.build &block
-        new.tap do |obj|
-          obj.instance_eval(&block)
-        end.index
-      end
-
-      def index
-        @index ||= Index.new
-      end
-
-      def types
-        @types ||= {}
-      end
-
-      def type key, **opts
-        types[ key ] = opts
-      end
-
-      def default *args
-        args.each do |field|
-          index.fields[ field.to_s ][:default] = true
-        end
-      end
-
-      def respond_to_missing? func, *args
-        return true if types[ func ]
-
-        super(func, *args)
-      end
-
-      def method_missing func, *args, **opts, &block
-        if types[ func ]
-          field = {
-            aliases: (opts.delete(:aliases) || []).map(&:to_s),
-            type: func,
-            existable: false,
-            sortable: false,
-            default: false
-          }.merge opts
-
-          index.fields[ args.first.to_s ] = field
-
-          return field
-        end
-
-        super(func, *args, **opts, &block)
-      end
-    end
-
-    class ClauseDSL
-      attr_reader :clause
-
-      def self.build **opts, &block
-        new(**opts).tap do |obj|
-          obj.instance_eval(&block)
-        end.clause
-      end
-
-      def initialize prefix:, **opts
-        @clause = {
-          prefix: prefix.to_s,
-          name: nil,
-          description: nil,
-          arity: nil,
-          input_format: nil,
-          compile: nil
-        }.merge(opts)
-      end
-
-      def respond_to_missing? func, **args
-        return true
-      end
-
-      def method_missing func, *args, **opts, &block
-        @clause[ func ] = args.first || block
-      end
-    end
-
     class ES < Compiler
-      attr_reader :context
-
       class << self
-        attr_reader :index, :clause_handlers
+        attr_reader :index
 
         def define_index &block
-          @index = IndexDSL.build(&block)
-        end
-
-        def clause **opts, &block
-          (@clause_handlers ||= []) << ClauseDSL.build(**opts, &block)
+          @index = Index.build(&block)
         end
       end
 
-      def initialize
-        @context = {
+      def context
+        @context ||= {
           query: {},
           sort: {}
         }
       end
 
       def compile ast
-        result = visit ast
+        result = ast.accept self
         context[:query] = result
 
         context
@@ -150,74 +156,9 @@ module QueryGrammar
         self.class.index
       end
 
-      def clause_handlers
-        self.class.clause_handlers
-      end
-
-      def handles_clause? clause
-        clause_handlers.any? { |handler| handler[:prefix] == clause.prefix }
-      end
-
-      def handle_clause clause
-        handler = clause_handlers.find { |clause_handler| clause_handler[:prefix] == clause.prefix }
-        QueryGrammar::Compiler::Cloaker.new(bind: self).cloak(clause, &handler[:compile])
-      end
-
-      def operation_for field, values
-        field_data = index.fields[ index.resolve_field field ]
-
-        throw "unable to search on non-existant field #{ field }" unless field_data
-
-        case field_data[:type]
-        when :text
-          return {
-            bool: {
-              must: values.map do |value|
-                next {
-                  match_phrase: { field => value }
-                } if value.index(" ")
-
-                {
-                  match: { field => value }
-                }
-              end
-            }
-          } if values.is_a? Array
-
-          return {
-            match_phrase: { field => values }
-          } if values.index(" ")
-
-          {
-            match: { field => values }
-          }
-        when :keyword
-          return {
-            terms: { field => values }
-          } if values.is_a? Array
-
-          {
-            term: { field => values }
-          }
-        when :date
-          return {
-            bool: {
-              must: values.map do |value|
-                { term: { field => value } }
-              end
-            }
-          } if values.is_a? Array
-
-          {
-            term: { field => values }
-          }
-        else throw "unknown type #{ field_data[:type] }"
-        end
-      end
-
-      visit QueryGrammar::AST::Group do |group|
+      visit :group do |group|
         joiner = group.conjoiner == :or ? :should : :must
-        inside = group.items.map { |i| visit i }.compact
+        inside = group.items.map { |i| i.accept self }.compact
 
         # todo: flatten, if there is a nested bool in `inside` then it should be
         # merged with this outer layer according to bool logic and precedence
@@ -228,9 +169,9 @@ module QueryGrammar
         }
       end
 
-      visit QueryGrammar::AST::Negator do |negator|
+      visit :negator do |negator|
         if negator.items.is_a?(Array)
-          inside = negator.items.map { |i| visit i }.compact
+          inside = negator.items.map { |i| i.accept self }.compact
         else
           inside = visit negator.items
         end
@@ -242,20 +183,27 @@ module QueryGrammar
         }
       end
 
-      visit QueryGrammar::AST::Clause do |clause|
+      visit :clause do |clause|
         if clause.prefix.blank?
           next {
             bool: {
               should: index.default_fields.map do |field|
-                operation_for field, clause.value
+                field_data = index.fields[ index.resolve_field field ]
+                QueryGrammar::Cloaker.new(bind: self).cloak(clause, &field_data[:compile])
               end
             }
           }
-        elsif handles_clause? clause
-          next handle_clause clause
         end
 
-        operation_for clause.prefix, clause.value
+        if index.operators.key? clause.prefix
+          handler = index.operators[ clause.prefix ]
+          next QueryGrammar::Cloaker.new(bind: self).cloak(clause, &handler[:compile])
+        end
+
+        field_data = index.fields[ index.resolve_field clause.prefix ]
+        throw "unable to search on non-existant field #{ field }" unless field_data
+
+        QueryGrammar::Cloaker.new(bind: self).cloak(clause, &field_data[:compile])
       end
     end
   end

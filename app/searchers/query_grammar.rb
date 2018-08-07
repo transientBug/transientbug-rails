@@ -7,6 +7,7 @@ module QueryGrammar
   autoload :Parser, "query_grammar/parser"
   autoload :Transformer, "query_grammar/transformer"
   autoload :Compiler, "query_grammar/compiler"
+  autoload :Cloacker, "query_grammar/cloaker"
 
   def self.rehydrate json
     parsed_json = json.is_a?(String) ? JSON.parse(json) : json
@@ -40,128 +41,6 @@ module QueryGrammar
     else
       # puts "#{ " |"*depth }---$ Found #{ cause.pos.bytepos } pos"
       cause
-    end
-  end
-
-  class Visitor
-    def self.visitors
-      @visitors ||= {}
-    end
-
-    def self.on type, **opts, &block
-      matcher = lambda do |*data|
-        opts.all? { |k, v| matchers[ type ][k].call v, *data }
-      end
-
-      visitors[ type ] ||= []
-      visitors[ type ].push({ opt_length: opts.keys.length, matcher: matcher, block: block })
-      visitors[ type ].sort_by! { |a| a[:opt_length] }.reverse!
-    end
-
-    def self.matchers
-      @matchers ||= {}
-    end
-
-    def self.def_matcher type, key, &block
-      matchers[ type ] ||= {}
-      matchers[ type ][ key ] = block
-    end
-
-    def visitors
-      self.class.visitors
-    end
-
-    def finalize
-      fail NotImplementedError
-    end
-
-    def method_missing func, *args
-      str_name = func.to_s
-      return super(func, *args) unless str_name.start_with? "visit_"
-
-      name = str_name.gsub(/^visit_/, "").to_sym
-
-      if visitors.key? name
-        visitor = visitors[ name ].find { |v| v[:matcher].call(*args) }
-        return QueryGrammar::Compiler::Cloaker.new(bind: self).cloak(*args, &visitor[:block])
-      end
-    end
-  end
-
-  class EchoVisitor < Visitor
-    def stack
-      @stack ||= []
-    end
-
-    def finalize
-      stack.first
-    end
-
-    def_matcher :clause, :prefix do |input, clause|
-      clause.prefix == input
-    end
-
-    def_matcher :clause, :type do |input, clause|
-      types = Array(input)
-
-      clause.values.all? do |v|
-        types.any? { |t| v.is_a? t }
-      end
-    end
-
-    def_matcher :clause, :arity do |input, clause|
-      clause.values.length <= input
-    end
-
-    on :any do |node|
-      puts "ANY #{ node }"
-    end
-
-    on :negator do |negator|
-      puts "NOT #{ negator }"
-
-      stack.push "NOT " + stack.pop
-    end
-
-    on :group do |group|
-      puts "GROUP #{ group.conjoiner } #{ group }"
-
-      items = group.items.length.times.map { stack.pop }
-      stack.push "(" + items.reverse.join(" #{ group.conjoiner.to_s.upcase } ") + ")"
-    end
-
-    on :clause do |clause|
-      puts "CLAUSE #{ clause }"
-
-      stack.push clause.to_s
-    end
-
-    on :value_list do |values, clause|
-      puts "VALUE LIST #{ values.length } #{ clause }"
-    end
-
-    on :value_date do |date, clause|
-      puts "VALUE DATE #{ date } #{ clause }"
-    end
-
-    on :value_phrase do |phrase, clause|
-      puts "VALUE PHRASE #{ phrase } #{ clause }"
-    end
-
-    on :value do |value, clause|
-      puts "VALUE #{ value } #{ clause }"
-    end
-
-    on :prefix do |prefix, clause|
-      puts "PREFIX #{ prefix } #{ clause }"
-    end
-
-    on :unary do |unary, clause|
-      puts "UNARY #{ unary } #{ clause }"
-    end
-
-    on :clause, prefix: "after", type: Date, arity: 1 do |clause|
-      puts "AFTER PREFIX CLAUSE #{ clause }"
     end
   end
 end

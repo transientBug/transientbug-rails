@@ -25,7 +25,8 @@ module QueryGrammar
     end
 
     rule negator: simple(:negator), clause: subtree(:clause) do
-      QueryGrammar::AST::Negator.new items: QueryGrammar::AST::Clause.new(unary: clause[:unary], prefix: clause[:prefix], value: clause[:value])
+      inner = QueryGrammar::AST::Clause.new unary: clause[:unary], prefix: clause[:prefix], value: clause[:value]
+      QueryGrammar::AST::Negator.new items: inner
     end
 
     rule group: subtree(:group) do
