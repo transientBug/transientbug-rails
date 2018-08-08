@@ -3,11 +3,14 @@ module QueryGrammar
   ParseError     = Class.new Error
   CompileError   = Class.new Error
 
+  autoload :Cloaker, "query_grammar/cloaker"
   autoload :AST, "query_grammar/ast"
+
+  autoload :Index, "query_grammar/index"
+
   autoload :Parser, "query_grammar/parser"
   autoload :Transformer, "query_grammar/transformer"
   autoload :Compiler, "query_grammar/compiler"
-  autoload :Cloacker, "query_grammar/cloaker"
 
   def self.rehydrate json
     parsed_json = json.is_a?(String) ? JSON.parse(json) : json

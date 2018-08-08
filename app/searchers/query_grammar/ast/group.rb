@@ -8,14 +8,6 @@ module QueryGrammar
         @conjoiner = conjoiner
       end
 
-      def accept visitor
-        items.each do |item|
-          item.accept visitor
-        end
-
-        visitor.visit_group self
-      end
-
       def to_h
         {
           conjoiner => items.map(&:to_h)

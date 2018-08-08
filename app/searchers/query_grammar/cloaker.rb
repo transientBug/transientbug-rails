@@ -1,4 +1,10 @@
 module QueryGrammar
+  # Ruby blocks don't closure over more than local variables, but we can
+  # get around that with this "cloaker" hack. First we make an
+  # unboundmethod which we rebind to our current instance. We also keep the
+  # blocks original binding and with the method missing magic, proxy out to
+  # it, which allows us to closure over methods and more from where the
+  # block was defined at.
   class Cloaker < BasicObject
     attr_reader :bind, :closure
 
@@ -10,12 +16,6 @@ module QueryGrammar
     def cloak *args, &block
       closure ||= block.binding
 
-      # Ruby blocks don't closure over more than local variables, but we can
-      # get around that with this "cloaker" hack. First we make an
-      # unboundmethod which we rebind to our current instance. We also keep the
-      # blocks original binding and with the method missing magic, proxy out to
-      # it, which allows us to closure over methods and more from where the
-      # block was defined at.
       executor = bind.class.class_eval do
         define_method :dsl_executor, &block
         meth = instance_method :dsl_executor

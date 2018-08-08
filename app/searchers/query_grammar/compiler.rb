@@ -22,7 +22,7 @@ module QueryGrammar
       # available within the admin panel
       def ancestor_hash func
         (ancestors - [self])
-          .select { |i| i.ancestors.include? Compiler }
+          .select { |i| i.ancestors.include? QueryGrammar::Compiler }
           .inject({}) { |memo, i| memo.merge i.send func }
       end
     end
@@ -35,15 +35,26 @@ module QueryGrammar
       fail NotImplementedError
     end
 
-    def method_missing func, *args
-      str_name = func.to_s
-      return super(func, *args) unless str_name.start_with? "visit_"
+    # rubocop:disable Style/MethodMissing
+    def respond_to_missing? func, *args
+      name = func.to_s.gsub(/^visit_/, "").to_sym
 
-      name = str_name.gsub(/^visit_/, "").to_sym
+      return true if visitors.key? name
 
-      if visitors.key? name
-        return QueryGrammar::Cloaker.new(bind: self).cloak(*args, &visitors[name])
-      end
+      super(func, *args)
     end
+
+    def method_missing func, *args
+      name = func.to_s.gsub(/^visit_/, "").to_sym
+
+      return super(func, *args) unless visitors.key? name
+
+      QueryGrammar::Cloaker.new(bind: self).cloak(*args, &visitors[name])
+    rescue => e
+      # Hack to remove this method_missing from the backtrace
+      e.set_backtrace e.backtrace[1..-1]
+      raise e
+    end
+    # rubocop:enable Style/MethodMissing
   end
 end

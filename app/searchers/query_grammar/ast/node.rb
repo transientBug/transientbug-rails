@@ -2,7 +2,7 @@ module QueryGrammar
   module AST
     class Node
       def accept visitor
-        visitor.visit_any self
+        visitor.send :"visit_#{ self.class.name.to_s.demodulize.underscore }", self
       end
 
       def as_json(*)

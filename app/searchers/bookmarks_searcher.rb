@@ -2,7 +2,7 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
   define_index do
     # Sets up information about which types from the search index can have what
     # operations performed on them
-    type :text do |clause|
+    type :text do |unary, field, values|
       next {
         bool: {
           must: values.map do |value|
@@ -26,7 +26,7 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       }
     end
 
-    type :keyword do |clause|
+    type :keyword do |unary, field, values|
       next {
         terms: { field => values }
       } if values.is_a? Array
@@ -36,7 +36,7 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       }
     end
 
-    type :number do |clause|
+    type :number do |unary, field, values|
       next {
         bool: {
           must: values.map do |value|
@@ -50,7 +50,7 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       }
     end
 
-    type :date do |clause|
+    type :date do |unary, field, values|
       next {
         bool: {
           must: values.map do |value|
@@ -70,7 +70,7 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
     keyword :host, name: "Host", description: "", sortable: true
     text :title, name: "Title", description: "", sortable: true
     text :description, name: "Description", description: "", existable: true
-    keyword :tags, name: "Tags", description: "", aliases: [ :tag ], existable: true
+    keyword :tags, name: "Tags", description: "", aliases: [ "tag" ], existable: true
     date :created_at, name: "Created Date", description: "", aliases: [ "created_date" ], sortable: true
 
     default :title, :tags
@@ -122,22 +122,20 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       DESC
 
       compile do |clause|
-        fields = clause.values.map do |value|
+        inside = clause.values.map do |value|
           field = index.resolve_field value
           fail "unable to existance check #{ value }" unless index.existable_fields.include? field
 
-          field
+          { exists: { field: field } }
         end
 
-        clause.values.map do |value|
-          {
-            bool: {
-              must: fields.map do |field|
-                { exists: { field: field } }
-              end
-            }
+        next inside.first if inside.length == 1
+
+        {
+          bool: {
+            must: inside
           }
-        end
+        }
       end
     end
 
