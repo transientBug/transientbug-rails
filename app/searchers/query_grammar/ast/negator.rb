@@ -14,7 +14,7 @@ module QueryGrammar
       end
 
       def to_s
-        "NOT #{ items.to_s }"
+        "NOT #{ items }"
       end
 
       def == other

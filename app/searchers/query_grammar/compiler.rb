@@ -37,24 +37,27 @@ module QueryGrammar
 
     # rubocop:disable Style/MethodMissing
     def respond_to_missing? func, *args
-      name = func.to_s.gsub(/^visit_/, "").to_sym
+      name = func.to_s.gsub(%r{^visit_}, "").to_sym
 
       return true if visitors.key? name
 
-      super(func, *args)
+      super
     end
 
+    # fuck you too rubocop, this does fallback to super
+    # rubocop:disable Style/RescueStandardError
     def method_missing func, *args
-      name = func.to_s.gsub(/^visit_/, "").to_sym
+      name = func.to_s.gsub(%r{^visit_}, "").to_sym
 
-      return super(func, *args) unless visitors.key? name
+      return super unless visitors.key? name
 
       QueryGrammar::Cloaker.new(bind: self).cloak(*args, &visitors[name])
     rescue => e
       # Hack to remove this method_missing from the backtrace
       e.set_backtrace e.backtrace[1..-1]
-      raise e
+      fail e
     end
+    # rubocop:enable Style/RescueStandardError
     # rubocop:enable Style/MethodMissing
   end
 end

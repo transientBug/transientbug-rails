@@ -1,63 +1,63 @@
 class BookmarksSearcher < QueryGrammar::Compiler::ES
+  def text_match field, value
+    return { match_phrase: { field => value } } if value.index " "
+
+    {
+      match: { field => value }
+    }
+  end
+
   define_index do
     # Sets up information about which types from the search index can have what
     # operations performed on them
-    type :text do |unary, field, values|
-      next {
-        bool: {
-          must: values.map do |value|
-            next {
-              match_phrase: { field => value }
-            } if value.index(" ")
-
-            {
-              match: { field => value }
-            }
-          end
+    type :text do |_unary, field, values|
+      if values.is_a? Array
+        next {
+          bool: {
+            must: values.map do |value|
+              text_match field, value
+            end
+          }
         }
-      } if values.is_a? Array
+      end
 
-      next {
-        match_phrase: { field => values }
-      } if values.index(" ")
-
-      {
-        match: { field => values }
-      }
+      text_match field, values
     end
 
-    type :keyword do |unary, field, values|
-      next {
-        terms: { field => values }
-      } if values.is_a? Array
+    type :keyword do |_unary, field, values|
+      next { terms: { field => values } } if values.is_a? Array
 
       {
         term: { field => values }
       }
     end
 
-    type :number do |unary, field, values|
-      next {
-        bool: {
-          must: values.map do |value|
-            { term: { field => value } }
-          end
+    type :number do |_unary, field, values|
+      if values.is_a? Array
+        next {
+          bool: {
+            must: values.map do |value|
+              { term: { field => value } }
+            end
+          }
         }
-      } if values.is_a? Array
+      end
 
       {
         term: { field => values }
       }
     end
 
-    type :date do |unary, field, values|
-      next {
-        bool: {
-          must: values.map do |value|
-            { term: { field => value } }
-          end
+    type :date do |_unary, field, values|
+      if values.is_a? Array
+        next {
+          bool: {
+            must: values.map do |value|
+              { term: { field => value } }
+            end
+          }
         }
-      } if values.is_a? Array
+      end
 
       {
         term: { field => values }

@@ -26,24 +26,16 @@ module QueryGrammar
     # TODO: Make this fail with a more informative error rather than just a
     # message. An object with a reference to the Parslet error and info such as
     # the column and line for highlighting in the UI
-    fail ParseError, "unexpected input at line #{line} column #{column} - #{deepest.message} #{input[column-1..-1]}"
+    fail ParseError, "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
   rescue SystemStackError => e
-    fail ParseError, "unexpected input at line 1 column 1 - #{e}: #{input}"
+    fail ParseError, "unexpected input at line 1 column 1 - #{ e }: #{ input }"
   end
 
   def self.deepest_cause cause, depth=0
-    # puts "#{ " |"*depth } ^"
-    # puts "#{ " |"*depth } |---> At depth #{ depth } with #{ cause.children.length } children"
+    cause unless cause.children.any?
 
-    if cause.children.any?
-      causes = cause.children.map { |xcause| deepest_cause xcause, depth+1 }
-      cause = causes.max { |xcause, other| xcause.pos.bytepos <=> other.pos.bytepos }
-
-      # puts "#{ " |"*depth }---= Found #{ cause.pos.bytepos } pos"
-      cause
-    else
-      # puts "#{ " |"*depth }---$ Found #{ cause.pos.bytepos } pos"
-      cause
-    end
+    cause.children
+      .map { |xcause| deepest_cause xcause, depth + 1 }
+      .max { |xcause, other| xcause.pos.bytepos <=> other.pos.bytepos }
   end
 end

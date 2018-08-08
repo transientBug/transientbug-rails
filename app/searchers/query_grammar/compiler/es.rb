@@ -41,7 +41,7 @@ module QueryGrammar
         joiner = group.conjoiner == :or ? :should : :must
         inside = group.items.map { |i| i.accept self }.compact
 
-        # todo: flatten, if there is a nested bool in `inside` then it should be
+        # TODO: flatten, if there is a nested bool in `inside` then it should be
         # merged with this outer layer according to bool logic and precedence
         {
           bool: {

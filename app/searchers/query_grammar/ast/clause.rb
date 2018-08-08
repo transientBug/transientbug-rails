@@ -3,10 +3,10 @@ module QueryGrammar
     class Clause < Node
       attr_reader :unary, :prefix, :value
 
-      def initialize  unary: nil, prefix: nil, value: nil
-        @unary = unary
+      def initialize unary: nil, prefix: nil, value: nil
+        @unary  = unary
         @prefix = prefix
-        @value = value
+        @value  = value
       end
 
       def values
@@ -14,19 +14,21 @@ module QueryGrammar
       end
 
       def to_h
+        value_hash = values.map do |val|
+          type = :date if val.is_a? Date
+          type ||= val.index(" ") ? :phrase : :term
+
+          {
+            type: type,
+            value: val.as_json
+          }
+        end
+
         {
           clause: {
             unary: unary,
             prefix: prefix,
-            values: values.map do |val|
-              type = :date if val.is_a? Date
-              type ||= val.index(" ") ? :phrase : :term
-
-              {
-                type: type,
-                value: val.as_json
-              }
-            end
+            values: value_hash
           }.compact
         }
       end
@@ -40,7 +42,7 @@ module QueryGrammar
 
         val = "(#{ val })" if value.is_a? Array
 
-        "#{ unary }#{ prefix }#{ prefix ? ":" : "" }#{ val }"
+        "#{ unary }#{ prefix }#{ prefix ? ':' : '' }#{ val }"
       end
 
       def == other

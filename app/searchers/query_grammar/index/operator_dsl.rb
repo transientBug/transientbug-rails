@@ -16,17 +16,19 @@ module QueryGrammar
           arity: nil,
           type: nil,
           compile: nil
-        }.merge(opts)
+        }.merge opts
       end
 
       # rubocop:disable Style/MethodMissing
-      def respond_to_missing? func, **args
-        return true
+      def respond_to_missing?(*)
+        true
       end
 
-      def method_missing func, *args, **opts, &block
+      # rubocop:disable Style/MethodMissingSuper
+      def method_missing func, *args, **_opts, &block
         @operator[ func ] = args.first || block
       end
+      # rubocop:enable Style/MethodMissingSuper
       # rubocop:enable Style/MethodMissing
     end
   end

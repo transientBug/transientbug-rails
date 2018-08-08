@@ -29,7 +29,7 @@ module QueryGrammar
       def respond_to_missing? func, *args
         return true if index.types[ func ]
 
-        super(func, *args)
+        super
       end
 
       def method_missing func, *args, **opts, &block
@@ -48,7 +48,7 @@ module QueryGrammar
           return field
         end
 
-        super(func, *args, **opts, &block)
+        super
       end
       # rubocop:enable Style/MethodMissing
     end

@@ -31,6 +31,7 @@ module QueryGrammar
   #      Word ::= [^:")(#x9#xA#xD#x20]+
   #      Space ::= #x9 | #xA | #xD | #x20
   class Parser < Parslet::Parser
+    # rubocop:disable Layout/ClosingParenthesisIndentation
     root :query
 
     rule :query do
@@ -84,7 +85,7 @@ module QueryGrammar
     end
 
     rule :prefix do
-      (word.as(:term)).as(:prefix) >> str(":")
+      word.as(:term).as(:prefix) >> str(":")
     end
 
     rule :negator do
@@ -126,5 +127,6 @@ module QueryGrammar
     rule :space do
       match["\s"].repeat(1)
     end
+    # rubocop:enable Layout/ClosingParenthesisIndentation
   end
 end

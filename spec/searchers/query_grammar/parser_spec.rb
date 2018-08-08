@@ -6,35 +6,46 @@ RSpec.describe QueryGrammar::Parser do
       let(:input) { "thing" }
 
       it { is_expected.to be_a(Hash) }
-      it { is_expected.to include(clause: a_kind_of(Hash).and(include(value: a_kind_of(Hash).and(include(term: a_kind_of(Parslet::Slice)))))) }
+
+      # rubocop:disable RSpec/ExampleLength
+      it do
+        is_expected.to include(
+          clause: a_kind_of(Hash).and(
+            include(value: a_kind_of(Hash).and(
+              include(term: a_kind_of(Parslet::Slice))
+            ))
+          )
+        )
+      end
+      # rubocop:enable RSpec/ExampleLength
     end
 
-    context "when term list only" do
-    end
+    # context "when term list only" do
+    # end
 
-    context "when prefix only" do
-    end
+    # context "when prefix only" do
+    # end
 
-    context "when unary prefix only" do
-    end
+    # context "when unary prefix only" do
+    # end
 
-    context "when negator prefix only" do
-    end
+    # context "when negator prefix only" do
+    # end
 
-    context "when negator unary prefix only" do
-    end
+    # context "when negator unary prefix only" do
+    # end
 
-    context "when prefixed term" do
-    end
+    # context "when prefixed term" do
+    # end
 
-    context "when prefixed term list" do
-    end
+    # context "when prefixed term list" do
+    # end
 
-    context "when unary prefixed field" do
-    end
+    # context "when unary prefixed field" do
+    # end
 
-    context "when negator unary prefixed field" do
-    end
+    # context "when negator unary prefixed field" do
+    # end
   end
 
   describe "rule: negator" do
