@@ -1,3 +1,33 @@
+class GtRangeClause < QueryGrammar::AST::Node
+  def initialize field:, value:
+  end
+end
+
+class LtRangeClause < QueryGrammar::AST::Node
+  def initialize field:, value:
+  end
+end
+
+class RangeClause < QueryGrammar::AST::Node
+  def initialize field:, low:, high:
+  end
+end
+
+class MatchClause < QueryGrammar::AST::Node
+  def initialize field:, value:
+  end
+end
+
+class EqualClause < QueryGrammar::AST::Node
+  def initialize field:, value:
+  end
+end
+
+class SortClause < QueryGrammar::AST::Node
+  def initialize field:
+  end
+end
+
 class ApplicationSearcher
   class << self
     attr_reader :index
