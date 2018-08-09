@@ -4,7 +4,7 @@ module QueryGrammar
     autoload :OperatorDSL, "query_grammar/index/operator_dsl"
 
     def self.build &block
-      QueryGrammar::Index::DSL.build(&block)
+      DSL.build(&block)
     end
 
     def types

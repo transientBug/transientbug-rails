@@ -1,67 +1,43 @@
-class BookmarksSearcher < QueryGrammar::Compiler::ES
-  def text_match field, value
-    return { match_phrase: { field => value } } if value.index " "
+class ApplicationSearcher
+  class << self
+    attr_reader :index
 
-    {
-      match: { field => value }
-    }
+    def define_index &block
+      @index = QueryGrammar::Index.build(&block)
+    end
   end
 
+  def index
+    self.class.index
+  end
+end
+
+class BookmarksSearcher < ApplicationSearcher
   define_index do
     # Sets up information about which types from the search index can have what
     # operations performed on them
-    type :text do |_unary, field, values|
-      if values.is_a? Array
-        next {
-          bool: {
-            must: values.map do |value|
-              text_match field, value
-            end
-          }
-        }
+    type :text do |clause|
+      clause.values.map do |value|
+        MatchClause.new field: clause.prefix, value: value
       end
-
-      text_match field, values
     end
 
-    type :keyword do |_unary, field, values|
-      next { terms: { field => values } } if values.is_a? Array
-
-      {
-        term: { field => values }
-      }
+    type :keyword do |clause|
+      clause.values.map do |value|
+        EqualClause.new field: clause.prefix, value: value
+      end
     end
 
-    type :number do |_unary, field, values|
-      if values.is_a? Array
-        next {
-          bool: {
-            must: values.map do |value|
-              { term: { field => value } }
-            end
-          }
-        }
+    type :number do |clause|
+      clause.values.map do |value|
+        EqualClause.new field: clause.prefix, value: value
       end
-
-      {
-        term: { field => values }
-      }
     end
 
-    type :date do |_unary, field, values|
-      if values.is_a? Array
-        next {
-          bool: {
-            must: values.map do |value|
-              { term: { field => value } }
-            end
-          }
-        }
+    type :date do |clause|
+      clause.values.map do |value|
+        EqualClause.new field: clause.prefix, value: value
       end
-
-      {
-        term: { field => values }
-      }
     end
 
     # Sets up which fields are searchable, setting up the prefixs and compiles to
@@ -79,40 +55,41 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
     # the created_date field into two psuedofields "after" and "before" or an
     # existance "has" or sort helpers
     operator :after do
-      name "After Created Date"
+      name "Created After Date"
       description <<~DESC
       DESC
 
       arity 1
-      type :date
+      types :date
 
-      compile do |clause|
-        {
-          range: {
-            created_at: {
-              gt: clause.values.first
-            }
-          }
-        }
+      parse do |clause|
+        GtRangeClause.new field: :created_at, value: clause.values.first
       end
     end
 
     operator :before do
-      name "Before Created Date"
+      name "Created Before Date"
       description <<~DESC
       DESC
 
       arity 1
-      type :date
+      types :date
 
-      compile do |clause|
-        {
-          range: {
-            created_at: {
-              lt: clause.values.first
-            }
-          }
-        }
+      parse do |clause|
+        LtRangeClause.new field: :created_at, value: clause.values.first
+      end
+    end
+
+    operator :between do
+      name "Created Between Dates"
+      description <<~DESC
+      DESC
+
+      arity 2
+      types :date
+
+      parse do |clause|
+        RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second
       end
     end
 
@@ -121,21 +98,10 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       description <<~DESC
       DESC
 
-      compile do |clause|
-        inside = clause.values.map do |value|
-          field = index.resolve_field value
-          fail "unable to existance check #{ value }" unless index.existable_fields.include? field
-
-          { exists: { field: field } }
+      parse do |clause|
+        clause.values.map do |value|
+          ExistClause.new field: value
         end
-
-        next inside.first if inside.length == 1
-
-        {
-          bool: {
-            must: inside
-          }
-        }
       end
     end
 
@@ -144,21 +110,16 @@ class BookmarksSearcher < QueryGrammar::Compiler::ES
       description <<~DESC
       DESC
 
-      compile do |clause|
-        fields = clause.values.map do |value|
-          field = index.resolve_field value
-          fail "unsortable field #{ value }" unless index.sortable_fields.include? field
-
-          field
+      parse unary: "+" do |clause|
+        clause.values.map do |value|
+          SortClause.new field: value, direction: :asc
         end
+      end
 
-        direction = clause.unary == "+" ? :asc : :desc
-
-        sorts = fields.each_with_object({}) do |value, memo|
-          memo[ value ] = { order: direction }
+      parse unary: "-" do |clause|
+        clause.values.map do |value|
+          SortClause.new field: value, direction: :desc
         end
-
-        context[:sort].merge! sorts
       end
     end
   end
