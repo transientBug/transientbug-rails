@@ -15,8 +15,6 @@ module QueryGrammar
         context
       end
 
-      protected
-
       visit :negator do |negator|
         inside = Array(negator.items).map { |i| i.accept self }.compact
 

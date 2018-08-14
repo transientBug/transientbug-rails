@@ -15,7 +15,7 @@ module QueryGrammar
 
       return Cloaker.new(bind: self).cloak(bindings, &block) if block.arity == 1
 
-      return Cloaker.new(bind: Context.new(bindings)).cloak(&block)
+      Cloaker.new(bind: Context.new(bindings)).cloak(&block)
     end
 
     def parse_clause subtree_clause

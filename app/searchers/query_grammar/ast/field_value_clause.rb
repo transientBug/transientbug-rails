@@ -5,7 +5,7 @@ module QueryGrammar
 
       def initialize field: nil, value: nil
         @field = field
-        @value  = value
+        @value = value
       end
 
       def to_s

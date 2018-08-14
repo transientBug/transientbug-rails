@@ -13,7 +13,7 @@ module QueryGrammar
         fail NotImplementedError
       end
 
-      def == other
+      def == _other
         fail NotImplementedError
       end
 
