@@ -10,7 +10,9 @@
     %i.search.icon
 
 %h1 Search Results
-- if @bookmarks.empty?
+- if params[:q].blank?
   = render partial: "zero_state"
+- elsif @bookmarks.empty?
+  = render partial: "no_results_state"
 - else
   = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

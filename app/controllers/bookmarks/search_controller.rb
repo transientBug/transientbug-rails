@@ -6,6 +6,13 @@ class Bookmarks::SearchController < ApplicationController
   def index
     @bookmarks = fetch_bookmarks params[:q]
 
+    if @bookmarks.empty?
+      @bookmark = current_user.bookmarks.new
+      @bookmark.webpage = Webpage.new
+
+      authorize @bookmark
+    end
+
     respond_to do |format|
       format.html { render :index }
       format.json { render :index, status: :ok }
