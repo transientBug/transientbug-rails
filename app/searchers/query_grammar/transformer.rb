@@ -38,7 +38,7 @@ module QueryGrammar
 
       return inner.first if inner.length == 1
 
-      QueryGrammar::AST::Group.new conjoiner: :and, items: inner
+      QueryGrammar::AST::Group.new conjoiner: :or, items: inner
     end
 
     rule term: simple(:term) do

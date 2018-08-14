@@ -9,13 +9,8 @@
       = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
     %i.search.icon
 
-%h3 Advanced Search
-.query_builder.hidden{ data: { url: bookmarks_search_index_path, method: "POST", config: BookmarksSearcher.normalized_config.to_json, query: query.to_json } }
-= javascript_pack_tag "query_builder"
-
 %h1 Search Results
-
-- if @bookmarks.blank_query?
+- if @bookmarks.empty?
   = render partial: "zero_state"
 - else
   = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

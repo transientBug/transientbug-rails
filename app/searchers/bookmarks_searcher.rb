@@ -38,8 +38,8 @@ class BookmarksSearcher < ApplicationSearcher
     default :title, :tags
 
     # Handles custom prefixes for various other operations such as breaking apart
-    # the created_date field into two psuedofields "after" and "before" or an
-    # existance "has" or sort helpers
+    # the created_date field into two pseudo fields "after" and "before" or an
+    # existence "has" or sort helpers
     operator :after do
       name "Created After Date"
       description <<~DESC
