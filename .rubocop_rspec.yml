@@ -24,6 +24,8 @@ RSpec/EmptyExampleGroup:
 RSpec/ExampleLength:
   Description: Checks for long examples.
   Enabled: true
+  Exclude:
+    - spec/searchers/query_grammar/parser_spec.rb
 
 RSpec/ExampleWording:
   Description: Checks that example descriptions do not start with "should".
