@@ -17,7 +17,10 @@ module QueryGrammar
     #
     # TODO: Error handling
     def parse input, index:
-      QueryGrammar::Transformer.new(index).apply scan(input)
+      ast = QueryGrammar::Transformer.new(index).apply scan(input)
+      ast ||= QueryGrammar::AST::Group.new conjoiner: :and, items: []
+
+      ast
     end
 
     # Generates a parslet parser tree from the input, which is then used with the
