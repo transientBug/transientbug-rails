@@ -1,72 +1,28 @@
-class GtRangeClause < QueryGrammar::AST::Node
-  def initialize field:, value:
-  end
-end
-
-class LtRangeClause < QueryGrammar::AST::Node
-  def initialize field:, value:
-  end
-end
-
-class RangeClause < QueryGrammar::AST::Node
-  def initialize field:, low:, high:
-  end
-end
-
-class MatchClause < QueryGrammar::AST::Node
-  def initialize field:, value:
-  end
-end
-
-class EqualClause < QueryGrammar::AST::Node
-  def initialize field:, value:
-  end
-end
-
-class SortClause < QueryGrammar::AST::Node
-  def initialize field:
-  end
-end
-
-class ApplicationSearcher
-  class << self
-    attr_reader :index
-
-    def define_index &block
-      @index = QueryGrammar::Index.build(&block)
-    end
-  end
-
-  def index
-    self.class.index
-  end
-end
-
 class BookmarksSearcher < ApplicationSearcher
   define_index do
     # Sets up information about which types from the search index can have what
     # operations performed on them
     type :text do |clause|
       clause.values.map do |value|
-        MatchClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::MatchClause.new field: clause.prefix, value: value
       end
     end
 
     type :keyword do |clause|
       clause.values.map do |value|
-        EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
       end
     end
 
     type :number do |clause|
       clause.values.map do |value|
-        EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
       end
     end
 
     type :date do |clause|
       clause.values.map do |value|
-        EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
       end
     end
 
@@ -93,7 +49,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        GtRangeClause.new field: :created_at, value: clause.values.first
+        QueryGrammar::AST::GtRangeClause.new field: :created_at, value: clause.values.first
       end
     end
 
@@ -106,7 +62,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        LtRangeClause.new field: :created_at, value: clause.values.first
+        QueryGrammar::AST::LtRangeClause.new field: :created_at, value: clause.values.first
       end
     end
 
@@ -119,7 +75,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second
+        QueryGrammar::AST::RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second
       end
     end
 
@@ -130,7 +86,7 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
-          ExistClause.new field: value
+          QueryGrammar::AST::ExistClause.new field: value
         end
       end
     end
@@ -140,17 +96,17 @@ class BookmarksSearcher < ApplicationSearcher
       description <<~DESC
       DESC
 
-      parse unary: "+" do |clause|
+      parse do |clause|
         clause.values.map do |value|
-          SortClause.new field: value, direction: :asc
-        end
-      end
-
-      parse unary: "-" do |clause|
-        clause.values.map do |value|
-          SortClause.new field: value, direction: :desc
+          QueryGrammar::AST::SortClause.new field: value, direction: (clause.unary == "+" ? :asc : :desc)
         end
       end
     end
+  end
+
+  use_compiler QueryGrammar::Compiler::ES
+
+  execute_query do |compiled_query|
+    BookmarksIndex::Bookmark.query(compiled_query[:query]).order(compiled_query[:sort])
   end
 end

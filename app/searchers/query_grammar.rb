@@ -1,7 +1,6 @@
 module QueryGrammar
   Error          = Class.new StandardError
-  ParseError     = Class.new Error
-  CompileError   = Class.new Error
+  ScanError      = Class.new Error
 
   autoload :Cloaker, "query_grammar/cloaker"
   autoload :AST, "query_grammar/ast"
@@ -12,13 +11,20 @@ module QueryGrammar
   autoload :Transformer, "query_grammar/transformer"
   autoload :Compiler, "query_grammar/compiler"
 
-  def self.rehydrate json
-    parsed_json = json.is_a?(String) ? JSON.parse(json) : json
-    QueryGrammar::JSONHydrator.new.apply parsed_json.deep_symbolize_keys
+  # Scans and parses an input string to generate an AST of the query against
+  # the index
+  #
+  # TODO: Error handling
+  def self.parse input, index:
+    QueryGrammar::Transformer.new(index).apply scan(input)
   end
 
-  def self.parse input
-    QueryGrammar::Transformer.new.apply QueryGrammar::Parser.new.parse(input.strip)
+  # Generates a parslet parser tree from the input, which is then used with the
+  # transformer to generate an AST of the query, based off of the index
+  #
+  # @see .parse
+  def self.scan input
+     QueryGrammar::Parser.new.parse input.strip
   rescue Parslet::ParseFailed => e
     deepest = deepest_cause e.parse_failure_cause
     line, column = deepest.source.line_and_column deepest.pos
@@ -26,11 +32,16 @@ module QueryGrammar
     # TODO: Make this fail with a more informative error rather than just a
     # message. An object with a reference to the Parslet error and info such as
     # the column and line for highlighting in the UI
-    fail ParseError, "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
+    fail ScanError, "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
   rescue SystemStackError => e
-    fail ParseError, "unexpected input at line 1 column 1 - #{ e }: #{ input }"
+    fail ScanError, "unexpected input at line 1 column 1 - #{ e }: #{ input }"
   end
 
+  protected
+
+  # Grabs the cause in a tree of causes which has the furthest position in the
+  # input string, assuming its the clearest and best error message about what
+  # went wrong while parsing the input query
   def self.deepest_cause cause, depth=0
     cause unless cause.children.any?
 

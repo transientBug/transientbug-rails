@@ -1,18 +1,6 @@
 module QueryGrammar
   class Compiler
     class ES < Compiler
-      class << self
-        attr_reader :index
-
-        def define_index &block
-          @index = QueryGrammar::Index.build(&block)
-        end
-      end
-
-      def index
-        self.class.index
-      end
-
       def context
         @context ||= {
           query: {},
@@ -29,27 +17,6 @@ module QueryGrammar
 
       protected
 
-      def cloak_compile clause, field=nil
-        field = index.resolve_field(field || clause.prefix)
-        field_data = index.fields[ field ]
-        fail "unable to search on non-existant field #{ field }" unless field_data
-
-        QueryGrammar::Cloaker.new(bind: self).cloak(clause.unary, field, clause.values, &field_data[:compile])
-      end
-
-      visit :group do |group|
-        joiner = group.conjoiner == :or ? :should : :must
-        inside = group.items.map { |i| i.accept self }.compact
-
-        # TODO: flatten, if there is a nested bool in `inside` then it should be
-        # merged with this outer layer according to bool logic and precedence
-        {
-          bool: {
-            joiner => inside
-          }
-        }
-      end
-
       visit :negator do |negator|
         inside = Array(negator.items).map { |i| i.accept self }.compact
 
@@ -60,23 +27,43 @@ module QueryGrammar
         }
       end
 
-      visit :clause do |clause|
-        if clause.prefix.blank?
-          next {
-            bool: {
-              should: index.default_fields.map do |field|
-                cloak_compile clause, field
-              end
-            }
+      visit :group do |group|
+        joiner = group.conjoiner == :or ? :should : :must
+        inside = group.items.map { |i| i.accept self }.compact
+
+        {
+          bool: {
+            joiner => inside
           }
-        end
+        }
+      end
 
-        if index.operators.key? clause.prefix
-          handler = index.operators[ clause.prefix ]
-          next QueryGrammar::Cloaker.new(bind: self).cloak(clause, &handler[:compile])
-        end
+      visit :sort_clause do |clause|
+        context[:sort][ clause.field ] = { order: clause.direction }
 
-        cloak_compile clause
+        nil
+      end
+
+      visit :match_clause do |clause|
+        type = clause.value.index(" ") ? :match_phrase : :match
+
+        { type => { clause.field => clause.value } }
+      end
+
+      visit :equal_clause do |clause|
+        { term: { clause.field => clause.value } }
+      end
+
+      visit :gt_range_clause do |clause|
+        { range: { clause.field => { gt: clause.value } } }
+      end
+
+      visit :lt_range_clause do |clause|
+        { range: { clause.field => { lt: clause.value } } }
+      end
+
+      visit :range_clause do |clause|
+        { range: { clause.field => { gte: clause.low, lte: clause.high } } }
       end
     end
   end

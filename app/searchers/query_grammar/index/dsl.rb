@@ -40,10 +40,10 @@ module QueryGrammar
             sortable: false,
             default: false,
             type: func,
-            compile: index.types[ func ]
+            parse: index.types[ func ]
           }.merge opts
 
-          index.fields[ args.first.to_s ] = field
+          index.fields[ args.first.to_s ] = OpenStruct.new field
 
           return field
         end

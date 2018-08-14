@@ -10,13 +10,15 @@ module QueryGrammar
       end
 
       def initialize **opts
-        @operator = {
+        op_data = {
           name: nil,
           description: nil,
           arity: nil,
           type: nil,
-          compile: nil
+          parse: nil
         }.merge opts
+
+        @operator = OpenStruct.new op_data
       end
 
       # rubocop:disable Style/MethodMissing
