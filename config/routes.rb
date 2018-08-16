@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 
       collection do
         scope as: :bookmarks do
-          resources :search, only: [:index, :create, :show]
+          resources :search, only: [:index]
 
           resources :tags, only: [:index, :show] do
             collection do
@@ -90,8 +90,6 @@ Rails.application.routes.draw do
       get "tag/:tag", action: :tag, as: "tag"
     end
   end
-
-  post "/telegram/:token", to: "telegram_webhooks#webhook"
 
   # This should be locked down actually rather than disabled outside of dev
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?

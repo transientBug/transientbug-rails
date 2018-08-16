@@ -3,7 +3,7 @@ class BookmarksIndex < Chewy::Index
     analyzer: {
       title: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :english_stop]
+        filter: [:lowercase, :trim, :english_stop, :edgeNGram3x6]
       },
       description: {
         tokenizer: :standard,

@@ -20,7 +20,11 @@ Bundler/OrderedGems:
 Metrics/AbcSize:
   Max: 30
 
+# This is an issue for most DSL's and since ruby is highly conducive to DSL's
+# this rule doesn't really make a lot of sense and is really a deterant towards
+# a tool of the language
 Metrics/BlockLength:
+  Enabled: false
   Exclude:
     - db/**/*.rb
     - spec/**/**_spec.rb
@@ -72,6 +76,9 @@ Layout/EmptyLineBetweenDefs:
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
 Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/IndentArray:
   EnforcedStyle: consistent
 
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -151,6 +158,9 @@ Style/NumericPredicate:
   Enabled: false
 
 Style/NumericLiterals:
+  Enabled: false
+
+Style/MethodDefParentheses:
   Enabled: false
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
