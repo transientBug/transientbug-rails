@@ -3,7 +3,9 @@ module QueryGrammar
     class Negator < Node
       attr_reader :items
 
-      def initialize items:
+      def initialize items:, **opts
+        super(**opts)
+
         @items = items
       end
 

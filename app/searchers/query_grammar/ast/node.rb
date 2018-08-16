@@ -1,6 +1,12 @@
 module QueryGrammar
   module AST
     class Node
+      attr_reader :origin
+
+      def initialize origin:
+        @origin = origin
+      end
+
       # Should return a generic, human readable version of the query. Useful
       # for debugging
       def to_s

@@ -3,7 +3,9 @@ module QueryGrammar
     class RangeClause < Node
       attr_reader :field, :low, :high
 
-      def initialize field:, low:, high:
+      def initialize field:, low:, high:, **opts
+        super(**opts)
+
         @field = field
         @low = low
         @high = high

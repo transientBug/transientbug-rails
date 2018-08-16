@@ -10,7 +10,9 @@
     %i.search.icon
 
 %h1 Search Results
-- if params[:q].blank?
+- if @error
+  = render partial: "query_error"
+- elsif params[:q].blank?
   = render partial: "zero_state"
 - elsif @bookmarks.empty?
   = render partial: "no_results_state"

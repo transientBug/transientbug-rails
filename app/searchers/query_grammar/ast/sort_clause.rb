@@ -3,7 +3,9 @@ module QueryGrammar
     class SortClause < Node
       attr_reader :field, :direction
 
-      def initialize field:, direction:
+      def initialize field:, direction:, **opts
+        super(**opts)
+
         @field = field
         @direction = direction
       end

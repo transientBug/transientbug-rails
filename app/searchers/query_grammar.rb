@@ -1,6 +1,15 @@
 module QueryGrammar
-  Error          = Class.new StandardError
-  ScanError      = Class.new Error
+  class Error < StandardError
+    def initialize message, line, column, original=nil, *args
+      super(message, *args)
+
+      @line = line
+      @column = column
+      @original = original
+    end
+  end
+
+  ScanError = Class.new Error
 
   autoload :Cloaker, "query_grammar/cloaker"
   autoload :AST, "query_grammar/ast"
@@ -33,12 +42,10 @@ module QueryGrammar
       deepest = deepest_cause e.parse_failure_cause
       line, column = deepest.source.line_and_column deepest.pos
 
-      # TODO: Make this fail with a more informative error rather than just a
-      # message. An object with a reference to the Parslet error and info such as
-      # the column and line for highlighting in the UI
-      fail ScanError, "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
+      message = "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
+      fail ScanError.new(message, line, column, e)
     rescue SystemStackError => e
-      fail ScanError, "unexpected input at line 1 column 1 - #{ e }: #{ input }"
+      fail ScanError.new("unexpected input at line 1 column 1 - #{ e }: #{ input }", 1, 1, e)
     end
 
     protected
@@ -46,11 +53,11 @@ module QueryGrammar
     # Grabs the cause in a tree of causes which has the furthest position in the
     # input string, assuming its the clearest and best error message about what
     # went wrong while parsing the input query
-    def deepest_cause cause, depth=0
-      cause unless cause.children.any?
+    def deepest_cause cause
+      return cause unless cause.children.any?
 
       cause.children
-        .map { |xcause| deepest_cause xcause, depth + 1 }
+        .map { |xcause| deepest_cause xcause }
         .max { |xcause, other| xcause.pos.bytepos <=> other.pos.bytepos }
     end
   end

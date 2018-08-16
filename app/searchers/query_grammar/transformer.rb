@@ -38,7 +38,7 @@ module QueryGrammar
 
       return inner.first if inner.length == 1
 
-      QueryGrammar::AST::Group.new conjoiner: :or, items: inner
+      QueryGrammar::AST::Group.new conjoiner: :or, items: inner, origin: subtree_clause
     end
 
     rule term: simple(:term) do
@@ -53,10 +53,6 @@ module QueryGrammar
       phrase.to_s
     end
 
-    rule phrase: sequence(:phrase) do
-      ""
-    end
-
     rule term_list: subtree(:term_list) do
       term_list
     end
@@ -68,19 +64,21 @@ module QueryGrammar
     rule negator: simple(:negator), clause: subtree(:clause) do |subtree|
       inner = parse_clause subtree[:clause]
 
-      QueryGrammar::AST::Negator.new items: inner
+      QueryGrammar::AST::Negator.new items: inner, origin: subtree
     end
 
-    rule group: subtree(:group) do
-      QueryGrammar::AST::Group.new items: group[:values], conjoiner: group[:conjoiner].downcase.to_sym
+    rule group: subtree(:group) do |subtree|
+      group = subtree[:group]
+
+      QueryGrammar::AST::Group.new items: group[:values], conjoiner: group[:conjoiner].downcase.to_sym, origin: subtree
     end
 
     rule expression: subtree(:expression) do
       expression
     end
 
-    rule negator: simple(:negator), expression: subtree(:expression) do
-      QueryGrammar::AST::Negator.new items: expression
+    rule negator: simple(:negator), expression: subtree(:expression) do |subtree|
+      QueryGrammar::AST::Negator.new items: subtree[:expression], origin: subtree
     end
   end
 end

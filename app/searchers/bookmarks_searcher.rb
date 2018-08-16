@@ -4,25 +4,25 @@ class BookmarksSearcher < ApplicationSearcher
     # operations performed on them
     type :text do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::MatchClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::MatchClause.new field: clause.prefix, value: value, origin: clause
       end
     end
 
     type :keyword do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
       end
     end
 
     type :number do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
       end
     end
 
     type :date do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value
+        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
       end
     end
 
@@ -49,7 +49,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::GtRangeClause.new field: :created_at, value: clause.values.first
+        QueryGrammar::AST::GtRangeClause.new field: :created_at, value: clause.values.first, origin: clause
       end
     end
 
@@ -62,7 +62,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::LtRangeClause.new field: :created_at, value: clause.values.first
+        QueryGrammar::AST::LtRangeClause.new field: :created_at, value: clause.values.first, origin: clause
       end
     end
 
@@ -75,7 +75,7 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second
+        QueryGrammar::AST::RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second, origin: clause
       end
     end
 
@@ -86,7 +86,7 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
-          QueryGrammar::AST::ExistClause.new field: value
+          QueryGrammar::AST::ExistClause.new field: value, origin: clause
         end
       end
     end
@@ -98,7 +98,7 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
-          QueryGrammar::AST::SortClause.new field: value, direction: (clause.unary == "+" ? :asc : :desc)
+          QueryGrammar::AST::SortClause.new field: value, direction: (clause.unary == "+" ? :asc : :desc), origin: clause
         end
       end
     end

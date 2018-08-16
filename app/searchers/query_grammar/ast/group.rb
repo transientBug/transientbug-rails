@@ -3,7 +3,9 @@ module QueryGrammar
     class Group < Node
       attr_reader :items, :conjoiner
 
-      def initialize items:, conjoiner:
+      def initialize items:, conjoiner:, **opts
+        super(**opts)
+
         @items = items
         @conjoiner = conjoiner
       end

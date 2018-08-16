@@ -1,6 +1,11 @@
 class Bookmarks::SearchController < ApplicationController
   require_login!
 
+  rescue_from QueryGrammar::ScanError do |exception|
+    @error = exception
+    render :index
+  end
+
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index

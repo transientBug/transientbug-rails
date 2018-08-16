@@ -3,7 +3,9 @@ module QueryGrammar
     class FieldValueClause < Node
       attr_reader :field, :value
 
-      def initialize field: nil, value: nil
+      def initialize field: nil, value: nil, **opts
+        super(**opts)
+
         @field = field
         @value = value
       end
