@@ -139,8 +139,10 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
+          field = resolve_field value
+
           QueryGrammar::AST::ExistClause.new(
-            field: value,
+            field: field,
             origin: clause
           )
         end
