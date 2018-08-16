@@ -1,41 +1,6 @@
-/* eslint react/no-multi-comp:0 */
-import * as Mousetrap from "mousetrap"
 import { Component } from "react"
 
-import { isArray } from "lodash"
-
-const Kbd = props => (
-  <kbd className={ (props.dark ? "dark" : "") } dangerouslySetInnerHTML={ { __html: props.children } } />
-)
-
-class KeyboardShortcut extends Component {
-  constructor(props) {
-    super(props)
-
-    if (isArray(this.props.keys)) {
-      this.keys = this.props.keys
-      this.displayKeys = this.props.keys
-    } else {
-      this.keys = Object.keys(this.props.keys)[0] // eslint-disable-line
-      this.displayKeys = this.props.keys[ this.keys ]
-    }
-
-    Mousetrap.bind(this.keys, props.onKey)
-  }
-
-  componentWillUnmount() {
-    Mousetrap.unbind(this.keys)
-  }
-
-  render = () => (
-    <div className="key-combo">
-      { this.displayKeys.map(key => (
-        <Kbd key={ key } dark>{ key }</Kbd>
-      )).reduce((prev, curr) => [prev, " + ", curr]) }
-      { this.props.children }
-    </div>
-  )
-}
+import { KeyboardShortcut } from "../common"
 
 class NavbarSearch extends Component {
   state = { visible: false, query: this.props.query, title: this.props.title }
@@ -93,7 +58,7 @@ class NavbarSearch extends Component {
         ) : (
           <div className="tb header">
             <div className="tb title">{ this.state.title }</div>
-            <div className="tb query"><small>{ this.state.query }</small></div>
+            <div className="tb query">{ this.state.query }</div>
           </div>
         ))}
         <div className="tb key">
@@ -102,7 +67,7 @@ class NavbarSearch extends Component {
       </div>
       <div className={ `tb dropdown ${ this.state.visible ? "" : "hidden" }` }>
         <div className="tb content">
-          Recent searches go here
+          Recent searches and saved searches coming soon!
         </div>
         <div className="tb tips">
           <div className="left">

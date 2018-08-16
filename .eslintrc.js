@@ -17,6 +17,9 @@ module.exports = {
     // Doesn't seem to play nice with webpacker setup
     "import/no-unresolved": "off",
 
+    // No I like named exports, shut up
+    "import/prefer-default-export": "off",
+
     // Match ruby style, don't use semicolons ever and double quote strings
     quotes: ["error", "double"],
     semi: ["error", "never"],
