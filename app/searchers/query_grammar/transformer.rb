@@ -33,7 +33,7 @@ module QueryGrammar
         field_data = index.fields[ field ]
         field_data ||= index.operators[ field ]
 
-        Cloaker.new(bind: self.index).cloak(clause, &field_data.parse)
+        Cloaker.new(bind: index).cloak(clause, &field_data.parse)
       end.flatten
 
       return inner.first if inner.length == 1
