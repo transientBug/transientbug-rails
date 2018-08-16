@@ -49,6 +49,10 @@ module.exports = {
     "react/prop-types": "off",
 
     // Fuck no i want to be able to do an one line <Button>text</Button>
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+
+    "jsx-a11y/click-events-have-key-events": ["warn"],
+    "jsx-a11y/no-static-element-interactions": ["warn"],
+    "jsx-a11y/no-autofocus": ["warn"]
   }
 }

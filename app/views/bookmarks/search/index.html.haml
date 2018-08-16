@@ -1,7 +1,7 @@
 - content_for :page_title do
   Searching Bookmarks
 
-.ui.search
+-#.ui.search
   .ui.fluid.icon.input
     = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
       = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
