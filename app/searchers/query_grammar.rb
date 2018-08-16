@@ -42,7 +42,10 @@ module QueryGrammar
       deepest = deepest_cause e.parse_failure_cause
       line, column = deepest.source.line_and_column deepest.pos
 
-      message = "unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }"
+      message = <<~MSG
+        unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }
+      MSG
+
       fail ScanError.new(message, line, column, e)
     rescue SystemStackError => e
       fail ScanError.new("unexpected input at line 1 column 1 - #{ e }: #{ input }", 1, 1, e)

@@ -4,36 +4,76 @@ class BookmarksSearcher < ApplicationSearcher
     # operations performed on them
     type :text do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::MatchClause.new field: clause.prefix, value: value, origin: clause
+        QueryGrammar::AST::MatchClause.new(
+          field: clause.prefix,
+          value: value,
+          origin: clause
+        )
       end
     end
 
     type :keyword do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
+        QueryGrammar::AST::EqualClause.new(
+          field: clause.prefix,
+          value: value,
+          origin: clause
+        )
       end
     end
 
     type :number do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
+        QueryGrammar::AST::EqualClause.new(
+          field: clause.prefix,
+          value: value,
+          origin: clause
+        )
       end
     end
 
     type :date do |clause|
       clause.values.map do |value|
-        QueryGrammar::AST::EqualClause.new field: clause.prefix, value: value, origin: clause
+        QueryGrammar::AST::EqualClause.new(
+          field: clause.prefix,
+          value: value,
+          origin: clause
+        )
       end
     end
 
     # Sets up which fields are searchable, setting up the prefixs and compiles to
     # handle the correct clause type on input construction
-    keyword :uri, name: "URI", description: ""
-    keyword :host, name: "Host", description: "", sortable: true
-    text :title, name: "Title", description: "", sortable: true
-    text :description, name: "Description", description: "", existable: true
-    keyword :tags, name: "Tags", description: "", aliases: [ "tag" ], existable: true
-    date :created_at, name: "Created Date", description: "", aliases: [ "created_date" ], sortable: true
+    keyword :uri,
+            name: "URI",
+            description: ""
+
+    keyword :host,
+            name: "Host",
+            description: "",
+            sortable: true
+
+    text :title,
+         name: "Title",
+         description: "",
+         sortable: true
+
+    text :description,
+         name: "Description",
+         description: "",
+         existable: true
+
+    keyword :tags,
+            name: "Tags",
+            description: "",
+            aliases: [ "tag" ],
+            existable: true
+
+    date :created_at,
+         name: "Created Date",
+         description: "",
+         aliases: [ "created_date" ],
+         sortable: true
 
     default :title, :tags
 
@@ -49,7 +89,11 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::GtRangeClause.new field: :created_at, value: clause.values.first, origin: clause
+        QueryGrammar::AST::GtRangeClause.new(
+          field: :created_at,
+          value: clause.values.first,
+          origin: clause
+        )
       end
     end
 
@@ -62,7 +106,11 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::LtRangeClause.new field: :created_at, value: clause.values.first, origin: clause
+        QueryGrammar::AST::LtRangeClause.new(
+          field: :created_at,
+          value: clause.values.first,
+          origin: clause
+        )
       end
     end
 
@@ -75,7 +123,12 @@ class BookmarksSearcher < ApplicationSearcher
       types :date
 
       parse do |clause|
-        QueryGrammar::AST::RangeClause.new field: :created_at, low: clause.values.first, high: clause.values.second, origin: clause
+        QueryGrammar::AST::RangeClause.new(
+          field: :created_at,
+          low: clause.values.first,
+          high: clause.values.second,
+          origin: clause
+        )
       end
     end
 
@@ -86,7 +139,10 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
-          QueryGrammar::AST::ExistClause.new field: value, origin: clause
+          QueryGrammar::AST::ExistClause.new(
+            field: value,
+            origin: clause
+          )
         end
       end
     end
@@ -98,7 +154,11 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
-          QueryGrammar::AST::SortClause.new field: value, direction: (clause.unary == "+" ? :asc : :desc), origin: clause
+          QueryGrammar::AST::SortClause.new(
+            field: value,
+            direction: (clause.unary == "+" ? :asc : :desc),
+            origin: clause
+          )
         end
       end
     end
