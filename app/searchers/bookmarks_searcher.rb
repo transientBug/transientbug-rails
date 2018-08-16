@@ -156,8 +156,10 @@ class BookmarksSearcher < ApplicationSearcher
 
       parse do |clause|
         clause.values.map do |value|
+          field = resolve_field value
+
           QueryGrammar::AST::SortClause.new(
-            field: value,
+            field: field,
             direction: (clause.unary == "+" ? :asc : :desc),
             origin: clause
           )
