@@ -63,6 +63,10 @@ module QueryGrammar
       visit :range_clause do |clause|
         { range: { clause.field => { gte: clause.low, lte: clause.high } } }
       end
+
+      visit :exist_clause do |clause|
+        { exists: { field: clause.field } }
+      end
     end
   end
 end
