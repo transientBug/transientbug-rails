@@ -4,9 +4,11 @@
   .ui.loader#page-loader
 
 .ui.pusher
-  .ui.main.container
-    = render_service_announcements
+  .ui.main.fluid.container
+    = content_for :non_fluid
 
-    = semantic_flash
+    .margined
+      = render_service_announcements
 
-    = yield
+      = semantic_flash
+      = yield

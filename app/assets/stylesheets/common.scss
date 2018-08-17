@@ -16,7 +16,12 @@ html, body{
 }
 
 .main.container, .main.grid {
-  margin-top: 5em;
+  margin-top: 53px;
+
+  & > .margined {
+    margin-right: 5em;
+    margin-left: 5em;
+  }
 }
 
 .item.padder {
