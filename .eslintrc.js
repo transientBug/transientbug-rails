@@ -32,7 +32,7 @@ module.exports = {
     "comma-dangle": "off",
 
     // Let me two line, no curly bracket, if statement
-    "nonblock-statement-body-position": ["error", "below"],
+    "nonblock-statement-body-position": ["warn", "beside"],
     "curly": ["error", "multi-or-nest"],
 
     //

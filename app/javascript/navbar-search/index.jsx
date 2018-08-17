@@ -3,15 +3,25 @@ import { Component } from "react"
 import { KeyboardShortcut } from "../common"
 
 class NavbarSearch extends Component {
-  state = { visible: false, query: this.props.query, title: this.props.title }
+  state = { visible: false, query: this.props.query }
+
+  componentWillMount = () => {
+    document.addEventListener("mousedown", this.handleOutsideClick, false)
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener("mousedown", this.handleOutsideClick, false)
+  }
 
   onShow = (_e) => {
     this.setState({ visible: true })
+    this.queryInput.focus()
     return false
   }
 
   onHide = (_e) => {
     this.setState({ visible: false })
+    this.queryInput.blur()
     return false
   }
 
@@ -37,30 +47,29 @@ class NavbarSearch extends Component {
     event.target.value = tempValue // eslint-disable-line
   }
 
+  handleOutsideClick = (event) => {
+    if (this.node.contains(event.target)) return
+    if (!this.state.visible) return
+
+    this.onHide()
+  }
+
   render = () => (
-    <div className="tb navbar search" onClick={ this.onShow }>
+    <div className="tb navbar search" onClick={ this.onShow } ref={ (node) => { this.node = node } }>
       <div className="tb navbar-item">
-        {(this.state.visible ? (
-          <div className="tb input">
-            <form action={ this.props.path } method="get">
-              <input
-                className="mousetrap"
-                ref={ (input) => { this.queryInput = input } }
-                autoFocus
-                onFocus={ this.moveCursorToQueryEnd }
-                value={ this.state.query }
-                onChange={ this.handleQueryChange }
-                type="search"
-                name="q"
-              />
-            </form>
-          </div>
-        ) : (
-          <div className="tb header">
-            <div className="tb title">{ this.state.title }</div>
-            <div className="tb query">{ this.state.query }</div>
-          </div>
-        ))}
+        <div className="tb input">
+          <form action={ this.props.path } method="get">
+            <input
+              className="mousetrap"
+              ref={ (input) => { this.queryInput = input } }
+              onFocus={ this.moveCursorToQueryEnd }
+              value={ this.state.query }
+              onChange={ this.handleQueryChange }
+              type="search"
+              name="q"
+            />
+          </form>
+        </div>
         <div className="tb key">
           <KeyboardShortcut keys={ ["/"] } onKey={ this.onShow } />
         </div>
