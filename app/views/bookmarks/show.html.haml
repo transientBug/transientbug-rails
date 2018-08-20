@@ -3,30 +3,36 @@
 
 = model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
-%h2.ui.header
-  .content= @bookmark.title
+- content_for :non_fluid do
+  .ui.fluid.secondary.pointing.menu
+    - if @bookmark.offline_caches.any?
+      = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
 
-= link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-.date
-  = @bookmark.created_at.to_s(:long)
-  UTC
+    = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
 
-.ui.small.labels
-  - @bookmark.tags.each do |tag|
-    = link_to bookmarks_tag_path(tag) do
-      .ui.label{ class: [tag.color] }= tag.label
+    .ui.item
+      .ui.small.labels
+        - @bookmark.tags.each do |tag|
+          = link_to bookmarks_tag_path(tag) do
+            .ui.label{ class: [tag.color] }= tag.label
 
-.ui.fluid.menu
-  - if @bookmark.offline_caches.any?
-    = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
+    .right.menu
+      = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
 
-  = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
+      = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark) do
+        delete
 
-  .right.menu
-    = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
+.ui.grid
+  .eight.wide.column
+    %h2.ui.header
+      .content= @bookmark.title
 
-    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark) do
-      delete
+    = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+    .date
+      = @bookmark.created_at.to_s(:long)
+      UTC
 
-- if @bookmark.description.present?
-  = simple_format @bookmark.description
+
+  .eight.wide.column
+    - if @bookmark.description.present?
+      = simple_format @bookmark.description
