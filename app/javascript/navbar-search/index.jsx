@@ -25,15 +25,9 @@ class NavbarSearch extends Component {
     return false
   }
 
-  onSearch = (_e) => {
-    console.log("Search!")
-    return true
-  }
+  onSearch = _e => true
 
-  getHelp = (_e) => {
-    console.log("Help dialogue toggled")
-    return false
-  }
+  getHelp = _e => false
 
   handleQueryChange = (event) => {
     event.preventDefault()
@@ -54,17 +48,26 @@ class NavbarSearch extends Component {
     this.onHide()
   }
 
+  handleKeyPress = _e => true
+
   render = () => (
-    <div className="tb navbar search" onClick={ this.onShow } ref={ (node) => { this.node = node } }>
+    <div
+      className="tb navbar search"
+      onClick={ this.onShow }
+      onKeyPress={ this.handleKeyPress }
+      ref={ (node) => { this.node = node } }
+      role="searchbox"
+      tabIndex={ -1 }
+    >
       <div className="tb navbar-item">
         <div className="tb input">
           <form action={ this.props.path } method="get">
             <input
               className="mousetrap"
               ref={ (input) => { this.queryInput = input } }
-              onFocus={ this.moveCursorToQueryEnd }
               value={ this.state.query }
               onChange={ this.handleQueryChange }
+              onFocus={ this.moveCursorToQueryEnd }
               type="search"
               name="q"
             />

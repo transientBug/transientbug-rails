@@ -27,7 +27,7 @@ module QueryGrammar
     # TODO: Error handling
     def parse input, index:
       ast = QueryGrammar::Transformer.new(index).apply scan(input)
-      ast ||= QueryGrammar::AST::Group.new conjoiner: :and, items: []
+      ast ||= QueryGrammar::AST::Group.new conjoiner: :and, items: [], origin: nil
 
       ast
     end
