@@ -79,6 +79,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    capybara-mechanize (1.11.0)
+      capybara (>= 2.4.4, < 4)
+      mechanize (~> 2.7.0)
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
@@ -175,6 +178,7 @@ GEM
       railties (>= 4.0.1)
     hashdiff (0.3.7)
     hashie (3.5.7)
+    headless (2.3.1)
     hiredis (0.6.1)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
@@ -243,7 +247,19 @@ GEM
       thin
     marcel (0.3.2)
       mimemagic (~> 0.3.2)
+    mechanize (2.7.6)
+      domain_name (~> 0.5, >= 0.5.1)
+      http-cookie (~> 1.0)
+      mime-types (>= 1.17.2)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (>= 2.5.2)
+      nokogiri (~> 1.6)
+      ntlm-http (~> 0.1, >= 0.1.1)
+      webrobots (>= 0.0.9, < 0.2)
     method_source (0.9.0)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
     mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
@@ -254,12 +270,16 @@ GEM
     mustache (1.0.5)
     mustermann (1.0.2)
     nenv (0.3.0)
+    net-http-digest_auth (1.4.1)
+    net-http-persistent (3.0.0)
+      connection_pool (~> 2.2)
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    ntlm-http (0.1.1)
     oauth (0.5.4)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -502,6 +522,7 @@ GEM
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
+    webrobots (0.1.2)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -521,7 +542,8 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   byebug
-  capybara (~> 2.13)
+  capybara
+  capybara-mechanize
   capybara-selenium
   chewy
   coffee-rails
@@ -538,6 +560,7 @@ DEPENDENCIES
   guard-yard
   haml
   haml-rails
+  headless
   hiredis
   http
   jbuilder

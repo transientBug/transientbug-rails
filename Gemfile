@@ -86,6 +86,14 @@ gem "http"
 gem "addressable"
 # gem "robotstxt-parser", require: "robotstxt"
 
+gem "headless"
+
+gem "selenium-webdriver"
+
+gem "capybara"
+gem "capybara-mechanize"
+gem "capybara-selenium"
+
 # Parsing/HTML handling
 # gem "nokogiri"
 # gem "loofah"
@@ -154,9 +162,9 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver with headless
   # chrome
-  gem "capybara", "~> 2.13"
-  gem "capybara-selenium"
-  gem "selenium-webdriver"
+  # gem "capybara", "~> 2.13"
+  # gem "capybara-selenium"
+  # gem "selenium-webdriver"
   # gem "chromedriver-helper"
 
   # Test rack things
