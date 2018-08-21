@@ -1,14 +1,8 @@
+$import-google-fonts: false;
 @import "semantic-ui";
-
-// TODO: Replace with a local font
-@import url("//fonts.googleapis.com/css?family=Maven+Pro:700,900");
 
 html, body{
   height: 100%;
-}
-
-.header {
-  font-family: "Maven Pro", $font-family;
 }
 
 .ui.pusher {
@@ -48,7 +42,34 @@ html, body{
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+kbd {
+  display: inline-block !important;
+  margin: 0 0.1em;
+  padding: 0.1em 0.6em;
+
+  font-size: 11px;
+  font-family: Arial,Helvetica,sans-serif;
+
+  background-color: #f7f7f7;
+  color: #333;
+
+  border: 1px solid #444;
+  border-radius: 3px;
+
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  &.dark {
+    background-color: #333;
+    color: #f7f7f7;
+
+    border: 1px solid #444;
+    border-radius: 3px;
+  }
 }
 
 // Semantic UI has these classes, however they're only applicable to
