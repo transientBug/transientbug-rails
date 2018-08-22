@@ -1,4 +1,15 @@
 class Crowley
+  BROWSABLE_MIMES = [
+    "text/html",
+    "application/xhtml+xml"
+  ].freeze
+
+  PARSABLE_MIMES = {
+    "application/json" => ->(body) { JSON.parse body },
+    "text/html" => ->(body) { Nokogiri::HTML body },
+    "application/xhtml+xml" => ->(body) { Nokogiri::HTML body }
+  }.freeze
+
   class Crawler
     extend Forwardable
 
@@ -25,7 +36,7 @@ class Crowley
         @web_driver
       end
 
-      def console url: nil
+      def console url=nil
         return new.fetch url, handler: :console if url.present?
 
         new.console
@@ -39,15 +50,29 @@ class Crowley
     def_delegators :"self.class", :name, :url_pattern, :web_driver
 
     def browser
-      @browser ||= Capybara::Session.new(web_driver)
+      @browser ||= Capybara::Session.new web_driver
     end
 
-    def fetch url, handler:, context: {}
-      browser.visit url
+    def http
+      @http ||= HTTP.follow
+    end
 
-      current_body = Nokogiri::HTML(browser.body)
+    def fetch url, handler:, context: {}, verb: :get
+      head_res = http.head url
+      res_type = head_res.content_type.mime_type
 
-      send handler, url: url, body: current_body, context: context
+      if BROWSABLE_MIMES.include? res_type
+        browser.visit url
+        current_body = browser.body
+      else
+        response = http.send verb, url
+        current_body = response.body.to_s
+      end
+
+      current_body = PARSABLE_MIMES[ res_type ].call(current_body) if PARSABLE_MIMES.key?(res_type)
+      current_url = Addressable::URI.parse(url)
+
+      send handler, url: current_url, body: current_body, context: context
     end
 
     def console url: nil, body: nil, context: {}
