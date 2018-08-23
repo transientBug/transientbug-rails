@@ -1,9 +1,8 @@
 - content_for :page_title do
   Bookmarks Tagged '#{ @tag.label }'
 
-= render "bookmarks/navbar"
-
 %h1
-  .ui.massive.tag{ class: [ @tag.color ] }= @tag.label
+  Tag: 
+  .ui.massive.label{ class: [ @tag.color ] }= @tag.label
 
 = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }

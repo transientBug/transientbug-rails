@@ -17,6 +17,9 @@ module.exports = {
     // Doesn't seem to play nice with webpacker setup
     "import/no-unresolved": "off",
 
+    // No I like named exports, shut up
+    "import/prefer-default-export": "off",
+
     // Match ruby style, don't use semicolons ever and double quote strings
     quotes: ["error", "double"],
     semi: ["error", "never"],
@@ -29,7 +32,7 @@ module.exports = {
     "comma-dangle": "off",
 
     // Let me two line, no curly bracket, if statement
-    "nonblock-statement-body-position": ["error", "below"],
+    "nonblock-statement-body-position": ["warn", "beside"],
     "curly": ["error", "multi-or-nest"],
 
     //
@@ -49,6 +52,10 @@ module.exports = {
     "react/prop-types": "off",
 
     // Fuck no i want to be able to do an one line <Button>text</Button>
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+
+    "jsx-a11y/click-events-have-key-events": ["warn"],
+    "jsx-a11y/no-static-element-interactions": ["warn"],
+    "jsx-a11y/no-autofocus": ["warn"]
   }
 }

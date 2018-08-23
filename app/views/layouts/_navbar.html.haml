@@ -1,37 +1,38 @@
 - if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
   = render partial: "navbar"
 
-.ui.top.fixed.inverted.menu
-  .ui.container
-    = link_to root_path, class: "header item" do
-      = image_tag "bug_logo.png", class: "logo"
-      transientBug
+= javascript_pack_tag "application"
 
-    = active_link_to "Home", home_path, class: "item"
+.ui.top.fixed.inverted.menu
+  = link_to root_path, class: "header item" do
+    = image_tag "bug_logo.png", class: "logo"
+    transientBug
+
+  - if signed_in?
+    = active_link_to "Bookmarks", bookmarks_path, class: "item"
+
+    .app-div{ data: { behavior: "navbar-search", path: bookmarks_search_index_path, query: params[:q], title: nil }, style: "display:flex; flex-grow:1;" }
+
+  = content_for :navbar
+
+  .right.menu
+    - if signed_in?
+      .ui.item
+        = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
+          %i.bookmark.icon
+          new bookmark
+
+    = content_for :navbar_right
 
     - if signed_in?
-      = active_link_to "Bookmarks", bookmarks_path, class: "item"
+      .ui.simple.dropdown.item
+        %i.user.circle.outline.icon
+        = current_user.username
+        %i.dropdown.icon
+        .menu
+          = link_to "Profile", profile_path, class: "item"
+          = link_to "Admin Panel", admin_root_path, class: "item" if current_user.role? :admin
+          = link_to "Logout", logout_path, class: "item"
 
-    = content_for :navbar
-
-    .right.menu
-      - if signed_in?
-        .ui.item
-          = active_link_to new_bookmark_path, class: "ui inverted green icon button", class_active: "active" do
-            %i.bookmark.icon
-            new bookmark
-
-      = content_for :navbar_right
-
-      - if signed_in?
-        .ui.simple.dropdown.item
-          %i.user.circle.outline.icon
-          = current_user.username
-          %i.dropdown.icon
-          .menu
-            = link_to "Profile", profile_path, class: "item"
-            = link_to "Admin Panel", admin_root_path, class: "item" if current_user.role? :admin
-            = link_to "Logout", logout_path, class: "item"
-
-      - else
-        = link_to "Login", login_path, class: "item"
+    - else
+      = link_to "Login", login_path, class: "item"
