@@ -3,7 +3,8 @@
 
 = javascript_pack_tag "application"
 
-.ui.top.fixed.inverted.menu
+// Desktop nav
+.ui.top.fixed.inverted.menu.responsive.mobile.hidden
   = link_to root_path, class: "header item" do
     = image_tag "bug_logo.png", class: "logo"
     transientBug
@@ -36,3 +37,52 @@
 
     - else
       = link_to "Login", login_path, class: "item"
+
+// Mobile nav
+.ui.sidebar.inverted.vertical.menu
+  - if signed_in?
+    .item
+      .header
+        Hia,
+        = current_user.username
+
+    .item
+      = active_link_to new_bookmark_path, class: "ui inverted fluid green icon button", class_active: "active" do
+        %i.bookmark.icon
+        New Bookmark
+
+    = active_link_to bookmarks_path, active: :exclusive, class: "item" do
+      Bookmarks
+      %i.bookmark.icon
+
+    = active_link_to bookmarks_search_index_path, active: :exclusive, class: "item" do
+      Search
+      %i.search.icon
+
+    .item
+      .header User Things
+
+      .menu
+        = link_to "Profile", profile_path, class: "item"
+        = link_to "Admin Panel", admin_root_path, class: "item" if current_user.role? :admin
+        = link_to "Logout", logout_path, class: "item"
+
+  - else
+    = active_link_to root_path, active: :exclusive, class: "item" do
+      Home
+      %i.home.icon
+
+.ui.top.fixed.inverted.menu.mobile.only
+  .clickable.item
+    %i.large.sidebar.icon
+
+  .right.menu
+    - if signed_in?
+      = link_to bookmarks_path, class: "item" do
+        = image_tag "bug_logo.png", class: "image"
+
+    - else
+      = link_to "Login", login_path, class: "item"
+
+      = link_to root_path, class: "item" do
+        = image_tag "bug_logo.png", class: "image"

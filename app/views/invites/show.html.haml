@@ -1,9 +1,9 @@
 - content_for :page_title do
   = @invitation.title
 
-.ui.grid
-  .row
-    .centered.six.wide.column
+- content_for :custom_grid do
+  .ui.middle.aligned.center.aligned.horizontally.padded.grid
+    .column
       %h2.ui.header= @invitation.title
       %p= @invitation.description
 

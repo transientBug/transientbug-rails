@@ -5,16 +5,28 @@ html, body{
   height: 100%;
 }
 
-.ui.pusher {
+.pusher {
   min-height: 100%;
-}
 
-.main.container, .main.grid {
-  margin-top: 53px;
+  padding-top: 52px;
 
-  & > .margined {
-    margin-right: 5em;
-    margin-left: 5em;
+  &.main {
+    & > .messages {
+      & > .message {
+        border-radius: 0px;
+
+        margin: 0px;
+      }
+    }
+
+    & > :last-child {
+      margin-top: 1em;
+    }
+
+    [class*="horizontally padded"].ui.container {
+      padding-left: 1em;
+      padding-right: 1em;
+    }
   }
 }
 
@@ -41,7 +53,7 @@ html, body{
   cursor: pointer;
 }
 
-.hidden {
+.hidden:not(.responsive) {
   display: none !important;
 }
 

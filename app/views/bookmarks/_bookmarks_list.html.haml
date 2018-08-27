@@ -1,6 +1,9 @@
 - if bookmarks.any?
-  .ui.menu
-    .ui.item= select_all_checkbox
+  .ui.stackable.menu
+    .ui.item
+      = select_all_checkbox do
+        %label
+          .mobile.only Select All
 
     = bulk_edit_action "recache-all", url: bookmarks_bulk_recache_path, template: "public/templates/bookmarks/recache-all" do
       %i.download.icon
@@ -15,27 +18,29 @@
         %i.trash.icon
         delete all
 
-  .ui.relaxed.divided.bookmarks.list
+  .ui.divided.items
     - bookmarks.each do |bookmark|
-      .ui.item
-        .right.floated.content
-          .ui.labels
-            - bookmark.tags.each do |tag|
-              = link_to bookmarks_tag_path(tag) do
-                .ui.label{ class: [tag.color] }= tag.label
-
+      .item
         .content
-          .inline
-            = model_tag bookmark, only: [:uri, :title]
 
-            .header= link_to bookmark.title, bookmark_path(bookmark)
+          .header= link_to bookmark.title, bookmark_path(bookmark)
 
-            .date
-              = distance_of_time_in_words_to_now(bookmark.created_at)
-              ago
+          .meta
+            = link_to bookmark.uri.to_s, bookmark.uri.to_s
 
           .description
-            = link_to bookmark.uri.to_s, bookmark.uri.to_s
+            .inline
+              = model_tag bookmark, only: [:uri, :title]
+
+              .date
+                = distance_of_time_in_words_to_now(bookmark.created_at)
+                ago
+
+          .extra
+            .ui.labels
+              - bookmark.tags.each do |tag|
+                = link_to bookmarks_tag_path(tag) do
+                  .ui.label{ class: [tag.color] }= tag.label
 
 - else
   %h1.huge.center.aligned.icon.header

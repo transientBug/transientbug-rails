@@ -9,7 +9,7 @@ class Bookmarks::SearchController < ApplicationController
   # GET /bookmarks/search
   # GET /bookmarks/search.json
   def index
-    @bookmarks = fetch_bookmarks params[:q]
+    @bookmarks = fetch_bookmarks params[:q] || ""
 
     if @bookmarks.empty?
       @bookmark = current_user.bookmarks.new

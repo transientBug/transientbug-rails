@@ -5,7 +5,7 @@
 
 %h2.ui.dividing.header Authorized Apps
 
-.ui.menu
+.ui.stackable.menu
   .right.menu
     = bulk_edit_action "revoke-all", url: oauth_authorized_applications_bulk_revoke_path do
       %i.trash.icon

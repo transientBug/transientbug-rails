@@ -5,7 +5,7 @@
 
 %h2.ui.dividing.header Developer OAuth2 Apps
 
-.ui.menu
+.ui.stackable.menu
   .ui.item
     = link_to new_oauth_application_path do
       %i.add.icon
@@ -54,7 +54,7 @@
 
           %td= application.name
           %td
-            %pre= application.redirect_uri
+            %pre.mobile.hidden= application.redirect_uri
           %td= application.created_at.to_s(:long)
 
     - else
