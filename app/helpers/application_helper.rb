@@ -38,14 +38,26 @@ module ApplicationHelper
 
   # Renders a checkbox that, when clicked, will check all of the bulk select
   # checkboxes on the page through some JS magic
-  def select_all_checkbox
-    check_box_tag "select-all", nil, false, data: { behavior: "select-all" }
+  def select_all_checkbox &block
+    tag.div(class: "ui checkbox") do
+      capture do
+        concat check_box_tag("select-all", nil, false, data: { behavior: "select-all" })
+        concat tag.label "" unless block_given?
+        block.call if block_given?
+      end
+    end
   end
 
   # A bulk select checkbox, used to find which rows are effected by the bulk
   # action being performed.
-  def bulk_edit_checkbox model
-    check_box_tag "select-#{ model.id }", nil, false, data: { behavior: "select" }
+  def bulk_edit_checkbox model, &block
+    tag.div(class: "ui checkbox") do
+      capture do
+        concat check_box_tag("select-#{ model.id }", nil, false, data: { behavior: "select" })
+        concat tag.label "" unless block_given?
+        block.call if block_given?
+      end
+    end
   end
 
   # Renders a div that contains an inner div with the models attributes as data

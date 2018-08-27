@@ -2,14 +2,12 @@
 
 = render partial: "layouts/admin/navbar"
 
-.ui.pusher
-  .ui.main.horizontally.padded.grid
-    .row
-      .column
-        = render_service_announcements
+.ui.pusher.main
+  .messages
+    = render_service_announcements
+    = semantic_flash
 
-        = semantic_flash
-
+  .ui.horizontally.padded.grid
     - if lookup_context.template_exists?("#{ controller_path }/menu", [], true)
       .ui.two.wide.column
         .ui.row
