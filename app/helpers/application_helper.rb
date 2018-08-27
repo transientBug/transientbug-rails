@@ -43,7 +43,7 @@ module ApplicationHelper
       capture do
         concat check_box_tag("select-all", nil, false, data: { behavior: "select-all" })
         concat tag.label "" unless block_given?
-        block.call if block_given?
+        yield if block_given?
       end
     end
   end
@@ -55,7 +55,7 @@ module ApplicationHelper
       capture do
         concat check_box_tag("select-#{ model.id }", nil, false, data: { behavior: "select" })
         concat tag.label "" unless block_given?
-        block.call if block_given?
+        yield if block_given?
       end
     end
   end
