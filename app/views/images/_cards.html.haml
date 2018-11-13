@@ -1,14 +1,13 @@
 - if images.any?
-  .row
-    .ui.centered.cards
-      - images.each do |image|
-        = render partial: "card", locals: { image: image }
-
-  .row.centered
-    = paginate images
+  .ui.cards
+    - images.each do |image|
+      = render partial: "card", locals: { image: image }
 
 - else
-  .row.centered
-    %i.massive.warning.sign.icon
-  .row.centered
-    %h1.huge.header Uh oh, nothing found!
+  %h1.huge.center.aligned.icon.header
+    %i.warning.sign.icon
+    .content Uh oh, nothing found!
+
+- if images.respond_to? :total_pages
+  %br
+  = paginate images

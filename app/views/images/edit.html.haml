@@ -1,12 +1,11 @@
 - content_for :page_title do
   = @image.title
 
-.ui.fluid.grid.container
-  .row
-    %h1 Editing Image
+- content_for :secondary_navbar do
+  = link_to "back", image_path(@image), class: "ui item"
 
-  .row
-    = image_tag image_path(@image, format: :gif), class: "ui top attached centered image"
+%h1 Editing Image
 
-  .row
-    = render partial: "form", locals: { image: @image }
+= image_tag image_path(@image, format: :gif)
+
+= render partial: "form", locals: { image: @image }

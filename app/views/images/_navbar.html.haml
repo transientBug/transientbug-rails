@@ -4,6 +4,8 @@
       = active_link_to new_image_path, class: "ui inverted green icon button", class_active: "active" do
         %i.cloud.upload.icon
 
+  = active_link_to "Images", images_path, class: "ui item", class_active: "active"
+
   .ui.category.search.item{ data: { behavior: "search-images" } }
     .ui.icon.input
       = form_tag search_images_path, method: :get do

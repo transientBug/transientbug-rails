@@ -1,9 +1,7 @@
 - content_for :page_title do
   Images
 
-.ui.fluid.grid
-  .ui.centered.row
-    %h1
-      .ui.massive.label.tag{ class: [color_for(params[:tag])] }= params[:tag]
+%h1
+  .ui.massive.label.tag{ class: [color_for(params[:tag])] }= params[:tag]
 
-  = render partial: "cards", locals: { images: @images }
+= render partial: "cards", locals: { images: @images }
