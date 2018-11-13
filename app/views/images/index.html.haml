@@ -1,8 +1,6 @@
 - content_for :page_title do
   Images
 
-.ui.fluid.stackable.grid
-  .ui.centered.row
-    %h1 All Images
+%h1 All Images
 
-  = render partial: "cards", locals: { images: @images }
+= render partial: "cards", locals: { images: @images }

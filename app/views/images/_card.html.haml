@@ -11,11 +11,12 @@
       Added #{ image.created_at.to_date.to_s(:long) }
 
     .description
-      .ui.label{ data: { behavior: "tag-popup" } }
-        %i.tag.icon
-        #{ image.tags.length } #{ "tag".pluralize(image.tags.length) }
-      .ui.fluid.popup.bottom.left.hidden
-        = render partial: "tags", locals: { tags: image.tags }
+
+    .extra
+      .ui.labels
+        - image.tags.each do |tag|
+          = link_to tag_images_path(tag) do
+            .ui.label{ class: [color_for(tag)] }= tag
 
   .ui.buttons.bottom.attached
     = link_to "View", image, class: "ui button"

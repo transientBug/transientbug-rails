@@ -15,22 +15,27 @@
 - content_for :page_title do
   = @image.title
 
-.ui.fluid.grid
-  .row
-    %h1= @image.title
+- content_for :secondary_navbar do
+  - if policy(@image).update?
+    = link_to "edit", edit_image_path(@image), class: "ui item"
 
-  .row
-    = link_to image_path(@image, format: :gif), class: "ui top attached centered image" do
-      = image_tag image_path(@image, format: :gif)
+  .ui.item{ style: "padding: 0px;" }
+    .ui.small.labels
+      - @image.tags.each do |tag|
+        = link_to tag_images_path(tag) do
+          .ui.label{ class: [color_for(tag)] }= tag
 
-  .row
-    .ui.fluid.menu
-      - if policy(@image).update?
-        = link_to "Edit", edit_image_path(@image), class: "item"
+    - unless @image.source.blank?
+      .ui.item
+        %b Source: #{link_to @image.source, @image.source}
 
-      .right.menu
-        .ui.item
-          Updated: #{ @image.updated_at.to_date.to_s(:long) }
+  .right.menu
+    .ui.item
+      Last Updated: #{ @image.updated_at.to_date.to_s(:long) }
 
-  .row
-    = render partial: "tags", locals: { tags: @image.tags }
+%h1= @image.title
+
+= link_to image_path(@image, format: :gif) do
+  - if @image.disabled?
+    .ui.red.ribbon.label Disabled
+  = image_tag image_path(@image, format: :gif)

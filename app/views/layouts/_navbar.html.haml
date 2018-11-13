@@ -60,6 +60,17 @@
       %i.search.icon
 
     .item
+      .header Images
+
+      .menu
+        = active_link_to images_path, active: :exclusive, class: "item" do
+          Images
+
+        = active_link_to search_images_path(q: ""), active: :exclusive, class: "item" do
+          Search
+          %i.search.icon
+
+    .item
       .header User Things
 
       .menu
@@ -71,6 +82,17 @@
     = active_link_to root_path, active: :exclusive, class: "item" do
       Home
       %i.home.icon
+
+    .item
+      .header Images
+
+      .menu
+        = active_link_to images_path, active: :exclusive, class: "item" do
+          Images
+
+        = active_link_to search_images_path(q: ""), active: :exclusive, class: "item" do
+          Search
+          %i.search.icon
 
 .ui.top.fixed.inverted.menu.mobile.only
   .clickable.item
