@@ -51,9 +51,11 @@ module ApplicationHelper
   # A bulk select checkbox, used to find which rows are effected by the bulk
   # action being performed.
   def bulk_edit_checkbox model
+    tag_id = "select-#{ model.class.to_s.underscore }-data-#{ model.id }"
+
     tag.div(class: "ui checkbox") do
       capture do
-        concat check_box_tag("select-#{ model.id }", nil, false, data: { behavior: "select" })
+        concat check_box_tag(tag_id, nil, false, data: { behavior: "select" })
         concat tag.label "" unless block_given?
         yield if block_given?
       end
