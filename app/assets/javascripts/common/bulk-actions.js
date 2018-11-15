@@ -71,10 +71,10 @@ class BulkActions {
 
     const modelData = $("[data-behavior~=select]:checked").toArray()
       .map(element => {
-        const id = { element }
-        const dataId = id.replace(/^select-/, '')
+        const { id } = element
 
-        const modelElement = $(`.${dataId}`)
+        const dataId = id.replace(/^select-/, '')
+        const modelElement = document.getElementById(dataId)
 
         return Object.assign({}, modelElement.dataset)
       })
