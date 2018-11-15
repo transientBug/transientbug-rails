@@ -53,7 +53,7 @@ module ApplicationHelper
   def bulk_edit_checkbox model
     tag.div(class: "ui checkbox") do
       capture do
-        concat check_box_tag("select-#{ model.id }", nil, false, data: { behavior: "select" })
+        concat check_box_tag("select-#{ model.class.to_s.underscore }-data-#{ model.id }", nil, false, data: { behavior: "select" })
         concat tag.label "" unless block_given?
         yield if block_given?
       end

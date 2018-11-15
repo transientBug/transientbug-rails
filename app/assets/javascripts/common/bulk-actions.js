@@ -68,9 +68,16 @@ class BulkActions {
     const dataset = event.target.dataset
 
     const triggerData = Object.assign({}, dataset)
-    const modelData = $("[data-behavior~=select]:checked").siblings()
-      .toArray()
-      .map((element) => Object.assign({}, element.dataset))
+
+    const modelData = $("[data-behavior~=select]:checked").toArray()
+      .map(element => {
+        const id = { element }
+        const dataId = id.replace(/^select-/, '')
+
+        const modelElement = $(`.${dataId}`)
+
+        return Object.assign({}, modelElement.dataset)
+      })
 
     if(!BulkActions._handlers[triggerData.behavior])
       throw new Error(`Missing handler for ${ triggerData.behavior }`)
