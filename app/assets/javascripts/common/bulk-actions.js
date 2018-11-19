@@ -79,10 +79,10 @@ class BulkActions {
         return Object.assign({}, modelElement.dataset)
       })
 
-    if(!BulkActions._handlers[triggerData.behavior])
-      throw new Error(`Missing handler for ${ triggerData.behavior }`)
+    if(!BulkActions.handlers[triggerData.behavior])
+      throw new Error(`Missing handler for ${ triggerData.behavior } - ${JSON.stringify(BulkActions.handlers)}`)
 
-    BulkActions._handlers[triggerData.behavior](triggerData, modelData)
+    BulkActions.handlers[triggerData.behavior](triggerData, modelData)
   }
 
   static registerHandlerFor(behavior, handler) {
