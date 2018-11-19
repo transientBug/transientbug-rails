@@ -120,10 +120,10 @@ module ApplicationHelper
 
     options = {
       data: JSON.parse(data.to_json),
-      class: "clickable item"
+      class: "clickable ui item"
     }.merge opts.slice(:id, :class)
 
-    tag.div(**options, &block)
+    tag.a(**options, &block)
   end
   # rubocop:enable Metrics/AbcSize
 

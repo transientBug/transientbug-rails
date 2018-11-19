@@ -5,9 +5,14 @@ class AutomaticallyWiredModals {
   get _modalTriggers() { return $("[data-behavior~=neomodal]") }
 
   handleModalTriggerClick(event) {
+    event.preventDefault()
+
     const dataset = event.target.dataset
 
     const storageTarget = document.getElementById(dataset.storage)
+
+    if(!storageTarget)
+      throw new Error(`storage target #${dataset.storage} must exist on page. are you missing a #model_tag call?`)
 
     const templateData = {
       modal: _.omit(dataset, "behavior", "template", "storage"),
