@@ -32,6 +32,7 @@
     "ignore-loader": "^0.1.2",
     "js-yaml": "^3.9.1",
     "lodash": "^4.17.10",
+    "moment": "^2.22.2",
     "mousetrap": "^1.6.2",
     "node-sass": "^4.5.3",
     "path-complete-extname": "^0.1.0",
