@@ -8,13 +8,13 @@ module CurrentUser
   class_methods do
     def require_login! **opts
       before_action :store_user_location!, if: :storable_location?
-      before_action :require_login, **opts, unless: :signed_in?
+      before_action :redirect_to_login, **opts, unless: :signed_in?
     end
   end
 
   protected
 
-  def require_login
+  def redirect_to_login
     redirect_to login_url
   end
 

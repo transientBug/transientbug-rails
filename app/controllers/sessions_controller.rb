@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 
     self.current_user = @user
 
-    redirect_to after_sign_in_path_for(:user) || home_url
+    redirect_to stored_location_for(:user) || home_url
   end
 
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
     # TODO: Handle not found
     self.current_user = @auth.user
 
-    redirect_to request.env["omniauth.origin"] || after_sign_in_path_for(:user) || home_url
+    redirect_to request.env["omniauth.origin"] || stored_location_for(:user) || home_url
   end
 
   def destroy

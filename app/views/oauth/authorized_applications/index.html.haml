@@ -22,7 +22,7 @@
     - if @applications.any?
       - @applications.each do |application|
         %tr
-          %td.collapsing= model_tag application, only: [:name]
+          %td.collapsing= model_tag application, only: [:id, :name]
           %td.collapsing
             .ui.buttons
               = modal_tag application, :revoke, url: oauth_authorized_application_path(application), class: "ui icon button" do

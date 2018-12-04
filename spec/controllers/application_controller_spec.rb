@@ -19,7 +19,7 @@ RSpec.describe ApplicationController do
         get :action_requiring_user
       end
 
-      it { is_expected.to redirect_to(root_url) }
+      it { is_expected.to redirect_to(login_url) }
     end
 
     context "with a user" do
@@ -31,7 +31,7 @@ RSpec.describe ApplicationController do
         get :action_requiring_user
       end
 
-      it { is_expected.not_to redirect_to(root_url) }
+      it { is_expected.not_to redirect_to(login_url) }
       it { expect(response.body).to eq("hia") }
     end
   end

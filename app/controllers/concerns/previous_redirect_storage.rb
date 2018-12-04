@@ -35,10 +35,6 @@ module PreviousRedirectStorage
     ["*/*", :html].include? format
   end
 
-  def after_sign_in_path_for resource_or_scope
-    stored_location_for resource_or_scope
-  end
-
   def stored_location_key_for resource_or_scope
     "#{ resource_or_scope }_return_to"
   end
