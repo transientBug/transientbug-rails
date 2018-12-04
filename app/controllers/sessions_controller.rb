@@ -1,5 +1,10 @@
 class SessionsController < ApplicationController
+  before_action :redirect_home, only: [ :index, :new ], if: :signed_in?
+
   require_login! only: [ :destroy ]
+
+  # Oauth clients aren't going to be sending along an authenticity token since they're
+  # external clients
   skip_before_action :verify_authenticity_token, only: :create
 
   def index
@@ -12,7 +17,7 @@ class SessionsController < ApplicationController
 
     self.current_user = @user
 
-    redirect_to home_url
+    redirect_to after_sign_in_path_for(:user) || home_url
   end
 
   # https://seesparkbox.com/foundry/simulating_social_login_with_omniauth
@@ -24,11 +29,13 @@ class SessionsController < ApplicationController
     # TODO: Handle not found
     self.current_user = @auth.user
 
-    redirect_to request.env["omniauth.origin"] || home_url
+    redirect_to request.env["omniauth.origin"] || after_sign_in_path_for(:user) || home_url
   end
 
   def destroy
     self.current_user = nil
+    request.reset_session
+
     redirect_to root_url
   end
 
@@ -36,5 +43,9 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env["omniauth.auth"]
+  end
+
+  def redirect_home
+    redirect_to root_url
   end
 end
