@@ -25,12 +25,12 @@ module PreviousRedirectStorage
   def stored_location_for resource_or_scope
     session_key = stored_location_key_for resource_or_scope
 
-    return session.delete(session_key) if is_navigational_format?
+    return session.delete(session_key) if navigational_format?
 
     session[session_key]
   end
 
-  def is_navigational_format?
+  def navigational_format?
     format = request.format&.ref
     ["*/*", :html].include? format
   end
