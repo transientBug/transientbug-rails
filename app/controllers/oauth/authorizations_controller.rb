@@ -4,16 +4,11 @@ class Oauth::AuthorizationsController < ApplicationController
   include Doorkeeper::Helpers::Controller
 
   def new
-    if pre_auth.authorizable?
-      if skip_authorization? || matching_token?
-        auth = authorization.authorize
-        redirect_to auth.redirect_uri
-      else
-        render :new
-      end
-    else
-      render :error
-    end
+    return render :error unless pre_auth.authorizable?
+    return render :new unless skip_authorization? || matching_token?
+
+    auth = authorization.authorize
+    redirect_to auth.redirect_uri
   end
 
   # TODO: Handle raise invalid authorization

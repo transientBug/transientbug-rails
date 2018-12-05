@@ -557,7 +557,8 @@ CREATE TABLE oauth_applications (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     owner_id integer,
-    owner_type character varying
+    owner_type character varying,
+    official boolean DEFAULT false
 );
 
 
@@ -1496,6 +1497,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180212151435'),
 ('20180214183218'),
 ('20180223222455'),
-('20180620161718');
+('20180620161718'),
+('20181204152019');
 
 
