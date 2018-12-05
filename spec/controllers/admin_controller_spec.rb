@@ -21,7 +21,7 @@ RSpec.describe AdminController do
         get :action_requiring_admin
       end
 
-      it { is_expected.to redirect_to(root_url) }
+      it { is_expected.to redirect_to(login_url) }
     end
 
     context "with a non-admin user" do
@@ -45,7 +45,7 @@ RSpec.describe AdminController do
         get :action_requiring_admin
       end
 
-      it { is_expected.not_to redirect_to(root_url) }
+      it { is_expected.not_to redirect_to(login_url) }
       it { is_expected.not_to have_http_status(:not_found) }
       it { expect(response.body).to eq("hia") }
     end
