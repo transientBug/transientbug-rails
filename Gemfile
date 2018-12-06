@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2"
+gem "rails", "~> 5.2.1.1"
 
 # Data Stores
 #  * Postgres
@@ -103,6 +103,11 @@ gem "parslet"
 # API Documentation from RAD
 gem "apitome"
 
+# Security issues
+gem "rubyzip", ">= 1.2.2"
+gem "rack", ">= 2.0.6"
+gem "loofah", ">= 2.2.3"
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem "web-console", ">= 3.3.0"
@@ -144,7 +149,7 @@ group :development, :test do
 
   # Document the API through rspec tests
   gem "rspec_api_documentation"
-  gem "json_matchers"
+  gem "json_matchers", "~> 0.9"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"

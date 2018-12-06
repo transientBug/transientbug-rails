@@ -51,7 +51,7 @@ module ApplicationHelper
   # A bulk select checkbox, used to find which rows are effected by the bulk
   # action being performed.
   def bulk_edit_checkbox model
-    tag_id = "select-#{ model.class.to_s.underscore }-data-#{ model.id }"
+    tag_id = sanitize_to_id("select-#{ model.class.to_s.underscore }-data-#{ model.id }")
 
     tag.div(class: "ui checkbox") do
       capture do
@@ -88,7 +88,7 @@ module ApplicationHelper
 
     options = {
       class: "hidden model-data",
-      id: "#{ model.class.to_s.underscore }-data-#{ model.id }",
+      id: sanitize_to_id("#{ model.class.to_s.underscore }-data-#{ model.id }"),
       data: data
     }.merge opts
 
@@ -115,7 +115,7 @@ module ApplicationHelper
     data = {
       behavior: "neomodal",
       template: template,
-      storage: "#{ model.class.to_s.underscore }-data-#{ model.id }"
+      storage: sanitize_to_id("#{ model.class.to_s.underscore }-data-#{ model.id }")
     }.merge opts.except(:id, :class)
 
     options = {
@@ -138,5 +138,13 @@ module ApplicationHelper
       "templates",
       current_controller
     ].concat(args).flatten.compact.join "/"
+  end
+
+  # Copy and pasted from Rails's actionview/lib/action_view/helpers/form_tag_helper.rb
+  # since the form builders do this but the method is private and
+  # not-opt-outable which is causing issues with tag ids that have slashes in
+  # them, getting sanitized in checkboxes
+  def sanitize_to_id name
+    name.to_s.delete("]").tr("^-a-zA-Z0-9:.", "_")
   end
 end

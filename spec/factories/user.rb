@@ -3,12 +3,12 @@ FactoryBot.define do
     sequence(:username) { |n| "person#{ n }" }
     sequence(:email) { |n| "person#{ n }@example.com" }
 
-    password "12345"
+    password { "12345" }
     password_confirmation { password }
 
     trait :with_role do
       transient do
-        role_names [ :default ]
+        role_names { [ :default ] }
       end
 
       after(:create) do |user, evaluator|
