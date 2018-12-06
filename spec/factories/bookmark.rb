@@ -3,11 +3,11 @@ FactoryBot.define do
     user
     webpage
 
-    title "test"
+    title { "test" }
 
     factory :bookmark_with_tags do
       transient do
-        tags_count 2
+        tags_count { 2 }
       end
 
       after(:create) do |bookmark, evaluator|

@@ -3,7 +3,7 @@ class Oauth::AuthorizedApplications::Bulk::RevokesController < ApplicationContro
 
   # DELETE /oauth/authorized_applications/bulk/revoke
   def destroy
-    results = Doorkeeper::AccessToken.revoke_all_for bulk_params[:ids], current_user
+    results = Doorkeeper::AccessToken.authorized_tokens_for(bulk_params[:ids], current_user).each(&:revoke)
 
     revoke_results = results.each_with_object({}) do |access_token, memo|
       memo[ access_token.application_id ] = access_token.revoked_at

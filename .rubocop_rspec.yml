@@ -86,3 +86,6 @@ RSpec/NestedGroups:
 RSpec/NotToNot:
   Description: Checks for consistent method usage for negating expectations.
   Enabled: true
+
+FactoryBot/StaticAttributeDefinedDynamically:
+  Enabled: false
