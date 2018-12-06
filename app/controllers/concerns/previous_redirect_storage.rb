@@ -5,12 +5,27 @@ module PreviousRedirectStorage
 
   protected
 
+  def unstorable_controllers
+    @unstorable_controllers ||= [
+      SessionsController,
+      ErrorsController
+    ].freeze
+  end
+
+  def unstorable?
+    unstorable_controllers.any? { |controller| !is_a? controller }
+  end
+
   # Its important that the location is NOT stored if:
   # - The request method is not GET (non idempotent).
   # - The request is an Ajax request as this can lead to very unexpected behaviour.
   # - The request is the session or error controller as that could cause an infinite redirect loop.
   def storable_location?
-    request.get? && !request.xhr? && !is_a?(SessionsController) && !is_a?(ErrorsController)
+    [
+      request.get?,
+      !request.xhr?,
+      !unstorable?
+    ].all?
   end
 
   def store_user_location!
