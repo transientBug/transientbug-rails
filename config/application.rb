@@ -16,5 +16,9 @@ module TransientBug
     # -- all .rb files in that directory are automatically loaded.
 
     config.active_record.schema_format = :sql
+
+    config.generators.javascript_engine = :js
+
+    config.exceptions_app = self.routes
   end
 end

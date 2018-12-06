@@ -2,20 +2,25 @@ module CurrentUser
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_user, :signed_in?
+    helper_method :current_user, :signed_in?, :render_not_found
   end
 
   class_methods do
     def require_login! **opts
       before_action :store_user_location!, if: :storable_location?
-      before_action :redirect_to_login, **opts, unless: :signed_in?
+      before_action :render_not_found, **opts, unless: :signed_in?
+    end
+
+    def require_admin! **opts
+      before_action :store_user_location!, if: :storable_location?
+      before_action :render_not_found, **opts, unless: :is_admin?
     end
   end
 
   protected
 
-  def redirect_to_login
-    redirect_to login_url
+  def render_not_found
+    render "errors/not_found", status: :not_found, layout: "application"
   end
 
   def current_user
@@ -24,6 +29,10 @@ module CurrentUser
 
   def signed_in?
     current_user.present?
+  end
+
+  def is_admin?
+    signed_in? && current_user&.role?(:admin)
   end
 
   def current_user= user

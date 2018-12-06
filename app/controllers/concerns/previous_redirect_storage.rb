@@ -1,4 +1,4 @@
-# Nearly 100% copy pasta from device
+# Nearly 100% copy pasta from devise
 # https://github.com/plataformatec/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
 module PreviousRedirectStorage
   extend ActiveSupport::Concern
@@ -8,9 +8,9 @@ module PreviousRedirectStorage
   # Its important that the location is NOT stored if:
   # - The request method is not GET (non idempotent).
   # - The request is an Ajax request as this can lead to very unexpected behaviour.
-  # - The request is the session controller as that could cause an infinite redirect loop.
+  # - The request is the session or error controller as that could cause an infinite redirect loop.
   def storable_location?
-    request.get? && !request.xhr? && !is_a?(SessionsController)
+    request.get? && !request.xhr? && !is_a?(SessionsController) && !is_a?(ErrorsController)
   end
 
   def store_user_location!
