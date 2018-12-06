@@ -6,8 +6,6 @@ def draw name
 end
 
 Rails.application.routes.draw do
-  get 'errors/not_found'
-  get 'errors/internal_server_error'
   use_doorkeeper do
     controllers(
       applications: "oauth/applications",
@@ -85,8 +83,9 @@ Rails.application.routes.draw do
   draw :admin
   draw :api
 
-  match "/404", :to => "errors#not_found", :via => :all
-  match "/500", :to => "errors#internal_server_error", :via => :all
+  # Error pages
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
 
   resources :images do
     collection do

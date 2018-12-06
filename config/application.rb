@@ -19,6 +19,6 @@ module TransientBug
 
     config.generators.javascript_engine = :js
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
   end
 end
