@@ -7,14 +7,13 @@
     = render_service_announcements
     = semantic_flash
 
-  .ui.horizontally.padded.grid
-    - if lookup_context.template_exists?("#{ controller_path }/menu", [], true)
-      .ui.two.wide.column
-        .ui.row
+  .ui.fluid.stackable.container
+    - if has_partial? "menu"
+      .ui.padded.two.column.stackable.grid
+        .three.wide.column
           = render partial: "menu", locals: { count: @count }
 
-      .ui.fourteen.wide.column
-        .ui.row
+        .thirteen.wide.column
           #stickContext= yield
 
     - else
