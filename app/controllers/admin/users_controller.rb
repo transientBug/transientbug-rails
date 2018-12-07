@@ -83,4 +83,3 @@ class Admin::UsersController < AdminController
     end
   end
 end
-

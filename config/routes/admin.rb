@@ -55,4 +55,6 @@ namespace :admin do
       end
     end
   end
+
+  resources :applications, only: [ :index, :show, :edit, :update, :destroy ]
 end
