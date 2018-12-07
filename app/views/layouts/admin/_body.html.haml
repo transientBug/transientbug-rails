@@ -8,7 +8,7 @@
     = semantic_flash
 
   .ui.fluid.stackable.container
-    - if has_partial? "menu"
+    - if partial_for? "menu"
       .ui.padded.two.column.stackable.grid
         .three.wide.column
           .responsive.mobile.hidden.ui.fluid.vertical.menu.sticky{ data: { behavior: "sticky", context: "#stickContext", offset: 75 } }
