@@ -47,3 +47,5 @@
     = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
 
   = content_for :sidebar
+
+  = link_to "Exit Admin", root_path, class: "item"
