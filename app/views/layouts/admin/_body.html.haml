@@ -7,14 +7,14 @@
     = render_service_announcements
     = semantic_flash
 
-  .ui.horizontally.padded.grid
-    - if lookup_context.template_exists?("#{ controller_path }/menu", [], true)
-      .ui.two.wide.column
-        .ui.row
-          = render partial: "menu", locals: { count: @count }
+  .ui.fluid.stackable.container
+    - if partial_for? "menu"
+      .ui.padded.two.column.stackable.grid
+        .three.wide.column
+          .responsive.mobile.hidden.ui.fluid.vertical.menu.sticky{ data: { behavior: "sticky", context: "#stickContext", offset: 75 } }
+            = render partial: "menu", locals: { count: @count }
 
-      .ui.fourteen.wide.column
-        .ui.row
+        .thirteen.wide.column
           #stickContext= yield
 
     - else

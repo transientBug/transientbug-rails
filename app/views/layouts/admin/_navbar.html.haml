@@ -1,4 +1,4 @@
-.ui.top.fixed.inverted.red.menu
+.ui.top.fixed.inverted.red.menu.responsive.mobile.hidden
   .clickable.item
     %i.large.sidebar.icon
 
@@ -16,5 +16,15 @@
       = current_user.username
       %i.dropdown.icon
       .menu
+        = content_for :navbar_dropdown
         = link_to "Exit Admin", root_path, class: "item"
         = link_to "Logout", logout_path, class: "item"
+
+.ui.top.fixed.inverted.red.menu.mobile.only
+  .clickable.item
+    %i.large.sidebar.icon
+
+  .right.menu
+    = link_to root_path, class: "item" do
+      Exit Admin
+      = image_tag "bug_logo.png", class: "image"
