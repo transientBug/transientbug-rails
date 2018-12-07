@@ -14,7 +14,22 @@ document.addEventListener("turbolinks:load", () => {
     if($(element.dataset.context).length < 1)
       return
 
-    let stickySettings = Object.assign({}, element.dataset)
+    // Hack to get around sticky setting the menu to height: 100% causing there
+    // to be a big gap between the menu and content to scroll through
+    const style = window.getComputedStyle(element)
+    if(style.display === "none") {
+      [
+        "mobile",
+        "hidden"
+      ].forEach(c => element.classList.remove(c))
+
+      element.dataset.behavior = "non-sticky"
+
+      return
+    }
+
+    let stickySettings = Object.assign({ }, element.dataset)
+
     if(stickySettings.offset)
       stickySettings.offset = parseInt(stickySettings.offset)
 

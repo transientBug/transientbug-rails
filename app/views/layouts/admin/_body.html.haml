@@ -11,7 +11,8 @@
     - if has_partial? "menu"
       .ui.padded.two.column.stackable.grid
         .three.wide.column
-          = render partial: "menu", locals: { count: @count }
+          .responsive.mobile.hidden.ui.fluid.vertical.menu.sticky{ data: { behavior: "sticky", context: "#stickContext", offset: 75 } }
+            = render partial: "menu", locals: { count: @count }
 
         .thirteen.wide.column
           #stickContext= yield
