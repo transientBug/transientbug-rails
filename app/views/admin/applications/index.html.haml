@@ -1,19 +1,57 @@
-%h1 Listing admin_applications
+- content_for :page_title do
+  OAuth Applications
 
-%table
+-#- content_for :menu do
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
+    .divider
+    .header Bulk Actions
+    .menu
+      .item
+        = bulk_edit_action "delete-all", url: admin_applications_bulk_delete_path, class: "ui fluid icon negative basic button" do
+          %i.trash.icon
+          delete all
+
+%table.ui.celled.table
   %thead
     %tr
-      %th
-      %th
-      %th
-
+      %th= select_all_checkbox
+      %th Actions
+      %th ID
+      %th Name
+      %th Creator
+      %th Created At
   %tbody
-    - @admin_applications.each do |admin_application|
+    - if @applications.any?
+      - @applications.each do |application|
+        %tr
+          %td.collapsing= model_tag application, only: [ :id, :name ]
+          %td.collapsing
+            .ui.buttons
+              = link_to admin_application_path(application), class: "ui icon button" do 
+                %i.expand.icon
+                view
+
+              .ui.simple.dropdown.icon.button
+                %i.dropdown.icon
+                .menu
+                  .header
+                    %i.warning.sign.icon
+                    DANGERZONE
+
+                  = modal_tag application, :delete, url: admin_application_path(application) do
+                    %i.trash.icon
+                    delete
+
+          %td.collapsing= application.id
+          %td.collapsing= application.name
+          %td.collapsing= link_to application.owner.username, admin_user_path(application.owner)
+
+
+          %td.collapsing= application.created_at.to_s(:long)
+
+    - else
       %tr
-        %td= link_to 'Show', admin_application
-        %td= link_to 'Edit', edit_admin_application_path(admin_application)
-        %td= link_to 'Destroy', admin_application, method: :delete, data: { confirm: 'Are you sure?' }
+        %td{ colspan: 6 }
+          No OAuth applications made yet
 
-%br
-
-= link_to 'New Application', new_admin_application_path
+= paginate @applications
