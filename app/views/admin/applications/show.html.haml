@@ -1,6 +1,46 @@
-%p#notice= notice
+- content_for :page_title do
+  OAuth Application
 
+= model_tag @application, no_checkbox: true, only: [ :id, :name ]
 
-= link_to 'Edit', edit_admin_application_path(@admin_application)
-\|
-= link_to 'Back', admin_applications_path
+.ui.menu
+  .menu.right
+    .ui.simple.dropdown.item
+      more
+      %i.dropdown.icon
+      .menu
+        .header
+          %i.warning.sign.icon
+          DANGERZONE
+        .divider
+
+        = modal_tag @application, :delete, url: admin_application_path(@application) do
+          %i.trash.icon
+          delete
+
+%h2.ui.dividing.header Internal Stuff
+%table.ui.collapsing.celled.table
+  %tbody
+    %tr
+      %td
+        %b ID
+      %td
+        = @application.id
+
+    %tr
+      %td
+        %b Name
+      %td
+        = @application.name
+
+    %tr
+      %td
+        %b Owner
+      %td
+        = link_to @application.owner.username, admin_user_path(@application.owner)
+
+    %tr
+      %td
+        %b Created At
+      %td
+        = @application.created_at.to_s(:long)

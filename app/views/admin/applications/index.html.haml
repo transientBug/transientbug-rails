@@ -18,7 +18,7 @@
       %th Actions
       %th ID
       %th Name
-      %th Creator
+      %th Owner
       %th Created At
   %tbody
     - if @applications.any?
@@ -43,9 +43,8 @@
                     delete
 
           %td.collapsing= application.id
-          %td.collapsing= application.name
-          %td.collapsing= link_to application.owner.username, admin_user_path(application.owner)
-
+          %td= application.name
+          %td= link_to application.owner.username, admin_user_path(application.owner)
 
           %td.collapsing= application.created_at.to_s(:long)
 

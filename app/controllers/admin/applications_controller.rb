@@ -3,7 +3,14 @@ class Admin::ApplicationsController < AdminController
 
   # GET /admin/applications
   def index
-    @applications = Doorkeeper::Application.all.page params[:page]
+    application_table = Doorkeeper::Application.arel_table
+
+    query_param = params[:q]
+    base_where = application_table[:id].eq(query_param)
+
+    @applications = Doorkeeper::Application.all
+    @applications = @applications.where(base_where) if query_param.present? && !query_param.empty?
+    @applications = @applications.order(created_at: :desc).page params[:page]
   end
 
   # GET /admin/applications/1
