@@ -27,9 +27,9 @@
     .ui.list
       .item "Coming Soon"
 
-  - if Rails.env.development?
-    .column
-      %h2.dividing.header misc dev
+  .column
+    %h2.dividing.header misc dev
 
-      .ui.list
-        = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
+    .ui.list
+      = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
+      = link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"
