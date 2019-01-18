@@ -97,7 +97,7 @@ Rails.application.routes.draw do
   end
 
   constraints RoleConstraint.new(:admin) do
-  mount Sidekiq::Web => "/sidekiq"
-  mount Logster::Web => "/logs"
+    mount Sidekiq::Web => "/sidekiq"
+    mount Logster::Web => "/logs"
   end
 end
