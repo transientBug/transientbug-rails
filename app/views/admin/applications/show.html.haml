@@ -4,6 +4,10 @@
 = model_tag @application, no_checkbox: true, only: [ :id, :name ]
 
 .ui.menu
+  = link_to edit_admin_application_path(@application), class: "item" do
+    %i.edit.icon
+    edit
+
   .menu.right
     .ui.simple.dropdown.item
       more
@@ -38,6 +42,18 @@
         %b Owner
       %td
         = link_to @application.owner.username, admin_user_path(@application.owner)
+
+    %tr
+      %td
+        %b Is Official?
+      %td
+        - if @application.official
+          %i.green.check.icon
+          Owned and operated by the transientBug team
+        - else
+          %i.ban.icon
+          %strong Not
+          owned or operated by the transientBug team
 
     %tr
       %td

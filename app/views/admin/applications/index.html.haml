@@ -34,6 +34,10 @@
               .ui.simple.dropdown.icon.button
                 %i.dropdown.icon
                 .menu
+                  = link_to edit_admin_application_path(application), class: "item" do
+                    %i.edit.icon
+                    edit
+
                   .header
                     %i.warning.sign.icon
                     DANGERZONE

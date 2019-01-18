@@ -1,18 +1,10 @@
-%h1 Editing admin_application
-
-= render 'form'
-
-= link_to 'Show', @admin_application
-\|
-= link_to 'Back', admin_applications_path
-
 - content_for :page_title do
   Editing "#{ @application.name }"
 
 - content_for :menu do
   .item
     .divider
-    .header Applications
+    .header Application
     .menu
       = link_to admin_application_path(@application), class: "item" do
         %i.expand.icon

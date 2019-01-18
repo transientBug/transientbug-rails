@@ -47,6 +47,11 @@ class Admin::ApplicationsController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def application_params
-    params.fetch(:application, {})
+    params.require(:application).permit(
+      :name,
+      :redirect_uri,
+      :scopes,
+      :official
+    )
   end
 end
