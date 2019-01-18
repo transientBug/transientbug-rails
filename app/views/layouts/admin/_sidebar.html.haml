@@ -41,10 +41,11 @@
     .item "Coming Soon"
 
   .item
-    .header misc
+    .header misc dev
 
   .menu
-    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item" if Rails.env.development?
+    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
+    = active_link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"
 
   = content_for :sidebar
 

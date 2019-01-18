@@ -1,4 +1,6 @@
-namespace :admin do
+require_relative "../../lib/role_constraint"
+
+namespace :admin, constraints: RoleConstraint.new(:admin) do
   root "home#home"
 
   resources :service_announcements do
