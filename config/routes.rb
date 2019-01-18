@@ -1,4 +1,5 @@
 require "sidekiq/web"
+require_relative "../lib/role_constraint"
 
 def draw name
   path = Rails.root.join "config", "routes", "#{ name }.rb"
@@ -95,6 +96,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # This should be locked down actually rather than disabled outside of dev
-  mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
+  constraints RoleConstraint.new(:admin) do
+    mount Sidekiq::Web => "/sidekiq"
+    mount Logster::Web => "/logs"
+  end
 end
