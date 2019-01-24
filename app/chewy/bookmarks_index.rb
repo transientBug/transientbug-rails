@@ -3,15 +3,15 @@ class BookmarksIndex < Chewy::Index
     analyzer: {
       title: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :english_stop, :edgeNGram3x6]
+        filter: [ :lowercase, :trim, :english_stop, :edgeNGram3x6 ]
       },
       description: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :english_stop]
+        filter: [ :lowercase, :trim, :english_stop ]
       },
       tag: {
         tokenizer: :standard,
-        filter: [:lowercase, :trim, :edgeNGram3x6]
+        filter: [ :lowercase, :trim, :edgeNGram3x6 ]
       }
     },
     filter: {
@@ -45,9 +45,9 @@ class BookmarksIndex < Chewy::Index
 
     def build_bookmark_suggest bookmark
       {
-        input: [bookmark.title&.downcase, bookmark.uri.to_s].concat(bookmark.tags.map(&:label)),
+        input: [ bookmark.title&.downcase, bookmark.uri.to_s ].concat(bookmark.tags.map(&:label)),
         contexts: {
-          type: [:bookmark]
+          type: [ :bookmark ]
         }
       }
     end
@@ -80,6 +80,8 @@ class BookmarksIndex < Chewy::Index
     field :tags, type: :keyword, value: ->(bookmark) { bookmark.tags.map(&:label) }
 
     field :user_id, type: :integer
+
+    field :current_offline_cache_id, type: :integer
 
     field :suggest,
           type: :completion,
