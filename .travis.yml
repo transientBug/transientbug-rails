@@ -38,7 +38,9 @@ env:
     - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz
     - PULL_REQUEST_ID=$TRAVIS_PULL_REQUEST
 
-before_install: gem install bundler
+before_install:
+  - gem update --system
+  - gem install bundler
 
 jobs:
   include:
