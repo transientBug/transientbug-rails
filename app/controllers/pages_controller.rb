@@ -1,7 +1,9 @@
 class PagesController < ApplicationController
   require_login! only: [ :home ]
 
-  def main; end
+  def main
+    redirect_to :home if signed_in?
+  end
 
   def faq; end
 
@@ -10,6 +12,6 @@ class PagesController < ApplicationController
   def tos; end
 
   def home
-    @recent_bookmarks = policy_scope(Bookmark).limit(15)
+    @recent_bookmarks = policy_scope(Bookmark).limit(5)
   end
 end
