@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def main
-    redirect_to :dashboard if signed_in?
+    redirect_to :home if signed_in?
   end
 
   def faq; end
