@@ -44,17 +44,22 @@ before_install:
 jobs:
   include:
     - stage: test
+      name: RSpec
       script: .travis/rspec
 
     - stage: stylistic
+      name: Rubocop
       script: bundle exec rubocop
 
     - stage: stylistic
+      name: ESLint
       script: yarn eslint app/javascript/**/*
 
     - stage: docs
+      name: Yard
       script: bundle exec yard
 
     - stage: compile
+      name: Frontend Assets
       script: .travis/assets
       if: branch = master AND type != pull_request
