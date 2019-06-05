@@ -21,8 +21,8 @@ class ImagesController < ApplicationController
       format.html { render :show }
       format.json { render :show, status: :ok }
       format.gif do
-        type = @image.image.blob.content_type || 'image/gif'
-        send_data @image.image.blob.download, type: type, disposition: 'inline'
+        type = @image.image.blob.content_type || "image/gif"
+        send_data @image.image.blob.download, type: type, disposition: "inline"
       end
     end
   end
@@ -63,8 +63,7 @@ class ImagesController < ApplicationController
   end
 
   # GET /images/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /images
   # POST /images.json
@@ -147,7 +146,7 @@ class ImagesController < ApplicationController
         }
       }
     )
-    .suggest["image-suggest"]
+      .suggest["image-suggest"]
 
     ids ||= []
     ids += res.first["options"].map { |row| row.dig("_id") } if res.present?
@@ -170,7 +169,7 @@ class ImagesController < ApplicationController
         }
       }
     )
-    .suggest["tag-suggest"]
+      .suggest["tag-suggest"]
 
     tags ||= []
     tags += res.first["options"].map { |row| row.dig("_source", "tag") } if res.present?

@@ -13,7 +13,7 @@ roles = [
   Role.create name: role
 end
 
-me = User.create(
+User.create(
   username: "ashby",
   email: Rails.application.credentials.admin_email,
   password: Rails.application.credentials.admin_password,

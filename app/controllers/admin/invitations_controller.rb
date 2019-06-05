@@ -17,8 +17,7 @@ class Admin::InvitationsController < AdminController
   end
 
   # GET /invitations/1
-  def show
-  end
+  def show; end
 
   # GET /invitations/new
   def new
@@ -39,8 +38,7 @@ class Admin::InvitationsController < AdminController
   end
 
   # GET /invitations/1/edit
-  def edit
-  end
+  def edit; end
 
   # PATCH/PUT /invitations/1
   def update
@@ -78,4 +76,3 @@ class Admin::InvitationsController < AdminController
     params.require(:invitation).permit(:code, :internal_note, :title, :description, :available)
   end
 end
-

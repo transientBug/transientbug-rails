@@ -52,8 +52,7 @@ class BookmarksController < ApplicationController
   end
 
   # GET /bookmarks/1/edit
-  def edit
-  end
+  def edit; end
 
   # PATCH/PUT /bookmarks/1
   # PATCH/PUT /bookmarks/1.json

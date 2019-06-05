@@ -2,15 +2,18 @@ inherit_from:
   - .rubocop_rspec.yml
 
 AllCops:
-  TargetRubyVersion: 2.4.1
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
+    - "**/*.rb"
     - '**/Rakefile'
   Exclude:
     - bin/*
+    - node_modules/**/* # why the fuck is rubocop running against node_modules
     - db/migrate/*
     - db/schema.rb
+    - vendor/**/* # disable rubocop-ing the gem install path in travis
 
 # Configuration parameters: Include, TreatCommentsAsGroupSeparators.
 # Include: **/Gemfile, **/gems.rb
@@ -185,4 +188,9 @@ Style/SymbolArray:
 # Don't always use %w[] to define arrays of words, as its not really nice
 # reading for short two or three word arrays.
 Style/WordArray:
+  Enabled: false
+
+# Use StandardError when rescuing instead of the => e shortcut.
+# I like the like shortcut though
+Style/RescueStandardError:
   Enabled: false

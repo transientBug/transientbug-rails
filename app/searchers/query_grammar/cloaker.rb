@@ -35,7 +35,6 @@ module QueryGrammar
       result
     end
 
-    # rubocop:disable Style/MethodMissing
     def respond_to_missing? *args
       @_parent_binding.respond_to_missing?(*args)
     end
@@ -46,6 +45,5 @@ module QueryGrammar
       @_parent_binding.send method, *args, &block
     end
     # rubocop:enable Style/MethodMissingSuper
-    # rubocop:enable Style/MethodMissing
   end
 end
