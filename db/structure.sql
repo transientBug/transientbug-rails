@@ -244,8 +244,28 @@ CREATE TABLE bookmarks_offline_caches (
 
 CREATE TABLE bookmarks_tags (
     bookmark_id bigint NOT NULL,
-    tag_id bigint NOT NULL
+    tag_id bigint NOT NULL,
+    id bigint NOT NULL
 );
+
+
+--
+-- Name: bookmarks_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE bookmarks_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bookmarks_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE bookmarks_tags_id_seq OWNED BY bookmarks_tags.id;
 
 
 --
@@ -867,6 +887,13 @@ ALTER TABLE ONLY bookmarks ALTER COLUMN id SET DEFAULT nextval('bookmarks_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY bookmarks_tags ALTER COLUMN id SET DEFAULT nextval('bookmarks_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY clockwork_database_events ALTER COLUMN id SET DEFAULT nextval('clockwork_database_events_id_seq'::regclass);
 
 
@@ -1013,6 +1040,14 @@ ALTER TABLE ONLY authorizations
 
 ALTER TABLE ONLY bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bookmarks_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY bookmarks_tags
+    ADD CONSTRAINT bookmarks_tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -1500,6 +1535,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180223222455'),
 ('20180620161718'),
 ('20181204152019'),
-('20181205204805');
+('20181205204805'),
+('20190605150347');
 
 
