@@ -13,6 +13,7 @@ AllCops:
     - node_modules/**/* # why the fuck is rubocop running against node_modules
     - db/migrate/*
     - db/schema.rb
+    - vendor/**/* # disable rubocop-ing the gem install path in travis
 
 # Configuration parameters: Include, TreatCommentsAsGroupSeparators.
 # Include: **/Gemfile, **/gems.rb
