@@ -21,7 +21,6 @@ module QueryGrammar
         @operator = OpenStruct.new op_data
       end
 
-      # rubocop:disable Style/MethodMissing
       def respond_to_missing?(*)
         true
       end
@@ -31,7 +30,6 @@ module QueryGrammar
         @operator[ func ] = args.first || block
       end
       # rubocop:enable Style/MethodMissingSuper
-      # rubocop:enable Style/MethodMissing
     end
   end
 end

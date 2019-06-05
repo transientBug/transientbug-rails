@@ -1,5 +1,4 @@
 class Admin::HomeController < AdminController
   # GET /admin
-  def home
-  end
+  def home; end
 end

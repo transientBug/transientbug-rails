@@ -11,7 +11,7 @@ RSpec.describe Webpage do
 
     let(:instance) { described_class.create uri: uri }
 
-    context "setting an addressable uri" do
+    context "when setting an addressable uri" do
       let(:uri_string) { "http://test.me" }
       let(:uri) { Addressable::URI.parse(uri_string) }
 
@@ -19,7 +19,7 @@ RSpec.describe Webpage do
       it { is_expected.to eq(uri) }
     end
 
-    context "setting a string converts it" do
+    context "when setting a string converts it" do
       let(:uri) { "http://test.me" }
       let(:uri_obj) { Addressable::URI.parse(uri) }
 
@@ -27,7 +27,7 @@ RSpec.describe Webpage do
       it { is_expected.to eq(uri_obj) }
     end
 
-    context "setting a string with a fragment removes fragment from save" do
+    context "when setting a string with a fragment removes fragment from save" do
       let(:uri) { "http://test.me#test" }
       let(:uri_obj) { Addressable::URI.parse(uri) }
 

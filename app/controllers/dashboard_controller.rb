@@ -6,12 +6,14 @@ class DashboardController < ApplicationController
       total_count: BookmarksIndex.query(
         bool: {
           must: [ { term: { user_id: current_user.id } } ]
-        }).count,
+        }
+      ).count,
       untagged_count: BookmarksIndex.query(
         bool: {
           must: [ { term: { user_id: current_user.id } } ],
           must_not: [ { exists: { field: :tags } } ]
-        }).count
+        }
+      ).count
     }
 
     @recent_bookmarks = policy_scope(Bookmark).limit(5)

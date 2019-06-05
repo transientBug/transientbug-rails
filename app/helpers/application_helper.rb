@@ -17,7 +17,6 @@ module ApplicationHelper
   #
   # Content passed in through the block ends up inside of the div, useful for
   # icons and text about the action.
-  # rubocop:disable Metrics/AbcSize
   def bulk_edit_action behavior, **opts, &block
     template = opts.delete(:template) { template_path_for(behavior) }
 
@@ -34,7 +33,6 @@ module ApplicationHelper
 
     tag.div(**options, &block)
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Renders a checkbox that, when clicked, will check all of the bulk select
   # checkboxes on the page through some JS magic
@@ -67,7 +65,6 @@ module ApplicationHelper
   # bulk select checkboxes and grabbing their sibilings will provide you with
   # the data for every selected row. Use only to include/exclude
   # which fields in the attributes should make it to the html.
-  # rubocop:disable Metrics/AbcSize
   def model_tag model, **opts, &block
     attributes = Array(opts.delete(:only)).map(&:to_sym)
     attributes ||= model.attribute_names.map(&:to_sym)
@@ -125,7 +122,6 @@ module ApplicationHelper
 
     tag.a(**options, &block)
   end
-  # rubocop:enable Metrics/AbcSize
 
   def template_path_for *args
     template_prefix = "public" unless controller_path.start_with? "admin/"
