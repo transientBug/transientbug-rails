@@ -4,8 +4,7 @@ class InvitesController < ApplicationController
   before_action :set_invite, only: [ :create, :show, :update ]
 
   # GET /invites
-  def index
-  end
+  def index; end
 
   # POST /invites
   def create
@@ -41,10 +40,14 @@ class InvitesController < ApplicationController
     redirect_to home_path if signed_in?
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
+  # TODO: This is a bit over engineered around how it reserves invites,
+  # attempting to be atomic and needs some rethought with the whole invites
+  # system
   def set_invite
     @invitation = Invitation.find_by code: (params[:id] || params[:code])
 
-    redirect_to invites_path, error: "That invite isn't valid :(" and return unless @invitation
+    redirect_to(invites_path, error: "That invite isn't valid :(") && return unless @invitation
 
     @invitations_user = @invitation.invitations_users.find_by id: session[:invite_reservation]
 
@@ -63,9 +66,10 @@ class InvitesController < ApplicationController
 
     row = result.to_a.first || {}
 
-    redirect_to invites_path, error: "That invite isn't valid :(" and return if row["available"]&.negative?
+    redirect_to(invites_path, error: "That invite isn't valid :(") && return if row["available"]&.negative?
 
     @invitations_user = @invitation.invitations_users.create
     session[:invite_reservation] = @invitations_user.id
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 end

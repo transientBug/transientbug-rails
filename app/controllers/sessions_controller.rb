@@ -7,8 +7,7 @@ class SessionsController < ApplicationController
   # external clients
   skip_before_action :verify_authenticity_token, only: :create
 
-  def index
-  end
+  def index; end
 
   def new
     @user = User.find_by(email: params[:email])&.authenticate params[:password]

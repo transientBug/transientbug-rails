@@ -35,7 +35,6 @@ module QueryGrammar
       fail NotImplementedError
     end
 
-    # rubocop:disable Style/MethodMissing
     def respond_to_missing? func, *args
       name = func.to_s.gsub(%r{^visit_}, "").to_sym
 
@@ -45,7 +44,6 @@ module QueryGrammar
     end
 
     # fuck you too rubocop, this does fallback to super
-    # rubocop:disable Style/RescueStandardError
     def method_missing func, *args
       name = func.to_s.gsub(%r{^visit_}, "").to_sym
 
@@ -57,7 +55,5 @@ module QueryGrammar
       e.set_backtrace e.backtrace[1..-1]
       fail e
     end
-    # rubocop:enable Style/RescueStandardError
-    # rubocop:enable Style/MethodMissing
   end
 end

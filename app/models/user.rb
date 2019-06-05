@@ -20,13 +20,13 @@ class User < ApplicationRecord
   before_create :set_auth_token
 
   def self.find_or_create_from_auth_hash! auth_hash
-    email = auth_hash.dig 'info', 'email'
+    email = auth_hash.dig "info", "email"
 
     fail "Provider #{ auth_hash['provider'] } does not provide an email!" unless email.present?
 
     find_by email: email
     # find_or_create_by email: email do |user|
-      # user.username = auth_hash.dig 'info', 'name'
+    #   user.username = auth_hash.dig 'info', 'name'
     # end
   end
 
@@ -51,7 +51,7 @@ class User < ApplicationRecord
   # done to store the digest instead, but that'd require overriding
   # .has_secure_token
   def token_authenticate user_sent_token
-    user_digest  = ::Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
+    user_digest = ::Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
 
     return false unless user_sent_token.bytesize == user_digest.bytesize
     ActiveSupport::SecurityUtils.secure_compare(user_sent_token, user_digest) && self

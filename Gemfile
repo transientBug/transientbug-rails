@@ -184,10 +184,4 @@ group :test do
   # gem "reek"
   gem "rubocop"
   gem "rubocop-rspec"
-
-  gem "pronto"
-  # gem "pronto-flay", require: false
-  # gem "pronto-reek", require: false
-  gem "pronto-rubocop", require: false
-  gem "pronto-eslint_npm", require: false
 end

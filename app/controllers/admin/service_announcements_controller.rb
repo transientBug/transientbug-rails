@@ -16,8 +16,7 @@ class Admin::ServiceAnnouncementsController < AdminController
   end
 
   # GET /service_announcements/1
-  def show
-  end
+  def show; end
 
   # GET /service_announcements/new
   def new
@@ -30,7 +29,10 @@ class Admin::ServiceAnnouncementsController < AdminController
 
     respond_to do |format|
       if @service_announcement.save
-        format.html { redirect_to [:admin, @service_announcement], notice: "Service Announcement was successfully created." }
+        format.html do
+          redirect_to [:admin, @service_announcement],
+                      notice: "Service Announcement was successfully created."
+        end
       else
         format.html { render :new }
       end
@@ -38,14 +40,16 @@ class Admin::ServiceAnnouncementsController < AdminController
   end
 
   # GET /service_announcements/1/edit
-  def edit
-  end
+  def edit; end
 
   # PATCH/PUT /service_announcements/1
   def update
     respond_to do |format|
       if @service_announcement.update(service_announcement_params)
-        format.html { redirect_to [:admin, @service_announcement], notice: "Service Announcement was successfully updated." }
+        format.html do
+          redirect_to [:admin, @service_announcement],
+                      notice: "Service Announcement was successfully updated."
+        end
       else
         format.html { render :edit }
       end
@@ -56,7 +60,10 @@ class Admin::ServiceAnnouncementsController < AdminController
   def destroy
     respond_to do |format|
       if @service_announcement.destroy
-        format.html { redirect_to admin_service_announcements_url, notice: "Service Announcement was successfully deleted." }
+        format.html do
+          redirect_to admin_service_announcements_url,
+                      notice: "Service Announcement was successfully deleted."
+        end
       else
         format.html { render :new }
       end

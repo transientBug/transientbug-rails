@@ -33,7 +33,6 @@ class WebpageCacheService
       headers.delete key
     end
 
-    # rubocop:disable Lint/RescueWithoutErrorClass
     def exec
       cache_root
 
@@ -48,7 +47,6 @@ class WebpageCacheService
       errors.create key: uri, message: e.message
       self
     end
-    # rubocop:enable Lint/RescueWithoutErrorClass
 
     private
 

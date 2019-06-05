@@ -3,8 +3,7 @@ class ProfilesController < ApplicationController
   before_action :set_user
 
   # GET /profile
-  def show
-  end
+  def show; end
 
   # PATCH /profile
   # PUT /profile
