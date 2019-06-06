@@ -6,8 +6,6 @@ RSpec.resource "v1 Profile" do
   header "Accept", "application/vnd.api+json"
 
   parameter :auth_token, "Authentication Token", required: true
-
-  # rubocop:disable RSpec/ExampleLength
   get "/api/v1/profile" do
     example "Get" do
       explanation <<~DESC
@@ -20,5 +18,4 @@ RSpec.resource "v1 Profile" do
       expect(response_body).to match_response_schema("api/v1/profiles/profile")
     end
   end
-  # rubocop:enable RSpec/ExampleLength
 end

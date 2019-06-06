@@ -1,0 +1,64 @@
+= form_with model: application, scope: :application, url: admin_application_path(application), html: { class: "ui fluid form" } do |f|
+  - if application.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize application.errors.count, "error" } prohibited this application from being saved:"
+      %ul
+        - application.errors.full_messages.each do |message|
+          %li= message
+
+  %h4.ui.dividing.header user facing info 
+
+  .required.field
+    = f.label :name
+    = f.text_field :name, aria: { describedby: "application name" }
+
+    = doorkeeper_errors_for application, :name
+
+  -#.field
+  -#  = f.label :description
+  -#  = f.text_area :description, aria: { describedby: "application description" }
+
+  %h4.ui.dividing.header app data
+
+  .field
+    = f.label :redirect_uri
+    = f.text_area :redirect_uri, aria: { describedby: "redirect uris" }
+
+    = doorkeeper_errors_for application, :redirect_uri
+
+    .ui.message
+      %p Use one line per URI
+
+      - if Doorkeeper.configuration.native_redirect_uri
+        %p
+          Use this string for local tests:
+          %code
+            = Doorkeeper.configuration.native_redirect_uri
+
+  .field
+    = f.label :scopes
+    = f.text_area :scopes, aria: { describedby: "scopes" }
+
+    = doorkeeper_errors_for application, :scopes
+
+    .ui.message
+      Separate scopes with spaces. Leave blank to use the default scopes.
+
+  %h4.ui.dividing.header internal info
+
+  .field
+    .ui.checkbox
+      = f.check_box :official
+      = f.label :official
+
+    .ui.message
+      %p Do we, the transientBug operators, certify that this application is official?
+
+  -#.field
+    = f.label :internal_note
+    = f.text_area :internal_note, aria: { describedby: "application internal note" }
+
+    .ui.info.message
+      %p it's recommended to put a little internal note about what this application is for.
+
+  = f.submit "save", class: "ui positive right floated submit button"

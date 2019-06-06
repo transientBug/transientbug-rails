@@ -1,0 +1,13 @@
+- content_for :page_title do
+  Editing "#{ @application.name }"
+
+- content_for :menu do
+  .item
+    .divider
+    .header Application
+    .menu
+      = link_to admin_application_path(@application), class: "item" do
+        %i.expand.icon
+        view
+
+= render partial: "form", locals: { application: @application }

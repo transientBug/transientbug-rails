@@ -57,4 +57,6 @@ namespace :admin, constraints: RoleConstraint.new(:admin) do
       end
     end
   end
+
+  resources :applications, only: [ :index, :show, :edit, :update, :destroy ]
 end
