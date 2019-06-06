@@ -1,4 +1,5 @@
 class Admin::ApplicationsController < AdminController
+  before_action :set_count
   before_action :set_application, only: [:show, :edit, :update, :destroy]
 
   # GET /admin/applications
@@ -23,7 +24,10 @@ class Admin::ApplicationsController < AdminController
   def update
     respond_to do |format|
       if @application.update(application_params)
-        format.html { redirect_to admin_application_path(@application), notice: 'Application was successfully updated.' }
+        format.html do
+          redirect_to admin_application_path(@application),
+                      notice: "Application was successfully updated."
+        end
       else
         format.html { render :edit }
       end
@@ -34,7 +38,10 @@ class Admin::ApplicationsController < AdminController
   def destroy
     @application.destroy
     respond_to do |format|
-      format.html { redirect_to admin_applications_url, notice: 'Application was successfully destroyed.' }
+      format.html do
+        redirect_to admin_applications_url,
+                    notice: "Application was successfully destroyed."
+      end
     end
   end
 
@@ -43,6 +50,10 @@ class Admin::ApplicationsController < AdminController
   # Use callbacks to share common setup or constraints between actions.
   def set_application
     @application = Doorkeeper::Application.find(params[:id])
+  end
+
+  def set_count
+    @count = Doorkeeper::Application.count
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
