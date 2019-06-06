@@ -27,7 +27,7 @@ class Bookmarks::CacheController < ApplicationController
   def show
     key = params[:key]
 
-    render plain: "404 Not Found", status: :not_found and return unless renderer.asset?(key: key)
+    render(plain: "404 Not Found", status: :not_found) && return unless renderer.asset?(key: key)
     send_data renderer.asset(key: key).read, type: renderer.content_type(key: key), disposition: "inline"
   end
 

@@ -26,7 +26,6 @@ cache:
   bundler: true
   yarn: true
   directories:
-    - node_modules
     - elasticsearch-5.5.1
 
 matrix:
@@ -36,19 +35,31 @@ env:
   global:
     - ES_VERSION=5.5.1
     - ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz
-    - PULL_REQUEST_ID=$TRAVIS_PULL_REQUEST
+
+before_install:
+  - gem update --system
+  - gem install bundler
+  - yarn install
 
 jobs:
   include:
     - stage: test
+      name: RSpec
       script: .travis/rspec
 
     - stage: stylistic
-      script: bundle exec pronto run -f github_status -c origin/master
+      name: Rubocop
+      script: bundle exec rubocop
+
+    - stage: stylistic
+      name: ESLint
+      script: yarn eslint app/javascript/**/*
 
     - stage: docs
+      name: Yard
       script: bundle exec yard
 
     - stage: compile
+      name: Frontend Assets
       script: .travis/assets
       if: branch = master AND type != pull_request

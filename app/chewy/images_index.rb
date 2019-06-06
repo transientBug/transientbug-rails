@@ -1,5 +1,5 @@
 class ImagesIndex < Chewy::Index
-   settings analysis: {
+  settings analysis: {
     analyzer: {
       title: {
         tokenizer: :standard,
@@ -34,7 +34,7 @@ class ImagesIndex < Chewy::Index
     field :tags, type: "text", analyzer: :tag
     field :raw_tags, type: "text", value: ->(image) { image.tags }
 
-    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(image) {
+    tag_completion = lambda do |image|
       tags = image.tags.map(&:downcase)
 
       {
@@ -43,7 +43,9 @@ class ImagesIndex < Chewy::Index
           type: [:image]
         }
       }
-    }
+    end
+
+    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: tag_completion
 
     field :source, type: "keyword"
 
@@ -58,13 +60,16 @@ class ImagesIndex < Chewy::Index
   define_type -> { numbered_tags }, name: :tag do
     field :tag, type: "text", value: ->(tag_struct) { tag_struct.tag }, analyzer: :tag
     field :raw_tag, type: "keyword", value: ->(tag_struct) { tag_struct.tag }
-    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: ->(tag_struct) {
+
+    tag_completion = lambda do |tag_struct|
       {
         input: tag_struct.tag.downcase,
         contexts: {
           type: [:tag]
         }
       }
-    }
+    end
+
+    field :suggest, type: "completion", contexts: [ { name: :type, type: :category } ], value: tag_completion
   end
 end

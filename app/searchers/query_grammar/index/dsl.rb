@@ -25,7 +25,6 @@ module QueryGrammar
         index.operators[ prefix.to_s ] = QueryGrammar::Index::OperatorDSL.build(**opts, &block)
       end
 
-      # rubocop:disable Style/MethodMissing
       def respond_to_missing? func, *args
         return true if index.types[ func ]
 
@@ -50,7 +49,6 @@ module QueryGrammar
 
         super
       end
-      # rubocop:enable Style/MethodMissing
     end
   end
 end

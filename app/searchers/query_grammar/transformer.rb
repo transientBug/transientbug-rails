@@ -18,6 +18,7 @@ module QueryGrammar
       Cloaker.new(bind: Context.new(bindings)).cloak(&block)
     end
 
+    # rubocop:disable Metrics/AbcSize
     def parse_clause subtree_clause
       values = Array(subtree_clause[:value])
       base_clause = OpenStruct.new subtree_clause.merge(values: values)
@@ -40,6 +41,7 @@ module QueryGrammar
 
       QueryGrammar::AST::Group.new conjoiner: :or, items: inner, origin: subtree_clause
     end
+    # rubocop:enable Metrics/AbcSize
 
     rule term: simple(:term) do
       term.to_s

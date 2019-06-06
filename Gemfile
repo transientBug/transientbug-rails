@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2.1.1"
+gem "rails", "~> 5.2.3"
 
 # Data Stores
 #  * Postgres
@@ -87,14 +87,13 @@ gem "addressable"
 # gem "robotstxt-parser", require: "robotstxt"
 
 # Parsing/HTML handling
-# gem "nokogiri"
+gem "nokogiri"
 # gem "loofah"
 # gem "ruby-readability"
 # gem "stopwords-filter"
 gem "mimemagic"
 
 # Utils
-gem "mustermann" # Used by the autumn moon bot framework for pattern matching
 gem "exception_notification"
 gem "slack-notifier"
 gem "logster"
@@ -185,10 +184,4 @@ group :test do
   # gem "reek"
   gem "rubocop"
   gem "rubocop-rspec"
-
-  gem "pronto"
-  # gem "pronto-flay", require: false
-  # gem "pronto-reek", require: false
-  gem "pronto-rubocop", require: false
-  gem "pronto-eslint_npm", require: false
 end

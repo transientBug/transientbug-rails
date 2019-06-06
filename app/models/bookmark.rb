@@ -2,11 +2,12 @@ class Bookmark < ApplicationRecord
   belongs_to :user
   belongs_to :webpage
 
-  has_and_belongs_to_many :tags
+  has_many :bookmarks_tags
+  has_many :tags, through: :bookmarks_tags
 
   has_and_belongs_to_many :offline_caches
 
-  after_create :schedule_cache
+  after_commit :schedule_cache, on: :create
 
   default_scope { includes(:webpage) }
 

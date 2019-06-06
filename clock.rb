@@ -5,7 +5,7 @@ require_relative "./config/environment"
 
 module Clockwork
   # handler do |job|
-    # puts "Running #{job}"
+  #   puts "Running #{job}"
   # end
 
   # handler receives the time when job is prepared to run in the 2nd argument
@@ -21,15 +21,5 @@ module Clockwork
 
   Clockwork.manager = DatabaseEvents::Manager.new
 
-  sync_database_events model: ClockworkDatabaseEvent, every: 1.minute do |model_instance|
-    # do some work e.g...
-
-    # running a DelayedJob task, where #some_action is a method
-    # you've defined on the model, which does the work you need
-    # model_instance.delay.some_action
-
-    # performing some work with Sidekiq
-    # YourSidekiqWorkerClass.perform_async
-    model_instance.perform_async
-  end
+  sync_database_events model: ClockworkDatabaseEvent, every: 1.minute, &:perform_async
 end
