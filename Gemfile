@@ -151,9 +151,7 @@ group :development, :test do
   gem "rspec_api_documentation"
   gem "json_matchers", "~> 0.9"
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  # gem "spring"
-  # gem "spring-watcher-listen", "~> 2.0.0"
+  gem "dnssd"
 end
 
 group :test do
