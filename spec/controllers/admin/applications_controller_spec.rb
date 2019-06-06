@@ -85,15 +85,19 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
         }
       end
 
-      it "updates the requested application" do
+      it "updates the requested application successfully" do
+        application = Doorkeeper::Application.create! valid_attributes
+        put :update, params: { id: application.to_param, application: new_attributes }, session: valid_session
+
+        expect(response).to redirect_to(admin_application_path(application))
+      end
+
+      it "updates the requested applications name" do
         application = Doorkeeper::Application.create! valid_attributes
         put :update, params: { id: application.to_param, application: new_attributes }, session: valid_session
         application.reload
 
-        expect(response).to redirect_to(admin_application_path(application))
-
         expect(application.name).to eq(new_attributes[:name])
-        expect(application.official).to be_truthy
       end
 
       it "redirects to the application" do
@@ -108,9 +112,14 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
       it "returns a success response (i.e. to display the 'edit' template)" do
         application = Doorkeeper::Application.create! valid_attributes
         put :update, params: { id: application.to_param, application: invalid_attributes }, session: valid_session
-        application.reload
 
         expect(response).to be_success
+      end
+
+      it "doesn't set the invalid redirect_uri" do
+        application = Doorkeeper::Application.create! valid_attributes
+        put :update, params: { id: application.to_param, application: invalid_attributes }, session: valid_session
+        application.reload
 
         expect(application.redirect_uri).not_to eq(invalid_attributes[:redirect_uri])
       end

@@ -26,6 +26,7 @@ RSpec/ExampleLength:
   Enabled: true
   Exclude:
     - spec/searchers/query_grammar/parser_spec.rb
+  Max: 10
 
 RSpec/ExampleWording:
   Description: Checks that example descriptions do not start with "should".
