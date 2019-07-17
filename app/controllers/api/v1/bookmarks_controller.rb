@@ -21,6 +21,8 @@ class Api::V1::BookmarksController < Api::V1Controller
     if @bookmark.upsert
       render :show, status: :created, location: @bookmark
     else
+      # TODO: these errors might not map directly 1-1 with the API surface
+      # (referencing webpage_id for example) and should be mapped
       render json: @bookmark.errors, status: :unprocessable_entity
     end
   end
