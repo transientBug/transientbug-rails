@@ -11,9 +11,14 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # POST /api/v1/bookmarks
   def create
-    @bookmark = Bookmark.for(current_user, params.dig(:data, :attributes, :url))
+    @bookmark = Bookmark.for(current_user, uri_params)
 
     authorize @bookmark
+
+    if @bookmark.id
+      render :show, status: :found, location: @bookmark
+      return
+    end
 
     @bookmark.assign_attributes bookmark_params.to_h.compact
     @bookmark.tags = @bookmark.tags.to_a.concat(tags_models)
@@ -55,11 +60,19 @@ class Api::V1::BookmarksController < Api::V1Controller
     params.require(:data).require(:attributes).permit(:title, :description)
   end
 
+  # Tech Debt: Handle backwards compat where older clients may still be sending
+  # url when the proper field is uri
+  def uri_params
+    urlUri = params.require(:data).require(:attributes).permit(:url, :uri)
+
+    urlUri[:url] || urlUri[:uri]
+  end
+
   def tags_params
     params.require(:data).require(:attributes).permit(tags: [])
   end
 
   def tags_models
-    Tag.find_or_create_tags tags: tags_params[:tags].to_a
+    Tag.find_or_create_tags tags: tags_params[:tags].to_a.uniq
   end
 end
