@@ -16,6 +16,7 @@ class Bookmark < ApplicationRecord
   update_index("bookmarks#bookmark") { self }
 
   validates_uniqueness_of :webpage_id, scope: :user_id
+  validates :webpage_id, presence: true
 
   # This has potential performance costs if we start retrying lots of times
   def self.for user, uri

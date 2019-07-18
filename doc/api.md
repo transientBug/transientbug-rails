@@ -94,3 +94,10 @@ to avoid storing your password.
 You can find your API token on your [profile](/profile) page. Through this page
 you can also regenerate your token, however this will invalidate your previous
 API token.
+
+
+## Changes
+
+### July, 2019
+As of late July, 2019 the Bookmarks create endpoint no longer overwrites
+existing bookmark data and will now respond with a 302 to the found bookmark.
