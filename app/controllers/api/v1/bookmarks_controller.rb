@@ -63,9 +63,9 @@ class Api::V1::BookmarksController < Api::V1Controller
   # Tech Debt: Handle backwards compat where older clients may still be sending
   # url when the proper field is uri
   def uri_params
-    urlUri = params.require(:data).require(:attributes).permit(:url, :uri)
+    url_or_uri = params.require(:data).require(:attributes).permit(:url, :uri)
 
-    urlUri[:url] || urlUri[:uri]
+    url_or_uri[:url] || url_or_uri[:uri]
   end
 
   def tags_params
