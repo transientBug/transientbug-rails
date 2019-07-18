@@ -71,8 +71,10 @@ gem "sidekiq"
 # Provider
 gem "doorkeeper"
 # Consumer
-gem "omniauth-twitter"
-gem "omniauth-github"
+# gem "omniauth-rails_csrf_protection"
+# gem "omniauth-apple"
+# gem "omniauth-twitter"
+# gem "omniauth-github"
 
 # Permissions
 gem "pundit", github: "elabs/pundit"
