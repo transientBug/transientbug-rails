@@ -1,0 +1,11 @@
+.key-combo {
+  display: flex;
+
+  &:not(:first-child) {
+    padding-left: 1em;
+  }
+
+  & > :last-child {
+    margin-right: 0.5em;
+  }
+}

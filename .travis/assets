@@ -7,7 +7,7 @@ echo "Building API docs"
 bundle exec rake docs:generate
 
 echo "Building new assets"
-env RAILS_ENV=production bundle exec rake assets:precompile
+env RAILS_ENV=production NODE_ENV=production bundle exec rake assets:precompile
 
 export DO_SPACES_ENDPOINT="https://nyc3.digitaloceanspaces.com"
 export CURRENT_DATE=$(date -u "+%FT%H%M%S")

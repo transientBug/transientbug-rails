@@ -1,8 +1,6 @@
 - if lookup_context.template_exists?("#{ controller_name }/navbar", [], true)
   = render partial: "navbar"
 
-= javascript_pack_tag "application"
-
 // Desktop nav
 .ui.top.fixed.inverted.menu.responsive.mobile.hidden
   = link_to root_path, class: "header item" do
