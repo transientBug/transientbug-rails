@@ -2,7 +2,6 @@ module.exports = {
   parser: "babel-eslint",
   extends: [
     "plugin:prettier/recommended",
-    "prettier/flowtype",
     "prettier/react",
     "prettier/standard"
   ],
@@ -14,12 +13,8 @@ module.exports = {
   },
 
   globals: {
-    React: true,
-    ReactDOM: true,
-    _: true,
     Rails: true,
   },
 
-  rules: {
-  }
+  rules: { }
 }
