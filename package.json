@@ -2,7 +2,7 @@
   "name": "transientbug",
   "private": true,
   "scripts": {
-    "lint": "eslint 'app/javascript/**'",
+    "lint": "eslint 'app/javascript/'",
     "gen-typings": "yarn run tsm app/javascript/**/*.scss",
     "watch-typings": "yarn run tsm app/javascript/**/*.scss -w"
   },
