@@ -1,6 +1,9 @@
 {
   "name": "transientbug",
   "private": true,
+  "scripts": {
+    "lint": "eslint 'app/javascript/**'"
+  },
   "dependencies": {
     "@rails/webpacker": "^4.0.7",
     "@types/react": "^16.8.23",

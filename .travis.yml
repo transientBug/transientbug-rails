@@ -54,7 +54,7 @@ jobs:
 
     - stage: stylistic
       name: ESLint
-      script: yarn eslint app/javascript/**/*
+      script: yarn lint
 
     - stage: docs
       name: Yard
