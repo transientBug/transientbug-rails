@@ -1,5 +1,5 @@
 module.exports = {
-  test: /\.(js|jsx)?(\.erb)?$/,
+  test: /\.(j|t)(s|sx)?(\.erb)?$/,
   exclude: /node_modules/,
   loader: 'eslint-loader',
   enforce: "pre",
