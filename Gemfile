@@ -44,7 +44,7 @@ gem "haml-rails"
 # Javascript and CSS
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
-gem "webpacker", "~> 3.5.3"#, "~> 4.0"
+gem "webpacker", "~> 4.0"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 #
