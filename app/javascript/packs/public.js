@@ -5,27 +5,12 @@
 //
 // To reference this file, add <%= javascript_pack_tag 'public' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
-import React from "react";
-import ReactDOM from "react-dom";
+import renderComponents from "../lib/renderComponents";
 
 import Navbar from "../components/Navbar";
 
-const render = (selector, Component) => {
-  const appDivs = document.querySelectorAll(selector);
-
-  appDivs.forEach(appDiv => {
-    const props = { ...appDiv.dataset };
-
-    ReactDOM.render(<Component {...props} />, appDiv);
-  });
-};
-
-const componentMap = {
-  '[data-behavior~="navbar-search"]': Navbar
-};
-
 document.addEventListener("turbolinks:load", () => {
-  Object.entries(componentMap).forEach(([selector, component]) => {
-    render(selector, component);
+  renderComponents({
+    '[data-behavior~="navbar-search"]': Navbar
   });
 });
