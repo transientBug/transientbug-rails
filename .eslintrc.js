@@ -1,6 +1,13 @@
 module.exports = {
   parser: "babel-eslint",
-  extends: "airbnb",
+  extends: [
+    "plugin:prettier/recommended",
+    "prettier/flowtype",
+    "prettier/react",
+    "prettier/standard"
+  ],
+
+  plugins: ["prettier"],
 
   env: {
     browser: true,
@@ -14,48 +21,5 @@ module.exports = {
   },
 
   rules: {
-    // Doesn't seem to play nice with webpacker setup
-    "import/no-unresolved": "off",
-
-    // No I like named exports, shut up
-    "import/prefer-default-export": "off",
-
-    // Match ruby style, don't use semicolons ever and double quote strings
-    quotes: ["error", "double"],
-    semi: ["error", "never"],
-
-    // Spaces in [] and ${} for readability
-    "computed-property-spacing": [1, "always"],
-    "template-curly-spacing": [1, "always"],
-
-    // god i hate extra commas
-    "comma-dangle": "off",
-
-    // Let me two line, no curly bracket, if statement
-    "nonblock-statement-body-position": ["warn", "beside"],
-    "curly": ["error", "multi-or-nest"],
-
-    //
-    "object-curly-newline": [2, { "consistent": true }],
-
-    // Let me name unused variables with an underscore because sometimes you
-    // need them
-    "no-unused-vars": [2, { args: "all", argsIgnorePattern: "^_" }],
-
-    // Spaces in react jsx {}
-    "react/jsx-curly-spacing": [1, "always"],
-
-    // It wants me to destructure EVERYTHING and sometimes its ugly
-    "react/destructuring-assignment": "off",
-
-    // Lets not check prop types just yet, m'kay?
-    "react/prop-types": "off",
-
-    // Fuck no i want to be able to do an one line <Button>text</Button>
-    "react/jsx-one-expression-per-line": "off",
-
-    "jsx-a11y/click-events-have-key-events": ["warn"],
-    "jsx-a11y/no-static-element-interactions": ["warn"],
-    "jsx-a11y/no-autofocus": ["warn"]
   }
 }

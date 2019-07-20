@@ -1,15 +1,8 @@
 const { environment } = require('@rails/webpacker')
-const webpack = require('webpack')
+const typescript =  require('./loaders/typescript')
+const eslint = require('./loaders/eslint')
 
-environment.loaders.append('eslint', require('./loaders/eslint'))
-
-environment.plugins.prepend(
-  'Provide',
-  new webpack.ProvidePlugin({
-    _: 'lodash',
-    React: 'react',
-    ReactDOM: 'react-dom'
-  })
-)
+environment.loaders.prepend('typescript', typescript)
+environment.loaders.append('eslint', eslint)
 
 module.exports = environment
