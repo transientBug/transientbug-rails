@@ -14,25 +14,25 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({
   query = "",
   path = "",
-  placeholder = "Search ..."
+  placeholder = "Search Bookmarks ..."
 }) => {
   const wrapperRef = useRef<HTMLDivElement>();
   const queryInputRef = useRef<HTMLInputElement>();
   const formRef = useRef<HTMLFormElement>();
 
-  const submit = e => {
+  const submit = (e: Event) => {
     formRef.current.submit();
     e.preventDefault();
   };
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const open = e => {
+  const open = (e: Event) => {
     setIsOpen(true);
     e.preventDefault();
   };
 
-  const close = e => {
+  const close = (e: Event) => {
     setIsOpen(false);
     e.preventDefault();
   };

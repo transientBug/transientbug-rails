@@ -10,7 +10,7 @@ import * as styles from "./KeyboardShortcut.module.scss";
 interface KeyboardShortcutProps {
   keys: string[];
   displayKeys?: string[];
-  onKey: any;
+  onKey: EventHandlerNonNull;
 }
 
 const KeyboardShortcut: React.FC<KeyboardShortcutProps> = ({
@@ -34,6 +34,7 @@ const KeyboardShortcut: React.FC<KeyboardShortcutProps> = ({
     return zip(keys, keyDisplayText);
   }, [keys, displayKeys]);
 
+  // TODO: the old version handled adding + signs between combos which typescript didn't like
   return (
     <span className={styles.keyCombo}>
       {keyMap.map(([key, display]) => (

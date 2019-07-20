@@ -5,13 +5,14 @@ import KeyboardShortcut from "../KeyboardShortcut";
 import * as styles from "./Dropdown.module.scss";
 
 interface DropdownProps {
-  close: any;
-  search: any;
+  close: EventHandlerNonNull;
+  search: EventHandlerNonNull;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ close, search }) => {
-  const getHelp = () => {
+  const getHelp = (e: KeyboardEvent) => {
     console.log("help");
+    e.preventDefault();
   };
 
   return (
