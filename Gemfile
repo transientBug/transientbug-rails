@@ -67,6 +67,9 @@ gem "jbuilder"
 # ActiveJob Worker
 gem "sidekiq"
 
+# Cron like scheduled/repeating tasks
+gem "clockwork"
+
 # Auth
 # Provider
 gem "doorkeeper"
