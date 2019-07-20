@@ -2,7 +2,9 @@
   "name": "transientbug",
   "private": true,
   "scripts": {
-    "lint": "eslint 'app/javascript/**'"
+    "lint": "eslint 'app/javascript/**'",
+    "gen-typings": "yarn run tsm app/javascript/**/*.scss",
+    "watch-typings": "yarn run tsm app/javascript/**/*.scss -w"
   },
   "dependencies": {
     "@rails/webpacker": "^4.0.7",
@@ -24,12 +26,13 @@
     "eslint": "^6.0.1",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-prettier": "^3.1.0",
     "eslint-loader": "^2.2.1",
     "eslint-plugin-import": "^2.18.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
     "ts-loader": "^6.0.4",
+    "typed-scss-modules": "^0.0.10",
     "typescript": "^3.5.3",
     "webpack-dev-server": "^3.7.2"
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import * as styles from "./Kbd.module.scss";
 
 interface KbdProps {
   children: string;
@@ -7,7 +8,7 @@ interface KbdProps {
 
 const Kbd: React.FC<KbdProps> = props => (
   <kbd
-    className={props.dark ? "dark" : ""}
+    className={props.dark ? styles.dark : styles.light}
     dangerouslySetInnerHTML={{ __html: props.children }}
   />
 );
