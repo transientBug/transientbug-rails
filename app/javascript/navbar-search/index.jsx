@@ -89,7 +89,8 @@ class NavbarSearch extends Component {
         <div className="tb tips">
           <div className="left">
             <KeyboardShortcut
-              keys={{ [["enter"]]: ["&crarr;"] }}
+              keys={["enter"]}
+              displayKeys={["&crarr;"]}
               onKey={this.onSearch}
             >
               Search

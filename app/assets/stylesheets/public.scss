@@ -30,18 +30,6 @@
 }
 
 .tb {
-  & > .key-combo {
-    display: flex;
-
-    &:not(:first-child) {
-      padding-left: 1em;
-    }
-
-    & > :last-child {
-      margin-right: .5em;
-    }
-  }
-
   &.navbar.search {
     position: relative;
 
