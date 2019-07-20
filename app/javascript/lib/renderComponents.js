@@ -1,4 +1,4 @@
-import renderComponentsForSelector from "../renderComponentsForSelector";
+import renderComponentsForSelector from "./renderComponentsForSelector";
 
 const renderComponents = componentMap =>
   Object.entries(componentMap).forEach(([selector, component]) => {
