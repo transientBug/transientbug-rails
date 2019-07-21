@@ -1,0 +1,28 @@
+-#= render partial: "layouts/admin-tailwinid/sidebar"
+
+-#= render partial: "layouts/admin-tailwind/navbar"
+
+-#.ui.pusher.main
+  .messages
+    = render_service_announcements
+    - flash.each do |type, message|
+
+
+  .ui.fluid.stackable.container
+    - if partial_for? "menu"
+      .ui.padded.two.column.stackable.grid
+        .three.wide.column
+          .responsive.mobile.hidden.ui.fluid.vertical.menu.sticky{ data: { behavior: "sticky", context: "#stickContext", offset: 75 } }
+            = render partial: "menu", locals: { count: @count }
+
+        .thirteen.wide.column
+          #stickContext= yield
+
+    - else
+      = yield
+
+%div{ class: "bg-blue-800 p-2 shadow text-xl text-white" }
+  %h3{ class: "font-bold pl-2" } Roles
+
+%div{ class: "flex flex-wrap" }
+  = yield

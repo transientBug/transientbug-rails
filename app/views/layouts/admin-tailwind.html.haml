@@ -1,0 +1,17 @@
+!!! 5
+%html
+  %head
+    = render partial: "layouts/admin-tailwind/head"
+
+    = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+
+  %body{ class: [  controller_name, action_name, "bg-gray-900 font-sans leading-normal tracking-normal mt-12" ] }
+    = render partial: "layouts/admin-tailwind/navbar"
+
+    %div{class: "flex flex-col md:flex-row" }
+      = render partial: "layouts/admin-tailwind/sidebar"
+
+      %div{ class: "main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5" }
+        = render partial: "layouts/admin-tailwind/body"
+
+        = render partial: "layouts/admin-tailwind/footer"

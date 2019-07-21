@@ -1,0 +1,59 @@
+-#.ui.sidebar.inverted.vertical.menu
+  .item
+    .header Admin #{ current_user.username }
+
+  = active_link_to admin_root_path, active: :exclusive, class: "item" do
+    Home
+    %i.home.icon
+
+  .item
+    .header general admin
+
+  .menu
+    = active_link_to admin_service_announcements_path, class: "item" do
+      service announcements
+      %i.announcement.icon
+
+  .item
+    .header user admin
+
+  .menu
+    = active_link_to admin_invitations_path, class: "item" do
+      invitatitons
+      %i.mail.icon
+
+    = active_link_to admin_users_path, class: "item" do
+      users
+      %i.users.icon
+
+  .item
+    .header bookmark related
+
+  .menu
+    = active_link_to admin_bookmarks_path, class: "item" do
+      bookmarks
+      %i.bookmark.icon
+
+  .item
+    .header image related
+
+  .menu
+    .item "Coming Soon"
+
+  .item
+    .header misc dev
+
+  .menu
+    = active_link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
+    = active_link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"
+
+  = content_for :sidebar
+
+  = link_to "Exit Admin", root_path, class: "item"
+
+
+%div{ class: "bg-gray-900 shadow-lg h-16 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-48" }
+  %div{ class: "md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between" }
+    %ul{ class: "list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left" }
+      %li{ class: "mr-3 flex-1" }
+        %a{ href: "#", class: "block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500" } Test

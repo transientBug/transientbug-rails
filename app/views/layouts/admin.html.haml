@@ -4,6 +4,7 @@
     = render partial: "layouts/admin/head"
 
     = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+    = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name ] }
     = render partial: "layouts/admin/body"
