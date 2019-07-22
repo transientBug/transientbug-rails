@@ -635,6 +635,40 @@ ALTER SEQUENCE offline_caches_id_seq OWNED BY offline_caches.id;
 
 
 --
+-- Name: permissions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE permissions (
+    id bigint NOT NULL,
+    role_id bigint,
+    key character varying,
+    name character varying,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE permissions_id_seq OWNED BY permissions.id;
+
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -964,6 +998,13 @@ ALTER TABLE ONLY offline_caches ALTER COLUMN id SET DEFAULT nextval('offline_cac
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY permissions ALTER COLUMN id SET DEFAULT nextval('permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
 
 
@@ -1128,6 +1169,14 @@ ALTER TABLE ONLY oauth_applications
 
 ALTER TABLE ONLY offline_caches
     ADD CONSTRAINT offline_caches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY permissions
+    ADD CONSTRAINT permissions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1341,6 +1390,20 @@ CREATE INDEX index_offline_caches_on_webpage_id ON offline_caches USING btree (w
 
 
 --
+-- Name: index_permissions_on_key; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_permissions_on_key ON permissions USING btree (key);
+
+
+--
+-- Name: index_permissions_on_role_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_permissions_on_role_id ON permissions USING btree (role_id);
+
+
+--
 -- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1440,6 +1503,14 @@ ALTER TABLE ONLY invitations_users
 
 
 --
+-- Name: fk_rails_93c739e1a2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY permissions
+    ADD CONSTRAINT fk_rails_93c739e1a2 FOREIGN KEY (role_id) REFERENCES roles(id);
+
+
+--
 -- Name: fk_rails_9a06b64fac; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1536,6 +1607,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180620161718'),
 ('20181204152019'),
 ('20181205204805'),
-('20190605150347');
+('20190605150347'),
+('20190720230313');
 
 
