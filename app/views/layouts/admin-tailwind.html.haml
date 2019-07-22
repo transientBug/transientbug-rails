@@ -19,7 +19,7 @@
       .navbar-left
         = link_to admin_root_path, class: "navbar-logo" do
           = image_tag "bug_logo.png", class: "logo"
-          transientBug Admin
+          %span{ class: "hidden md:block" } transientBug Admin
 
       .navbar-center
         %span.navbar-search
@@ -39,33 +39,32 @@
             %a{ href: "#" } Link
 
           %li.navbar-list-item
-            .navbar-dropdown-container{ class: "relative inline-block" }
-              %button.navbar-dropdown-trigger{ class: "text-white focus:outline-none" }
-                %span.navbar-dropdown-trigger-avatar{ class: "pr-2" }
+            .navbar-dropdown-container
+              %button.navbar-dropdown-trigger
+                %span{ class: "pr-2" }
                   %img.navbar-avatar
                 Hi, #{ current_user.username }
                 %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
                   %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
 
-              .navbar-dropdown{ class: "absolute bg-gray-900 text-white right-0 mt-3 p-3 overflow-auto z-30 " }
-                %input.navbar-dropdown-search{ class: "p-2 text-gray-600" }
-                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Profile
-                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings
-                .navbar-dropdown-divider{ class: "border border-gray-800" }
-                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings
+              .navbar-dropdown.hidden
+                %a.navbar-dropdown-item{ href: "#" } Profile
+                %a.navbar-dropdown-item{ href: "#" } Settings
+                .navbar-dropdown-divider
+                %a.navbar-dropdown-item{ href: "#" } Exit Admin
 
-    %div{class: "flex flex-col md:flex-row" }
-      %aside{ class: "bg-red-600 shadow-lg h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-48" }
-        %div{ class: "md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between" }
-          %ul{ class: "list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left" }
-            %li{ class: "mr-3 flex-1" }
-              %a{ href: "#", class: "block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500" } Test
+    .content-and-sidebar
+      %aside.sidebar
+        %nav.sidebar-nav
+          %ul.sidebar-nav-list
+            %li.sidebar-nav-item
+              %a{ href: "#" } Test
 
-      %div{ class: "flex-1 bg-gray-100 pb-24 md:pb-5" }
-        %div{ class: "bg-gray-200 p-2 shadow text-xl text-black" }
-          %h3{ class: "font-bold pl-2" }= content_for :page_title
+      %section.content
+        %header.header
+          %h3= content_for :page_title
 
-        %div{ class: "flex flex-wrap" }
+        %main.main
           = yield
 
   = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false

@@ -31,20 +31,23 @@
  */
 // @tailwind screens;
 
+$navbar-sm-height: 7.5rem;
+$navbar-md-height: 3.5rem;
+
 body.admin {
   @apply font-sans leading-normal tracking-normal;
 
-  margin-top: 7.5rem;
+  margin-top: $navbar-sm-height;
 
   @screen md {
-    margin-top: 3.5rem;
+    margin-top: $navbar-md-height;
   }
 }
 
 .navbar {
   @apply bg-red-600 pt-2 pb-1 px-1 mt-0 fixed w-full z-20 top-0;
 
-  height: 7.5rem;
+  height: $navbar-sm-height;
 
   display: grid;
 
@@ -58,7 +61,7 @@ body.admin {
   @screen md {
     @apply pt-1;
 
-    height: 3.5rem;
+    height: $navbar-md-height;
 
     grid-template-areas: "left center right";
   }
@@ -71,13 +74,13 @@ body.admin {
     }
   }
 
-  & > .navbar-left {
+  .navbar-left {
     grid-area: left;
 
     @include navbar-item();
   }
 
-  & > .navbar-center {
+  .navbar-center {
     grid-area: center;
 
     @include navbar-item();
@@ -85,7 +88,7 @@ body.admin {
     @apply px-2;
   }
 
-  & > .navbar-right {
+  .navbar-right {
     grid-area: right;
 
     @include navbar-item();
@@ -102,7 +105,7 @@ body.admin {
 
   display: contents;
 
-  & > img {
+  img {
     display: inline;
     height: 2.5rem;
   }
@@ -111,7 +114,7 @@ body.admin {
 .navbar-search {
   @apply relative w-full;
 
-  & > .navbar-search-input {
+  .navbar-search-input {
     @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pl-10 appearance-none leading-normal;
 
     &:focus {
@@ -119,7 +122,7 @@ body.admin {
     }
   }
 
-  & > .navbar-search-icon {
+  .navbar-search-icon {
     position: absolute;
 
     top: 0.5rem;
@@ -134,14 +137,14 @@ body.admin {
     @apply flex-none;
   }
 
-  & > .navbar-list-item {
+  .navbar-list-item {
     @apply flex justify-center flex-1;
 
     @screen md {
       @apply flex-none mr-3;
     }
 
-    & > a {
+    a {
       @apply inline-block no-underline py-2 px-4 text-gray-600;
 
       &:hover {
@@ -151,6 +154,102 @@ body.admin {
       &.active {
         @apply text-white;
       }
+    }
+  }
+}
+
+.navbar-dropdown-container {
+  @apply relative inline-block;
+
+  .navbar-dropdown-trigger {
+    @apply text-white;
+
+    &:focus {
+      @apply outline-none;
+    }
+  }
+
+  .navbar-dropdown {
+    @apply absolute bg-red-700 text-white right-0 mt-4 rounded overflow-auto z-30 w-48 shadow-md;
+
+    .navbar-dropdown-item {
+      @apply p-2 text-white text-sm no-underline block;
+
+      &:hover {
+        @apply bg-red-800 no-underline;
+      }
+    }
+
+    .navbar-dropdown-divider {
+      @apply border border-red-800 m-2;
+    }
+  }
+}
+
+.content-and-sidebar {
+  @apply flex flex-col;
+
+  @screen md {
+    @apply flex-row;
+  }
+
+  aside.sidebar {
+    @apply bg-red-600 shadow-lg h-16 fixed bottom-0 z-10 w-full;
+
+    @screen md {
+      @apply relative h-screen w-48;
+    }
+
+    nav.sidebar-nav {
+      @apply content-center text-left justify-between;
+
+      @screen md {
+        @apply mt-12 w-48 fixed left-0 top-0 content-start;
+      }
+
+      ul.sidebar-nav-list {
+        @apply flex flex-row py-0 px-1 text-center;
+
+        @screen md {
+          @apply flex-col py-3 px-2 text-left;
+        }
+
+        & > li.sidebar-nav-item {
+          @apply mr-3 flex-1;
+
+          & > * {
+            @apply block py-1 pl-1 align-middle text-white no-underline border-b-2 border-red-800;
+
+            @screen md {
+              @apply py-3;
+            }
+
+            &:hover {
+              @apply text-white border-white bg-red-800 inner-shadow;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    @apply flex-1 bg-gray-100 pb-24;
+
+    @screen md {
+      @apply pb-5;
+    }
+
+    header.header {
+      @apply bg-gray-200 p-2 shadow text-xl text-black;
+
+      & > h3 {
+        @apply font-bold pl-2;
+      }
+    }
+
+    main.main {
+      @apply p-4 flex flex-wrap;
     }
   }
 }
