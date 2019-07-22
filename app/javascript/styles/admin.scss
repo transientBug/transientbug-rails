@@ -30,3 +30,127 @@
  * your stylesheet by default.
  */
 // @tailwind screens;
+
+body.admin {
+  @apply font-sans leading-normal tracking-normal;
+
+  margin-top: 7.5rem;
+
+  @screen md {
+    margin-top: 3.5rem;
+  }
+}
+
+.navbar {
+  @apply bg-red-600 pt-2 pb-1 px-1 mt-0 fixed w-full z-20 top-0;
+
+  height: 7.5rem;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+
+  grid-template-areas:
+    "left center center"
+    "right right right";
+
+  @screen md {
+    @apply pt-1;
+
+    height: 3.5rem;
+
+    grid-template-areas: "left center right";
+  }
+
+  @mixin navbar-item {
+    @apply flex justify-center items-center text-white;
+
+    @screen md {
+      @apply justify-start;
+    }
+  }
+
+  & > .navbar-left {
+    grid-area: left;
+
+    @include navbar-item();
+  }
+
+  & > .navbar-center {
+    grid-area: center;
+
+    @include navbar-item();
+
+    @apply px-2;
+  }
+
+  & > .navbar-right {
+    grid-area: right;
+
+    @include navbar-item();
+    @apply pt-2;
+
+    @screen md {
+      @apply justify-end;
+    }
+  }
+}
+
+.navbar-logo {
+  @apply text-xl pl-2 font-bold;
+
+  display: contents;
+
+  & > img {
+    display: inline;
+    height: 2.5rem;
+  }
+}
+
+.navbar-search {
+  @apply relative w-full;
+
+  & > .navbar-search-input {
+    @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pl-10 appearance-none leading-normal;
+
+    &:focus {
+      @apply outline-none border-gray-300;
+    }
+  }
+
+  & > .navbar-search-icon {
+    position: absolute;
+
+    top: 0.5rem;
+    left: 0.8rem;
+  }
+}
+
+.navbar-list {
+  @apply flex justify-between flex-1 items-center;
+
+  @screen md {
+    @apply flex-none;
+  }
+
+  & > .navbar-list-item {
+    @apply flex justify-center flex-1;
+
+    @screen md {
+      @apply flex-none mr-3;
+    }
+
+    & > a {
+      @apply inline-block no-underline py-2 px-4 text-gray-600;
+
+      &:hover {
+        @apply text-gray-200 underline;
+      }
+
+      &.active {
+        @apply text-white;
+      }
+    }
+  }
+}

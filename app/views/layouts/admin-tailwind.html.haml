@@ -1,17 +1,71 @@
 !!! 5
 %html
   %head
-    = render partial: "layouts/admin-tailwind/head"
+    %meta{ :content => "width=device-width, initial-scale=1, shrink-to-fit=no", "name" => "viewport" }
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+    %meta{ :name => "turbolinks-cache-control", :content => "no-cache" }
 
-    = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+    = content_for :meta
 
-  %body{ class: [  controller_name, action_name, "bg-gray-900 font-sans leading-normal tracking-normal mt-12" ] }
-    = render partial: "layouts/admin-tailwind/navbar"
+    %title
+      transientBug Admin #{ content_for :page_title }
+
+    = csrf_meta_tags
+
+    = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
+
+  %body{ class: [ "admin", controller_name, action_name ] }
+    %nav.navbar
+      .navbar-left
+        = link_to admin_root_path, class: "navbar-logo" do
+          = image_tag "bug_logo.png", class: "logo"
+          transientBug Admin
+
+      .navbar-center
+        %span.navbar-search
+          %input.navbar-search-input
+
+          .navbar-search-icon
+            %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
+              %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
+
+      .navbar-right
+        %ul.navbar-list
+
+          %li.navbar-list-item
+            %a.active{ href: "#" } Active
+
+          %li.navbar-list-item
+            %a{ href: "#" } Link
+
+          %li.navbar-list-item
+            .navbar-dropdown-container{ class: "relative inline-block" }
+              %button.navbar-dropdown-trigger{ class: "text-white focus:outline-none" }
+                %span.navbar-dropdown-trigger-avatar{ class: "pr-2" }
+                  %img.navbar-avatar
+                Hi, #{ current_user.username }
+                %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
+                  %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
+
+              .navbar-dropdown{ class: "absolute bg-gray-900 text-white right-0 mt-3 p-3 overflow-auto z-30 " }
+                %input.navbar-dropdown-search{ class: "p-2 text-gray-600" }
+                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Profile
+                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings
+                .navbar-dropdown-divider{ class: "border border-gray-800" }
+                %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings
 
     %div{class: "flex flex-col md:flex-row" }
-      = render partial: "layouts/admin-tailwind/sidebar"
+      %aside{ class: "bg-red-600 shadow-lg h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-48" }
+        %div{ class: "md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between" }
+          %ul{ class: "list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left" }
+            %li{ class: "mr-3 flex-1" }
+              %a{ href: "#", class: "block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500" } Test
 
-      %div{ class: "main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5" }
-        = render partial: "layouts/admin-tailwind/body"
+      %div{ class: "flex-1 bg-gray-100 pb-24 md:pb-5" }
+        %div{ class: "bg-gray-200 p-2 shadow text-xl text-black" }
+          %h3{ class: "font-bold pl-2" }= content_for :page_title
 
-        = render partial: "layouts/admin-tailwind/footer"
+        %div{ class: "flex flex-wrap" }
+          = yield
+
+  = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
