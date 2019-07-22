@@ -26,6 +26,15 @@ module.exports = {
     Rails: true,
   },
 
+  settings: {
+    "react": {
+      "createClass": "createReactClass", // Regex for Component Factory to use,
+                                         // default to "createReactClass"
+      "pragma": "React",  // Pragma to use, default to "React"
+      "version": "detect"
+    }
+  },
+
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
