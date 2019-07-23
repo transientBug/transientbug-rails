@@ -22,45 +22,44 @@
           %span{ class: "hidden md:block" } transientBug Admin
 
       .navbar-center
-        %span.navbar-search
-          %input.navbar-search-input
+        %span.search
+          %input{ type: "search", placeholder: "Search roles ..." }
 
-          .navbar-search-icon
+          .search-icon
             %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
               %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
 
       .navbar-right
-        %ul.navbar-list
-
-          %li.navbar-list-item
+        %ul
+          %li
             %a.active{ href: "#" } Active
 
-          %li.navbar-list-item
+          %li
             %a{ href: "#" } Link
 
-          %li.navbar-list-item
-            .navbar-dropdown-container
-              %button.navbar-dropdown-trigger
+          %li
+            .dropdown
+              %button.dropdown-trigger
                 %span{ class: "pr-2" }
-                  %img.navbar-avatar
+                  %img
                 Hi, #{ current_user.username }
                 %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
                   %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
 
-              .navbar-dropdown.hidden
+              .dropdown-menu.hidden
                 = content_for :navbar_dropdown
                 - if content_for? :navbar_dropdown
-                  .navbar-dropdown-divider
-                = link_to "Exit Admin", root_path, class: "navbar-dropdown-item"
-                .navbar-dropdown-divider
-                = link_to "Logout", logout_path, class: "navbar-dropdown-item"
+                  .divider
+                = link_to "Exit Admin", root_path, class: "dropdown-item"
+                .divider
+                = link_to "Logout", logout_path, class: "dropdown-item"
 
     .content-and-sidebar
       %aside.sidebar
-        %nav.sidebar-nav
-          %ul.sidebar-nav-list
-            %li.sidebar-nav-item
-              %a{ href: "#" } Test
+        %nav
+          %a.active{ href: "#" } Test
+          %a{ href: "#" } Test
+          %a{ href: "#" } Test
 
       %section.content
         %header.header

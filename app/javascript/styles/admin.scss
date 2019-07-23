@@ -1,34 +1,10 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
 
-/**
- * This injects Tailwind's base styles and any base styles registered by
- * plugins.
- */
 @tailwind base;
-
-/**
- * This injects Tailwind's component classes and any component classes
- * registered by plugins.
- */
 @tailwind components;
-
-/**
- * This injects Tailwind's utility classes and any utility classes registered
- * by plugins.
- */
 @tailwind utilities;
-
-/**
- * Use this directive to control where Tailwind injects the responsive
- * variations of each utility.
- *
- * If omitted, Tailwind will append these classes to the very end of
- * your stylesheet by default.
- */
 // @tailwind screens;
 
 $navbar-sm-height: 7.5rem;
@@ -41,6 +17,62 @@ body.admin {
 
   @screen md {
     margin-top: $navbar-md-height;
+  }
+}
+
+@mixin navbar-item {
+  @apply flex justify-center items-center text-white;
+
+  @screen md {
+    @apply justify-start;
+  }
+
+  ul,
+  ol {
+    @apply flex justify-between flex-1 items-center;
+
+    @screen md {
+      @apply flex-none;
+    }
+
+    li {
+      @apply flex justify-center flex-1;
+
+      @screen md {
+        @apply flex-none mr-3;
+      }
+
+      a {
+        @apply inline-block no-underline py-2 px-4 text-gray-600;
+
+        &:hover {
+          @apply text-gray-200 underline;
+        }
+
+        &.active {
+          @apply text-white;
+        }
+      }
+    }
+  }
+
+  .search {
+    @apply relative w-full;
+
+    input[type~="search"] {
+      @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pl-10 appearance-none leading-normal shadow-inner;
+
+      &:focus {
+        @apply outline-none border-gray-300;
+      }
+    }
+
+    .search-icon {
+      position: absolute;
+
+      top: 0.5rem;
+      left: 0.8rem;
+    }
   }
 }
 
@@ -64,14 +96,6 @@ body.admin {
     height: $navbar-md-height;
 
     grid-template-areas: "left center right";
-  }
-
-  @mixin navbar-item {
-    @apply flex justify-center items-center text-white;
-
-    @screen md {
-      @apply justify-start;
-    }
   }
 
   .navbar-left {
@@ -111,57 +135,10 @@ body.admin {
   }
 }
 
-.navbar-search {
-  @apply relative w-full;
-
-  .navbar-search-input {
-    @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pl-10 appearance-none leading-normal;
-
-    &:focus {
-      @apply outline-none border-gray-300;
-    }
-  }
-
-  .navbar-search-icon {
-    position: absolute;
-
-    top: 0.5rem;
-    left: 0.8rem;
-  }
-}
-
-.navbar-list {
-  @apply flex justify-between flex-1 items-center;
-
-  @screen md {
-    @apply flex-none;
-  }
-
-  .navbar-list-item {
-    @apply flex justify-center flex-1;
-
-    @screen md {
-      @apply flex-none mr-3;
-    }
-
-    a {
-      @apply inline-block no-underline py-2 px-4 text-gray-600;
-
-      &:hover {
-        @apply text-gray-200 underline;
-      }
-
-      &.active {
-        @apply text-white;
-      }
-    }
-  }
-}
-
-.navbar-dropdown-container {
+.dropdown {
   @apply relative inline-block;
 
-  .navbar-dropdown-trigger {
+  .trigger {
     @apply text-white;
 
     &:focus {
@@ -169,18 +146,22 @@ body.admin {
     }
   }
 
-  .navbar-dropdown {
-    @apply absolute bg-red-700 text-white right-0 mt-4 rounded overflow-auto z-30 w-48 shadow-md;
+  .dropdown-menu {
+    @apply absolute bg-white right-0 mt-6 rounded overflow-auto z-30 w-48 shadow;
 
-    .navbar-dropdown-item {
-      @apply p-2 text-white text-sm no-underline block;
+    @screen md {
+      @apply mt-4;
+    }
+
+    .dropdown-item {
+      @apply p-2 text-red-800 text-sm no-underline block;
 
       &:hover {
-        @apply bg-red-800 no-underline;
+        @apply text-white bg-red-800 no-underline;
       }
     }
 
-    .navbar-dropdown-divider {
+    .divider {
       @apply border border-red-800 m-2;
     }
   }
@@ -192,64 +173,62 @@ body.admin {
   @screen md {
     @apply flex-row;
   }
+}
 
-  aside.sidebar {
-    @apply bg-red-600 shadow-lg h-16 fixed bottom-0 z-10 w-full;
+.content {
+  @apply flex-1 pb-24;
 
-    @screen md {
-      @apply relative h-screen w-48;
-    }
+  @screen md {
+    @apply pb-5;
+  }
 
-    nav.sidebar-nav {
-      @apply content-center text-left justify-between;
+  header {
+    @apply flex items-center border-b border-gray-200 p-2 text-xl text-black;
 
-      @screen md {
-        @apply mt-12 w-48 fixed left-0 top-0 content-start;
-      }
+    height: 3.5rem;
 
-      ul.sidebar-nav-list {
-        @apply flex flex-row py-0 px-0 text-center;
-
-        @screen md {
-          @apply flex-col text-left;
-        }
-
-        & > li.sidebar-nav-item {
-          @apply flex-1;
-
-          & > * {
-            @apply block px-2 align-middle text-white no-underline border-b border-gray-500;
-
-            @screen md {
-              @apply py-3;
-            }
-
-            &:hover {
-              @apply text-white border-white bg-red-800 shadow-inner;
-            }
-          }
-        }
-      }
+    h3 {
+      @apply font-bold pl-2;
     }
   }
 
-  .content {
-    @apply flex-1 bg-gray-100 pb-24;
+  main {
+    @apply p-4 flex flex-wrap;
+  }
+}
+
+aside.sidebar {
+  @apply bg-red-600 shadow-md fixed bottom-0 z-10 w-full;
+
+  @screen md {
+    @apply relative h-screen w-64;
+  }
+
+  & > nav {
+    @apply flex flex-row py-0 px-0;
 
     @screen md {
-      @apply pb-5;
+      @apply fixed w-64 flex-col;
     }
 
-    header.header {
-      @apply bg-gray-200 p-2 shadow text-xl text-black;
+    & > * {
+      @apply flex flex-1 justify-center p-4 text-white font-bold;
 
-      & > h3 {
-        @apply font-bold pl-2;
+      @screen md {
+        @apply block justify-start;
       }
-    }
 
-    main.main {
-      @apply p-4 flex flex-wrap;
+      &.active {
+        @apply text-white bg-red-700 border-red-900 border-t-4 shadow-inner;
+
+        @screen md {
+          @apply border-t-0 border-l-4;
+        }
+      }
+
+      &:hover {
+        @apply bg-red-700 shadow-inner;
+      }
     }
   }
 }
