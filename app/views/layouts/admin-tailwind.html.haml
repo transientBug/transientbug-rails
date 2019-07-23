@@ -22,7 +22,8 @@
           %span{ class: "hidden md:block" } transientBug Admin
 
       .navbar-center
-        %span.search
+        = content_for :navbar_center
+        -#%span.search
           %input{ type: "search", placeholder: "Search roles ..." }
 
           .search-icon
@@ -31,11 +32,7 @@
 
       .navbar-right
         %ul
-          %li
-            %a.active{ href: "#" } Active
-
-          %li
-            %a{ href: "#" } Link
+          = content_for :navbar_right
 
           %li
             .dropdown
@@ -55,13 +52,21 @@
                 = link_to "Logout", logout_path, class: "dropdown-item"
 
     .content-and-sidebar
-      %aside.sidebar
-        %nav
+      - if content_for? :sidebar
+        %aside.sidebar
+          = content_for :sidebar
+
+        -#%nav
           %a.active{ href: "#" } Test
           %a{ href: "#" } Test
           %a{ href: "#" } Test
+      - if partial_for? "menu"
+        =render partial: "menu", locals: { count @count }
 
       %section.content
+        - flash.for_each do |type, message|
+          .flash{ class: [type] }= message
+
         %header.header
           %h3= content_for :page_title
 
