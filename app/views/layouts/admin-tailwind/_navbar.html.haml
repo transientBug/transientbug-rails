@@ -1,69 +1,40 @@
--#.ui.top.fixed.inverted.red.menu.responsive.mobile.hidden
-  .clickable.item
-    %i.large.sidebar.icon
+- if partial_for? "navbar"
+  = render partial: "navbar"
 
-  = link_to admin_root_path, class: "header item" do
-    = image_tag "bug_logo.png", class: "logo"
-    transientBug Admin
+%nav.navbar
+  .navbar-left
+    = link_to admin_root_path, class: "navbar-logo" do
+      = image_tag "bug_logo.png", class: "logo"
+      %span{ class: "hidden md:block" } transientBug Admin
 
-  = content_for :navbar
+  .navbar-center
+    = content_for :navbar_center
+    -#%span.search
+      %input{ type: "search", role: "search" placeholder: "Search roles ..." }
 
-  .right.menu
-    = content_for :navbar_right
+      .search-icon
+        %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
+          %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
 
-    .ui.simple.dropdown.item
-      %i.user.circle.outline.icon
-      = current_user.username
-      %i.dropdown.icon
-      .menu
-        = content_for :navbar_dropdown
-        = link_to "Exit Admin", root_path, class: "item"
-        = link_to "Logout", logout_path, class: "item"
+  .navbar-right
+    %ul
+      = content_for :navbar_right
 
--#.ui.top.fixed.inverted.red.menu.mobile.only
-  .clickable.item
-    %i.large.sidebar.icon
+      %li
+        .dropdown
+          %button.dropdown-trigger
+            %span{ class: "pr-2" }
+              %img
+            Hi, #{ current_user.username }
+            %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
+              %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
 
-  .right.menu
-    = link_to root_path, class: "item" do
-      Exit Admin
-      = image_tag "bug_logo.png", class: "image"
+          .dropdown-menu.hidden
+            - if content_for? :navbar_dropdown
+              = content_for :navbar_dropdown
+              .divider
+            = link_to "Exit Admin", root_path, class: "dropdown-item"
+            .divider
+            = link_to "Logout", logout_path, class: "dropdown-item"
 
-%nav.navbar{ class: "bg-gray-900 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0" }
-  .inner-navbar-wrapper{ class: "flex flex-wrap items-center" }
 
-    .navbar-logo{ class: "flex flex-shrink md:w-1/3 justify-center md:justify-start text-white" }
-      %span{ class: "text-xl pl-2" } transientBug Admin
-
-    .navbar-search{ class: "flex flex-1 md:w-1/3 justify-center md:justify-start text-white px-2" }
-      %span.navbar-search-inner{ class: "relative w-full" }
-        %input.navbar-search-input{ class: "w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 pl-10 appearance-none leading-normal" }
-
-        .navbar-search-icon{ class: "absolute", style: "top: .5rem; left: .8rem;" }
-          %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
-            %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
-
-    .navbar-left{ class: "flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end" }
-      %ul.navbar-left-list{ class: "list-reset flex justify-between flex-1 md:flex-none items-center" }
-
-        %li.navbar-left-item{ class: "flex-1 md:flex-none md:mr-3" }
-          %a{ href: "#", class: "inline-block py-2 px-4 text-white no-underline" } Active
-
-        %li.navbar-left-item{ class: "flex-1 md:flex-none md:mr-3" }
-          %a{ href: "#", class: "inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" } Link
-
-        %li.navbar-left-item{ class: "flex-1 md:flex-none md:mr-3" }
-          .navbar-dropdown-container{ class: "relative inline-block" }
-            %button.navbar-dropdown-trigger{ class: "drop-button text-white focus:outline-none" }
-              %span.navbar-dropdown-trigger-avatar{ class: "pr-2" }
-                %img.navbar-avatar
-              Hi, #{ current_user.username }
-              %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
-                %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
-
-            .navbar-dropdown{ class: "dropdownlist absolute bg-gray-900 text-white right-0 mt-3 p-3 overflow-auto z-30 " }
-              %input.navbar-dropdown-search{ class: "drop-search p-2 text-gray-600" }
-              %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Profile
-              %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings
-              .navbar-dropdown-divider
-              %a.navbar-dropdown-item{ href: "#", class: "p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block" } Settings

@@ -15,57 +15,30 @@
     = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
 
   %body{ class: [ "admin", controller_name, action_name ] }
-    %nav.navbar
-      .navbar-left
-        = link_to admin_root_path, class: "navbar-logo" do
-          = image_tag "bug_logo.png", class: "logo"
-          %span{ class: "hidden md:block" } transientBug Admin
-
-      .navbar-center
-        = content_for :navbar_center
-        -#%span.search
-          %input{ type: "search", placeholder: "Search roles ..." }
-
-          .search-icon
-            %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
-              %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
-
-      .navbar-right
-        %ul
-          = content_for :navbar_right
-
-          %li
-            .dropdown
-              %button.dropdown-trigger
-                %span{ class: "pr-2" }
-                  %img
-                Hi, #{ current_user.username }
-                %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
-                  %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
-
-              .dropdown-menu.hidden
-                = content_for :navbar_dropdown
-                - if content_for? :navbar_dropdown
-                  .divider
-                = link_to "Exit Admin", root_path, class: "dropdown-item"
-                .divider
-                = link_to "Logout", logout_path, class: "dropdown-item"
+    = render partial: "layouts/admin-tailwind/navbar"
 
     .content-and-sidebar
-      - if content_for? :sidebar
-        %aside.sidebar
-          = content_for :sidebar
-
-        -#%nav
-          %a.active{ href: "#" } Test
-          %a{ href: "#" } Test
-          %a{ href: "#" } Test
-      - if partial_for? "menu"
-        =render partial: "menu", locals: { count @count }
+      = render partial: "layouts/admin-tailwind/sidebar"
 
       %section.content
-        - flash.for_each do |type, message|
-          .flash{ class: [type] }= message
+        -# TODO: Thing of a better way to handle fetching these, maybe as a default before action?
+        -# or just stick with a helper like the application helper uses?
+        -# TODO: Style these and get the icons working again in the new webpack flow
+        - service_announcements = ServiceAnnouncement.displayable
+        - if service_announcements&.any?
+          - service_announcements.each do |service_announcement|
+            .flash{ class: [ service_announcement.color, (service_announcement.icon ? "icon" : "")] }
+              - if service_announcement.icon
+                %i.icon{ class: [ service_announcement.icon ] }
+
+              .header
+                = service_announcement.title
+              %p
+                :markdown
+                  #{ service_announcement.message }
+
+        - flash.each do |type, message|
+          .flash{ class: [type], role: "alert" }= message
 
         %header.header
           %h3= content_for :page_title
