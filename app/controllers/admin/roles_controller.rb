@@ -4,20 +4,21 @@ class Admin::RolesController < AdminController
 
   # GET /admin/roles
   def index
-    @roles = Role.all.order(name: :desc).page params[:page]
-  end
+    role_table = Role.arel_table
 
-  # GET /admin/roles/1
-  def show
+    query_param = params[:q]
+    base_where = role_table[:id].eq(query_param)
+      .or(role_table[:name].matches("%#{ query_param }%"))
+      .or(role_table[:description].matches("%#{ query_param }%"))
+
+    @roles = Role.all
+    @roles = @roles.where(base_where) if query_param.present? && !query_param.empty?
+    @roles = @roles.order(name: :asc).page params[:page]
   end
 
   # GET /admin/roles/new
   def new
     @role = Role.new
-  end
-
-  # GET /admin/roles/1/edit
-  def edit
   end
 
   # POST /admin/roles
@@ -32,6 +33,12 @@ class Admin::RolesController < AdminController
       end
     end
   end
+
+  # GET /admin/roles/1
+  def show; end
+
+  # GET /admin/roles/1/edit
+  def edit; end
 
   # PATCH/PUT /admin/roles/1
   def update

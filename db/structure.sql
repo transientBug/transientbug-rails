@@ -705,7 +705,8 @@ CREATE TABLE roles (
     id bigint NOT NULL,
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    description character varying
 );
 
 
@@ -1668,6 +1669,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181205204805'),
 ('20190605150347'),
 ('20190720230313'),
-('20190724044957');
+('20190724044957'),
+('20190724174108');
 
 

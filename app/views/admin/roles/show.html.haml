@@ -36,3 +36,21 @@
         %b Created At
       %td
         = @role.created_at.to_s(:long)
+
+%b Description
+= @role.description
+
+%h2.ui.dividing.header Permissions
+
+
+%table.ui.collapsing.celled.table
+  %thead
+    %tr
+      %th Name
+      %th Description
+  %tbody
+    - @role.permissions.each do |permission|
+      %tr
+        %td= permission.name
+        %td= permission.description
+  
