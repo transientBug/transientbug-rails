@@ -1,5 +1,4 @@
-%h1 New admin_role
+- content_for :page_title do
+  New Role
 
-= render 'form'
-
-= link_to 'Back', admin_roles_path
+= render partial: "form", locals: { role: @role }

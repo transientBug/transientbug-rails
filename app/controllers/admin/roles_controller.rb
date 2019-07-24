@@ -1,6 +1,4 @@
 class Admin::RolesController < AdminController
-  layout "admin-tailwind"
-
   before_action :set_count
   before_action :set_role, only: [:show, :edit, :update, :destroy]
 
@@ -65,6 +63,6 @@ class Admin::RolesController < AdminController
   end
 
   def role_params
-    params.fetch(:role, {})
+    params.require(:role).permit :name, :description, permission_ids: []
   end
 end

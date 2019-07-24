@@ -1,7 +1,13 @@
-%h1 Editing admin_role
+- content_for :page_title do
+  Editing "#{ @role.name }"
 
-= render 'form'
+- content_for :menu do
+  .item
+    .divider
+    .header Role
+    .menu
+      = link_to admin_role_path(@role), class: "item" do
+        %i.expand.icon
+        view
 
-= link_to 'Show', @admin_role
-\|
-= link_to 'Back', admin_roles_path
+= render partial: "form", locals: { role: @role }
