@@ -68,8 +68,8 @@ class User < ApplicationRecord
     roles.find { |role| role.name == name.to_s }
   end
 
-  def has_permission? key
-    permissions.find { |permission| permission.key == key.to_s }
+  def permission? key
+    permissions.any? { |permission| permission.key == key.to_s }
   end
 
   private
