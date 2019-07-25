@@ -2,13 +2,14 @@ require 'rails_helper'
 
 RSpec.describe "admin/roles/new", type: :view do
   before(:each) do
-    assign(:admin_role, Admin::Role.new())
+    assign(:role, create(:role))
   end
 
-  it "renders new admin_role form" do
+  it "renders new role form" do
     render
 
     assert_select "form[action=?][method=?]", admin_roles_path, "post" do
+      debugger
     end
   end
 end
