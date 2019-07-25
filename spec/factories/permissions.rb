@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :permission do
-    role nil
-    key "MyString"
-    name "MyString"
-    description "MyString"
+    key { "MyString" }
+    sequence(:name) { |n| "role#{ n }" }
+    description { "MyString" }
   end
 end
