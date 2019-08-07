@@ -16,7 +16,7 @@ class Api::V1::BookmarksController < Api::V1Controller
     authorize @bookmark
 
     if @bookmark.id
-      render :show, status: :found, location: @bookmark
+      render :show, status: :ok, location: @bookmark
       return
     end
 
