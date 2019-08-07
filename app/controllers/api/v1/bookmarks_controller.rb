@@ -16,10 +16,7 @@ class Api::V1::BookmarksController < Api::V1Controller
     authorize @bookmark
 
     if @bookmark.id
-      # 302 Found with a location doesn't return CORS by default so things like
-      # a browser extension will fail on this request
-      response.set_header 'Access-Control-Allow-Origin', '*'
-      render :show, status: :found, location: @bookmark
+      render :show, status: :ok, location: @bookmark
       return
     end
 
