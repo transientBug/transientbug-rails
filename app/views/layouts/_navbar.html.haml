@@ -10,7 +10,7 @@
   - if signed_in?
     = active_link_to "Bookmarks", bookmarks_path, class: "item"
 
-    = react_component "Navbar", { path: bookmarks_search_index_path, query: params[:q], title: nil }, { style: "display:flex; flex-grow:1;" }
+    = react_component "Navbar", { path: bookmarks_search_index_path, query: params.fetch(:q, '') }, { style: "display:flex; flex-grow:1;" }
 
   = content_for :navbar
 
