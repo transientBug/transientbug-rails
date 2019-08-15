@@ -5,12 +5,12 @@
 //
 // To reference this file, add <%= javascript_pack_tag 'public' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
-import renderComponents from "../lib/renderComponents";
 
+// Support component names relative to this directory:
 import Navbar from "../components/Navbar";
+import ReactRailsUJS from "react_ujs";
 
-document.addEventListener("turbolinks:load", () => {
-  renderComponents({
-    '[data-behavior~="navbar-search"]': Navbar
-  });
-});
+window.Navbar = Navbar;
+//const componentRequireContext = require.context("components", true);
+
+//ReactRailsUJS.useContext(componentRequireContext);
