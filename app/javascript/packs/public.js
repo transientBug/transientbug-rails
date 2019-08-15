@@ -6,11 +6,9 @@
 // To reference this file, add <%= javascript_pack_tag 'public' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-// Support component names relative to this directory:
-import Navbar from "../components/Navbar";
 import ReactRailsUJS from "react_ujs";
 
-window.Navbar = Navbar;
-//const componentRequireContext = require.context("components", true);
+// Support component names relative to this directory:
+const componentRequireContext = require.context("components", true);
 
-//ReactRailsUJS.useContext(componentRequireContext);
+ReactRailsUJS.useContext(componentRequireContext);
