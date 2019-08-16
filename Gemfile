@@ -53,6 +53,7 @@ gem "turbolinks", "~> 5"
 gem "semantic-ui-sass", "~> 2.2.12.0"
 gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
+gem "react-rails"
 gem "ejs" # javascript templates for things like fancy delete modals
 
 # Better link styling
