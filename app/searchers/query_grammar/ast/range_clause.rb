@@ -27,6 +27,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? RangeClause
+
         field == other.field && low == other.low && high == other.high
       end
     end

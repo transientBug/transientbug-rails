@@ -21,6 +21,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? Negator
+
         items == other.items
       end
     end

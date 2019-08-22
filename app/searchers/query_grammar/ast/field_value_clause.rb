@@ -14,6 +14,7 @@ module QueryGrammar
         val = Array(value).map do |entry|
           next entry.to_s if entry.is_a? Date
           next "\"#{ entry }\"" if entry.index(" ")
+
           entry
         end.join " "
 
@@ -37,6 +38,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? self.class
+
         field == other.field && value == other.value
       end
     end

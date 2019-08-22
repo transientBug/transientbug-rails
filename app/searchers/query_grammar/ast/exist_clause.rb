@@ -23,6 +23,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? ExistClause
+
         field == other.field
       end
     end

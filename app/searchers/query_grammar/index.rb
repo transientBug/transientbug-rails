@@ -48,6 +48,7 @@ module QueryGrammar
 
     def resolve_field field_or_alias
       return field_or_alias unless aliases.key? field_or_alias
+
       aliases[ field_or_alias ]
     end
   end
