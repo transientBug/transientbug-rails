@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class RangeClause < Node
       attr_reader :field, :low, :high
 

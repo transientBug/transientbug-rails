@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class Group < Node
       attr_reader :items, :conjoiner
 

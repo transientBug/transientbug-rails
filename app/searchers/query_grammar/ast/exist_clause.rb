@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class ExistClause < Node
       attr_reader :field
 

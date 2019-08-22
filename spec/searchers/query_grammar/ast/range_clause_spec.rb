@@ -1,3 +1,3 @@
-RSpec.describe QueryGrammar::AST::RangeClause do
+RSpec.describe QueryGrammar::Ast::RangeClause do
   skip "Nothing to test here yet"
 end

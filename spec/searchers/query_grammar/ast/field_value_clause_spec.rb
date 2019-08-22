@@ -1,3 +1,3 @@
-RSpec.describe QueryGrammar::AST::FieldValueClause do
+RSpec.describe QueryGrammar::Ast::FieldValueClause do
   skip "Nothing to test here yet"
 end

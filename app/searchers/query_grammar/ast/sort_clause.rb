@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class SortClause < Node
       attr_reader :field, :direction
 

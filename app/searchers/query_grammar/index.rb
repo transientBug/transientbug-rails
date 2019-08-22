@@ -1,10 +1,10 @@
 module QueryGrammar
   class Index
-    autoload :DSL, "query_grammar/index/dsl"
-    autoload :OperatorDSL, "query_grammar/index/operator_dsl"
+    autoload :Dsl, "query_grammar/index/dsl"
+    autoload :OperatorDsl, "query_grammar/index/operator_dsl"
 
     def self.build &block
-      DSL.build(&block)
+      Dsl.build(&block)
     end
 
     def types

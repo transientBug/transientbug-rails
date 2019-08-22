@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class MatchClause < FieldValueClause
     end
   end

@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class Negator < Node
       attr_reader :items
 

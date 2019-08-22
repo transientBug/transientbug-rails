@@ -1,3 +1,3 @@
-RSpec.describe QueryGrammar::AST::Node do
+RSpec.describe QueryGrammar::Ast::Node do
   skip "Nothing to test here yet"
 end

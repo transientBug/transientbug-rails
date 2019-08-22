@@ -20,5 +20,7 @@ module TransientBug
     config.generators.javascript_engine = :js
 
     config.exceptions_app = routes
+
+    config.load_defaults "6.0"
   end
 end
