@@ -3,7 +3,7 @@
   "required": ["data"],
   "properties": {
     "data": {
-      "$ref": "_bookmark.json"
+      "$ref": "file:/api/v1/bookmark.json#"
     }
   }
 }

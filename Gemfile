@@ -141,7 +141,7 @@ group :development, :test do
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails"#, "~> 3.5"
+  gem "rspec-rails", github: 'rspec/rspec-rails', branch: '4-0-dev' #, "~> 3.5"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"

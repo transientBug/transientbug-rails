@@ -1,4 +1,5 @@
 {
+  "id": "file:/api/v1/bookmark.json#",
   "type": "object",
   "required": ["type", "id"],
   "properties": {
