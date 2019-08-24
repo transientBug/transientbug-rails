@@ -1,6 +1,6 @@
 module QueryGrammar
   class Index
-    class OperatorDSL
+    class OperatorDsl
       attr_reader :operator
 
       def self.build **opts, &block

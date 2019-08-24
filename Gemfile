@@ -6,7 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 # Base Rails stuff
-gem "rails", "~> 5.2.3"
+gem "rails", "~> 6.0.0"
+gem "rake"
 
 # Data Stores
 #  * Postgres
@@ -14,7 +15,7 @@ gem "rails", "~> 5.2.3"
 #  * Redis
 gem "pg"
 gem "chewy"
-gem "redis", "~> 3.0"
+gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
 # gem "active_record_upsert" # Has issues with arel deps wnd the rails 5.2 beta
@@ -22,8 +23,8 @@ gem "connection_pool"
 # gem "aws-sdk-s3", "~> 1"
 
 # TODO: Replace because of rails 5.2 having redis stores built in
-gem "redis-rails"
-gem "redis-rack-cache"
+# gem "redis-rails"
+# gem "redis-rack-cache"
 
 # CORS
 gem "rack-cors"
@@ -32,7 +33,7 @@ gem "rack-cors"
 gem "bcrypt"
 
 # Server
-gem "puma", "~> 3.11"
+gem "puma"#, "~> 3.11"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -42,15 +43,15 @@ gem "haml"
 gem "haml-rails"
 
 # Javascript and CSS
-gem "sass-rails", "~> 5.0"
-gem "uglifier", ">= 1.3.0"
-gem "webpacker", "~> 4.0"
+gem "sass-rails"#, "~> 5.0"
+gem "uglifier"#, ">= 1.3.0"
+gem "webpacker"#, "~> 4.0"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 #
 # gem "coffee-rails" # uuuuuuugh
-gem "turbolinks", "~> 5"
-gem "semantic-ui-sass", "~> 2.2.12.0"
+gem "turbolinks"#, "~> 5"
+gem "semantic-ui-sass"#, "~> 2.2.12.0"
 gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
 gem "react-rails"
@@ -110,14 +111,14 @@ gem "parslet"
 gem "apitome"
 
 # Security issues
-gem "rubyzip", ">= 1.2.2"
-gem "rack", ">= 2.0.6"
-gem "loofah", ">= 2.2.3"
+#gem "rubyzip", ">= 1.2.2"
+#gem "rack", ">= 2.0.6"
+#gem "loofah", ">= 2.2.3"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "web-console", ">= 3.3.0"
-  gem "listen", ">= 3.0.5", "< 3.2"
+  gem "web-console"#, ">= 3.3.0"
+  gem "listen"#, ">= 3.0.5", "< 3.2"
 
   gem "better_errors"
   gem "binding_of_caller"
@@ -136,11 +137,11 @@ group :development, :test do
   gem "pry-rails"
 
   # Document everything
-  gem "yard", ">= 0.9.20"
+  gem "yard"#, ">= 0.9.20"
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails", "~> 3.5"
+  gem "rspec-rails", github: 'rspec/rspec-rails', branch: '4-0-dev' #, "~> 3.5"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"
@@ -155,7 +156,7 @@ group :development, :test do
 
   # Document the API through rspec tests
   gem "rspec_api_documentation"
-  gem "json_matchers", "~> 0.9"
+  gem "json_matchers"#, "~> 0.9"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
@@ -165,13 +166,13 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver with headless
   # chrome
-  gem "capybara", "~> 2.13"
+  gem "capybara"#, "~> 2.13"
   gem "capybara-selenium"
   gem "selenium-webdriver"
   # gem "chromedriver-helper"
 
   # Test rack things
-  gem "rack-test", "~> 0.7.0"
+  gem "rack-test"#, "~> 0.7.0"
 
   # A Mockery of Time
   gem "timecop"

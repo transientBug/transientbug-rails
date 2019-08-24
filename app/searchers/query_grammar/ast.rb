@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     autoload :Node, "query_grammar/ast/node"
 
     autoload :Negator, "query_grammar/ast/negator"

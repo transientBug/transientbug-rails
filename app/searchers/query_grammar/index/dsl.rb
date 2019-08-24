@@ -1,6 +1,6 @@
 module QueryGrammar
   class Index
-    class DSL
+    class Dsl
       def self.build &block
         new.tap do |obj|
           obj.instance_eval(&block)
@@ -22,7 +22,7 @@ module QueryGrammar
       end
 
       def operator prefix, **opts, &block
-        index.operators[ prefix.to_s ] = QueryGrammar::Index::OperatorDSL.build(**opts, &block)
+        index.operators[ prefix.to_s ] = QueryGrammar::Index::OperatorDsl.build(**opts, &block)
       end
 
       def respond_to_missing? func, *args

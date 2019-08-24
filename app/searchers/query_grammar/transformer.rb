@@ -18,7 +18,6 @@ module QueryGrammar
       Cloaker.new(bind: Context.new(bindings)).cloak(&block)
     end
 
-    # rubocop:disable Metrics/AbcSize
     def parse_clause subtree_clause
       values = Array(subtree_clause[:value])
       base_clause = OpenStruct.new subtree_clause.merge(values: values)
@@ -39,9 +38,8 @@ module QueryGrammar
 
       return inner.first if inner.length == 1
 
-      QueryGrammar::AST::Group.new conjoiner: :or, items: inner, origin: subtree_clause
+      QueryGrammar::Ast::Group.new conjoiner: :or, items: inner, origin: subtree_clause
     end
-    # rubocop:enable Metrics/AbcSize
 
     rule term: simple(:term) do
       term.to_s
@@ -66,13 +64,13 @@ module QueryGrammar
     rule negator: simple(:negator), clause: subtree(:clause) do |subtree|
       inner = parse_clause subtree[:clause]
 
-      QueryGrammar::AST::Negator.new items: inner, origin: subtree
+      QueryGrammar::Ast::Negator.new items: inner, origin: subtree
     end
 
     rule group: subtree(:group) do |subtree|
       group = subtree[:group]
 
-      QueryGrammar::AST::Group.new items: group[:values], conjoiner: group[:conjoiner].downcase.to_sym, origin: subtree
+      QueryGrammar::Ast::Group.new items: group[:values], conjoiner: group[:conjoiner].downcase.to_sym, origin: subtree
     end
 
     rule expression: subtree(:expression) do
@@ -80,7 +78,7 @@ module QueryGrammar
     end
 
     rule negator: simple(:negator), expression: subtree(:expression) do |subtree|
-      QueryGrammar::AST::Negator.new items: subtree[:expression], origin: subtree
+      QueryGrammar::Ast::Negator.new items: subtree[:expression], origin: subtree
     end
   end
 end

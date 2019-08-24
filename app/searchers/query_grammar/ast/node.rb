@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class Node
       attr_reader :origin
 
