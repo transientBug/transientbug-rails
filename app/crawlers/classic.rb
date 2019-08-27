@@ -35,10 +35,6 @@ class Document
     @dependencies ||= {}
   end
 
-  def address
-    @address ||= Addressable::URI.parse uri
-  end
-
   # TODO: What if this is JSON and instead of xpath it's a json_path?
   def nokogiri
     @nokogiri ||= Nokogiri::HTML(response.body)
@@ -49,7 +45,9 @@ class Document
   def_delegators :nokogiri, :xpath
 
   # TODO: move this logic to a "dependency resolver/parser"
-  def asset_links uri
+  def asset_links
+    root_uri = Addressable::URI.parse @uri
+
     [
       "//link[@rel='stylesheet']/@href",
       "//script/@src",
@@ -59,12 +57,15 @@ class Document
       .uniq
       .compact
       .map(&Addressable::URI.method(:parse))
-      .map { |link| (uri + link).to_s }
+      .map { |link| (root_uri + link).to_s }
   end
 
-  def add_dependency link, dep
+  def add_dependency dep
+    binding.pry unless dep.is_a? Document
+    fail "dependency must be a Document, got `#{ dep.class }`" unless dep.is_a? Document
+
     dep.parent = self
-    dependencies[link] = dep
+    dependencies[dep.uri] = dep
   end
 end
 
@@ -96,21 +97,13 @@ class Classic
   end
 
   def crawl site
-    root = crawl_deps site
-
-    fetch_favicon_for root
-
-    return root
+    crawl_deps(site).tap(&method(:fetch_favicon_for))
   end
 
   private
 
   def crawl_deps site
-    root = request site
-
-    fetch_assets_for root
-
-    return root
+    request(site).tap(&method(:fetch_assets_for))
   end
 
   def client
@@ -118,54 +111,60 @@ class Classic
   end
 
   def fetch_favicon_for root
-    default_location = root.address.join("/favicon.ico").to_s
-    res = request default_location
+    root_address = Addressable::URI.parse root.uri
 
-    root.add_dependency default_location, res
+    res = root_address
+      .yield_self { |uri| uri.join "/favicon.ico" }
+      .yield_self(&:to_s)
+      .yield_self(&method(:request))
+
+    root.add_dependency res
     return if (200...299).include? res.response.status
 
     root.xpath('//link[@rel="shortcut icon"]').find do |possible_favicon|
-      href = root.address.join(possible_favicon.attr("href")).to_s
+      res = possible_favicon.attr("href")
+        .yield_self { |href| root_address.join href } # Ensures that a relative URI is converted to absolute
+        .yield_self(&:to_s)
+        .yield_self(&method(:request))
 
-      res = request href
+      root.add_dependency res
 
-      root.add_dependency href, res
+      (200..299).include? res.response.status
     end
   end
 
   def fetch_assets_for root
-    root.asset_links(root.address).each do |link|
-      dep = crawl_deps link
-
-      root.add_dependency link, dep
+    root.asset_links.each do |link|
+      root.add_dependency crawl_deps link
     end
   end
 
   def request uri
-    document = Document.new uri
+    Document.new(uri).tap do |document|
+      puts "Fetching uri: '#{ uri }'"
 
-    puts "Fetching uri: '#{ uri }'"
+      res = client.get uri
 
-    res = client.get uri
+      body, content_type = with_temp_file do |temp_file|
+        write_body response: res, to: temp_file
+        content_type = get_content_type response: res, io: temp_file
 
-    body, content_type = binary_temp_file do |temp_file|
-      write_body response: res, to: temp_file
-      content_type = get_content_type response: res, io: temp_file
+        [temp_file.read, content_type]
+      end
 
-      [temp_file.read, content_type]
+      # TODO: There is a lot more info to capture from the request and
+      # response.
+      document.request = Request.new uri: uri, method: "GET", headers: {} #res.req.headers
+      document.response = Response.new status: res.code, headers: res.headers, body: body
+
+      document.content_type = content_type
+    rescue HTTP::ConnectionError => e
+      debugger
     end
-
-    # TODO: There is a lot more info to capture from the request and
-    # response.
-    document.request = Request.new uri: uri, method: "GET", headers: {} #res.req.headers
-    document.response = Response.new status: res.code, headers: res.headers, body: body
-
-    document.content_type = content_type
-
-    return document
   end
 
-  def binary_temp_file
+  # TODO: Could these three methods live else where?
+  def with_temp_file
     Tempfile.create do |temp_file|
       temp_file.binmode
 
