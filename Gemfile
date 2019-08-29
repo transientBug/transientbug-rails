@@ -22,9 +22,10 @@ gem "connection_pool"
 
 # gem "aws-sdk-s3", "~> 1"
 
-# TODO: Replace because of rails 5.2 having redis stores built in
-# gem "redis-rails"
-# gem "redis-rack-cache"
+# Caching - Rails 5.2 shipped with a redis cache for fragments, but doesn't
+# provide session storage via redis too, which redis-rails does.
+gem "redis-rails"
+gem "redis-rack-cache"
 
 # CORS
 gem "rack-cors"
