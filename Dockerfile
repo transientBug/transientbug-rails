@@ -10,11 +10,12 @@ RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpin
 
 WORKDIR /app
 
+VOLUME ["/app/public", "/dropzone"]
+
 COPY Gemfile Gemfile.lock ./
-RUN  bundle install --binstubs --jobs 4 --without development test
+RUN  bundle install --binstubs --jobs 4 --without development test && \
+     bundle exec rake tmp:create
 
 COPY . .
-
-VOLUME ["/app/public", "/dropzone"]
 
 CMD bundle exec puma -C config/puma.rb
