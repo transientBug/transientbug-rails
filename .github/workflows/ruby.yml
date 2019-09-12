@@ -1,0 +1,67 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+
+      - name: Rubocop Linter
+        uses: andrewmcodes/rubocop-linter-action@0.1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:10.8
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: ""
+
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+
+      elasticsearch:
+        image: blacktop/elasticsearch:5.6
+        ports:
+          - 9200/tcp
+        env:
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+          discovery.type: "single-node"
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+
+      - name: Set up Node 12.8
+        uses: actions/setup-node@v1
+        with:
+          ruby-version: 12.8.x
+
+      - name: Install libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client libpq-dev
+
+      - name: Setup Database
+        run: |
+          bundle exec rails db:prepare
