@@ -34,12 +34,12 @@ jobs:
       redis:
         image: redis
         ports:
-          - 6379/tcp
+          - 6379:6379
 
       elasticsearch:
         image: blacktop/elasticsearch:5.6
         ports:
-          - 9200/tcp
+          - 9200:9200
         env:
           ES_JAVA_OPTS: "-Xms512m -Xmx512m"
           discovery.type: "single-node"
@@ -70,3 +70,5 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rails db:prepare
+        ENV:
+          DATABASE_URL: 'localhost:5432'
