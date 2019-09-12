@@ -62,6 +62,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client libpq-dev
 
+      - name: Install deps
+        run: |
+          bundle install
+          yarn install
+
       - name: Setup Database
         run: |
           bundle exec rails db:prepare
