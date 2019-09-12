@@ -11,8 +11,11 @@
     - if @stats[:untagged_count] != 0
       .statistic.red
         .value= @stats[:untagged_count]
-        .label= link_to "Untagged Bookmarks", bookmarks_search_index_path(q: "NOT has:tags")
-    - else 
+        .label
+          = link_to "Untagged Bookmarks", bookmarks_search_index_path(q: "NOT has:tags")
+          %br
+          = link_to "Tag Wizard", bookmarks_tag_wizard_index_path, class: "ui mini button"
+    - else
       .statistic
         .value= @stats[:untagged_count]
         .label Untagged Bookmarks!
