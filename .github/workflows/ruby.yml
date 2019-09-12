@@ -70,5 +70,5 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rails db:prepare
-        ENV:
+        env:
           DATABASE_URL: 'localhost:5432'
