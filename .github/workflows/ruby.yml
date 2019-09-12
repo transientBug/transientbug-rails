@@ -72,3 +72,5 @@ jobs:
           bundle exec rails db:prepare
         env:
           DATABASE_URL: 'localhost:5432'
+          RAILS_ENV: test
+          NODE_ENV: test
