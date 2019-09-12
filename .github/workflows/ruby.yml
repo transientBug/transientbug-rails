@@ -3,7 +3,7 @@ name: Ruby
 on: [push]
 
 jobs:
-  style:
+  #style:
     runs-on: ubuntu-latest
 
     steps:
