@@ -59,3 +59,13 @@ jobs:
           DATABASE_USER: postgres
           RAILS_ENV: test
           NODE_ENV: test
+
+      - name: Run specs
+        run: |
+          bundle exec rake
+        env:
+          DATABASE_HOST: localhost
+          DATABASE_USER: postgres
+          RAILS_ENV: test
+          NODE_ENV: test
+
