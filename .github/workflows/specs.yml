@@ -1,9 +1,13 @@
-name: Ruby
+name: Specs
 
-on: [push]
+on:
+  pull_request: true
+  push:
+    branches:
+      - master
 
 jobs:
-  tests:
+  RSpec:
     runs-on: ubuntu-latest
 
     services:
@@ -68,4 +72,3 @@ jobs:
           DATABASE_USER: postgres
           RAILS_ENV: test
           NODE_ENV: test
-
