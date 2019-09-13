@@ -1,7 +1,9 @@
 name: Specs
 
 on:
-  pull_request: true
+  pull_request:
+    branches:
+      - '*'
   push:
     branches:
       - master
