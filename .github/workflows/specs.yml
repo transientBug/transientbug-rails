@@ -46,7 +46,7 @@ jobs:
       - name: Set up Node 12.8
         uses: actions/setup-node@v1
         with:
-          ruby-version: 12.8.x
+          node-version: 12.8.x
 
       - name: Install libraries
         run: |
