@@ -1,13 +1,17 @@
 # config/chewy.yml
+
+default: &default
+  host: <%= ENV.fetch "ELASTICSEARCH_URL", "http://localhost:9200" %>
+
 # separate environment configs
 development:
-  host: 'localhost:9200'
+  <<: *default
   prefix: 'transientbug'
 
 test:
-  host: 'localhost:9200'
+  <<: *default
   prefix: 'transientbug_test'
 
 production:
-  host: <%= ENV["ELASTICSEARCH_URL"] %>
+  <<: *default
   prefix: "transientbug_prod"
