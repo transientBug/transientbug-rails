@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Bookmarks::TagWizardController, type: :controller do
   let(:valid_attributes) do
     {
-      tags: 'test',
+      tags: "test"
     }
   end
 

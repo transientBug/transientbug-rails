@@ -8,17 +8,17 @@ class Bookmarks::TagWizardController < ApplicationController
         :webpage,
         :tags,
         :user,
-        :offline_caches,
+        :offline_caches
       )
     end
 
-    @bookmark = BookmarksSearcher.new.search('NOT has:tags')
+    @bookmark = BookmarksSearcher.new.search("NOT has:tags")
       .query(term: { user_id: current_user.id })
       .per(1)
       .load(scope: scope)
       .objects.first
 
-    return render 'no_untagged' unless @bookmark
+    return render "no_untagged" unless @bookmark
 
     authorize @bookmark
   end
