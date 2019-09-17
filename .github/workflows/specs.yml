@@ -62,7 +62,7 @@ jobs:
         run: |
           bundle exec rails db:prepare
         env:
-          DATABASE_URL: postgresql://localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
           ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
           RAILS_ENV: test
@@ -72,7 +72,7 @@ jobs:
         run: |
           bundle exec rake
         env:
-          DATABASE_URL: postgresql://localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
           ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
           RAILS_ENV: test
