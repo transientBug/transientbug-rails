@@ -22,17 +22,17 @@ Rails.application.config.content_security_policy do |policy|
   policy.font_src    :self, :https, :data, "fonts.gstatic.com"
   policy.img_src     :self, :https, :data
   policy.object_src  :none
-  policy.script_src  :self, :https, :unsafe_inline
-  policy.style_src   :self, :https, :unsafe_inline, "fonts.googleapis.com"
+  policy.script_src  :self, :https
+  policy.style_src   :self, :https, "fonts.googleapis.com"
 
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
-    policy.script_src  :self, :https, :unsafe_inline, :unsafe_eval, "http://localhost:*", "http://0.0.0.0:*"
+    policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*"
     policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035"
   end
 
   # Specify URI for violation reports
-  # policy.report_uri  "/csp-violation-report-endpoint"
+  policy.report_uri  "/csp-violation-report"
 end
 
 # If you are using UJS then enable automatic nonce generation
