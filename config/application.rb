@@ -17,10 +17,11 @@ module TransientBug
     # the framework and any gems in your application.
     config.active_record.schema_format = :sql
 
-    config.generators.javascript_engine = :js
+    config.generators do |g|
+      g.assets = false
+      g.helper = false
+    end
 
     config.exceptions_app = routes
-
-    config.load_defaults "6.0"
   end
 end
