@@ -1,0 +1,79 @@
+name: Specs
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - master
+
+jobs:
+  RSpec:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:10.8
+        ports:
+          - 5432/tcp
+        env:
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DATABASE: "transientbug_test"
+
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+
+      elasticsearch:
+        image: blacktop/elasticsearch:5.6
+        ports:
+          - 9200/tcp
+        env:
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+          discovery.type: "single-node"
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+
+      - name: Set up Node 12.8
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.8.x
+
+      - name: Install libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client libpq-dev sqlite3 libsqlite3-dev
+
+      - name: Install deps
+        run: |
+          bundle install
+          yarn install
+
+      - name: Setup Database
+        run: |
+          bundle exec rails db:prepare
+        env:
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
+          RAILS_ENV: test
+          NODE_ENV: test
+
+      - name: Run specs
+        run: |
+          bundle exec rake
+        env:
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
+          RAILS_ENV: test
+          NODE_ENV: test

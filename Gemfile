@@ -8,6 +8,7 @@ end
 # Base Rails stuff
 gem "rails", "~> 6.0.0"
 gem "rake"
+gem "bootsnap", require: false
 
 # Data Stores
 #  * Postgres

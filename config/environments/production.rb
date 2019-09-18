@@ -54,10 +54,9 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
   config.cache_store = :redis_cache_store, { url: ENV["REDIS_URL"], expires_in: 90.minutes }
 
-  config.session_store :redis_store, servers: ["#{ ENV['REDIS_URL'] }/session"]
+  config.session_store :redis_store, servers: ["#{ ENV['REDIS_URL'] }/session"], expires_after: 20.years
   config.action_dispatch.rack_cache = {
     metastore: "#{ ENV['REDIS_URL'] }/metastore",
     entitystore: "#{ ENV['REDIS_URL'] }/entitystore"
