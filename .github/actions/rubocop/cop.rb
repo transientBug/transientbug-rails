@@ -156,11 +156,10 @@ def run
 
   check.finish!(**payload)
 
-  fail if annotations.any?
+  exit 1 if annotations.any?
 rescue => e
-  puts e
   check.finish! conclusion: :failure
-  fail
+  fail e
 end
 
 run()
