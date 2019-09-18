@@ -1,0 +1,6 @@
+name: 'Rubocop'
+description: 'Rubocops the repo and adds annotations'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
