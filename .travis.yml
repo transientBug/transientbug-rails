@@ -41,6 +41,7 @@ before_install:
   - gem install bundler
   - nvm install
   - yarn install
+  - psql -c 'create database transientbug_test;' -U postgres
 
 jobs:
   include:
