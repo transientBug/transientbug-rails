@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  RSpec:
+  DockerBuild:
     runs-on: ubuntu-latest
 
     services:
