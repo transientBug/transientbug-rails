@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
       collection do
         scope as: :bookmarks do
+          resources :tag_wizard, only: [:index, :update]
+
           resources :search, only: [:index]
 
           resources :tags, only: [:index, :show] do

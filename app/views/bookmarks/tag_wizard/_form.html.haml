@@ -1,0 +1,16 @@
+= form_with model: bookmark, url: bookmarks_tag_wizard_path(bookmark), class: "ui fluid form", html: { autocomplete: "off" } do |f|
+  - if bookmark.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
+      %ul
+        - bookmark.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :tags
+    .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-bookmark-tags" } }
+      = f.text_field :tags, value: bookmark.tags.map(&:label).join(","), style: "display: none", autocomplete: "off", data: { behaviour: "init" }
+      %i.dropdown.icon
+      .default.text Search Tags
+
+  = f.submit "Save & Next!", class: "ui positive fluid submit button"
