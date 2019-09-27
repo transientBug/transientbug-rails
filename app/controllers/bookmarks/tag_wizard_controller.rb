@@ -36,6 +36,7 @@ class Bookmarks::TagWizardController < ApplicationController
 
   def set_bookmark
     @bookmark = Bookmark.find params[:id]
+
     authorize @bookmark
   end
 
