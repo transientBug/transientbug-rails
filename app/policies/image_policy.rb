@@ -2,6 +2,7 @@ class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.all.order(:title) if user&.role? :admin
+
       scope.where(disabled: false).order(:title)
     end
   end

@@ -55,12 +55,14 @@ class User < ApplicationRecord
     user_digest = ::Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
 
     return false unless user_sent_token.bytesize == user_digest.bytesize
+
     ActiveSupport::SecurityUtils.secure_compare(user_sent_token, user_digest) && self
   end
 
   def owner_of? record
     return record.owner == self if record.respond_to? :owner
     return record.user_id == id if record.respond_to? :user_id
+
     false
   end
 

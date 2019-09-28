@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class RangeClause < Node
       attr_reader :field, :low, :high
 
@@ -27,6 +27,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? RangeClause
+
         field == other.field && low == other.low && high == other.high
       end
     end

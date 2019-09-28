@@ -1,3 +1,3 @@
-RSpec.describe QueryGrammar::AST::Negator do
+RSpec.describe QueryGrammar::Ast::Negator do
   skip "Nothing to test here yet"
 end

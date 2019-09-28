@@ -1,10 +1,10 @@
 module QueryGrammar
   class Index
-    autoload :DSL, "query_grammar/index/dsl"
-    autoload :OperatorDSL, "query_grammar/index/operator_dsl"
+    autoload :Dsl, "query_grammar/index/dsl"
+    autoload :OperatorDsl, "query_grammar/index/operator_dsl"
 
     def self.build &block
-      DSL.build(&block)
+      Dsl.build(&block)
     end
 
     def types
@@ -48,6 +48,7 @@ module QueryGrammar
 
     def resolve_field field_or_alias
       return field_or_alias unless aliases.key? field_or_alias
+
       aliases[ field_or_alias ]
     end
   end

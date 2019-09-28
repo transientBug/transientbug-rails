@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class SortClause < Node
       attr_reader :field, :direction
 
@@ -27,6 +27,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? SortClause
+
         field == other.field && direction == other.direction
       end
     end

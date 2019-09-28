@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class ExistClause < Node
       attr_reader :field
 
@@ -23,6 +23,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? ExistClause
+
         field == other.field
       end
     end

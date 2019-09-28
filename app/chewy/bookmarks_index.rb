@@ -36,6 +36,7 @@ class BookmarksIndex < Chewy::Index
 
       loop do
         break if host.count(".") < 1
+
         host = host.split(".", 2).last
         host_iterations << host
       end

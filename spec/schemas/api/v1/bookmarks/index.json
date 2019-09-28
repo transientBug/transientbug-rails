@@ -4,7 +4,7 @@
   "properties": {
     "data": {
       "type": "array",
-      "items": { "$ref": "_bookmark.json" }
+      "items": { "$ref": "file:/api/v1/bookmark.json#" }
     },
     "links": {
       "type": "object",

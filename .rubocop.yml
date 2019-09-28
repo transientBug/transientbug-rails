@@ -2,7 +2,7 @@ inherit_from:
   - .rubocop_rspec.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
@@ -80,16 +80,11 @@ Layout/EmptyLineBetweenDefs:
 
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
-
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
-Style/MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses_except_multiline
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -165,8 +160,11 @@ Style/NumericPredicate:
 Style/NumericLiterals:
   Enabled: false
 
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
 Style/MethodDefParentheses:
   Enabled: false
+  #EnforcedStyle: require_no_parentheses_except_multiline
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed
