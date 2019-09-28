@@ -27,7 +27,7 @@ class Admin::RolesController < AdminController
 
     respond_to do |format|
       if @role.save
-        format.html { redirect_to [:admin,  @role], notice: 'Role was successfully created.' }
+        format.html { redirect_to [:admin, @role], notice: "Role was successfully created." }
       else
         format.html { render :new }
       end
@@ -44,7 +44,7 @@ class Admin::RolesController < AdminController
   def update
     respond_to do |format|
       if @role.update(role_params)
-        format.html { redirect_to [:admin, @role], notice: 'Role was successfully updated.' }
+        format.html { redirect_to [:admin, @role], notice: "Role was successfully updated." }
       else
         format.html { render :edit }
       end
@@ -55,7 +55,7 @@ class Admin::RolesController < AdminController
   def destroy
     @role.destroy
     respond_to do |format|
-      format.html { redirect_to admin_roles_url, notice: 'Role was successfully destroyed.' }
+      format.html { redirect_to admin_roles_url, notice: "Role was successfully destroyed." }
     end
   end
 

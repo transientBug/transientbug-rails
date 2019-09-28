@@ -4,7 +4,7 @@ FactoryBot.define do
 
     trait :with_permissions do
       transient do
-        permission_names { [ 'default.default' ] }
+        permission_names { [ "default.default" ] }
       end
 
       after(:create) do |role, evaluator|

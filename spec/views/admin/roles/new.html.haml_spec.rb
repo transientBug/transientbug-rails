@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "admin/roles/new", type: :view do
-  before(:each) do
+  before do
     assign(:role, build(:role))
   end
 
