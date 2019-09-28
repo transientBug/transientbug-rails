@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "admin/roles/show", type: :view do
+  let(:role) { create :role }
+
   before do
-    @role = assign(:role, create(:role))
+    assign :role, role
   end
 
-  it "renders attributes in <p>" do
+  it "renders attributes" do
     render
   end
 end
