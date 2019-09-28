@@ -43,6 +43,8 @@ namespace :admin, constraints: RoleConstraint.new(:admin) do
     end
   end
 
+  resources :roles
+
   resources :bookmarks, only: [ :index, :show, :destroy ] do
     scope module: :bookmarks do
       resources :cache, only: [ :create ]
