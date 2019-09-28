@@ -4,7 +4,7 @@ RSpec.describe "admin/roles/edit", type: :view do
   let(:role) { create :role }
 
   before do
-    assign(:role, role)
+    assign :role, role
   end
 
   it "renders the edit role form" do

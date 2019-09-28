@@ -1,8 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "admin/roles/new", type: :view do
+  let(:role) { build :role }
+
   before do
-    assign(:role, build(:role))
+    assign :role, role
   end
 
   it "renders new role form" do
