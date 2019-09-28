@@ -32,14 +32,6 @@ namespace :admin, constraints: RoleConstraint.new(:admin) do
   resources :users, only: [ :index, :new, :create, :show, :edit, :update ] do
     scope module: :users do
       resources :password, only: [ :index, :create ]
-
-      # scope as: :users do
-      #   collection do
-      #     namespace :bulk do
-      #       resource :disable, only: [:destroy]
-      #     end
-      #   end
-      # end
     end
   end
 
