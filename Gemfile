@@ -20,6 +20,7 @@ gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
 # gem "active_record_upsert" # Has issues with arel deps wnd the rails 5.2 beta
+gem "after_party"
 
 # gem "aws-sdk-s3", "~> 1"
 
