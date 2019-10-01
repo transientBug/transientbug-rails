@@ -1,0 +1,15 @@
+.main {
+  @apply fixed w-full h-auto inset-0 z-50 overflow-hidden flex justify-center items-center;
+}
+
+.container {
+  @apply border border-teal-500 shadow-lg bg-white w-11/12 mx-auto rounded shadow-lg z-50 overflow-y-auto;
+
+  @screen md {
+    @apply max-w-md;
+  }
+}
+
+.content {
+  @apply py-4 text-left px-6;
+}
