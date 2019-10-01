@@ -8,27 +8,27 @@
 // import "core-js/stable"
 // import "regenerator-runtime/runtime"
 
-import Rails from "@rails/ujs";
-import Turbolinks from "turbolinks";
-import * as ActiveStorage from "@rails/activestorage";
-import ReactRailsUJS from "react_ujs";
+import Rails from "@rails/ujs"
+import Turbolinks from "turbolinks"
+import * as ActiveStorage from "@rails/activestorage"
+import ReactRailsUJS from "react_ujs"
 
-import "channels";
+import "channels"
 
-import "../styles/admin";
+import "../styles/admin"
 
-Rails.start();
-Turbolinks.start();
-ActiveStorage.start();
+Rails.start()
+Turbolinks.start()
+ActiveStorage.start()
 
 // Support component names relative to this directory:
-const componentRequireContext = require.context("components", true);
-ReactRailsUJS.useContext(componentRequireContext);
+const componentRequireContext = require.context("components", true)
+ReactRailsUJS.useContext(componentRequireContext)
 // ReactRailsUJS doesn't seem to pick up on Turbolinks like it should
 // I wonder if its because Turbolinks.start needs to be called before
 // importing ReactRailsUJS?
-ReactRailsUJS.detectEvents();
+ReactRailsUJS.detectEvents()
 
 // TODO: make better. Should App be moved away from?
 // Do I need it for anything besides a place to put the store?
-if (!window.App) window.App = {};
+if (!window.App) window.App = {}
