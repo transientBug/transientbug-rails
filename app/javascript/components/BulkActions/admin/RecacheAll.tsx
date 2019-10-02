@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import { BulkAction } from "../types"
 
 import useModal from "../../../hooks/useModal"
+import useStore from "../../../hooks/useStore"
 
 import Button from "../../Button"
 
@@ -20,6 +21,14 @@ const RecacheAll: BulkAction = ({ actionUrl }) => {
       </>
     )
   }))
+
+  const [visible, setVisible] = useState(false)
+
+  useStore(change => {
+    setVisible(change.selected.length !== 0)
+  })
+
+  if (!visible) return null
 
   return (
     <>
