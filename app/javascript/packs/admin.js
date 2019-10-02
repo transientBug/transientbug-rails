@@ -16,6 +16,7 @@ import ReactRailsUJS from "react_ujs"
 import "channels"
 
 import "../styles/admin"
+import createStore from "../lib/store"
 
 Rails.start()
 Turbolinks.start()
@@ -32,3 +33,4 @@ ReactRailsUJS.detectEvents()
 // TODO: make better. Should App be moved away from?
 // Do I need it for anything besides a place to put the store?
 if (!window.App) window.App = {}
+window.App.store = createStore(window.__initStore__)
