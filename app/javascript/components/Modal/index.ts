@@ -1,3 +1,3 @@
-import ModalPortal from "./ModalPortal"
+import Modal from "./Modal"
 
-export default ModalPortal
+export default Modal

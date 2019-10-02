@@ -1,0 +1,41 @@
+@mixin button-colors($bg, $border, $text) {
+  @apply bg-#{$bg} text-#{$text} border border-#{$border};
+}
+
+.button {
+  @apply font-semibold py-3 px-4 mt-2 rounded;
+}
+
+@variants hover {
+  .button-gray {
+    @include button-colors(gray-400, transparent, gray-800);
+  }
+
+  .button-gray-outline {
+    @include button-colors(transparent, gray-700, gray-800);
+  }
+
+  .button-red {
+    @include button-colors(red-600, transparent, white);
+  }
+
+  .button-red-outline {
+    @include button-colors(transparent, red-600, red-600);
+  }
+}
+
+.button-gray {
+  @include button-colors(gray-300, transparent, gray-600);
+}
+
+.button-gray-inverted {
+  @include button-colors(transparent, gray-500, gray-600);
+}
+
+.button-red {
+  @include button-colors(red-300, transparent, red-600);
+}
+
+.button-red-inverted {
+  @include button-colors(transparent, red-600, red-600);
+}

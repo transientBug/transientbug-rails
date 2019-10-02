@@ -2,7 +2,12 @@
   Bookmarks
 
 - content_for :menu do
-  = react_component "BulkActions", { actions: [ { "recache-all": admin_bookmarks_bulk_recache_path }, { "delete-all": admin_bookmarks_bulk_delete_path } ] }
+
+  .bulk-action-container
+    .bulk-action-menu
+      %h2 Bulk Actions
+      = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
+      = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
 
   .item.hidden{ data: { group: "bulk-edit-menu" } }
     .divider

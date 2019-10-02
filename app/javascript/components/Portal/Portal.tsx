@@ -1,9 +1,7 @@
 import React, { useMemo, useEffect } from "react"
 import ReactDOM from "react-dom"
 
-import Modal, { ModalProps } from "./Modal"
-
-const ModalPortal: React.FC<ModalProps> = props => {
+const Portal: React.FC = ({ children }) => {
   const domNode = useMemo(() => document.createElement("div"), [])
 
   useEffect(() => {
@@ -14,7 +12,7 @@ const ModalPortal: React.FC<ModalProps> = props => {
     }
   })
 
-  return ReactDOM.createPortal(<Modal {...props} />, domNode)
+  return ReactDOM.createPortal(children, domNode)
 }
 
-export default ModalPortal
+export default Portal

@@ -4,6 +4,25 @@
 
 @tailwind base;
 @tailwind components;
+
+@import "components/_buttons.scss";
+
+.bulk-action-container {
+  @apply overflow-hidden w-full;
+
+  & > .bulk-action-menu {
+    @apply px-4 py-4 mb-2 mt-2 flex flex-col;
+
+    & > h2 {
+      @apply font-bold mb-4;
+    }
+
+    & .button {
+      @apply w-full;
+    }
+  }
+}
+
 @tailwind utilities;
 
 // @tailwind screens;
