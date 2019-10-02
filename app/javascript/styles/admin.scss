@@ -23,6 +23,10 @@
   }
 }
 
+input:checked + svg {
+  display: block;
+}
+
 @tailwind utilities;
 
 // @tailwind screens;
