@@ -2,31 +2,18 @@
   Bookmarks
 
 - content_for :menu do
-
   .bulk-action-container
     .bulk-action-menu
-      %h2 Bulk Actions
       = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
       = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
 
-  .item.hidden{ data: { group: "bulk-edit-menu" } }
-    .divider
-    .header Bulk Actions
-    .menu
-      .item
-        = bulk_edit_action "recache-all", url: admin_bookmarks_bulk_recache_path, class: "ui fluid icon button" do
-          %i.download.icon
-          recache all
-
-      .item
-        = bulk_edit_action "delete-all", url: admin_bookmarks_bulk_delete_path, class: "ui fluid icon negative basic button" do
-          %i.trash.icon
-          delete all
+- content_for :store do
+  != { records: @bookmarks.reduce({}) { |memo, bookmark| memo.merge({ bookmark.id => bookmark.slice(:id, :uri, :user) }) }, selected: [] }.to_json
 
 %table.ui.celled.table
   %thead
     %tr
-      %th= select_all_checkbox
+      %th= react_component "BulkActions/SelectAll"
       %th Actions
       %th ID
       %th Creator
@@ -38,7 +25,7 @@
     - if @bookmarks.any?
       - @bookmarks.each do |bookmark|
         %tr
-          %td.collapsing= model_tag bookmark, only: [ :id, :title, :uri ]
+          %td.collapsing= react_component "BulkActions/SelectSingle", id: bookmark.id
           %td.collapsing
             .ui.buttons
               = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
