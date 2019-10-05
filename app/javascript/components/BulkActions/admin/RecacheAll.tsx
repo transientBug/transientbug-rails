@@ -34,7 +34,7 @@ const RecacheAll: BulkAction = ({ actionUrl }) => {
     <>
       {modal}
 
-      <Button className="button-gray hover:button-gray" onClick={open}>
+      <Button className="button-light-gray hover:button-gray" onClick={open}>
         <i className="download icon" />
         Recache All
       </Button>

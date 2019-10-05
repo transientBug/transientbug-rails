@@ -12,7 +12,7 @@ const DeleteAll: BulkAction = ({ actionUrl }) => {
     content: "Are you sure you want to delete all of these bookmarks?",
     actions: (
       <>
-        <Button className="button-gray hover:button-gray" onClick={close}>
+        <Button className="button-light-gray hover:button-gray" onClick={close}>
           NO! Cancel! ABORT!
         </Button>
         <Button className="button-red hover:button-red" onClick={close}>
