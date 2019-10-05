@@ -10,8 +10,9 @@
 = csrf_meta_tags
 = csp_meta_tag
 
-:javascript
-  window.__initStore__ = #{ raw yield(:store) || "{}" }
+- if content_for? :store
+  :javascript
+    window.__initStore__ = #{ raw content_for(:store) }
 
 = stylesheet_link_tag "admin", media: "all", "data-turbolinks-track": "reload"
 = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
