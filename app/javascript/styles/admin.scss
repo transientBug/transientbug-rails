@@ -7,19 +7,27 @@
 
 @import "components/_buttons.scss";
 
-.bulk-action-container {
-  @apply overflow-hidden w-full;
+.bulk-action-menu {
+  @apply px-4 flex flex-col w-full overflow-hidden;
 
-  & > .bulk-action-menu {
-    @apply px-4 py-4 mb-2 mt-2 flex flex-col;
+  h2 {
+    @apply font-bold text-lg;
+  }
 
-    & > h2 {
-      @apply font-bold mb-4;
-    }
+  small {
+    @apply text-gray-500;
+  }
 
-    & .button {
-      @apply w-full;
-    }
+  & .button {
+    @apply w-full my-2;
+  }
+
+  & :first-child:not(:empty) {
+    @apply mt-2;
+  }
+
+  & :last-child:not(:empty) {
+    @apply mb-2;
   }
 }
 
