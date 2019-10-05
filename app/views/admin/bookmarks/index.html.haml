@@ -2,13 +2,13 @@
   Bookmarks
 
 - content_for :menu do
-  .bulk-action-container
-    .bulk-action-menu
-      = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
-      = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
+  .bulk-action-menu
+    = react_component "BulkActions/Header", actionUrl: admin_bookmarks_bulk_recache_path
+    = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
+    = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
 
 - content_for :store do
-  != { records: @bookmarks.reduce({}) { |memo, bookmark| memo.merge({ bookmark.id => bookmark.slice(:id, :uri, :user) }) }, selected: [] }.to_json
+  != { records: @bookmarks.reduce({}) { |memo, bookmark| memo.merge({ bookmark.id => bookmark.slice(:id, :uri, :user) }) } }.to_json
 
 %table.ui.celled.table
   %thead
