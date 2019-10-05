@@ -1,6 +1,5 @@
 import React, { ReactNode, useState, useCallback, useMemo } from "react"
 
-import Modal from "../../components/Modal"
 import Portal from "../../components/Portal"
 
 export interface UseModalHook {
@@ -13,15 +12,9 @@ const useModal: UseModalHook = props => {
   const open = useCallback(() => setOpened(true), [])
   const close = useCallback(() => setOpened(false), [])
 
-  const modal = useMemo(
-    () =>
-      opened && (
-        <Portal>
-          <Modal onClose={close}>{props(close)}</Modal>
-        </Portal>
-      ),
-    [opened]
-  )
+  const modal = useMemo(() => opened && <Portal>{props(close)}</Portal>, [
+    opened
+  ])
 
   return [modal, open, close]
 }

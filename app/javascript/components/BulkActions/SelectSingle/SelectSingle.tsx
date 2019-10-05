@@ -12,7 +12,7 @@ interface SelectSingleProps {
 const SelectSingle: React.FC<SelectSingleProps> = ({ id }) => {
   const [checked, setChecked] = useState(false)
 
-  const [update] = useStore(change => {
+  const update = useStore(change => {
     if (change.selected.includes(id)) setChecked(true)
     else setChecked(false)
   })
@@ -29,11 +29,7 @@ const SelectSingle: React.FC<SelectSingleProps> = ({ id }) => {
     }
   }
 
-  return (
-    <>
-      <Checkbox checked={checked} onChange={updateStore}></Checkbox>
-    </>
-  )
+  return <Checkbox checked={checked} onChange={updateStore}></Checkbox>
 }
 
 const Wrapped = props => (

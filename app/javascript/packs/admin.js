@@ -33,4 +33,8 @@ ReactRailsUJS.detectEvents()
 // TODO: make better. Should App be moved away from?
 // Do I need it for anything besides a place to put the store?
 if (!window.App) window.App = {}
-window.App.store = createStore(window.__initStore__)
+window.App.store = createStore({
+  selected: [],
+  records: {},
+  ...window.__initStore__
+})

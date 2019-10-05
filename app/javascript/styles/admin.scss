@@ -6,6 +6,7 @@
 @tailwind components;
 
 @import "components/_buttons.scss";
+@import "components/_modal.scss";
 
 .bulk-action-menu {
   @apply px-4 flex flex-col w-full overflow-hidden;

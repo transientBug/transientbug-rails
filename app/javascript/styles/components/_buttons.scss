@@ -1,9 +1,13 @@
 @mixin button-colors($bg, $border, $text) {
   @apply bg-#{$bg} text-#{$text} border border-#{$border};
+
+  transition: all 100ms ease-in-out;
 }
 
 .button {
   @apply font-semibold py-3 px-4 mt-2 rounded;
+
+  @include button-colors(transparent, transparent, gray-800);
 }
 
 @variants hover, active {
@@ -24,6 +28,14 @@
 
   .button-light-gray-outline {
     @include button-colors(transparent, gray-500, gray-600);
+  }
+
+  .button-white {
+    @include button-colors(white, transparent, gray-900);
+  }
+
+  .button-white-outline {
+    @include button-colors(transparent, white, gray-900);
   }
 
   .button-red {

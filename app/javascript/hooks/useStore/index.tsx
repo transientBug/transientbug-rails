@@ -18,7 +18,7 @@ const useStore = changeHandler => {
     }
   }, [])
 
-  return [update]
+  return update
 }
 
 export default useStore

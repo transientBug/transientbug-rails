@@ -8,7 +8,7 @@ import ErrorBoundary from "../../ErrorBoundary"
 const SelectAll: React.FC = () => {
   const [checked, setChecked] = useState(false)
 
-  const [update] = useStore(change => {
+  const update = useStore(change => {
     if (change.selected.length) setChecked(true)
     else setChecked(false)
   })
@@ -25,11 +25,7 @@ const SelectAll: React.FC = () => {
     }
   }
 
-  return (
-    <>
-      <Checkbox checked={checked} onChange={updateStore}></Checkbox>
-    </>
-  )
+  return <Checkbox checked={checked} onChange={updateStore}></Checkbox>
 }
 
 const Wrapped = () => (
