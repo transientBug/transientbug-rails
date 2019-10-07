@@ -1,3 +1,3 @@
-import Kbd from "./Kbd";
+import Kbd from "./Kbd"
 
-export default Kbd;
+export default Kbd

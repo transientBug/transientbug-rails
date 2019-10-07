@@ -1,0 +1,25 @@
+= form_for [:admin,role], html: { class: "ui fluid form" } do |f|
+  - if role.errors.any?
+    .ui.message.error
+      %h2= "#{ pluralize role.errors.count, "error" } prohibited this role from being saved:"
+      %ul
+        - role.errors.full_messages.each do |message|
+          %li= message
+
+  %h4.ui.dividing.header basic info 
+
+  .required.field
+    = f.label :name
+    = f.text_field :name, aria: { describedby: "role name" }
+
+  .field
+    = f.label :description
+    = f.text_area :description, aria: { describedby: "description" }
+
+  %h4.ui.dividing.header permissions
+
+  .field
+    .ui.checkbox
+      = f.collection_check_boxes :permission_ids, Permission.all, :id, :name
+
+  = f.submit "save", class: "ui positive right floated submit button"
