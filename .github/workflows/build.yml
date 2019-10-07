@@ -92,8 +92,8 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t docker.pkg.github.com/transientbug/transientbug-rails/app:latest
-            -t docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA}
+            -t docker.pkg.github.com/transientbug/transientbug-rails/app:latest \
+            -t docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA} \
             -f Dockerfile .
 
       #- name: Login to GitHub Docker Registry
