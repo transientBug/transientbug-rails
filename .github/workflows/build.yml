@@ -92,7 +92,7 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_REF}-latest
+            -t docker.pkg.github.com/transientBug/transientbug-rails/app:latest
             -t docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_SHA}
             -f Dockerfile .
 
