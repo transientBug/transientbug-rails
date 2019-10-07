@@ -89,6 +89,13 @@ jobs:
           NODE_ENV: production
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
+      - name: Package & Upload Assets Tar
+        run : |
+          bin/upload-assets
+        env:
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
       - name: Build Image
         run: |
           docker build \
