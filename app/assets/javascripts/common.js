@@ -55,10 +55,6 @@ document.addEventListener("turbolinks:load", () => {
     }
   })
 
-  $("[data-behavior~=tag-popup]").popup({
-    inline: true
-  })
-
   $("[data-behavior~=dropdown]").dropdown()
 })
 
