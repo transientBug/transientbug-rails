@@ -1,7 +1,5 @@
 import React from "react"
 
-// import * as styles from "./Button.module.scss"
-
 interface ButtonProps {
   className?: string
   onClick?: any

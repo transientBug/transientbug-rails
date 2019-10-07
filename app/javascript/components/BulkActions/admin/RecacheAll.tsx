@@ -7,6 +7,8 @@ import useBulkActions from "../../../hooks/useBulkActions"
 import * as Modal from "../../Modal"
 import Button from "../../Button"
 
+import railsFetch from "../../../lib/railsFetch"
+
 const RecacheAll: BulkAction = ({ actionUrl }) => {
   const visible = useBulkActions()
 
@@ -18,6 +20,21 @@ const RecacheAll: BulkAction = ({ actionUrl }) => {
     const pluralString = `${bookmarks.length} ${
       bookmarks.length === 1 ? "Bookmark" : "Bookmarks"
     }`
+
+    const recacheAll = async () => {
+      await railsFetch({
+        url: actionUrl,
+        method: "POST",
+        payload: {
+          bulk: {
+            action: "delete-all",
+            ids: bookmarks.map(bookmark => bookmark.id)
+          }
+        }
+      })
+
+      window.location.reload()
+    }
 
     return (
       <Modal.Container className="modal-dimmed-background">
@@ -46,7 +63,7 @@ const RecacheAll: BulkAction = ({ actionUrl }) => {
           <Modal.Actions>
             <Button
               className="self-start button-red-outline hover:button-red shadow hover:shadow-md"
-              onClick={close}
+              onClick={recacheAll}
             >
               Recache {pluralString}
             </Button>

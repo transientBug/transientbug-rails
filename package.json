@@ -4,7 +4,8 @@
   "scripts": {
     "lint": "eslint 'app/javascript/'",
     "gen-typings": "yarn run tsm app/javascript/**/*.module.scss",
-    "watch-typings": "yarn run tsm app/javascript/**/*.module.scss -w"
+    "watch-typings": "yarn run tsm app/javascript/**/*.module.scss -w",
+    "dev-server": "bundle exec bin/webpack-dev-server"
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",

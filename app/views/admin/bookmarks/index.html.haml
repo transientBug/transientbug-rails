@@ -1,14 +1,16 @@
 - content_for :page_title do
   Bookmarks
 
+- content_for :store do
+  != { records: store_records(@bookmarks, only: [:id, :uri, :user]) }.to_json
+
 - content_for :menu do
   .bulk-action-menu
     = react_component "BulkActions/Header", actionUrl: admin_bookmarks_bulk_recache_path
     = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
     = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
 
-- content_for :store do
-  != { records: @bookmarks.reduce({}) { |memo, bookmark| memo.merge({ bookmark.id => bookmark.slice(:id, :uri, :user) }) } }.to_json
+= paginate @bookmarks
 
 %table.ui.celled.table
   %thead

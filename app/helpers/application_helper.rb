@@ -10,6 +10,21 @@ module ApplicationHelper
     render partial: "layouts/service_announcements", locals: { service_announcements: service_announcements }
   end
 
+  def store_records records, **opts
+    attributes = Array(opts.delete(:only)).map(&:to_sym)
+    attributes ||= records.model.attribute_names.map(&:to_sym)
+
+    # force the ID to be present because reasons
+    attributes << :id
+    attributes.uniq!
+
+    records.each_with_object({}) do |record, memo|
+      memo[ record.id ] = attributes.each_with_object({}) do |attribute, record_memo|
+        record_memo[ attribute ] = record.send(attribute).to_s
+      end
+    end
+  end
+
   # Builds out a "clickable item" div which contains all of the information
   # needed for bulk actions, including which modal template to use, and the bulk
   # action to be completed. This tag is hidden by default and JS unhides it
