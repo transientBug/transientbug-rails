@@ -1,4 +1,4 @@
-name: Specs
+name: Build
 
 on:
   pull_request:
