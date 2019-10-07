@@ -58,6 +58,16 @@ jobs:
           bundle install
           yarn install
 
+      - name: Setup Database
+        run: |
+          bundle exec rails db:prepare
+        env:
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
+          RAILS_ENV: test
+          NODE_ENV: test
+
       - name: Build Docs
         run: |
           bundle exec rake docs:generate
@@ -65,6 +75,8 @@ jobs:
           DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
           ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
+          RAILS_ENV: test
+          NODE_ENV: test
 
       - name: Build Assets
         run: |
