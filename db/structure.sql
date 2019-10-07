@@ -843,6 +843,15 @@ ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
+-- Name: task_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.task_records (
+    version character varying NOT NULL
+);
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1667,6 +1676,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190720230313'),
 ('20190724044957'),
 ('20190724174108'),
-('20190820175931');
+('20190820175931'),
+('20191007044907');
 
 

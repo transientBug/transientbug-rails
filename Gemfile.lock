@@ -83,6 +83,7 @@ GEM
       zeitwerk (~> 2.1, >= 2.1.8)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    after_party (1.11.2)
     apitome (0.3.0)
       kramdown
       railties
@@ -498,6 +499,7 @@ PLATFORMS
 DEPENDENCIES
   active_link_to
   addressable
+  after_party
   apitome
   awesome_print
   bcrypt
