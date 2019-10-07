@@ -96,14 +96,13 @@ jobs:
             -t docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA} \
             -f Dockerfile .
 
-      #- name: Login to GitHub Docker Registry
-        #run: |
-          #docker login docker.pkg.github.com --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-        #env:
-          #DOCKER_USERNAME: ${{ secrets.GITHUB_DOCKER_USERNAME }}
-          #DOCKER_PASSWORD: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+      - name: Login to GitHub Docker Registry
+        run: |
+          docker login docker.pkg.github.com --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.GITHUB_DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
 
-      #- name: Push to GitHub Docker Registry
-        #run: |
-          #docker push docker.pkg.github.com/transientbug/transientbug-rails/app:latest
-          #docker push docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA}
+      - name: Push to GitHub Docker Registry
+        run: |
+          docker push docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA}
