@@ -58,7 +58,17 @@ jobs:
           bundle install
           yarn install
 
-      - name: Run specs
+      - name: Build Docs
+        run: |
+          bundle exec rake docs:generate
+        env:
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
+          RAILS_ENV: production
+          NODE_ENV: production
+
+      - name: Build Assets
         run: |
           bundle exec rake assets:precompile
         env:
@@ -67,3 +77,23 @@ jobs:
           ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
           RAILS_ENV: production
           NODE_ENV: production
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
+      - name: Build Image
+        run: |
+          docker build \
+            -t docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_REF}-latest
+            -t docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_SHA}
+            -f Dockerfile .
+
+      - name: Login to GitHub Docker Registry
+        run: |
+          docker login docker.pkg.github.com --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.GITHUB_DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+
+      - name: Push to GitHub Docker Registry
+        run: |
+          docker push docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_REF}-latest
+          docker push docker.pkg.github.com/transientBug/transientbug-rails/app:${GITHUB_SHA}
