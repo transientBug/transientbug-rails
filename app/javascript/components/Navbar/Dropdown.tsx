@@ -1,19 +1,19 @@
-import React from "react";
+import React from "react"
 
-import KeyboardShortcut from "../KeyboardShortcut";
+import KeyboardShortcut from "../KeyboardShortcut"
 
-import * as styles from "./Dropdown.module.scss";
+import * as styles from "./Dropdown.module.scss"
 
 interface DropdownProps {
-  close: EventHandlerNonNull;
-  search: EventHandlerNonNull;
+  close: EventHandlerNonNull
+  search: EventHandlerNonNull
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ close, search }) => {
   const getHelp = (e: KeyboardEvent) => {
-    console.log("help");
-    e.preventDefault();
-  };
+    console.log("help")
+    e.preventDefault()
+  }
 
   return (
     <div className={styles.dropdown}>
@@ -40,7 +40,7 @@ const Dropdown: React.FC<DropdownProps> = ({ close, search }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown

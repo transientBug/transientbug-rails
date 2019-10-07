@@ -19,7 +19,7 @@
   - if policy(@image).update?
     = link_to "edit", edit_image_path(@image), class: "ui item"
 
-  .ui.item{ style: "padding: 0px;" }
+  .ui.item
     .ui.small.labels
       - @image.tags.each do |tag|
         = link_to tag_images_path(tag) do

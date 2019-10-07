@@ -4,37 +4,8 @@ document.addEventListener("turbolinks:load", () => {
     $(event.target).closest(".message").transition("fade")
   })
 
-  $(".ui.accordion").accordion()
-
   // Toggle the sidebar open and closed
   $(".sidebar.icon").parent().on("click", () => $(".ui.sidebar").sidebar("toggle"))
-
-  // Handle making the side menus sticky
-  $("[data-behavior~=sticky]").each((idx, element) => {
-    if($(element.dataset.context).length < 1)
-      return
-
-    // Hack to get around sticky setting the menu to height: 100% causing there
-    // to be a big gap between the menu and content to scroll through
-    const style = window.getComputedStyle(element)
-    if(style.display === "none") {
-      [
-        "mobile",
-        "hidden"
-      ].forEach(c => element.classList.remove(c))
-
-      element.dataset.behavior = "non-sticky"
-
-      return
-    }
-
-    let stickySettings = Object.assign({ }, element.dataset)
-
-    if(stickySettings.offset)
-      stickySettings.offset = parseInt(stickySettings.offset)
-
-    $(element).sticky(stickySettings)
-  })
 
   tagDropdown(
     "[data-behavior~=autocomplete-image-tags]",
@@ -82,10 +53,6 @@ document.addEventListener("turbolinks:load", () => {
     fields: {
       url: "view"
     }
-  })
-
-  $("[data-behavior~=tag-popup]").popup({
-    inline: true
   })
 
   $("[data-behavior~=dropdown]").dropdown()

@@ -68,7 +68,3 @@ class Application {
 }
 
 Application.boot()
-
-App.registerInitializer("action cable", (app) => {
-  app.cable = ActionCable.createConsumer()
-})

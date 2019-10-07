@@ -89,12 +89,9 @@ module ApplicationHelper
       data: data
     }.merge opts
 
-    display = "display: inline"
-    display = "display: none" if no_checkbox
-
     # Ensures that when we grab the siblings of the checkboxes that are
     # checked, that we'll end up with the correct div containing all the datas
-    tag.div style: display do
+    tag.div class: (no_checkbox ? "hidden" : "") do
       capture do
         concat tag.div(**options, &block)
         concat bulk_edit_checkbox model unless no_checkbox

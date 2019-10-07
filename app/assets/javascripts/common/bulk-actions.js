@@ -19,28 +19,6 @@ class BulkActions {
   toggleBulkActionsVisibility(shouldShow) {
     this._actions.toggleClass("hidden", !shouldShow)
     this._menus.toggleClass("hidden", !shouldShow)
-
-    const sticky = this._actions.parents("[data-behavior~=sticky]")
-    if(sticky.length < 1) return
-
-    // Hack to get around sticky setting the menu to height: 100% causing there
-    // to be a big gap between the menu and content to scroll through
-    const element = sticky.get(0)
-    const style = window.getComputedStyle(element)
-    if(style.display === "none") {
-      [
-        "mobile",
-        "hidden"
-      ].forEach(c => element.classList.remove(c))
-
-      element.dataset.behavior = "non-sticky"
-
-      return
-    }
-
-    console.log(sticky)
-
-    sticky.sticky("refresh")
   }
 
   toggleSelectAllChecked(shouldShow) {

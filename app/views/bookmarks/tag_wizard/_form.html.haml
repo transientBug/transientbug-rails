@@ -9,7 +9,7 @@
   .field
     = f.label :tags
     .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-bookmark-tags" } }
-      = f.text_field :tags, value: bookmark.tags.map(&:label).join(","), style: "display: none", autocomplete: "off", data: { behaviour: "init" }
+      = f.text_field :tags, value: bookmark.tags.map(&:label).join(","), autocomplete: "off", data: { behaviour: "init" }, class: "hidden"
       %i.dropdown.icon
       .default.text Search Tags
 

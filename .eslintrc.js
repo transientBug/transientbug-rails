@@ -73,6 +73,7 @@ module.exports = {
         'no-array-constructor': 'off',
         'no-unused-vars': 'off',
 
+        '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/no-angle-bracket-type-assertion': 'warn',
         '@typescript-eslint/no-array-constructor': 'warn',
         '@typescript-eslint/no-namespace': 'error',
