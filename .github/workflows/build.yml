@@ -92,7 +92,7 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_REF}-latest
+            -t docker.pkg.github.com/transientbug/transientbug-rails/app:latest
             -t docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA}
             -f Dockerfile .
 
@@ -105,5 +105,5 @@ jobs:
 
       #- name: Push to GitHub Docker Registry
         #run: |
-          #docker push docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_REF}-latest
+          #docker push docker.pkg.github.com/transientbug/transientbug-rails/app:latest
           #docker push docker.pkg.github.com/transientbug/transientbug-rails/app:${GITHUB_SHA}
