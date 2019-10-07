@@ -3,7 +3,7 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 //
-// To reference this file, add <%= javascript_pack_tag 'public' %> to the appropriate
+// To reference this file, add <%= javascript_pack_tag 'admin' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 // import "core-js/stable"
 // import "regenerator-runtime/runtime"
@@ -15,7 +15,7 @@ import ReactRailsUJS from "react_ujs";
 
 import "channels";
 
-import "../styles/public";
+import "../styles/admin";
 
 Rails.start();
 Turbolinks.start();
