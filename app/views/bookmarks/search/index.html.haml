@@ -3,7 +3,7 @@
 
 .ui.search.mobile.only
   .ui.fluid.icon.input
-    = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
+    = form_tag bookmarks_search_index_path, method: :get do
       = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
     %i.search.icon
 

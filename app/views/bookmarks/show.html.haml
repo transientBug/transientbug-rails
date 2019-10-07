@@ -7,7 +7,7 @@
 
   = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
 
-  .ui.item{ style: "padding: 0px;" }
+  .ui.item
     .ui.small.labels
       - @bookmark.tags.each do |tag|
         = link_to bookmarks_tag_path(tag) do
