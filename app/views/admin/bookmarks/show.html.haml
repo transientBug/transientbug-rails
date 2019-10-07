@@ -99,22 +99,12 @@
                   .date= offline_cache.created_at.to_s(:long)
 
                 .extra.text
-                  .ui.accordion
-                    .title
-                      %i.dropdown.icon
-                      - asset_count = offline_cache.assets.count
-                      = asset_count
-                      = "Asset".pluralize asset_count
-                      = error_count_label offline_cache.error_messages
+                  .title
+                    - asset_count = offline_cache.assets.count
+                    = asset_count
+                    = "Asset".pluralize asset_count
+                    = error_count_label offline_cache.error_messages
 
-                    .content
-                      .ui.list
-                        - offline_cache.assets.each do |asset|
-                          .item
-                            %i.file.icon
-                            .content
-                              .header= asset.blob.metadata.dig("uri")
-                              .description= asset.blob.content_type
 - else
   %h2.ui.dividing.header Cache History
   %p None :(
