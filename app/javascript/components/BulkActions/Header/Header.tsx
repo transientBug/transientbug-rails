@@ -2,11 +2,13 @@ import React, { useState } from "react"
 
 import useStore from "../../../hooks/useStore"
 
+import store from "../../../lib/defaultStore"
+
 const Header: React.FC = () => {
   const [count, setCound] = useState(0)
 
-  useStore(change => {
-    setCound(change.selected.length)
+  useStore(store, state => {
+    setCound(state.selection.length)
   })
 
   if (count === 0) return null

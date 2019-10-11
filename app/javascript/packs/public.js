@@ -28,7 +28,3 @@ ReactRailsUJS.useContext(componentRequireContext)
 // I wonder if its because Turbolinks.start needs to be called before
 // importing ReactRailsUJS?
 ReactRailsUJS.detectEvents()
-
-// TODO: make better. Should App be moved away from?
-// Do I need it for anything besides a place to put the store?
-if (!window.App) window.App = {}

@@ -2,11 +2,13 @@ import { useState } from "react"
 
 import useStore from "../useStore"
 
+import store from "../../lib/defaultStore"
+
 const useBulkActions = () => {
   const [visible, setVisible] = useState(false)
 
-  useStore(change => {
-    setVisible(change.selected.length !== 0)
+  useStore(store, state => {
+    setVisible(state.selection.length !== 0)
   })
 
   return visible

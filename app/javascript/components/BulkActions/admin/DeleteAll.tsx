@@ -7,15 +7,17 @@ import useBulkActions from "../../../hooks/useBulkActions"
 import * as Modal from "../../Modal"
 import Button from "../../Button"
 
+import store from "../../../lib/defaultStore"
 import railsFetch from "../../../lib/railsFetch"
+import Turbolinks from "turbolinks"
 
 const DeleteAll: BulkAction = ({ actionUrl }) => {
   const visible = useBulkActions()
 
   const [modal, open] = useModal(close => {
-    const state = window.App.store.getState()
+    const state = store.state
 
-    const bookmarks = state.selected.map(id => state.records[`${id}`])
+    const bookmarks = state.selection.map(id => state.records[`${id}`])
 
     const pluralString = `${bookmarks.length} ${
       bookmarks.length === 1 ? "Bookmark" : "Bookmarks"
@@ -33,7 +35,7 @@ const DeleteAll: BulkAction = ({ actionUrl }) => {
         }
       })
 
-      window.location.reload()
+      Turbolinks.visit(window.location, { action: "replace" })
     }
 
     return (

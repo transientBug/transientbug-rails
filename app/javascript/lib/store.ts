@@ -1,32 +1,60 @@
 import produce from "immer"
 
-function createStore(initialState = {}) {
-  let listeners = []
-  const state = { ...initialState }
+class Store {
+  private subscribers = []
+  private reducer = null
+  private internalState: any = {}
 
-  function unsubscribe(unsubListener) {
-    listeners = listeners.filter(listener => listener !== unsubListener)
-    unsubListener = null
-  }
-
-  function setState(action) {
-    const newState = produce(state, action)
-    Object.assign(state, newState)
-
-    listeners.forEach(listener => listener(state))
-  }
-
-  return {
-    subscribe(listener) {
-      listeners.push(listener)
-      return () => unsubscribe(listener)
-    },
-    unsubscribe,
-    setState,
-    getState() {
-      return state
+  constructor(reducer) {
+    this.internalState = {
+      ...this.internalState,
+      ...reducer(undefined, { type: null })
     }
+    this.reducer = reducer
+  }
+
+  subscribe(subscriber) {
+    this.subscribers.push(subscriber)
+
+    return () => {
+      this.unsubscribe(subscriber)
+    }
+  }
+
+  unsubscribe(unsubscriber) {
+    this.subscribers = this.subscribers.filter(
+      subscriber => subscriber !== unsubscriber
+    )
+    unsubscriber = null
+  }
+
+  dispatch(event) {
+    this.internalState = this.reducer(this.internalState, event)
+
+    this.subscribers.forEach(subscriber =>
+      subscriber(this.internalState, event)
+    )
+  }
+
+  get state() {
+    return this.internalState
   }
 }
 
-export default createStore
+const createReducer = (initialState, { ...typesToReducers }) => {
+  return produce((draft, event) => {
+    if (!typesToReducers.hasOwnProperty(event.type)) return
+    typesToReducers[event.type](draft, event)
+  }, initialState)
+}
+
+const combineReducers = ({ ...reducers }) => {
+  return (state, event) => {
+    return Object.entries(reducers).reduce((memo, [key, reducer]) => {
+      return { ...memo, [key]: reducer(state, event)[key] }
+    }, {})
+  }
+}
+
+export default Store
+export { createReducer, combineReducers }
