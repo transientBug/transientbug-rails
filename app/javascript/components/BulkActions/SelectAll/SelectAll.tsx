@@ -23,7 +23,7 @@ const SelectAll: React.FC = () => {
     else store.dispatch(selectionClear())
   }
 
-  return <Checkbox checked={checked} onChange={updateStore}></Checkbox>
+  return <Checkbox inverted checked={checked} onChange={updateStore}></Checkbox>
 }
 
 const Wrapped = () => (

@@ -1,3 +1,9 @@
+= javascript_tag nonce: true, "data-turbolinks-track": "reload", "data-turbolinks-eval": true do
+  window.__initStore__ = {}
+  - if content_for? :store
+    window.__initStore__ = #{ raw content_for(:store) }
+  console.log("hi")
+
 = render partial: "layouts/admin/sidebar"
 
 = render partial: "layouts/admin/navbar"

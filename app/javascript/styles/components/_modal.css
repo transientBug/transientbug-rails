@@ -60,7 +60,6 @@
 }
 
 .bg-danger {
-  // TODO: Theme colors in tailwind or scss?
   background: linear-gradient(87deg, #db2828 0, #f55036 100%);
 }
 

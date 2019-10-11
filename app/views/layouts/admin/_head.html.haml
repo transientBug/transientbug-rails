@@ -1,6 +1,5 @@
 %meta{ :content => "width=device-width, initial-scale=1, shrink-to-fit=no", "name" => "viewport" }
 %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
-%meta{ :name => "turbolinks-cache-control", :content => "no-cache" }
 
 = content_for :meta
 
@@ -9,10 +8,6 @@
 
 = csrf_meta_tags
 = csp_meta_tag
-
-- if content_for? :store
-  = javascript_tag nonce: true do
-    window.__initStore__ = #{ raw content_for(:store) }
 
 = stylesheet_link_tag "admin", media: "all", "data-turbolinks-track": "reload"
 = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
