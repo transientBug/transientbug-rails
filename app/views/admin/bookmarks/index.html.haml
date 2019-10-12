@@ -2,7 +2,7 @@
   Bookmarks
 
 - content_for :store do
-  != { records: store_records(@bookmarks, only: [:id, :uri, :user]) }.to_json
+  != { records: store_records(@bookmarks, only: [:id, :title, :uri]) }.to_json
 
 - content_for :menu do
   .bulk-action-menu
