@@ -19,11 +19,11 @@
 
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self, :https
-  policy.font_src    :self, :https, :data, "fonts.gstatic.com"
+  policy.font_src    :self, :https, :data
   policy.img_src     :self, :https, :data
   policy.object_src  :none
   policy.script_src  :self, :https
-  policy.style_src   :self, :https, "fonts.googleapis.com"
+  policy.style_src   :self, :https
 
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
