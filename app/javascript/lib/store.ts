@@ -6,11 +6,20 @@ class Store {
   private internalState: any = {}
 
   constructor(reducer) {
-    this.internalState = {
-      ...this.internalState,
-      ...reducer(undefined, { type: null })
-    }
     this.reducer = reducer
+
+    document.addEventListener("turbolinks:load", () => {
+      this.reset()
+    })
+
+    this.reset()
+  }
+
+  protected reset() {
+    this.internalState = {
+      ...this.reducer(undefined, { type: null }),
+      ...((window as any).__initStore__ || {})
+    }
   }
 
   subscribe(subscriber) {

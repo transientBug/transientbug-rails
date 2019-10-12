@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import useStore from "../useStore"
 
-import store from "../../lib/defaultStore"
+import store from "../../store"
 
 const useBulkActions = () => {
   const [visible, setVisible] = useState(false)

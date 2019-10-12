@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import useStore from "../../../hooks/useStore"
 
-import store from "../../../lib/defaultStore"
+import store from "../../../store"
 
 const Header: React.FC = () => {
   const [count, setCound] = useState(0)

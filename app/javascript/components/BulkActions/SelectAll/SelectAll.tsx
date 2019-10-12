@@ -5,10 +5,9 @@ import useStore from "../../../hooks/useStore"
 
 import ErrorBoundary from "../../ErrorBoundary"
 
-import store, {
-  selectionAddAll,
-  selectionClear
-} from "../../../lib/defaultStore"
+import store from "../../../store"
+
+import { operations } from "../../../store/selections"
 
 const SelectAll: React.FC = () => {
   const [checked, setChecked] = useState(false)
@@ -19,8 +18,8 @@ const SelectAll: React.FC = () => {
   })
 
   const updateStore = ({ target: { checked } }) => {
-    if (checked) store.dispatch(selectionAddAll())
-    else store.dispatch(selectionClear())
+    if (checked) store.dispatch(operations.addAll())
+    else store.dispatch(operations.clear())
   }
 
   return <Checkbox inverted checked={checked} onChange={updateStore}></Checkbox>

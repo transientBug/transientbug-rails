@@ -5,7 +5,8 @@ import useStore from "../../../hooks/useStore"
 
 import ErrorBoundary from "../../ErrorBoundary"
 
-import store, { selectionAdd, selectionRemove } from "../../../lib/defaultStore"
+import store from "../../../store"
+import { operations } from "../../../store/selections"
 
 interface SelectSingleProps {
   id: string
@@ -20,8 +21,8 @@ const SelectSingle: React.FC<SelectSingleProps> = ({ id }) => {
   })
 
   const updateStore = ({ target: { checked } }) => {
-    if (checked) store.dispatch(selectionAdd(id))
-    else store.dispatch(selectionRemove(id))
+    if (checked) store.dispatch(operations.add(id))
+    else store.dispatch(operations.remove(id))
   }
 
   return <Checkbox checked={checked} onChange={updateStore}></Checkbox>

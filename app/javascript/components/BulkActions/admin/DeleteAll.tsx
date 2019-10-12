@@ -7,7 +7,7 @@ import useBulkActions from "../../../hooks/useBulkActions"
 import * as Modal from "../../Modal"
 import Button from "../../Button"
 
-import store from "../../../lib/defaultStore"
+import store from "../../../store"
 import railsFetch from "../../../lib/railsFetch"
 import Turbolinks from "turbolinks"
 
