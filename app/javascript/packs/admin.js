@@ -23,12 +23,27 @@ ActiveStorage.start()
 
 // Support component names relative to this directory:
 const componentRequireContext = require.context("components", true)
-ReactRailsUJS.useContext(componentRequireContext)
+// ReactRailsUJS.useContext(componentRequireContext)
+// Copy pasta from the react-rails ujs source to avoid CSP issues with eval
+ReactRailsUJS.getConstructor = className => {
+  const parts = className.split(".")
+  const filename = parts.shift()
+  const keys = parts
+
+  // Load the module:
+  let component = componentRequireContext("./" + filename)
+
+  // Then access each key:
+  keys.forEach(function(k) {
+    component = component[k]
+  })
+
+  // support `export default`
+  if (component.__esModule) component = component["default"]
+
+  return component
+}
 // ReactRailsUJS doesn't seem to pick up on Turbolinks like it should
 // I wonder if its because Turbolinks.start needs to be called before
 // importing ReactRailsUJS?
 ReactRailsUJS.detectEvents()
-
-// TODO: make better. Should App be moved away from?
-// Do I need it for anything besides a place to put the store?
-if (!window.App) window.App = {}
