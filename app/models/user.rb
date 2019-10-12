@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :authorizations
   has_and_belongs_to_many :roles
+  has_many :permissions, through: :roles
 
   has_many :images
   has_many :bookmarks
@@ -67,6 +68,10 @@ class User < ApplicationRecord
 
   def role? name
     roles.find { |role| role.name == name.to_s }
+  end
+
+  def permission? key
+    permissions.any? { |permission| permission.key == key.to_s }
   end
 
   private
