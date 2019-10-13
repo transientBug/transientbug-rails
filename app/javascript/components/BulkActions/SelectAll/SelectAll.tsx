@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, ReactNode } from "react"
 
 import Checkbox from "../../Checkbox"
 import useStore from "../../../hooks/useStore"
@@ -9,7 +9,11 @@ import store from "../../../store"
 
 import { operations } from "../../../store/selections"
 
-const SelectAll: React.FC = () => {
+interface SelectAllProps {
+  label?: ReactNode
+}
+
+const SelectAll: React.FC<SelectAllProps> = ({ label }) => {
   const [checked, setChecked] = useState(false)
 
   useStore(store, state => {
@@ -22,12 +26,16 @@ const SelectAll: React.FC = () => {
     else store.dispatch(operations.clear())
   }
 
-  return <Checkbox inverted checked={checked} onChange={updateStore}></Checkbox>
+  return (
+    <Checkbox inverted checked={checked} onChange={updateStore}>
+      {label}
+    </Checkbox>
+  )
 }
 
-const Wrapped = () => (
+const Wrapped: typeof SelectAll = props => (
   <ErrorBoundary>
-    <SelectAll></SelectAll>
+    <SelectAll {...props} />
   </ErrorBoundary>
 )
 
