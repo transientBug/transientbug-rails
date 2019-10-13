@@ -76,7 +76,7 @@
 }
 
 .modal-dark-dialogue {
-  @apply text-white;
+  @apply text-white bg-gray-600;
 
   & .modal-body-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.17);

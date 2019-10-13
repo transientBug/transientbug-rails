@@ -38,6 +38,8 @@ class Store {
   }
 
   dispatch(event) {
+    if (typeof event === "function") return event(ev => this.dispatch(ev))
+
     this.internalState = this.reducer(this.internalState, event)
 
     this.subscribers.forEach(subscriber =>

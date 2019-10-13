@@ -20,7 +20,7 @@ module ApplicationHelper
 
     records.each_with_object({}) do |record, memo|
       memo[ record.id ] = attributes.each_with_object({}) do |attribute, record_memo|
-        record_memo[ attribute ] = record.send(attribute).as_json
+        record_memo[ attribute ] = record.send(attribute).to_s
       end
     end
   end
