@@ -10,6 +10,16 @@
   max-height: 52px;
 }
 
+.tb nav.pagination.menu {
+  @apply mb-4 flex flex-col;
+
+  width: max-content;
+
+  @screen md {
+    @apply flex-row;
+  }
+}
+
 .bookmarks.index {
   .main {
     @apply flex flex-col;
@@ -25,7 +35,7 @@
 }
 
 aside.tb.sidebar-menu {
-  @apply w-full p-4 text-white flex-shrink-0 block border-t;
+  @apply w-full p-4 text-white flex-shrink-0 block border-t border-b;
 
   background-color: #1b1c1d;
 
@@ -35,7 +45,7 @@ aside.tb.sidebar-menu {
     @apply w-1/4 inset-y-0 left-0 max-w-sm;
   }
 
-  & .tb.bulk-action-menu {
+  & &.bulk-action-menu {
     @apply flex flex-col;
   }
 }
@@ -48,6 +58,48 @@ main.tb {
    * the ".pusher.main"
    * */
   margin-top: 0px !important;
+}
+
+.tb.bookmark-card {
+  @apply w-full flex mb-2;
+
+  & .card-menu {
+    @apply h-12 h-auto bg-cover rounded-l bg-gray-200 p-4 flex flex-col justify-around;
+  }
+
+  & .card-body {
+    @apply border-r border-b border-t border-gray-200 rounded-r p-4 flex flex-col justify-between leading-normal w-full;
+
+    & h4 {
+      @apply text-black font-bold text-xl mb-2;
+
+      & small {
+        @apply font-thin text-sm text-gray-500;
+      }
+    }
+
+    & .tb.footer {
+      @apply flex flex-col mt-2;
+    }
+  }
+}
+
+.tb {
+  & p {
+    @apply text-gray-700 text-base;
+  }
+
+  & time {
+    @apply text-sm text-gray-500;
+  }
+}
+
+.tb.tags {
+  @apply flex flex-row flex-wrap mt-1;
+
+  .tb.tag {
+    @apply inline-block bg-gray-200 rounded px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-1;
+  }
 }
 
 @tailwind utilities;

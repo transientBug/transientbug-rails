@@ -1,3 +1,13 @@
+-#%label{ class: "flex justify-start items-start" }
+  %div{ class: "border border-gray-400 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500 mr-2" }
+   %input{ type: :checkbox, class: "opacity-0 absolute" }
+   %svg{ class: "fill-current w-4 h-4 text-gray-400 pointer-events-none inverted", viewBox: "0 0 20 20" }
+     %clipPath{ id: "_clip1" }
+       %path{ d: "M20,20l-20,0l0,-20l20,0l0,20Zm-17,-9.291l4.9,5.129l9.1,-9.525l-2.1,-2.151l-7,7.543l-2.8,-3.429l-2.1,2.433Z" }
+     %g{ clip: { path: "url(#_clip1)" } }
+       %path{ d: "M20,3.5c0,-1.932 -1.568,-3.5 -3.5,-3.5l-13,0c-1.932,0 -3.5,1.568 -3.5,3.5l0,13c0,1.932 1.568,3.5 3.5,3.5l13,0c1.932,0 3.5,-1.568 3.5,-3.5l0,-13Z" }
+  %div{ class: "select-none" } Select All
+
 - content_for :store do
   != { records: store_records(bookmarks, only: [:id, :title, :uri]) }.to_json
 
@@ -6,16 +16,6 @@
     - if bookmarks.any?
       .tb.bulk-action-menu
         = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
-        -#%label{ class: "flex justify-start items-start" }
-          %div{ class: "border border-gray-400 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500 mr-2" }
-            %input{ type: :checkbox, class: "opacity-0 absolute" }
-            %svg{ class: "fill-current w-4 h-4 text-gray-400 pointer-events-none inverted", viewBox: "0 0 20 20" }
-              %clipPath{ id: "_clip1" }
-                %path{ d: "M20,20l-20,0l0,-20l20,0l0,20Zm-17,-9.291l4.9,5.129l9.1,-9.525l-2.1,-2.151l-7,7.543l-2.8,-3.429l-2.1,2.433Z" }
-              %g{ clip: { path: "url(#_clip1)" } }
-                %path{ d: "M20,3.5c0,-1.932 -1.568,-3.5 -3.5,-3.5l-13,0c-1.932,0 -3.5,1.568 -3.5,3.5l0,13c0,1.932 1.568,3.5 3.5,3.5l13,0c1.932,0 3.5,-1.568 3.5,-3.5l0,-13Z" }
-
-          %div{ class: "select-none" } Select All
 
         = react_component "BulkActions/Header"
         = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path
@@ -26,47 +26,40 @@
       = paginate bookmarks
 
       - bookmarks.each do |bookmark|
-        %div{ class: "w-full flex mb-2" }
-          %div{ class: "h-12 h-auto min-w-12 bg-cover rounded-l bg-gray-200 p-4 flex flex-col justify-around" }
+        .tb.bookmark-card
+          .tb.card-menu
             = react_component "BulkActions/SelectSingle", id: bookmark.id
 
             = link_to edit_bookmark_path(bookmark), title: "edit" do
               %i.pencil.icon
 
-            -#%label{ class: "flex justify-start items-start" }
-              %div{ class: "border border-gray-400 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500" }
-                %input{ type: :checkbox, class: "opacity-0 absolute" }
-                %svg{ class: "fill-current w-4 h-4 text-gray-400 pointer-events-none", viewBox: "0 0 20 20" }
-                  %path{ d: "M0,11.048l3,-3.548l4,5l10,-11l3,3.137l-13,13.89l-7,-7.479Z" }
+          .tb.card-body
+            %h4
+              = link_to bookmark.title, bookmark_path(bookmark)
 
-          %div{ class: "border-r border-b border-t border-gray-200 rounded-r p-4 flex flex-col justify-between leading-normal w-full" }
-            %div{ class: "mb-2" }
-              %h4{ class: "text-black font-bold text-xl mb-2" }
-                = link_to bookmark.title, bookmark_path(bookmark)
+              %small
+                (#{ link_to bookmark.uri.host.to_s, bookmark.uri.to_s, title: bookmark.uri.to_s })
 
-                %small{ class: "font-thin text-sm text-gray-500" }
-                  (#{ link_to bookmark.uri.host.to_s, bookmark.uri.to_s, title: bookmark.uri.to_s })
+            %p
+              - unless bookmark.description.blank?
+                = bookmark.description.truncate(80)
+              - else
+                %em No description
 
-              %p{ class: "text-gray-700 text-base" }
-                - unless bookmark.description.blank?
-                  = bookmark.description.truncate(80)
-                - else
-                  %em No description
-
-            %div{ class: "flex flex-col" }
-              %time{ datetime: bookmark.created_at, title: bookmark.created_at.to_s(:long_ordinal), class: "text-sm text-gray-500" }
+            .tb.card-footer
+              %time{ datetime: bookmark.created_at, title: bookmark.created_at.to_s(:long_ordinal) }
                 = distance_of_time_in_words_to_now(bookmark.created_at)
                 ago
 
-              %div{ class: "flex flex-row flex-wrap mt-1" }
+              .tb.tags
                 - bookmark.tags.each do |tag|
                   = link_to bookmarks_tag_path(tag) do
-                    %span{ class: ["inline-block bg-gray-200 bg-#{tag.color}-500 rounded px-3 py-1 text-sm font-semibold text-grey-700 mr-2 mb-1"] }= tag.label
+                    %span{ class: ["tb tag bg-#{tag.color}-500"] }= tag.label
 
-                -#%button{ class: ["inline-block bg-gray-200 rounded px-3 py-1 text-sm font-semibold text-grey-700 mr-2 mb-1"] }
+                -#%button.tb.tag
                   %i.plus.icon
 
-        = paginate bookmarks
+      = paginate bookmarks
 
     - else
       %h1
