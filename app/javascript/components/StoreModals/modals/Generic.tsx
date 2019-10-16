@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef } from "react"
 
-import * as Modal from "../../../Modal"
+import * as Modal from "../../Modal"
 import { GenericModalProps } from "./types"
 
 const GenericModal: React.FC<GenericModalProps> = ({

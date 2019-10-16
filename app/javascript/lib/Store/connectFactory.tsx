@@ -1,11 +1,13 @@
-import React, { useState, useMemo, useLayoutEffect } from "react"
+import React, { useState, useMemo, useLayoutEffect, ReactNode } from "react"
 
 import bindActions from "./bindActions"
 
 const connectFactory = store => (mapStateToProps, mapDispatchToProps) => {
-  return (Component): React.FC => {
-    return ({ ...ownProps }) => {
-      const [stateProps, setStateProps] = useState<any>({})
+  return (Component): ReactNode => {
+    const Wrapper = ({ ...ownProps }) => {
+      const [stateProps, setStateProps] = useState<any>(
+        mapStateToProps(store.state, ownProps)
+      )
 
       useLayoutEffect(() => {
         const unsub = store.subscribe(state => {
@@ -30,6 +32,8 @@ const connectFactory = store => (mapStateToProps, mapDispatchToProps) => {
 
       return <Component {...props} />
     }
+
+    return Wrapper
   }
 }
 

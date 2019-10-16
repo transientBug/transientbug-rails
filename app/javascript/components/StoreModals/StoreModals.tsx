@@ -1,17 +1,17 @@
 import React from "react"
 
-import { connect } from "../../../store"
-import { operations } from "../../../store/modals"
-
-import { withErrorBoundary } from "../../ErrorBoundary"
-
+import { withErrorBoundary } from "../ErrorBoundary"
 import ReactModal from "react-modal"
-import classnames from "../../../lib/classnames"
+
+import classnames from "../../lib/classnames"
+
+import { connect } from "../../store"
+import { operations } from "../../store/modals"
 
 ReactModal.setAppElement("body")
 
 const componentRequireContext = require.context(
-  "components/BulkActions/StoreModals/modals",
+  "components/StoreModals/modals",
   true
 )
 
@@ -44,18 +44,14 @@ const StoreModals: React.FC<StoreModalsProps> = ({
       bodyOpenClassName={"modal-open"}
       htmlOpenClassName={"modal-open"}
     >
-      <div className="modal-dialogue-body">
-        {modalConstructor && modalConstructor({ close, ...modal.props })}
-      </div>
+      {modalConstructor && modalConstructor({ close, ...modal.props })}
     </ReactModal>
   )
 }
 
-const Wrapped = withErrorBoundary(
+export default withErrorBoundary(
   connect(
-    ({ modals = {} }) => ({ modal: modals }),
+    ({ modals }) => ({ modal: modals }),
     { close: operations.close }
   )(StoreModals)
 )
-
-export default Wrapped

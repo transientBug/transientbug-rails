@@ -15,14 +15,20 @@ module ApplicationHelper
     attributes ||= records.model.attribute_names.map(&:to_sym)
 
     # force the ID to be present because reasons
-    attributes << :id
+    attributes.unshift :id
     attributes.uniq!
 
-    records.each_with_object({}) do |record, memo|
+    objects = records.each_with_object({}) do |record, memo|
       memo[ record.id ] = attributes.each_with_object({}) do |attribute, record_memo|
         record_memo[ attribute ] = record.send(attribute).to_s
       end
     end
+
+    {
+      type: records.model.name.to_s,
+      attributes: attributes,
+      objects: objects
+    }
   end
 
   # Builds out a "clickable item" div which contains all of the information

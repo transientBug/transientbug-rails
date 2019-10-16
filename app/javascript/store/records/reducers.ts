@@ -3,15 +3,21 @@ import { createReducer } from "../../lib/Store"
 import types from "./types"
 
 const reducer = createReducer(
-  { records: {} },
+  {
+    records: {
+      objects: {},
+      type: "",
+      attributes: []
+    }
+  },
   {
     [types.SET]: (draft, action) => {
       action.records.forEach(record => {
-        draft.records[record.id] = record
+        draft.records.objects[record.id] = record
       })
     },
     [types.CLEAR]: draft => {
-      draft.records = []
+      draft.records.objects = {}
     }
   }
 )
