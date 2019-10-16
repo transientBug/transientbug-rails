@@ -48,7 +48,7 @@
 }
 
 .modal-body-content {
-  @apply my-5 overflow-scroll;
+  @apply my-5; /* overflow-scroll; */
 }
 
 .modal-body-actions {

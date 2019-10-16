@@ -16,14 +16,12 @@ interface DeleteAllProps {
 
 const DeleteAll: React.FC<BulkActionProps & DeleteAllProps> = ({
   actionUrl,
-  records,
   count,
   show
 }) => {
   if (!count) return null
 
-  const showModal = () =>
-    show("RecacheAll", { url: actionUrl, records, type: "Bookmark" })
+  const showModal = () => show("DeleteAll", { url: actionUrl })
 
   return (
     <>
@@ -40,8 +38,7 @@ const DeleteAll: React.FC<BulkActionProps & DeleteAllProps> = ({
 
 export default withErrorBoundary(
   connect(
-    ({ selection, records }) => ({
-      records: selection.map(id => records[`${id}`]),
+    ({ selection }) => ({
       count: selection.length
     }),
     {

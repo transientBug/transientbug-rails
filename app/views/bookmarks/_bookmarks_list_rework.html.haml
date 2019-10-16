@@ -18,7 +18,7 @@
         = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
 
         = react_component "BulkActions/Header"
-        = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path
+        = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
         = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
 
   %main.tb

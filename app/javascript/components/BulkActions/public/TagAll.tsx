@@ -8,21 +8,20 @@ import { connect } from "../../../store"
 import { operations } from "../../../store/modals"
 
 interface TagAllProps {
-  records: any[]
   ids: number[]
   show?: any
+  autocompleteUrl: string
 }
 
 const TagAll: React.FC<BulkActionProps & TagAllProps> = ({
   actionUrl,
-  records,
+  autocompleteUrl,
   count,
   show
 }) => {
   if (!count) return null
 
-  const showModal = () =>
-    show("RecacheAll", { url: actionUrl, records, type: "Bookmark" })
+  const showModal = () => show("TagAll", { url: actionUrl, autocompleteUrl })
 
   return (
     <>
@@ -39,8 +38,7 @@ const TagAll: React.FC<BulkActionProps & TagAllProps> = ({
 
 export default withErrorBoundary(
   connect(
-    ({ selection, records }) => ({
-      records: selection.map(id => records[`${id}`]),
+    ({ selection }) => ({
       count: selection.length
     }),
     {

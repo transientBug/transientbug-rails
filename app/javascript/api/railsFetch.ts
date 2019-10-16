@@ -7,24 +7,29 @@ const railsFetch = async ({
 }: {
   url: string
   method: string
-  payload: any
+  payload?: any
 }) => {
-  const csrfParam = Rails.csrfParam()
   const csrfToken = Rails.csrfToken()
-  // Add rails csrf token
-  payload[csrfParam] = csrfToken
 
-  return fetch(url, {
-    method: method,
+  const options: any = {
+    method,
     headers: new Headers({
       "Content-Type": "application/json",
       Accept: "application/json",
       "X-CSRF-Token": csrfToken,
       "X-Requested-With": "XMLHttpRequest"
     }),
-    credentials: "same-origin",
-    body: JSON.stringify(payload)
-  })
+    credentials: "same-origin"
+  }
+
+  if (method !== "GET" && method !== "HEAD" && payload) {
+    const csrfParam = Rails.csrfParam()
+    payload[csrfParam] = csrfToken
+
+    options.body = JSON.stringify(payload)
+  }
+
+  return fetch(url, options)
 }
 
 export default railsFetch
