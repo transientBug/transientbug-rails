@@ -1,17 +1,19 @@
 import React from "react"
+
 import { BulkAction } from "../types"
+import { ModalClose } from "../StoreModals/modals/types"
+
+import Turbolinks from "turbolinks"
 
 import useBulkActions from "../../../hooks/useBulkActions"
 
 import Button from "../../Button"
+import ErrorBoundary from "../../ErrorBoundary"
 
 import store from "../../../store"
 import { operations } from "../../../store/modals"
 
-import railsFetch from "../../../lib/railsFetch"
-import Turbolinks from "turbolinks"
-import ErrorBoundary from "../../ErrorBoundary"
-import { ModalClose } from "../StoreModals/modals/types"
+import railsFetch from "../../../api/railsFetch"
 
 const DeleteAll: BulkAction = ({ actionUrl }) => {
   const visible = useBulkActions()
@@ -93,7 +95,11 @@ const DeleteAll: BulkAction = ({ actionUrl }) => {
       }
     }
 
-    store.dispatch(operations.show("Danger", modalProps))
+    const modalStyles = {
+      dialog: "modal-light-dialogue bg-danger"
+    }
+
+    store.dispatch(operations.show("Generic", modalProps, modalStyles))
   }
 
   return (

@@ -7,16 +7,14 @@ const GenericModal: React.FC<GenericModalProps> = ({
   close,
   children: { title, content, actions }
 }) => (
-  <Modal.Container className="modal-dimmed-background">
-    <Modal.Dialogue className="modal-light-dialogue">
-      <Modal.Header>
-        <h2>{title}</h2>
-        <Modal.Close onClick={close} />
-      </Modal.Header>
-      <Modal.Content>{content}</Modal.Content>
-      <Modal.Actions>{actions(close)}</Modal.Actions>
-    </Modal.Dialogue>
-  </Modal.Container>
+  <>
+    <Modal.Header>
+      <h2>{title}</h2>
+      <Modal.Close onClick={close} />
+    </Modal.Header>
+    <Modal.Content>{content}</Modal.Content>
+    <Modal.Actions>{actions(close)}</Modal.Actions>
+  </>
 )
 
 export default GenericModal

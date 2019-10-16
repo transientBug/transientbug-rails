@@ -5,6 +5,8 @@ const classnames = (...args) =>
     .chain(args)
     .flatten()
     .uniq()
+    .filter(Boolean)
     .join(" ")
+    .value()
 
 export default classnames

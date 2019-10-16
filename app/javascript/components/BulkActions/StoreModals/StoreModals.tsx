@@ -1,37 +1,61 @@
-import React, { useState, useRef } from "react"
+import React from "react"
 
-import store from "../../../store"
-import useStore from "../../../hooks/useStore"
+import { connect } from "../../../store"
 import { operations } from "../../../store/modals"
 
-import Portal from "../../Portal"
-import ErrorBoundary from "../../ErrorBoundary"
+import { withErrorBoundary } from "../../ErrorBoundary"
+
+import ReactModal from "react-modal"
+import classnames from "../../../lib/classnames"
+
+ReactModal.setAppElement("body")
 
 const componentRequireContext = require.context(
   "components/BulkActions/StoreModals/modals",
   true
 )
 
-const StoreModals: React.FC = () => {
-  const [modal, setModal] = useState<any>({})
-
-  useStore(store, state => {
-    if (modal !== state.modals) setModal(state.modals)
-  })
-
-  if (!modal.name) return null
-
-  const modalConstructor = componentRequireContext(`./${modal.name}`).default
-
-  const close = () => store.dispatch(operations.close(modal.name))
-
-  return <Portal>{modalConstructor({ store, close, ...modal.props })}</Portal>
+interface StoreModalsProps {
+  modal?: any
+  close: (name: string) => void
 }
 
-const Wrapped = () => (
-  <ErrorBoundary>
-    <StoreModals />
-  </ErrorBoundary>
+const StoreModals: React.FC<StoreModalsProps> = ({
+  modal,
+  close: boundClose
+}) => {
+  if (!modal) return null
+
+  let modalConstructor
+  if (modal.name)
+    modalConstructor = componentRequireContext(`./${modal.name}`).default
+
+  const close = () => boundClose(modal.name)
+
+  return (
+    <ReactModal
+      isOpen={!!modal.name}
+      onRequestClose={close}
+      overlayClassName={"modal-container modal-dimmed-background"}
+      className={classnames(
+        "modal-dialogue",
+        modal.name ? modal.styles.dialog : ""
+      )}
+      bodyOpenClassName={"modal-open"}
+      htmlOpenClassName={"modal-open"}
+    >
+      <div className="modal-dialogue-body">
+        {modalConstructor && modalConstructor({ close, ...modal.props })}
+      </div>
+    </ReactModal>
+  )
+}
+
+const Wrapped = withErrorBoundary(
+  connect(
+    ({ modals = {} }) => ({ modal: modals }),
+    { close: operations.close }
+  )(StoreModals)
 )
 
 export default Wrapped

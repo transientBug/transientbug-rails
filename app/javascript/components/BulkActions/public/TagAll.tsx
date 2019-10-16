@@ -8,9 +8,8 @@ import Button from "../../Button"
 import store from "../../../store"
 import { operations } from "../../../store/modals"
 
-import railsFetch from "../../../lib/railsFetch"
-import Turbolinks from "turbolinks"
 import ErrorBoundary from "../../ErrorBoundary"
+import { bulk } from "../../../api"
 import { ModalClose } from "../StoreModals/modals/types"
 
 const TagAll: BulkAction = ({ actionUrl }) => {
@@ -26,20 +25,7 @@ const TagAll: BulkAction = ({ actionUrl }) => {
     bookmarks.length === 1 ? "Bookmark" : "Bookmarks"
   }`
 
-  const tagAll = async () => {
-    await railsFetch({
-      url: actionUrl,
-      method: "PATCH",
-      payload: {
-        bulk: {
-          action: "tag-all",
-          ids: bookmarks.map(bookmark => bookmark.id)
-        }
-      }
-    })
-
-    Turbolinks.visit(window.location, { action: "replace" })
-  }
+  const tagAll = () => bulk.tag(actionUrl, store.state.selection)
 
   const Actions: React.FC<{ close: ModalClose }> = close => (
     <>

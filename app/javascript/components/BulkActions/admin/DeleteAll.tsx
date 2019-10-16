@@ -1,97 +1,92 @@
 import React from "react"
-import { BulkAction } from "../types"
 
-import useModal from "../../../hooks/useModal"
-import useBulkActions from "../../../hooks/useBulkActions"
+import { BulkActionProps } from "../types"
+import { ModalClose } from "../StoreModals/modals/types"
 
-import * as Modal from "../../Modal"
-import Button from "../../Button"
-
-import store from "../../../store"
-import railsFetch from "../../../lib/railsFetch"
 import Turbolinks from "turbolinks"
+import pluralize from "pluralize"
 
-const DeleteAll: BulkAction = ({ actionUrl }) => {
-  const visible = useBulkActions()
+import Button from "../../Button"
+import RecordsTable from "../../RecordsTable"
 
-  const [modal, open] = useModal(close => {
-    const state = store.state
+import { operations } from "../../../store/modals"
+import { bulk } from "../../../api"
 
-    const bookmarks = state.selection.map(id => state.records[`${id}`])
+import { connect } from "../../../store"
 
-    const pluralString = `${bookmarks.length} ${
-      bookmarks.length === 1 ? "Bookmark" : "Bookmarks"
-    }`
+const DeleteModal = (url, records, wording) => {
+  const ids = records.map(r => r.i)
+  const count = records.length
 
-    const deleteAll = async () => {
-      await railsFetch({
-        url: actionUrl,
-        method: "DELETE",
-        payload: {
-          bulk: {
-            action: "delete-all",
-            ids: bookmarks.map(bookmark => bookmark.id)
-          }
-        }
-      })
+  const pluralString = pluralize(`${count} ${wording}`, count)
 
-      Turbolinks.visit(window.location, { action: "replace" })
+  const deleteAll = async () => {
+    await bulk.delete(url, ids)
+    Turbolinks.visit(window.location, { replace: true })
+  }
+
+  const actions: React.FC<{ close: ModalClose }> = close => (
+    <>
+      <Button
+        className="self-start button-white hover:button-light-gray shadow hover:shadow-md"
+        onClick={deleteAll}
+      >
+        Delete {pluralString}
+      </Button>
+      <Button
+        className="hover:button-white-outline text-white hover:text-white shadow hover:shadow-md"
+        onClick={close}
+      >
+        Cancel
+      </Button>
+    </>
+  )
+
+  const modalProps = {
+    children: {
+      title: `Delete Selected ${pluralString}}?`,
+      content: (
+        <>
+          <p>
+            Are you <strong>sure</strong> you want to delete these{" "}
+            {pluralString}? This is a permanent operation and cannot be undone.
+          </p>
+          <RecordsTable headers={["id", "title", "uri"]} records={records} />
+        </>
+      ),
+      actions
     }
+  }
 
-    return (
-      <Modal.Container className="modal-dimmed-background">
-        <Modal.Dialogue className="modal-dark-dialogue bg-danger">
-          <Modal.Header>
-            <h2>Delete Selected Bookmarks?</h2>
-            <Modal.Close onClick={close} />
-          </Modal.Header>
-          <Modal.Content>
-            <p>
-              Are you <strong>sure</strong> you want to delete these{" "}
-              {pluralString}? Deleting users data should be handled with care
-              and only used for extreme circumstances or if requested. This is a
-              permanent operation.
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookmarks.map(bookmark => (
-                  <tr key={bookmark.id}>
-                    <td>{bookmark.id}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              className="self-start button-white hover:button-light-gray shadow hover:shadow-md"
-              onClick={deleteAll}
-            >
-              Delete {pluralString}
-            </Button>
-            <Button
-              className="hover:button-white-outline text-white hover:text-white shadow hover:shadow-md"
-              onClick={close}
-            >
-              Cancel
-            </Button>
-          </Modal.Actions>
-        </Modal.Dialogue>
-      </Modal.Container>
-    )
-  })
+  const modalStyles = {
+    dialog: "modal-light-dialogue bg-danger"
+  }
 
-  if (!visible) return null
+  return ["Generic", modalProps, modalStyles]
+}
+
+interface DeleteAllProps {
+  records: any[]
+  ids: number[]
+  show?: any
+}
+
+const DeleteAll: React.FC<BulkActionProps & DeleteAllProps> = ({
+  actionUrl,
+  records,
+  count,
+  show
+}) => {
+  if (!count) return null
+
+  const showModal = () => show(...DeleteModal(actionUrl, records, "Bookmark"))
 
   return (
     <>
-      {modal}
-      <Button className="button-red-outline hover:button-red" onClick={open}>
+      <Button
+        className="button-red-outline hover:button-red"
+        onClick={showModal}
+      >
         <i className="trash icon" />
         Delete All
       </Button>
@@ -99,4 +94,12 @@ const DeleteAll: BulkAction = ({ actionUrl }) => {
   )
 }
 
-export default DeleteAll
+export default connect(
+  ({ selection, records }) => ({
+    records: selection.map(id => records[`${id}`]),
+    count: selection.length
+  }),
+  {
+    show: operations.show
+  }
+)(DeleteAll)

@@ -3,13 +3,13 @@ import * as styles from "./Kbd.module.scss"
 
 interface KbdProps {
   children: string
-  dark: boolean
+  dark?: boolean
 }
 
-const Kbd: React.FC<KbdProps> = props => (
+const Kbd: React.FC<KbdProps> = ({ dark = true, children }) => (
   <kbd
-    className={props.dark ? styles.dark : styles.light}
-    dangerouslySetInnerHTML={{ __html: props.children }}
+    className={dark ? styles.dark : styles.light}
+    dangerouslySetInnerHTML={{ __html: children }}
   />
 )
 

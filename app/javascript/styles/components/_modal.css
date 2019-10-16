@@ -64,7 +64,7 @@
 }
 
 .modal-light-dialogue {
-  @apply bg-white;
+  @apply bg-white text-black;
 
   & .modal-body-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.09);
@@ -85,4 +85,8 @@
   & .modal-body-actions {
     border-top: 1px solid rgba(255, 255, 255, 0.17);
   }
+}
+
+.modal-open {
+  overflow: hidden;
 }

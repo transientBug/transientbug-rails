@@ -1,5 +1,6 @@
 import React from "react"
-import KeyboardShortcut from "../KeyboardShortcut"
+
+import Kbd from "../Kbd"
 
 interface CloseProps {
   onClick: () => void
@@ -7,7 +8,7 @@ interface CloseProps {
 
 const Close: React.FC<CloseProps> = ({ onClick }) => (
   <button className="modal-header-close" onClick={onClick}>
-    <KeyboardShortcut keys={["esc"]} onKey={onClick} />
+    <Kbd>esc</Kbd>
     <i className="close icon" />
   </button>
 )
