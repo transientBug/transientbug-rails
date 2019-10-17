@@ -5,20 +5,24 @@
 
 = render partial: "layouts/navbar"
 
-.ui.dimmer
-  .ui.loader#page-loader
+- if content_for? :custom_body
+  = content_for :custom_body
 
-.ui.pusher.main
-  - if content_for? :secondary_navbar
-    .ui.fluid.secondary.top.attached.stackable.menu
-      = content_for :secondary_navbar
+- else
+  .ui.dimmer
+    .ui.loader#page-loader
 
-  .messages
-    = render_service_announcements
-    = semantic_flash
+  .ui.pusher.main
+    - if content_for? :secondary_navbar
+      .ui.fluid.secondary.top.attached.stackable.menu
+        = content_for :secondary_navbar
 
-  - if content_for? :custom_grid
-    = content_for :custom_grid
-  - else
-    .ui.fluid.horizontally.padded.stackable.container
-      = yield
+    .messages
+      = render_service_announcements
+      = semantic_flash
+
+    - if content_for? :custom_grid
+      = content_for :custom_grid
+    - else
+      .ui.fluid.horizontally.padded.stackable.container
+        = yield

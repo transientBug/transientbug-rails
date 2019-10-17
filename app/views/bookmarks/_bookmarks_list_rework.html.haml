@@ -11,63 +11,68 @@
 - content_for :store do
   != { records: store_records(bookmarks, only: [:id, :title, :uri]) }.to_json
 
-- content_for :custom_grid do
-  %aside.tb.sidebar-menu
-    - if bookmarks.any?
-      .tb.bulk-action-menu
-        = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
+- content_for :custom_body do
+  .ui.pusher.main
+    %aside.tb.sidebar-menu
+      - if bookmarks.any?
+        .tb.bulk-action-menu
+          = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
 
-        = react_component "BulkActions/Header"
-        = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
-        = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
+          = react_component "BulkActions/Header"
+          = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
+          = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
 
-  %main.tb
-    - if bookmarks.any?
-      = paginate bookmarks
+    %main.tb
+      .messages
+        = render_service_announcements
+        = semantic_flash
 
-      - bookmarks.each do |bookmark|
-        .tb.bookmark-card
-          .tb.card-menu
-            = react_component "BulkActions/SelectSingle", id: bookmark.id
+      - if bookmarks.any?
+        = paginate bookmarks
 
-            = link_to edit_bookmark_path(bookmark), title: "edit" do
-              %i.pencil.icon
+        - bookmarks.each do |bookmark|
+          .tb.bookmark-card
+            .tb.card-menu
+              = react_component "BulkActions/SelectSingle", id: bookmark.id
 
-          .tb.card-body
-            %h4
-              = link_to bookmark.title, bookmark_path(bookmark)
+              = link_to edit_bookmark_path(bookmark), title: "edit" do
+                %i.pencil.icon
 
-              %small
-                (#{ link_to bookmark.uri.host.to_s, bookmark.uri.to_s, title: bookmark.uri.to_s })
+            .tb.card-body
+              %h4
+                = link_to bookmark.title, bookmark_path(bookmark)
 
-            %p
-              - unless bookmark.description.blank?
-                = bookmark.description.truncate(80)
-              - else
-                %em No description
+                %small
+                  (#{ link_to bookmark.uri.host.to_s, bookmark.uri.to_s, title: bookmark.uri.to_s })
 
-            .tb.card-footer
-              %time{ datetime: bookmark.created_at, title: bookmark.created_at.to_s(:long_ordinal) }
-                = distance_of_time_in_words_to_now(bookmark.created_at)
-                ago
+              %p
+                - unless bookmark.description.blank?
+                  = bookmark.description.truncate(80)
+                - else
+                  %em No description
 
-              .tb.tags
-                - bookmark.tags.each do |tag|
-                  = link_to bookmarks_tag_path(tag) do
-                    %span{ class: ["tb tag bg-#{tag.color}-500"] }= tag.label
+              .tb.card-footer
+                %time{ datetime: bookmark.created_at, title: bookmark.created_at.to_s(:long_ordinal) }
+                  = distance_of_time_in_words_to_now(bookmark.created_at)
+                  ago
 
-                -#%button.tb.tag
-                  %i.plus.icon
+                .tb.tags
+                  - bookmark.tags.each do |tag|
+                    = link_to bookmarks_tag_path(tag) do
+                      %span{ class: ["tb tag bg-#{tag.color}-500"] }= tag.label
 
-      = paginate bookmarks
+                  -#%button.tb.tag
+                    %i.plus.icon
 
-    - else
-      %h1
-        %i.bookmark.icon
-        No bookmarks found!
+        = paginate bookmarks
 
-      %p
-        Maybe
-        = link_to "make one?", new_bookmark_path
+      - else
+        %h1
+          %i.bookmark.icon
+          No bookmarks found!
+
+        %p
+          Maybe
+          = link_to "make one?", new_bookmark_path
 
   = react_component "StoreModals"

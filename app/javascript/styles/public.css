@@ -92,6 +92,10 @@ main.tb {
   & time {
     @apply text-sm text-gray-500;
   }
+
+  & .messages {
+    @apply mb-2;
+  }
 }
 
 .tb.tags {
