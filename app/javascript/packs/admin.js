@@ -15,7 +15,7 @@ import ReactRailsUJS from "react_ujs"
 
 import "channels"
 
-import store from "../store"
+import "../store"
 
 import "../styles/admin"
 
@@ -29,9 +29,6 @@ document.addEventListener("turbolinks:request-start", event => {
   const xhr = event.data.xhr
   xhr.setRequestHeader("X-Turbolinks-Nonce", Rails.cspNonce())
 })
-
-window.store = store
-store.subscribe(state => console.table(Object.entries(state)))
 
 Rails.start()
 Turbolinks.start()

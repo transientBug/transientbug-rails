@@ -15,7 +15,8 @@ import ReactRailsUJS from "react_ujs"
 
 import "channels"
 
-import store from "../store"
+// For some reason I've got to import the store first before anything gets hooked up, and I'm not sure why ...
+import "../store"
 
 import "../styles/public"
 
@@ -30,8 +31,8 @@ document.addEventListener("turbolinks:request-start", event => {
   xhr.setRequestHeader("X-Turbolinks-Nonce", Rails.cspNonce())
 })
 
-window.store = store
-store.subscribe(state => console.table(Object.entries(state)))
+// window.store = store
+// store.subscribe(state => console.table(Object.entries(state)))
 
 Rails.start()
 Turbolinks.start()
