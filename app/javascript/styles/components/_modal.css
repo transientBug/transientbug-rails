@@ -1,29 +1,59 @@
-.modal-container {
-  @apply fixed w-full h-auto inset-0 z-50 overflow-hidden flex justify-center items-center;
+.modal-open {
+  overflow: hidden;
+}
 
-  &.modal-dimmed-background {
+.modal-overlay {
+  @apply fixed w-full h-auto inset-0 z-50 overflow-scroll flex justify-center items-center;
+
+  &.overlay-dimmed-background {
     background: rgba(0, 0, 0, 0.5);
   }
 }
 
-.modal-dialogue {
-  & > .modal-dialogue-body {
-    @apply text-left;
+.modal-container {
+  @apply max-w-full mx-auto z-50 flex;
 
-    & > * {
-      @apply px-6 py-4;
-    }
-  }
+  max-height: calc(100% - 70px);
 
-  @apply shadow max-w-full mx-auto rounded z-50 overflow-y-auto;
-
-  max-height: calc(100% - 60px);
   margin-top: 60px;
+  margin-bottom: 10px;
 
   @screen md {
     @apply w-1/2;
 
     max-width: 800px;
+  }
+}
+
+.modal-dialogue {
+  @apply text-left flex flex-col shadow rounded;
+
+  & > * {
+    @apply px-6 py-4 flex-grow flex-shrink;
+  }
+}
+
+.light-dialogue {
+  @apply bg-white text-black;
+
+  & .modal-body-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  }
+
+  & .modal-body-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+  }
+}
+
+.dark-dialogue {
+  @apply text-white bg-gray-600;
+
+  & .modal-body-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+  }
+
+  & .modal-body-actions {
+    border-top: 1px solid rgba(255, 255, 255, 0.17);
   }
 }
 
@@ -33,17 +63,17 @@
   h2 {
     @apply text-xl;
   }
-}
 
-.modal-header-close {
-  @apply cursor-pointer z-50 text-gray-900;
+  .modal-header-close {
+    @apply cursor-pointer z-50 text-gray-900;
 
-  opacity: 0.5;
+    opacity: 0.5;
 
-  transition: all 250ms linear;
+    transition: all 250ms linear;
 
-  &:hover {
-    opacity: 0.9;
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 
@@ -56,33 +86,5 @@
 
   & > *:not(:first-child) {
     @apply ml-2;
-  }
-}
-
-.bg-danger {
-  background: linear-gradient(87deg, #db2828 0, #f55036 100%);
-}
-
-.modal-light-dialogue {
-  @apply bg-white;
-
-  & .modal-body-header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
-  }
-
-  & .modal-body-actions {
-    border-top: 1px solid rgba(0, 0, 0, 0.09);
-  }
-}
-
-.modal-dark-dialogue {
-  @apply text-white;
-
-  & .modal-body-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.17);
-  }
-
-  & .modal-body-actions {
-    border-top: 1px solid rgba(255, 255, 255, 0.17);
   }
 }

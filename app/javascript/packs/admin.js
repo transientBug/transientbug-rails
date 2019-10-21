@@ -15,6 +15,8 @@ import ReactRailsUJS from "react_ujs"
 
 import "channels"
 
+import "../store"
+
 import "../styles/admin"
 
 /** Turbolinks and inline body script tags with a CSP nonce don't seem to play nice.

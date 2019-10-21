@@ -6,7 +6,7 @@
 
 - content_for :menu do
   .bulk-action-menu
-    = react_component "BulkActions/Header", actionUrl: admin_bookmarks_bulk_recache_path
+    = react_component "BulkActions/Header"
     = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
     = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
 
@@ -71,3 +71,5 @@
           No bookmarks made yet
 
 = paginate @bookmarks
+
+= react_component "StoreModals"

@@ -14,7 +14,7 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({
   query = "",
   path = "",
-  placeholder = "Search Bookmarks ..."
+  placeholder = `Search your bookmarks (Press "/" to focus)`
 }) => {
   const wrapperRef = useRef<HTMLDivElement>()
   const queryInputRef = useRef<HTMLInputElement>()

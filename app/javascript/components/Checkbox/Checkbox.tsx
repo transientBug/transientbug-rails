@@ -15,7 +15,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 }) => (
   <label className="flex justify-start items-start">
     <div
-      className={`border border-gray-400 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500 ${
+      className={`border border-gray-600 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500 ${
         children ? " mr-2" : ""
       }`}
     >
@@ -26,7 +26,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         checked={checked}
       />
       <svg
-        className={`fill-current w-4 h-4 text-gray-400 pointer-events-none ${inverted &&
+        className={`fill-current w-4 h-4 text-gray-600 pointer-events-none ${inverted &&
           "inverted"}`}
         viewBox="0 0 20 20"
       >

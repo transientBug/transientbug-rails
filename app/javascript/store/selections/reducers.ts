@@ -14,7 +14,7 @@ const reducer = createReducer(
       )
     },
     [types.ADD_ALL]: draft => {
-      draft.selection = Object.keys(draft.records).map(i => parseInt(i))
+      draft.selection = Object.keys(draft.records.objects).map(i => parseInt(i))
     },
     [types.CLEAR]: draft => {
       draft.selection = []
