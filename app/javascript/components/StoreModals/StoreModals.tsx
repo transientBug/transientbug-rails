@@ -3,12 +3,19 @@ import React from "react"
 import { withErrorBoundary } from "../ErrorBoundary"
 import ReactModal from "react-modal"
 
-import classnames from "../../lib/classnames"
+import Rails from "@rails/ujs"
+import { CacheProvider } from "@emotion/core"
+import createCache from "@emotion/cache"
 
 import { connect } from "../../store"
 import { operations } from "../../store/modals"
 
 ReactModal.setAppElement("body")
+
+// Sadness and not at all documented for React-Select :<
+const myCache = createCache({
+  nonce: Rails.cspNonce()
+})
 
 const componentRequireContext = require.context(
   "components/StoreModals/modals",
@@ -33,16 +40,18 @@ const StoreModals: React.FC<StoreModalsProps> = ({
   const close = () => boundClose(modal.name)
 
   return (
-    <ReactModal
-      isOpen={!!modal.name}
-      onRequestClose={close}
-      overlayClassName={"modal-overlay overlay-dimmed-background"}
-      className={"modal-container"}
-      bodyOpenClassName={"modal-open"}
-      htmlOpenClassName={"modal-open"}
-    >
-      {modalConstructor && modalConstructor({ close, ...modal.props })}
-    </ReactModal>
+    <CacheProvider value={myCache}>
+      <ReactModal
+        isOpen={!!modal.name}
+        onRequestClose={close}
+        overlayClassName={"modal-overlay overlay-dimmed-background"}
+        className={"modal-container"}
+        bodyOpenClassName={"modal-open"}
+        htmlOpenClassName={"modal-open"}
+      >
+        {modalConstructor && modalConstructor({ close, ...modal.props })}
+      </ReactModal>
+    </CacheProvider>
   )
 }
 
