@@ -36,7 +36,7 @@ const RecacheAllModal: React.FC<RecacheAllModalProps> = ({
   }
 
   return (
-    <div className="modal-dialogue-body modal-light-dialogue">
+    <div className="modal-dialogue light-dialogue">
       <Modal.Header>
         <h2>Recache Selected {pluralString}?</h2>
         <Modal.Close onClick={close} />

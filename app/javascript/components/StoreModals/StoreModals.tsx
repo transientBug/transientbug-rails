@@ -36,11 +36,8 @@ const StoreModals: React.FC<StoreModalsProps> = ({
     <ReactModal
       isOpen={!!modal.name}
       onRequestClose={close}
-      overlayClassName={"modal-container modal-dimmed-background"}
-      className={classnames(
-        "modal-dialogue",
-        modal.name ? modal.styles.dialog : ""
-      )}
+      overlayClassName={"modal-overlay overlay-dimmed-background"}
+      className={"modal-container"}
       bodyOpenClassName={"modal-open"}
       htmlOpenClassName={"modal-open"}
     >

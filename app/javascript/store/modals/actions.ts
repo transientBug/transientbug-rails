@@ -1,14 +1,10 @@
 import types from "./types"
 
-const show = (name, props, styles = {}) => ({
+const show = (name, props) => ({
   type: types.SHOW,
   modal: {
     name,
-    props,
-    styles: {
-      dialog: "modal-light-dialogue",
-      ...styles
-    }
+    props
   }
 })
 

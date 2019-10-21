@@ -3,7 +3,7 @@ import React from "react"
 import { upperCase } from "lodash"
 
 const RecordsTable = ({ headers, records }) => (
-  <table>
+  <table className="tb">
     <thead>
       <tr>
         {headers.map((header, idx) => (

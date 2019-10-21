@@ -39,7 +39,7 @@ const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
   }
 
   return (
-    <div className="modal-dialogue-body modal-light-dialogue bg-danger">
+    <div className="modal-dialogue light-dialogue bg-danger">
       <Modal.Header>
         <h2>Delete Selected {pluralString}?</h2>
         <Modal.Close onClick={close} />

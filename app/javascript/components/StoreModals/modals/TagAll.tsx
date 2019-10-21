@@ -68,12 +68,12 @@ const TagAllModal: React.FC<TagAllModalProps> = ({
   }, 500)
 
   return (
-    <div className="modal-dialogue-body modal-light-dialogue">
+    <div className="modal-dialogue light-dialogue">
       <Modal.Header>
         <h2>Add Tags to Selected {pluralString}?</h2>
         <Modal.Close onClick={close} />
       </Modal.Header>
-      <Modal.Content>
+      <Modal.Content className="overflow-visible">
         <p>
           This will add all the given tags to the selected {pluralString}, but
           will not replace or overwrite any existing tags.

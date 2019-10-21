@@ -2,6 +2,8 @@
 @import "components/_modal";
 @import "components/_checkbox";
 @import "components/_bulk_action_menu";
+@import "components/_backgrounds";
+@import "components/_tables";
 
 @tailwind base;
 @tailwind components;
