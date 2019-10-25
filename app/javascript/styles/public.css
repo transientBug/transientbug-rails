@@ -22,18 +22,16 @@
   }
 }
 
-.bookmarks.index {
-  .main {
-    @apply flex flex-col;
+.main {
+  @apply flex flex-col;
 
-    @screen lg {
-      @apply flex-row;
-    }
+  @screen lg {
+    @apply flex-row;
   }
+}
 
-  & > .ui.footer {
-    @apply mt-0;
-  }
+.ui.footer.segment {
+  @apply mt-0;
 }
 
 aside.tb.sidebar-menu {

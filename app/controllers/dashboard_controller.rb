@@ -16,6 +16,6 @@ class DashboardController < ApplicationController
       ).count
     }
 
-    @recent_bookmarks = policy_scope(Bookmark).limit(5)
+    @recent_bookmarks = policy_scope(Bookmark).limit(5).page
   end
 end
