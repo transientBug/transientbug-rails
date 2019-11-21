@@ -1,9 +1,10 @@
 - content_for :page_title do
   Editing Bookmark "#{ @bookmark.title }"
 
-- content_for :secondary_navbar do
+- content_for :sidebar do
   = link_to "back", bookmark_path(@bookmark), class: "ui item"
 
-%h1 Editing Bookmark
+- content_for :sidebar_body do
+  %h2.ui.dividing.header Editing Bookmark
 
-= render partial: "form", locals: { bookmark: @bookmark }
+  = render partial: "form", locals: { bookmark: @bookmark }

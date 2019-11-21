@@ -1,6 +1,7 @@
 - content_for :page_title do
   New Bookmark
 
-%h1 New Bookmark
+- content_for :sidebar_body do
+  %h2.ui.dividing.header New Bookmark
 
-= render partial: "form", locals: { bookmark: @bookmark }
+  = render partial: "form", locals: { bookmark: @bookmark }
