@@ -2,7 +2,10 @@
   Editing Bookmark "#{ @bookmark.title }"
 
 - content_for :sidebar do
-  = link_to "back", bookmark_path(@bookmark), class: "ui item"
+  .tb.bulk-action-menu
+    = link_to bookmark_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      %i.chevron.left.icon
+      Back to bookmark
 
 - content_for :sidebar_body do
   %h2.ui.dividing.header Editing Bookmark
