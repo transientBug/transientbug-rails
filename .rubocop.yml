@@ -44,7 +44,7 @@ Metrics/CyclomaticComplexity:
 
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
   AllowHeredoc: true
   AllowURI: true
@@ -80,10 +80,10 @@ Layout/EmptyLineBetweenDefs:
 
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
@@ -124,7 +124,7 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 # Need a new line but don't have a blank line
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: final_newline, final_blank_line
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   EnforcedStyle: final_newline
 
 # Configuration parameters: EnforcedStyle, SupportedStyles.
