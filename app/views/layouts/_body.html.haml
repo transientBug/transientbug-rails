@@ -1,19 +1,15 @@
+= javascript_tag nonce: true, "data-turbolinks-track": "reload", "data-turbolinks-eval": true do
+  window.__initStore__ = {}
+  - if content_for? :store
+    window.__initStore__ = #{ raw content_for(:store) }
+
 = render partial: "layouts/navbar"
 
-.ui.dimmer
-  .ui.loader#page-loader
+- if content_for? :custom_body
+  = content_for :custom_body
 
-.ui.pusher.main
-  - if content_for? :secondary_navbar
-    .ui.fluid.secondary.top.attached.stackable.menu
-      = content_for :secondary_navbar
+- elsif content_for? :sidebar_body
+  = render partial: "layouts/application/sidebar"
 
-  .messages
-    = render_service_announcements
-    = semantic_flash
-
-  - if content_for? :custom_grid
-    = content_for :custom_grid
-  - else
-    .ui.fluid.horizontally.padded.stackable.container
-      = yield
+- else
+  = render partial: "layouts/application/old_body"

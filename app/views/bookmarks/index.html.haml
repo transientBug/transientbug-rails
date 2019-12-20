@@ -1,6 +1,7 @@
 - content_for :page_title do
   Bookmarks
 
-%h1 Your Bookmarks
+- content_for :sidebar_body do
+  %h2.ui.dividing.header Your bookmarks
 
 = render partial: "bookmarks_list", locals: { bookmarks: @bookmarks }

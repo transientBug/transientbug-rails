@@ -1,0 +1,12 @@
+.ui.pusher.main
+  %aside.tb.sidebar-menu
+    = content_for :sidebar
+
+  %main.tb
+    .messages
+      = render_service_announcements
+      = semantic_flash
+
+    = content_for :sidebar_body
+
+= react_component "StoreModals"
