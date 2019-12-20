@@ -22,7 +22,7 @@
   }
 }
 
-.main {
+.main:not(.old) {
   @apply flex flex-col;
 
   @screen lg {
