@@ -28,7 +28,7 @@ Rails.application.config.content_security_policy do |policy|
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
     policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*"
-    policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035"
+    policy.connect_src :self, :https, "http://localhost:3036", "ws://localhost:3036"
   end
 
   # Specify URI for violation reports

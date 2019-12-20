@@ -5,9 +5,13 @@
 }
 
 .button {
-  @apply font-semibold py-3 px-4 mt-2 rounded;
+  @apply text-center font-semibold py-3 px-4 mt-2 rounded cursor-pointer;
 
   @add-mixin button-colors transparent, transparent, gray-800;
+
+  & > i, & > icon {
+    @apply mx-1;
+  }
 }
 
 @variants hover, active {

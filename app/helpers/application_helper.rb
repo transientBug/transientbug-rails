@@ -24,8 +24,11 @@ module ApplicationHelper
       end
     end
 
+    records_type = records.model if records.respond_to? :model
+    records_type ||= records.first.class
+
     {
-      type: records.model.name.to_s,
+      type: records_type.name.to_s,
       attributes: attributes,
       objects: objects
     }
