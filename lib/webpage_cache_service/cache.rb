@@ -43,9 +43,9 @@ class WebpageCacheService
       # Return self since there is an errors object and the offline cache model
       # that people might care about on this object.
       self
-    rescue => e
-      errors.create key: uri, message: e.message
-      self
+    # rescue => e
+      # errors.create key: uri, message: e.message
+      # self
     end
 
     private
@@ -96,7 +96,7 @@ class WebpageCacheService
 
       # Without manually managing the temp file, there isn't an easy way to
       # breakup the following logic but I did my best and fuck you too rubocop
-      attachments = binary_temp_file do |temp_file|
+      binary_temp_file do |temp_file|
         write_body response: response, to: temp_file
 
         content_type = get_content_type(response: response, io: temp_file)
@@ -110,7 +110,7 @@ class WebpageCacheService
         )
       end
 
-      attachment = attachments.first
+      attachment = offline_cache.assets.order(:id).first
 
       [ response, attachment ]
     end
