@@ -1,3 +1,6 @@
+= render "layouts/common/navbar"
+= render "layouts/common/mobile_nav"
+
 .ui.pusher.main
   %aside.tb.sidebar-menu
     = content_for :sidebar
@@ -7,6 +10,6 @@
       = render_service_announcements
       = semantic_flash
 
-    = content_for :sidebar_body
+    = yield
 
 = react_component "StoreModals"

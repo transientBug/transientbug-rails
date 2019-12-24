@@ -1,4 +1,6 @@
 class Oauth::ApplicationsController < ApplicationController
+  layout "page"
+
   require_login!
   before_action :set_application, only: [:show, :edit, :update, :destroy]
 

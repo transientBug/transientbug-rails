@@ -1,4 +1,6 @@
 class InvitesController < ApplicationController
+  layout "page"
+
   before_action :redirect_on_signed_in
 
   before_action :set_invite, only: [ :create, :show, :update ]

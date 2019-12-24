@@ -1,20 +1,19 @@
 - content_for :page_title do
   Invitations
 
-- content_for :custom_grid do
-  .ui.middle.aligned.center.aligned.horizontally.padded.grid
-    .column
-      %h2.ui.header Invitations
+.ui.middle.aligned.center.aligned.horizontally.padded.grid
+  .column
+    %h2.ui.header Invitations
 
-      %p
-        Open registration for transientBug is currently closed, however if you have received an invite code, you can enter it below to proceed with registration.
+    %p
+      Open registration for transientBug is currently closed, however if you have received an invite code, you can enter it below to proceed with registration.
 
-      = form_tag invites_path, method: :post, class: "ui form" do
-        .ui.error.message
+    = form_tag invites_path, method: :post, class: "ui form" do
+      .ui.error.message
 
-        .required.field
-          = label_tag "code", "Invite Code"
-          .ui.right.action.left.icon.input
-            %i.mail.icon
-            = text_field_tag "code", "", placeholder: "12345"
-            = button_tag "Use", class: "ui green button", type: "submit"
+      .required.field
+        = label_tag "code", "Invite Code"
+        .ui.right.action.left.icon.input
+          %i.mail.icon
+          = text_field_tag "code", "", placeholder: "12345"
+          = button_tag "Use", class: "ui green button", type: "submit"

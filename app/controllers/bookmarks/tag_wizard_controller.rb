@@ -1,4 +1,6 @@
 class Bookmarks::TagWizardController < ApplicationController
+  layout "page"
+
   require_login!
   before_action :set_bookmark, only: [:update]
 
