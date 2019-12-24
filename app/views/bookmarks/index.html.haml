@@ -3,7 +3,7 @@
 
 %h2.ui.dividing.header Your bookmarks
 
-- set_store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
 
 - content_for :sidebar do
   - if @bookmarks.any?

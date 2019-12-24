@@ -36,7 +36,9 @@ module ApplicationHelper
     }
   end
 
-  def set_store_content data
+  # TODO: figure out if there is a way I could call this multiple times and
+  # merge the resulting data? maybe through an array that the JS processes?
+  def store_content data
     content_for :store do
       data.to_json.html_safe
     end
