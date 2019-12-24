@@ -1,0 +1,12 @@
+= render "layouts/common/store"
+
+= render "layouts/application/navbar"
+
+- if content_for? :custom_body
+  = content_for :custom_body
+
+- elsif content_for? :sidebar_body
+  = render "layouts/application/sidebar"
+
+- else
+  = render "layouts/application/old_body"
