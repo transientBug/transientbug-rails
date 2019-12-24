@@ -26,7 +26,7 @@ class ImagesController < ApplicationController
         type = @image.image.blob.content_type || "image/gif"
 
         @image.image.blob.open do |file|
-          send_data file, type: type, disposition: "inline"
+          send_data file.read, type: type, disposition: "inline"
         end
       end
     end
