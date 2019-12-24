@@ -1,0 +1,25 @@
+.tb.bookmark-card
+  .tb.card-menu
+    = react_component "BulkActions/SelectSingle", id: bookmark.id
+
+    = link_to edit_bookmark_path(bookmark), title: "edit" do
+      %i.pencil.icon
+
+  .tb.card-body
+    %h4
+      = link_to bookmark.title, bookmark_path(bookmark)
+
+      %small
+        (#{ link_to bookmark.uri.host.to_s, bookmark.uri.to_s, title: bookmark.uri.to_s })
+
+    %p
+      - unless bookmark.description.blank?
+        = bookmark.description.truncate(80)
+      - else
+        %em No description
+
+    .tb.card-footer
+      = render "components/time", time: bookmark.created_at
+
+      = render "components/tags", tags: bookmark.tags do |tag|
+        = bookmarks_tag_path(tag)
