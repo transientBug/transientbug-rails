@@ -1,4 +1,6 @@
 class Oauth::AuthorizedApplicationsController < ApplicationController
+  layout "page"
+
   require_login!
 
   def index

@@ -1,4 +1,6 @@
 class ImagesController < ApplicationController
+  layout "page"
+
   require_login! only: [ :new, :edit, :create, :update, :destroy ]
   before_action :set_image, only: [ :show, :edit, :update, :destroy ]
 
@@ -22,7 +24,10 @@ class ImagesController < ApplicationController
       format.json { render :show, status: :ok }
       format.gif do
         type = @image.image.blob.content_type || "image/gif"
-        send_data @image.image.blob.download, type: type, disposition: "inline"
+
+        @image.image.blob.open do |file|
+          send_data file, type: type, disposition: "inline"
+        end
       end
     end
   end

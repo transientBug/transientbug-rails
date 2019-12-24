@@ -1,3 +1,6 @@
+= render "layouts/common/navbar"
+= render "layouts/common/mobile_nav"
+
 .ui.pusher.main.old
   - if content_for? :secondary_navbar
     .ui.fluid.secondary.top.attached.stackable.menu
@@ -7,8 +10,5 @@
     = render_service_announcements
     = semantic_flash
 
-  - if content_for? :custom_grid
-    = content_for :custom_grid
-  - else
-    .ui.fluid.horizontally.padded.stackable.container
-      = yield
+  .ui.fluid.horizontally.padded.stackable.container
+    = yield

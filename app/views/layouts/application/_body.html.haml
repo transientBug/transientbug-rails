@@ -1,12 +1,29 @@
-= render "layouts/common/store"
+= render "layouts/common/navbar"
+= render "layouts/common/mobile_nav"
 
-= render "layouts/application/navbar"
+- if content_for? :sidebar_body
+  .ui.pusher.main
+    %aside.tb.sidebar-menu
+      = content_for :sidebar
 
-- if content_for? :custom_body
-  = content_for :custom_body
+    %main.tb
+      .messages
+        = render_service_announcements
+        = semantic_flash
 
-- elsif content_for? :sidebar_body
-  = render "layouts/application/sidebar"
+      = content_for :sidebar_body
+
+  = react_component "StoreModals"
 
 - else
-  = render "layouts/application/old_body"
+  .ui.pusher.main.old
+    - if content_for? :secondary_navbar
+      .ui.fluid.secondary.top.attached.stackable.menu
+        = content_for :secondary_navbar
+
+    .messages
+      = render_service_announcements
+      = semantic_flash
+
+    .ui.fluid.horizontally.padded.stackable.container
+      = yield
