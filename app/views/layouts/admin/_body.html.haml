@@ -1,11 +1,8 @@
-= javascript_tag nonce: true, "data-turbolinks-track": "reload", "data-turbolinks-eval": true do
-  window.__initStore__ = {}
-  - if content_for? :store
-    window.__initStore__ = #{ raw content_for(:store) }
+= render "layouts/common/store"
 
-= render partial: "layouts/admin/sidebar"
+= render "layouts/admin/mobile_nav"
 
-= render partial: "layouts/admin/navbar"
+= render "layouts/admin/navbar"
 
 .ui.pusher.main
   .messages
