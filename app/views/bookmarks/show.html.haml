@@ -32,26 +32,25 @@
       - else
         Archive
 
-- content_for :sidebar_body do
-  = model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
+= model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
-  .ui.fluid.horizontally.padded.stackable.grid
-    .eight.wide.column
-      %h2.ui.header
-        .content= @bookmark.title
+.ui.fluid.horizontally.padded.stackable.grid
+  .eight.wide.column
+    %h2.ui.header
+      .content= @bookmark.title
 
-      = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-      %time{ datetime: @bookmark.created_at.rfc2822 }
-        = @bookmark.created_at.to_s(:long)
-        UTC
+    = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+    %time{ datetime: @bookmark.created_at.rfc2822 }
+      = @bookmark.created_at.to_s(:long)
+      UTC
 
-      .ui.item
-        .ui.small.labels
-          - @bookmark.tags.each do |tag|
-            = link_to bookmarks_tag_path(tag) do
-              .ui.label{ class: [tag.color] }= tag.label
+    .ui.item
+      .ui.small.labels
+        - @bookmark.tags.each do |tag|
+          = link_to bookmarks_tag_path(tag) do
+            .ui.label{ class: [tag.color] }= tag.label
 
-    .eight.wide.column
-      - if @bookmark.description.present?
-        :markdown
-          #{ @bookmark.description }
+  .eight.wide.column
+    - if @bookmark.description.present?
+      :markdown
+        #{ @bookmark.description }

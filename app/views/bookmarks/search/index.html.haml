@@ -15,4 +15,10 @@
 - elsif @bookmarks.empty?
   = render partial: "no_results_state"
 - else
-  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+  = paginate @bookmarks
+
+  - @bookmarks.each do |bookmark|
+    = render "components/bookmark_card", bookmark: bookmark do
+      = react_component "BulkActions/SelectSingle", id: bookmark.id
+
+  = paginate @bookmarks

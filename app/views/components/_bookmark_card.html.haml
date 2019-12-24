@@ -1,6 +1,7 @@
+
 .tb.bookmark-card
   .tb.card-menu
-    = react_component "BulkActions/SelectSingle", id: bookmark.id
+    = yield
 
     = link_to edit_bookmark_path(bookmark), title: "edit" do
       %i.pencil.icon
