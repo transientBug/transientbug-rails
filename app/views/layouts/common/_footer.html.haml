@@ -13,8 +13,7 @@
           - if Rails.env.development?
             .item= link_to "Dev Auth", auth_path(:developer)
 
-          .item= link_to "Firefox Extension", "https://github.com/transientBug/firefox-extension", data: { turbolinks: false }
-          .item= link_to "Chrome Extension", "https://github.com/transientBug/chrome-extension", data: { turbolinks: false }
+          .item= link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbolinks: false }
 
           .item= link_to "Images", images_path
 
@@ -22,7 +21,7 @@
         %h4.ui.inverted.header All the Credits!
         .ui.inverted.link.list
           .item=link_to "Semantic UI", "https://semantic-ui.com/", data: { turbolinks: false }
-          .item= link_to "Rails 5.2", "https://github.com/rails/rails", data: { turbolinks: false }
+          .item= link_to "Rails 6", "https://github.com/rails/rails", data: { turbolinks: false }
           .item
             = link_to "https://github.com/transientBug/transientbug-rails", data: { turbolinks: false } do
               %i.github.icon

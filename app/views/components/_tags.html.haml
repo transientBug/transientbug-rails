@@ -1,0 +1,7 @@
+.tb.tags
+  - tags.each do |tag|
+    = link_to yield(tag) do
+      %span{ class: ["tb tag bg-#{tag.color}-500"] }= tag.label
+
+  -#%button.tb.tag
+    %i.plus.icon

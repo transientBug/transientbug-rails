@@ -1,6 +1,8 @@
 - content_for :page_title do
   Searching Bookmarks
 
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
+
 .ui.search.mobile.only
   .ui.fluid.icon.input
     = form_tag bookmarks_search_index_path, method: :get do
@@ -15,4 +17,10 @@
 - elsif @bookmarks.empty?
   = render partial: "no_results_state"
 - else
-  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+  = paginate @bookmarks
+
+  - @bookmarks.each do |bookmark|
+    = render "components/bookmark_card", bookmark: bookmark do
+      = react_component "BulkActions/SelectSingle", id: bookmark.id
+
+  = paginate @bookmarks

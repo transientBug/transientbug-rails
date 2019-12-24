@@ -22,7 +22,7 @@
   }
 }
 
-.main:not(.old) {
+.main:not(.old):not(.pages) {
   @apply flex flex-col;
 
   @screen lg {
@@ -64,7 +64,7 @@ main.tb {
   @apply w-full flex mb-2;
 
   & .card-menu {
-    @apply h-12 h-auto bg-cover rounded-l bg-gray-200 p-4 flex flex-col justify-around;
+    @apply h-12 h-auto bg-cover rounded-l bg-gray-200 p-4 flex flex-col justify-between;
   }
 
   & .card-body {
