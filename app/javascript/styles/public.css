@@ -29,6 +29,16 @@ nav.navbar {
   }
 }
 
+body.pages {
+  .tb.service-announcement {
+    @apply rounded-none border-r-0 border-t-0 border-l-0;
+
+    .announcement-icon {
+      @apply rounded-none;
+    }
+  }
+}
+
 .ui.footer.segment {
   @apply mt-0;
 }
