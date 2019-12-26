@@ -51,6 +51,14 @@
     .announcement-body-message {
       @apply text-gray-700 font-medium text-sm text-center px-2 pt-1;
 
+      & a {
+        @apply text-blue-500;
+
+        &:hover {
+          @apply text-blue-700;
+        }
+      }
+
       @screen md {
         @apply text-left;
       }
