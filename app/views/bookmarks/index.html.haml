@@ -1,7 +1,7 @@
 - content_for :page_title do
   Bookmarks
 
-%h2.ui.dividing.header Your bookmarks
+%h2.dividing Your bookmarks
 
 - store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
 

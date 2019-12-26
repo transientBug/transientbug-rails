@@ -1,12 +1,32 @@
 - if service_announcements&.any?
   - service_announcements.each do |service_announcement|
-    .ui.message{ class: [ service_announcement.color, (service_announcement.icon ? "icon" : "")] }
-      - if service_announcement.icon
+    -#.inline-flex.items-center.bg-white.leading-none.rounded-full.p-2.shadow.text-sm.w-full{ class: [ "text-#{ service_announcement.color }-800" ] }
+      -#%span.inline-flex.text-white.rounded-full.h-6.px-3.justify-center.items-center{ class: [ "bg-#{ service_announcement.color }-800" ] }
+        -#- if service_announcement.icon
+          -#%i.icon{ class: [ service_announcement.icon ] }
+
+        -#= service_announcement.title
+
+      -#%p.inline-flex.px-2
+        -#:markdown
+          -##{ service_announcement.message }
+
+    -#.flex.border.border-gray-400
+      .flex.justify-center.items-center.text-white.font-bold.text-6xl{ class: "w-2/12 bg-#{ service_announcement.color }-700" }
         %i.icon{ class: [ service_announcement.icon ] }
 
-      .content
-        .header
-          = service_announcement.title
-        %p
+      .w-full.px-1.bg-white.py-5.tracking-wide{ class: "lg:w-10/12" }
+        .font-semibold.text-gray-900.text-xl.text-center.px-2{ class: "lg:text-left" }= service_announcement.title
+        .text-gray-700.font-medium.text-sm.pt-1.text-center.px-2{ class: "lg:text-left" }
+          :markdown
+            #{ service_announcement.message }
+
+    .tb.service-announcement
+      .announcement-icon{ class: "bg-#{ service_announcement.color }-800" }
+        %i.icon{ class: [ service_announcement.icon ] }
+
+      .announcement-body
+        .announcement-body-title= service_announcement.title
+        .announcement-body-message
           :markdown
             #{ service_announcement.message }

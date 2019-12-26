@@ -12,24 +12,23 @@
       delete
 
 .ui.raised.very.padded.text.container.segment
-  %h1.ui.header Tag Wizard!
+  %h1 Tag Wizard!
   %p
     The tag wizard makes it easy for you to work through your backlog of untagged bookmarks!
 
-  %h3.ui.header= @bookmark.title
+  %h3= @bookmark.title
 
   = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-  .date
-    = @bookmark.created_at.to_s(:long)
-    UTC
+  = render "components/time", time: @bookmark.created_at
 
   %hr
 
   = render partial: 'form', locals: { bookmark: @bookmark }
 
   - if @bookmark.description.present?
-    %h3.ui.header Need a little more info?
+    %h3 Need a little more info?
 
     %p
       %strong Description:
-      = simple_format @bookmark.description
+      :markdown
+        #{ @bookmark.description }
