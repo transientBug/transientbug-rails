@@ -1,4 +1,4 @@
-= form_with model: bookmark, url: bookmarks_tag_wizard_path(bookmark), class: "ui fluid form", html: { autocomplete: "off" } do |f|
+= form_with model: bookmark, url: bookmarks_tag_wizard_path(bookmark), local: true, class: "ui fluid form", html: { autocomplete: "off" } do |f|
   - if bookmark.errors.any?
     .ui.message.error
       %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"

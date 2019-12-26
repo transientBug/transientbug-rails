@@ -9,7 +9,16 @@
       = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
     %i.search.icon
 
-%h1 Search Results
+- content_for :sidebar do
+  - if @bookmarks.any?
+    .tb.bulk-action-menu
+      = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
+
+      = react_component "BulkActions/Header"
+      = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
+      = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
+
+%h1.dividing Search Results
 - if @error
   = render partial: "query_error"
 - elsif params[:q].blank?

@@ -6,9 +6,8 @@
     = content_for :sidebar
 
   %main.tb
-    .messages
-      = render_service_announcements
-      = semantic_flash
+    = render_service_announcements
+    = semantic_flash
 
     = yield
 

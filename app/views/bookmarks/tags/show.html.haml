@@ -13,9 +13,9 @@
       = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
 
 - if @bookmarks.any?
-  %h2.ui.dividing.header
+  %h2.dividing
     Tag:
-    .ui.massive.label{ class: [ @tag.color ] }= @tag.label
+    %span.tb.tag{ class: "bg-#{ @tag.color }-500" }= @tag.label
 
   = paginate @bookmarks
 

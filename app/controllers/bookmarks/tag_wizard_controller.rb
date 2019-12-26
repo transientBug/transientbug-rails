@@ -1,6 +1,4 @@
 class Bookmarks::TagWizardController < ApplicationController
-  layout "page"
-
   require_login!
   before_action :set_bookmark, only: [:update]
 
@@ -29,15 +27,15 @@ class Bookmarks::TagWizardController < ApplicationController
     if bookmark_params[:tags].any? && @bookmark.update(bookmark_params)
       redirect_to bookmarks_tag_wizard_index_path, notice: "Bookmark tagged!"
     else
-      flash.notice = "You've got to add at least one tag to the bookmark, silly"
-      render :index
+      flash.alert = "You've got to add at least one tag to the bookmark!"
+      redirect_to bookmarks_tag_wizard_index_path
     end
   end
 
   private
 
   def set_bookmark
-    @bookmark = Bookmark.find params[:id]
+    @bookmark = current_user.bookmarks.find params[:id]
 
     authorize @bookmark
   end
