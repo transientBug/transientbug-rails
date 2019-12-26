@@ -35,7 +35,7 @@
 = model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
 .flex.flex-col.justify-between{ class: "lg:flex-row" }
-  .column.w-full
+  .column.w-full{ class: "lg:mr-2 sm:mb-2" }
     %h2.font-bold.text-3xl= @bookmark.title
 
     = link_to @bookmark.uri.to_s, @bookmark.uri.to_s

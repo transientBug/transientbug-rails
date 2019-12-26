@@ -36,6 +36,10 @@ nav.navbar {
 .tb {
   --sidebar-width: 24rem;
   --navbar-height: 52px;
+
+  & hr {
+    @apply border-b border-gray-200 my-4;
+  }
 }
 
 aside.tb.sidebar-menu {
