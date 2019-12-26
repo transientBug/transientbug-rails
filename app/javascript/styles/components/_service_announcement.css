@@ -4,6 +4,30 @@
   .announcement-icon {
     @apply flex justify-center items-center text-white font-bold text-6xl rounded-l rounded-r-none;
 
+    &.service-announcement-bg-plain {
+      @apply bg-gray-400;
+    }
+
+    &.service-announcement-bg-olive {
+      background-color: #b5cc18;
+    }
+
+    &.service-announcement-bg-violet {
+      background-color: #6435c9;
+    }
+
+    &.service-announcement-bg-brown {
+      background-color: #a5673f;
+    }
+
+    &.service-announcement-bg-grey {
+      @apply bg-gray-800;
+    }
+
+    &.service-announcement-bg-black {
+      background-color: #000;
+    }
+
     @screen md {
       @apply w-32;
     }
