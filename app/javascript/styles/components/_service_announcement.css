@@ -1,0 +1,35 @@
+.tb.service-announcement {
+  @apply flex border border-gray-300 mb-4 rounded;
+
+  .announcement-icon {
+    @apply flex justify-center items-center text-white font-bold text-6xl rounded-l rounded-r-none;
+
+    @screen md {
+      @apply w-32;
+    }
+
+    & > i.icon {
+      height: initial;
+    }
+  }
+
+  .announcement-body {
+    @apply w-full bg-white px-2 py-5 tracking-wide;
+
+    .announcement-body-title {
+      @apply font-semibold text-gray-900 text-xl text-center px-2;
+
+      @screen md {
+        @apply text-left;
+      }
+    }
+
+    .announcement-body-message {
+      @apply text-gray-700 font-medium text-sm text-center px-2 pt-1;
+
+      @screen md {
+        @apply text-left;
+      }
+    }
+  }
+}
