@@ -5,8 +5,6 @@ namespace :admin, constraints: RoleConstraint.new(:admin) do
 
   resources :service_announcements do
     scope module: :service_announcements do
-      resources :toggle, only: [ :create ]
-
       scope as: :service_announcements do
         collection do
           namespace :bulk do
