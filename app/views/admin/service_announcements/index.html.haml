@@ -32,7 +32,7 @@
           %td.collapsing= model_tag service_announcement, only: [ :id, :title ]
 
           %td.collapsing
-            .flex.flex-col.justify-center
+            .flex.flex-col.items-center
               .ui.buttons
                 = link_to admin_service_announcement_path(service_announcement), class: "ui icon button" do 
                   %i.expand.icon
