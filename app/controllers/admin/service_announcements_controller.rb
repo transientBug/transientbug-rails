@@ -47,8 +47,8 @@ class Admin::ServiceAnnouncementsController < AdminController
     respond_to do |format|
       if @service_announcement.update(service_announcement_params)
         format.html do
-          redirect_to [:admin, @service_announcement],
-                      notice: "Service Announcement was successfully updated."
+          redirect_back fallback_location: [:admin, @service_announcement],
+                        notice: "Service Announcement was successfully updated."
         end
       else
         format.html { render :edit }
