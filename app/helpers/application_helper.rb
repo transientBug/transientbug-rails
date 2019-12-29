@@ -44,6 +44,12 @@ module ApplicationHelper
     end
   end
 
+  def behavior_data name, **args
+    capture do
+      yield({ data: { behavior: name, args: args.to_json } })
+    end
+  end
+
   # Builds out a "clickable item" div which contains all of the information
   # needed for bulk actions, including which modal template to use, and the bulk
   # action to be completed. This tag is hidden by default and JS unhides it

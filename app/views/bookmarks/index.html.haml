@@ -10,9 +10,16 @@
     .tb.bulk-action-menu
       = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
 
-      = react_component "BulkActions/Header"
-      = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
-      = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
+      = behavior_data "bulk-action-visibility" do |dataset|
+        .hidden{ **dataset }
+          = react_component "BulkActions/Header"
+
+          = behavior_data "display-modal", modal: "TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path do |dataset|
+            %button{ class: "button button-white-outline hover:button-white text-white hover:text-gray-800", **dataset }
+              %i.tags.icon
+              Add Tags
+
+          = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
 
 - if @bookmarks.any?
   = paginate @bookmarks

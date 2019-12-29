@@ -12,6 +12,7 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import ReactRailsUJS from "react_ujs"
+import { DataBehaviors } from "../lib/Behaviors"
 
 import "channels"
 
@@ -64,3 +65,14 @@ ReactRailsUJS.getConstructor = className => {
 // I wonder if its because Turbolinks.start needs to be called before
 // importing ReactRailsUJS?
 ReactRailsUJS.detectEvents()
+
+const behaviorsRequireContext = require.context("../behaviors", true, /\.ts/)
+const dataBehaviors = new DataBehaviors(behaviorsRequireContext)
+
+document.addEventListener("turbolinks:load", () => {
+  dataBehaviors.connect()
+})
+
+document.addEventListener("turbolinks:before-render", () => {
+  dataBehaviors.disconnect()
+})
