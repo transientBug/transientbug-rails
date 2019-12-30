@@ -21,13 +21,16 @@ class DataBehaviors {
   }
 
   connect = () => {
-    console.groupCollapsed("Connecting Behaviors")
-    document.querySelectorAll(this.Selector).forEach(this.connectBehavior)
+    const elements = document.querySelectorAll(this.Selector)
+    console.groupCollapsed(`Connecting ${elements.length} Behaviors`)
+    elements.forEach(this.connectBehavior)
     console.groupEnd()
   }
 
   disconnect = () => {
-    console.groupCollapsed("Disconnecting Behaviors")
+    console.groupCollapsed(
+      `Disconnecting ${this.connectedBehaviors.length} Behaviors`
+    )
     this.connectedBehaviors.forEach(behaviorInstance =>
       behaviorInstance.disconnect()
     )
@@ -54,10 +57,14 @@ class DataBehaviors {
       args
     )
 
-    const behaviorInstance = new behaviorKlass(element, args)
-    this.connectedBehaviors.push(behaviorInstance)
+    try {
+      const behaviorInstance = new behaviorKlass(element, args)
+      this.connectedBehaviors.push(behaviorInstance)
 
-    behaviorInstance.connect()
+      behaviorInstance.connect()
+    } catch (e) {
+      console.error(`Unable to connect ${behavior}`, e)
+    }
   }
 }
 

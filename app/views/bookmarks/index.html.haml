@@ -10,16 +10,25 @@
     .tb.bulk-action-menu
       = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
 
-      = behavior_data "bulk-action-visibility" do |dataset|
-        .hidden{ **dataset }
-          = react_component "BulkActions/Header"
+      = behavior_data "bulk-action-visibility" do |vis_dataset|
+        .hidden{ **vis_dataset }
+          %h2
+            Bulk Actions
+            %small
+              (
+              = behavior_data "bulk-action-count" do |dataset|
+                %span{ **dataset }
+              selected bookmarks )
 
           = behavior_data "display-modal", modal: "TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path do |dataset|
             %button{ class: "button button-white-outline hover:button-white text-white hover:text-gray-800", **dataset }
               %i.tags.icon
               Add Tags
 
-          = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
+          = behavior_data "display-modal", modal: "DeleteAll", actionUrl: bookmarks_bulk_delete_path do |dataset|
+            %button{ class: "button button-red-outline hover:button-red text-red hover:text-white", **dataset }
+              %i.trash.icon
+              Delete All
 
 - if @bookmarks.any?
   = paginate @bookmarks

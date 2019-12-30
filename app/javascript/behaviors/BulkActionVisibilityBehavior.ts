@@ -14,16 +14,8 @@ export default class BulkActionVisibilityBehavior extends Behavior<{}> {
     store.unsubscribe(this.unsubscribe)
   }
 
-  protected show = () => {
-    this.element.classList.remove("hidden")
-  }
-
-  protected hide = () => {
-    this.element.classList.add("hidden")
-  }
-
   protected subscriber = ({ selection }) => {
-    if (selection.length > 0) this.show()
-    else this.hide()
+    if (selection.length > 0) this.element.classList.remove("hidden")
+    else this.element.classList.add("hidden")
   }
 }
