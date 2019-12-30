@@ -1,5 +1,4 @@
 - dataset ||= {}
-
 - clipId = "_clip-#{ SecureRandom.uuid }"
 
 %label{ class: "flex justify-start items-start", **dataset }
@@ -13,5 +12,5 @@
       %g{ clip: { path: "url(##{ clipId })" } }
         %path{ d: "M20,3.5c0,-1.932 -1.568,-3.5 -3.5,-3.5l-13,0c-1.932,0 -3.5,1.568 -3.5,3.5l0,13c0,1.932 1.568,3.5 3.5,3.5l13,0c1.932,0 3.5,-1.568 3.5,-3.5l0,-13Z" }
 
-  %div{ class: "select-none" }
-    = yield
+  - if block_given?
+    %div{ class: "select-none" }= yield
