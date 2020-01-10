@@ -3,13 +3,7 @@ import { EVENT_MAP } from "./constants"
 class Behavior<S> {
   static readonly OnBehavior: string
 
-  readonly element: HTMLElement
-  readonly args: S
-
-  constructor(element, args: S) {
-    this.element = element
-    this.args = args
-  }
+  constructor(readonly element: HTMLElement, readonly args: S) {}
 
   OnConnect = () => {}
   OnDisconnect = () => {}
