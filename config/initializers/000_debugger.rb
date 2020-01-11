@@ -22,7 +22,7 @@ if defined? RubyProf
   def profile name, &block
     result = RubyProf.profile(&block)
 
-    profile_output = ETL.root.join "profile", ETL.environment.to_s, "#{ name }.html"
+    profile_output = Rails.root.join "profile", Rails.environment.to_s, "#{ name }.html"
     profile_output.parent.mkpath
 
     printer = RubyProf::CallStackPrinter.new result
