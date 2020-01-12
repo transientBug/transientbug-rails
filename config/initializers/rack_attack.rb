@@ -13,6 +13,36 @@ class Rack::Attack
 
   # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
+  # Screw this one person in particular
+  blocklist_ip("34.83.207.109")
+
+  # This could use some better setup but these are the common paths I see a lot
+  # getting tried, so let's start with temp banning them for now. The maxretry,
+  # findtime and bantime could use some better adjusting and is a bit egregious
+  # right now but thats okay
+  blocklist("fail2ban") do |req|
+    Rack::Attack::Fail2Ban.filter("pentesters-#{ req.ip }", maxretry: 2, findtime: 1.hour, bantime: 12.hours) do
+      # The count for the IP is incremented if the return value is truthy
+      is_bad = CGI.unescape(req.query_string) =~ %r{/etc/passwd}
+
+      is_bad ||= req.path.include?("/etc/passwd")
+      is_bad ||= req.path.include?("/vpns/")
+      is_bad ||= req.path.include?("/cgi-bin/")
+
+      is_bad ||= req.path.include?("wp-admin")
+      is_bad ||= req.path.include?("wp-content")
+      is_bad ||= req.path.include?("wp-json")
+      is_bad ||= req.path.include?("wp-login")
+      is_bad ||= req.path.include?("wp-config")
+
+      is_bad ||= req.path.end_with?(".php")
+
+      is_bad ||= req.headers["HTTP_ACCEPT"].include?("../")
+
+      is_bad
+    end
+  end
+
   ### Throttle Spammy Clients ###
 
   # If any single client IP is making tons of requests, then they're
@@ -27,7 +57,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   throttle("req/ip", limit: 300, period: 5.minutes) do |req|
-    req.ip unless req.path.start_with?("/csp-violation-report") && req.post?
+    return req.ip unless req.path.start_with?("/csp-violation-report") && req.post?
   end
 
   ### Prevent Brute-Force Login Attacks ###
