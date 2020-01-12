@@ -33,7 +33,7 @@
             - ServiceAnnouncement.icons.each do |k, v|
               .item{ data: { value: k }, class: [ service_announcement.icon == k ? "active selected" : "" ] }
                 %i.icon{ class: k }
-                = k.humanize.capitalize
+                = k.humanize
 
       .field
         = f.label :color
@@ -45,7 +45,7 @@
             - ServiceAnnouncement.colors.each do |k, v|
               .item{ data: { value: k }, class: [ service_announcement.color == k ? "active selected" : "" ] }
                 %i.square.icon{ class: k }
-                = k.humanize.capitalize
+                = k.humanize
 
     .ui.column
       %h4.ui.dividing.header Limits

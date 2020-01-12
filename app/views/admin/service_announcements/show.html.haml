@@ -59,13 +59,13 @@
         %b Icon
       %td
         %i.icon{ class: [ @service_announcement.color, @service_announcement.icon ] }
-        = @service_announcement.icon.humanize.capitalize
+        = @service_announcement.icon&.humanize
     %tr
       %td
         %b Color
       %td
         %i.square.icon{ class: @service_announcement.color }
-        = @service_announcement.color.humanize.capitalize
+        = @service_announcement.color&.humanize
     %tr
       %td
         %b Start At
