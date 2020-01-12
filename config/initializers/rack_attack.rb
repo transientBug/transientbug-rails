@@ -1,4 +1,4 @@
-Rack::Attack.enabled = false if Rails.env.development?
+Rack::Attack.enabled = false if Rails.env.development? || Rails.env.test?
 
 class Rack::Attack
 
