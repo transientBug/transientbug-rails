@@ -6,19 +6,19 @@
 .ui.menu
   = link_to edit_admin_service_announcement_path(@service_announcement), class: "item" do
     %i.edit.icon
-    edit
+    Edit
 
-  = link_to admin_service_announcement_toggle_index_path(@service_announcement), class: "item", method: :post do
+  = button_to admin_service_announcement_path(@service_announcement), method: :patch, params: { service_announcement: { active: !@service_announcement.active } }, class: "item" do
     - if @service_announcement.active
       %i.hide.icon
-      deactivate
+      Deactivate
     - else
       %i.unhide.icon
-      activate
+      Activate
 
   .right.menu
     .ui.simple.dropdown.item
-      more
+      More
       %i.dropdown.icon
       .menu
 
@@ -29,7 +29,7 @@
 
         = modal_tag @service_announcement, :delete, url: admin_service_announcement_path(@service_announcement) do
           %i.trash.icon
-          delete
+          Delete
 
 %h2.ui.dividing.header Internal Stuff
 %table.ui.collapsing.celled.table
@@ -43,10 +43,15 @@
       %td
         %b Active?
       %td
-        = @service_announcement.active
+        - if @service_announcement.active
+          %i.green.unhide.icon
+          active
+        - else
+          %i.red.hide.icon
+          inactive
     %tr
       %td
-        %b Only for Logged In Users??
+        %b Only for Logged In Users?
       %td
         = @service_announcement.logged_in_only
     %tr
@@ -54,13 +59,13 @@
         %b Icon
       %td
         %i.icon{ class: [ @service_announcement.color, @service_announcement.icon ] }
-        = @service_announcement.icon.humanize.capitalize
+        = @service_announcement.icon&.humanize
     %tr
       %td
         %b Color
       %td
         %i.square.icon{ class: @service_announcement.color }
-        = @service_announcement.color.humanize.capitalize
+        = @service_announcement.color&.humanize
     %tr
       %td
         %b Start At
@@ -79,4 +84,4 @@
 
 %h2.ui.dividing.header Preview
 
-= render partial: "layouts/service_announcements", locals: { service_announcements: [ @service_announcement ] }
+= render partial: "layouts/common/service_announcements", locals: { service_announcements: [ @service_announcement ] }

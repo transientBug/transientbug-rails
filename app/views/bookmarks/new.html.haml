@@ -1,7 +1,12 @@
 - content_for :page_title do
   New Bookmark
 
-- content_for :sidebar_body do
-  %h2.ui.dividing.header New Bookmark
+- content_for :sidebar do
+  .tb.bulk-action-menu
+    = link_to bookmarks_path, class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      %i.chevron.left.icon
+      Back to bookmarks
 
-  = render partial: "form", locals: { bookmark: @bookmark }
+%h2.dividing New Bookmark
+
+= render partial: "form", locals: { bookmark: @bookmark }

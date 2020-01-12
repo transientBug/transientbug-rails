@@ -1,9 +1,35 @@
 - content_for :page_title do
   Bookmarks Tagged '#{ @tag.label }'
 
-- content_for :sidebar_body do
-  %h2.ui.dividing.header
-    Tag: 
-    .ui.massive.label{ class: [ @tag.color ] }= @tag.label
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
 
-= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+- content_for :sidebar do
+  - if @bookmarks.any?
+    .tb.bulk-action-menu
+      = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
+
+      = react_component "BulkActions/Header"
+      = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
+      = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
+
+- if @bookmarks.any?
+  %h2.dividing
+    Tag:
+    %span.tb.tag{ class: "bg-#{ @tag.color }-500" }= @tag.label
+
+  = paginate @bookmarks
+
+  - @bookmarks.each do |bookmark|
+    = render "components/bookmark_card", bookmark: bookmark do
+      = react_component "BulkActions/SelectSingle", id: bookmark.id
+
+  = paginate @bookmarks
+
+- else
+  %h1
+    %i.bookmark.icon
+    No bookmarks found!
+
+  %p
+    Maybe
+    = link_to "make one?", new_bookmark_path

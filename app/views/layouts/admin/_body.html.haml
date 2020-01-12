@@ -1,16 +1,9 @@
-= javascript_tag nonce: true, "data-turbolinks-track": "reload", "data-turbolinks-eval": true do
-  window.__initStore__ = {}
-  - if content_for? :store
-    window.__initStore__ = #{ raw content_for(:store) }
-
-= render partial: "layouts/admin/sidebar"
-
-= render partial: "layouts/admin/navbar"
+= render "layouts/admin/navbar"
+= render "layouts/admin/mobile_nav"
 
 .ui.pusher.main
-  .messages
-    = render_service_announcements
-    = semantic_flash
+  = render_service_announcements
+  = semantic_flash
 
   .ui.fluid.stackable.container
     - if partial_for? "menu"

@@ -7,12 +7,17 @@ module ApplicationHelper
     service_announcements = ServiceAnnouncement.displayable
     service_announcements = service_announcements.where(logged_in_only: false) unless current_user
 
-    render partial: "layouts/service_announcements", locals: { service_announcements: service_announcements }
+    render partial: "layouts/common/service_announcements", locals: { service_announcements: service_announcements }
   end
 
   def store_records records, **opts
+    records = Array(records)
+
+    records_type = records.model if records.respond_to? :model
+    records_type ||= records.first.class
+
     attributes = Array(opts.delete(:only)).map(&:to_sym)
-    attributes ||= records.model.attribute_names.map(&:to_sym)
+    attributes ||= records_type.attribute_names.map(&:to_sym)
 
     # force the ID to be present because reasons
     attributes.unshift :id
@@ -24,14 +29,25 @@ module ApplicationHelper
       end
     end
 
-    records_type = records.model if records.respond_to? :model
-    records_type ||= records.first.class
-
     {
       type: records_type.name.to_s,
       attributes: attributes,
       objects: objects
     }
+  end
+
+  # TODO: figure out if there is a way I could call this multiple times and
+  # merge the resulting data? maybe through an array that the JS processes?
+  def store_content data
+    content_for :store do
+      data.to_json.html_safe
+    end
+  end
+
+  def behavior_data name, **args
+    capture do
+      yield({ data: { behavior: name, args: args.to_json } })
+    end
   end
 
   # Builds out a "clickable item" div which contains all of the information

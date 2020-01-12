@@ -1,4 +1,6 @@
 class Oauth::AuthorizationsController < ApplicationController
+  layout "page"
+
   require_login!
 
   include Doorkeeper::Helpers::Controller

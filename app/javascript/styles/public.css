@@ -1,28 +1,27 @@
+@import "components/_typography";
 @import "components/_buttons";
-@import "components/_modal";
 @import "components/_checkbox";
-@import "components/_bulk_action_menu";
-@import "components/_backgrounds";
 @import "components/_tables";
+@import "components/_time";
+
+@import "components/_tags";
+
+@import "components/_backgrounds";
+@import "components/_modal";
+
+@import "components/_pager";
+@import "components/_bulk_action_menu";
+@import "components/_service_announcement";
+@import "components/_bookmark_card";
 
 @tailwind base;
 @tailwind components;
 
-.ui.top.fixed.menu {
-  max-height: 52px;
+nav.navbar {
+  max-height: var(--navbar-height) !important;
 }
 
-.tb nav.pagination.menu {
-  @apply mb-4 flex flex-col;
-
-  width: max-content;
-
-  @screen md {
-    @apply flex-row;
-  }
-}
-
-.main:not(.old) {
+.main:not(.old):not(.pages) {
   @apply flex flex-col;
 
   @screen lg {
@@ -30,79 +29,62 @@
   }
 }
 
+body.pages {
+  .tb.service-announcement {
+    @apply rounded-none border-r-0 border-t-0 border-l-0;
+
+    .announcement-icon {
+      @apply rounded-none;
+    }
+  }
+}
+
 .ui.footer.segment {
   @apply mt-0;
 }
 
+.tb {
+  --sidebar-width: 24rem;
+  --navbar-height: 52px;
+
+  & hr {
+    @apply border-b border-gray-200 my-4;
+  }
+}
+
 aside.tb.sidebar-menu {
-  @apply w-full p-4 text-white flex-shrink-0 block border-t border-b;
+  @apply w-full p-4 flex-shrink-0 block border-t border-b text-white;
 
   background-color: #1b1c1d;
 
   border-color: rgba(224, 224, 224, 0.2);
 
   @screen lg {
-    @apply w-1/4 inset-y-0 left-0 max-w-sm;
+    @apply fixed inset-y-0 left-0;
+
+    width: var(--sidebar-width);
+    top: var(--navbar-height);
   }
 
-  & &.bulk-action-menu {
-    @apply flex flex-col;
+  h2 {
+    @apply text-white;
   }
 }
 
 main.tb {
-  @apply p-4 mt-0 flex flex-col w-full;
+  @apply p-4 mt-0 flex flex-col;
 
   /*
    * Takes care of semantic UI adding a margin to the top of the last child in
    * the ".pusher.main"
    * */
   margin-top: 0px !important;
-}
 
-.tb.bookmark-card {
-  @apply w-full flex mb-2;
+  @screen lg {
+    @apply relative;
 
-  & .card-menu {
-    @apply h-12 h-auto bg-cover rounded-l bg-gray-200 p-4 flex flex-col justify-around;
-  }
-
-  & .card-body {
-    @apply border-r border-b border-t border-gray-200 rounded-r p-4 flex flex-col justify-between leading-normal w-full;
-
-    & h4 {
-      @apply text-black font-bold text-xl mb-2;
-
-      & small {
-        @apply font-thin text-sm text-gray-500;
-      }
-    }
-
-    & .tb.footer {
-      @apply flex flex-col mt-2;
-    }
-  }
-}
-
-.tb {
-  & p {
-    @apply text-gray-700 text-base;
-  }
-
-  & time {
-    @apply text-sm text-gray-500;
-  }
-
-  & .messages {
-    @apply mb-2;
-  }
-}
-
-.tb.tags {
-  @apply flex flex-row flex-wrap mt-1;
-
-  .tb.tag {
-    @apply inline-block bg-gray-200 rounded px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-1;
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
   }
 }
 

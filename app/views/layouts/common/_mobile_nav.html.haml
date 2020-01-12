@@ -1,4 +1,19 @@
 // Mobile nav
+%nav.tb.navbar.ui.top.fixed.inverted.menu.mobile.only
+  .clickable.item
+    %i.large.sidebar.icon
+
+  .right.menu
+    - if signed_in?
+      = link_to bookmarks_path, class: "item" do
+        = image_tag "bug_logo.png", class: "image"
+
+    - else
+      = link_to "Login", login_path, class: "item"
+
+      = link_to root_path, class: "item" do
+        = image_tag "bug_logo.png", class: "image"
+
 .ui.sidebar.inverted.vertical.menu
   - if signed_in?
     .item

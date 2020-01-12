@@ -17,14 +17,14 @@
     %h2 Offline Archive
 
     - if @bookmark.current_offline_cache.present?
-      Archive made on
-      %time{ datetime: @bookmark.current_offline_cache.created_at.rfc2822 }
-        = @bookmark.current_offline_cache.created_at.to_s(:long)
-        UTC
+      .archive-info
+        Archive made
+        = render "components/time", time: @bookmark.current_offline_cache.created_at
 
       = link_to "View Archive", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "button button-white-outline hover:button-white text-white hover:text-gray-800"
     - else
-      No archive available
+      .archive-info
+        No archive available
 
     = button_to bookmark_cache_index_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
       - if @bookmark.offline_caches.any?
@@ -32,26 +32,22 @@
       - else
         Archive
 
-- content_for :sidebar_body do
-  = model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
+= model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
-  .ui.fluid.horizontally.padded.stackable.grid
-    .eight.wide.column
-      %h2.ui.header
-        .content= @bookmark.title
+.flex.flex-col.justify-between{ class: "lg:flex-row" }
+  .column.w-full{ class: "lg:mr-2 sm:mb-2" }
+    %h2.font-bold.text-3xl= @bookmark.title
 
-      = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-      %time{ datetime: @bookmark.created_at.rfc2822 }
-        = @bookmark.created_at.to_s(:long)
-        UTC
+    = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+    = render "components/time", time: @bookmark.created_at
 
-      .ui.item
-        .ui.small.labels
-          - @bookmark.tags.each do |tag|
-            = link_to bookmarks_tag_path(tag) do
-              .ui.label{ class: [tag.color] }= tag.label
+    = render "components/tags", tags: @bookmark.tags do |tag|
+      = bookmarks_tag_path(tag)
 
-    .eight.wide.column
-      - if @bookmark.description.present?
-        :markdown
-          #{ @bookmark.description }
+  .column.w-full
+    - if @bookmark.description.present?
+      :markdown
+        #{ @bookmark.description }
+
+    - else
+      %em No description ...

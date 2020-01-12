@@ -1,36 +1,51 @@
 - content_for :page_title do
   Bookmark '#{ @bookmark.title }'
 
-- content_for :secondary_navbar do
-  - if @bookmark.offline_caches.any?
-    = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
+- content_for :sidebar do
+  .tb.bulk-action-menu
+    %h2 Actions
+    = link_to bookmark_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      %i.linkify.icon
+      View
 
-  = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
+    = link_to edit_bookmark_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      %i.pencil.icon
+      Edit
 
-  .right.menu
-    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark) do
-      delete
+    -# TODO: replace
+    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark), class: "button button-red-outline hover:button-red" do
+      %i.trash.can.icon
+      Delete
 
-- content_for :custom_grid do
-  .ui.raised.very.padded.text.container.segment
-    %h1.ui.header Tag Wizard!
-    %p
-      The tag wizard makes it easy for you to work through your backlog of untagged bookmarks!
+    %h2 Offline Archive
 
-    %h3.ui.header= @bookmark.title
+    - if @bookmark.current_offline_cache.present?
+      .archive-info
+        Archive made
+        = render "components/time", time: @bookmark.current_offline_cache.created_at
 
-    = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-    .date
-      = @bookmark.created_at.to_s(:long)
-      UTC
+      = link_to "View Archive", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "button button-white-outline hover:button-white text-white hover:text-gray-800"
+    - else
+      .archive-info
+        No archive available
 
-    %hr
+%h1 Tag Wizard!
+%p
+  The tag wizard makes it easy for you to work through your backlog of untagged bookmarks!
 
-    = render partial: 'form', locals: { bookmark: @bookmark }
+%hr
 
-    - if @bookmark.description.present?
-      %h3.ui.header Need a little more info?
+%div{ class: "w-full lg:w-1/3" }
+  %h2.font-bold.text-3xl= @bookmark.title
 
-      %p
-        %strong Description:
-        = simple_format @bookmark.description
+  = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+  = render "components/time", time: @bookmark.created_at
+
+  = render partial: 'form', locals: { bookmark: @bookmark }
+
+  - if @bookmark.description.present?
+    :markdown
+      #{ @bookmark.description }
+
+  - else
+    %em No description ...
