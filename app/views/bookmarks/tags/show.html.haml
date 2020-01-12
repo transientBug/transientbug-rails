@@ -5,13 +5,8 @@
 
 - content_for :sidebar do
   - if @bookmarks.any?
-    .tb.bulk-action-menu
-      = react_component "BulkActions/SelectAll", label: "Select All Bookmarks"
-
-      = react_component "BulkActions/Header"
-      = react_component "BulkActions/public/TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path
-      = react_component "BulkActions/public/DeleteAll", actionUrl: bookmarks_bulk_delete_path
-
+    = render "bookmarks/bulk-actions"
+    
 - if @bookmarks.any?
   %h2.dividing
     Tag:
@@ -21,7 +16,8 @@
 
   - @bookmarks.each do |bookmark|
     = render "components/bookmark_card", bookmark: bookmark do
-      = react_component "BulkActions/SelectSingle", id: bookmark.id
+      = behavior_data "bulk-action-select-single", id: bookmark.id do |dataset|
+        = render "components/checkbox", dataset: dataset
 
   = paginate @bookmarks
 
