@@ -28,8 +28,9 @@ gem "connection_pool"
 gem "redis-rails"
 gem "redis-rack-cache"
 
-# CORS
+# CORS & other Security
 gem "rack-cors"
+gem "rack-attack"
 
 # Needed for has_secure_password
 gem "bcrypt"
