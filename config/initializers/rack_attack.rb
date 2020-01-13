@@ -57,7 +57,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   throttle("req/ip", limit: 300, period: 5.minutes) do |req|
-    return req.ip unless req.path.start_with?("/csp-violation-report") && req.post?
+    req.ip unless req.path.start_with?("/csp-violation-report") && req.post?
   end
 
   ### Prevent Brute-Force Login Attacks ###
