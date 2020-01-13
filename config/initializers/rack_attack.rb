@@ -37,7 +37,7 @@ class Rack::Attack
 
       is_bad ||= req.path.end_with?(".php")
 
-      is_bad ||= req.env["HTTP_ACCEPT"].include?("../")
+      is_bad ||= req.env["HTTP_ACCEPT"]&.include?("../")
 
       is_bad
     end
