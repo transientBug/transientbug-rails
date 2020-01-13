@@ -6,7 +6,10 @@ import { DataBehaviors } from "../lib/Behaviors"
 
 import "../channels"
 
-import "../store"
+import React from "react"
+import { Provider } from "react-redux"
+import store from "../store/store"
+import { reset } from "../store/slices/resetAction"
 
 /** Turbolinks and inline body script tags with a CSP nonce don't seem to play nice.
  * Probably not recommended to do this but :/ Nothing else it working
@@ -23,6 +26,14 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
+document.addEventListener("turbolinks:load", () => {
+  store.dispatch(reset(window.__initStore__ || {}))
+})
+
+document.addEventListener("turbolinks:request-start", () => {
+  store.dispatch(reset({}))
+})
+
 // Support component names relative to this directory:
 const componentRequireContext = require.context("components", true)
 // ReactRailsUJS.useContext(componentRequireContext)
@@ -33,17 +44,23 @@ ReactRailsUJS.getConstructor = className => {
   const keys = parts
 
   // Load the module:
-  let component = componentRequireContext("./" + filename)
+  let Component = componentRequireContext("./" + filename)
 
   // Then access each key:
   keys.forEach(function(k) {
-    component = component[k]
+    Component = Component[k]
   })
 
   // support `export default`
-  if (component.__esModule) component = component["default"]
+  if (Component.__esModule) Component = Component["default"]
 
-  return component
+  const StoreWrapper = (...args) => (
+    <Provider store={store}>
+      <Component {...args} />
+    </Provider>
+  )
+
+  return StoreWrapper
 }
 // ReactRailsUJS doesn't seem to pick up on Turbolinks like it should
 // I wonder if its because Turbolinks.start needs to be called before

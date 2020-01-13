@@ -7,8 +7,9 @@ import Rails from "@rails/ujs"
 import { CacheProvider } from "@emotion/core"
 import createCache from "@emotion/cache"
 
-import { connect } from "../../store"
-import { operations } from "../../store/modals"
+import { connect } from "react-redux"
+import { actions } from "../../store/slices/modals"
+import { RootState } from "../../store/store"
 
 ReactModal.setAppElement("body")
 
@@ -33,9 +34,9 @@ const StoreModals: React.FC<StoreModalsProps> = ({
 }) => {
   if (!modal) return null
 
-  let modalConstructor
+  let ModalComponent
   if (modal.name)
-    modalConstructor = componentRequireContext(`./${modal.name}`).default
+    ModalComponent = componentRequireContext(`./${modal.name}`).default
 
   const close = () => boundClose(modal.name)
 
@@ -49,7 +50,7 @@ const StoreModals: React.FC<StoreModalsProps> = ({
         bodyOpenClassName={"modal-open"}
         htmlOpenClassName={"modal-open"}
       >
-        {modalConstructor && modalConstructor({ close, ...modal.props })}
+        {ModalComponent && <ModalComponent {...{ close, ...modal }} />}
       </ReactModal>
     </CacheProvider>
   )
@@ -57,7 +58,7 @@ const StoreModals: React.FC<StoreModalsProps> = ({
 
 export default withErrorBoundary(
   connect(
-    ({ modals }) => ({ modal: modals }),
-    { close: operations.close }
+    ({ modals }: RootState) => ({ modal: modals.stack[0] }),
+    { close: actions.close }
   )(StoreModals)
 )

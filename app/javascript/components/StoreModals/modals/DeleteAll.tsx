@@ -7,19 +7,25 @@ import Button from "../../Button"
 
 import { bulk } from "../../../api"
 
-import pluralize from "pluralize"
 import Turbolinks from "turbolinks"
+import pluralize from "pluralize"
 
-import { connect } from "../../../store"
+import { connect } from "react-redux"
+import { RootState } from "../../../store/store"
 
-interface DeleteAllModalProps {
+interface OwnProps {
   close: ModalClose
+  url: string
+}
+
+interface StateProps {
   records: any[]
   ids: number[]
   headers: string[]
   wording: string
-  url: string
 }
+
+type DeleteAllModalProps = OwnProps & StateProps
 
 const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
   close,
@@ -70,9 +76,9 @@ const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
 }
 
 export default connect(
-  ({ records, selection }) => ({
-    ids: selection,
-    records: selection.map(i => records.objects[`${i}`]),
+  ({ records, selection }: RootState) => ({
+    ids: selection.selection,
+    records: selection.selection.map(i => records.objects[`${i}`]),
     headers: records.attributes,
     wording: records.type
   }),

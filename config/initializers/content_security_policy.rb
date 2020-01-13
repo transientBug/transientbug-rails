@@ -27,8 +27,9 @@ Rails.application.config.content_security_policy do |policy|
 
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
-    policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*"
+    policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_eval, :unsafe_inline
     policy.connect_src :self, :https, "http://localhost:3036", "ws://localhost:3036"
+    policy.style_src :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_inline
   end
 
   # Specify URI for violation reports
@@ -36,11 +37,13 @@ Rails.application.config.content_security_policy do |policy|
 end
 
 # If you are using UJS then enable automatic nonce generation
-Rails.application.config.content_security_policy_nonce_generator = -> request do
-  if request.env['HTTP_TURBOLINKS_REFERRER'].present?
-    request.env['HTTP_X_TURBOLINKS_NONCE']
-  else
-    SecureRandom.base64(16)
+unless Rails.env.development?
+  Rails.application.config.content_security_policy_nonce_generator = -> request do
+    if request.env['HTTP_TURBOLINKS_REFERRER'].present?
+      request.env['HTTP_X_TURBOLINKS_NONCE']
+    else
+      SecureRandom.base64(16)
+    end
   end
 end
 # Set the nonce only to specific directives

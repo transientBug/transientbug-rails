@@ -1,6 +1,6 @@
 import Behavior, { ForBehavior } from "../lib/Behaviors"
 
-import store from "../store"
+import store, { RootState } from "../store/store"
 
 @ForBehavior("bulk-action-visibility")
 export default class BulkActionVisibilityBehavior extends Behavior<{}> {
@@ -11,11 +11,13 @@ export default class BulkActionVisibilityBehavior extends Behavior<{}> {
   }
 
   OnDisconnect = () => {
-    store.unsubscribe(this.unsubscribe)
+    this.unsubscribe()
   }
 
-  protected subscriber = ({ selection }) => {
-    if (selection.length > 0) this.element.classList.remove("hidden")
+  protected subscriber = () => {
+    const { selection } = store.getState() as RootState
+
+    if (selection.selection.length > 0) this.element.classList.remove("hidden")
     else this.element.classList.add("hidden")
   }
 }
