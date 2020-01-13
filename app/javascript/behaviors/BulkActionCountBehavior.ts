@@ -1,6 +1,6 @@
 import Behavior, { ForBehavior } from "../lib/Behaviors"
 
-import store from "../store"
+import store, { RootState } from "../store/store"
 
 /*
 I originally wanted to use lodash.template here, writing some template into the html
@@ -18,10 +18,12 @@ export default class BulkActionCountBehavior extends Behavior<{}> {
   }
 
   OnDisconnect = () => {
-    store.unsubscribe(this.unsubscribe)
+    this.unsubscribe()
   }
 
-  protected subscriber = ({ selection }) => {
-    this.element.innerHTML = selection.length
+  protected subscriber = () => {
+    const { selection } = store.getState() as RootState
+
+    this.element.innerHTML = selection.selection.length.toString()
   }
 }

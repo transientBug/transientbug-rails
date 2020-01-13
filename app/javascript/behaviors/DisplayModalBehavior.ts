@@ -1,7 +1,7 @@
 import Behavior, { OnEvent, ForBehavior } from "../lib/Behaviors"
 
-import { operations } from "../store/modals"
-import store from "../store"
+import store from "../store/store"
+import { actions } from "../store/slices/modals"
 
 interface Args {
   modal: string
@@ -16,7 +16,8 @@ export default class DisplayModalBehavior extends Behavior<Args> {
     event.preventDefault()
 
     store.dispatch(
-      operations.show(this.args.modal, {
+      actions.open({
+        name: this.args.modal,
         url: this.args.actionUrl,
         autocompleteUrl: this.args.autocompleteUrl
       })
