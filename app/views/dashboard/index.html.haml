@@ -8,14 +8,21 @@
     .statistic
       .value= @stats[:total_count]
       .label Total Bookmarks
+
     - if @stats[:untagged_count] != 0
       .statistic.red
         .value= @stats[:untagged_count]
-        .label= link_to "Untagged Bookmarks", bookmarks_search_index_path(q: "NOT has:tags")
-    - else 
+        .label
+          = link_to "Untagged Bookmarks", bookmarks_search_index_path(q: "NOT has:tags")
+          %br
+          = link_to "Tag Wizard", bookmarks_tag_wizard_index_path, class: "ui mini button"
+
+    - else
       .statistic
         .value= @stats[:untagged_count]
         .label Untagged Bookmarks!
 
 %h2.ui.dividing.header Most recent bookmarks
-= render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @recent_bookmarks }
+
+- @recent_bookmarks.each do |bookmark|
+  = render "components/bookmark_card", bookmark: bookmark, with_select: false

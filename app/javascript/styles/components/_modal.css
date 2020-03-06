@@ -1,0 +1,90 @@
+.modal-open {
+  overflow: hidden;
+}
+
+.modal-overlay {
+  @apply fixed w-full h-auto inset-0 z-50 overflow-scroll flex justify-center items-center;
+
+  &.overlay-dimmed-background {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.modal-container {
+  @apply max-w-full mx-auto z-50 flex;
+
+  max-height: calc(100% - 70px);
+
+  margin-top: 60px;
+  margin-bottom: 10px;
+
+  @screen md {
+    @apply w-1/2;
+
+    max-width: 800px;
+  }
+}
+
+.modal-dialogue {
+  @apply text-left flex flex-col shadow rounded;
+
+  & > * {
+    @apply px-6 py-4 flex-grow flex-shrink;
+  }
+}
+
+.light-dialogue {
+  @apply bg-white text-black;
+
+  & .modal-body-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  }
+
+  & .modal-body-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+  }
+}
+
+.dark-dialogue {
+  @apply text-white bg-gray-600;
+
+  & .modal-body-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+  }
+
+  & .modal-body-actions {
+    border-top: 1px solid rgba(255, 255, 255, 0.17);
+  }
+}
+
+.modal-body-header {
+  @apply flex justify-between items-center;
+
+  h2 {
+    @apply text-xl;
+  }
+
+  .modal-header-close {
+    @apply cursor-pointer z-50 text-gray-900;
+
+    opacity: 0.5;
+
+    transition: all 250ms linear;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.modal-body-content {
+  @apply my-5 overflow-scroll;
+}
+
+.modal-body-actions {
+  @apply flex flex-row justify-between items-center;
+
+  & > *:not(:first-child) {
+    @apply ml-2;
+  }
+}

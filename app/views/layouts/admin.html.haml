@@ -1,12 +1,16 @@
 !!! 5
 %html
   %head
-    = render partial: "layouts/admin/head"
+    = render "layouts/common/head" do
+      %title transientBug Admin #{ content_for :page_title }
 
-    = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
-    = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_link_tag "admin", media: "all", "data-turbolinks-track": "reload"
+      = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+
+      = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name ] }
-    = render partial: "layouts/admin/body"
+    = render "layouts/common/store"
 
-    = render partial: "layouts/admin/footer"
+    = render "layouts/admin/body"

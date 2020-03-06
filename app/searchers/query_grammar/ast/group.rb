@@ -1,5 +1,5 @@
 module QueryGrammar
-  module AST
+  module Ast
     class Group < Node
       attr_reader :items, :conjoiner
 
@@ -23,6 +23,7 @@ module QueryGrammar
 
       def == other
         return false unless other.is_a? Group
+
         items == other.items && conjoiner == other.conjoiner
       end
     end

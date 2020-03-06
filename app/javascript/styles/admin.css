@@ -1,0 +1,29 @@
+@import "components/_buttons";
+@import "components/_checkbox";
+@import "components/_tables";
+@import "components/_time";
+
+@import "components/_tags";
+
+@import "components/_backgrounds";
+@import "components/_modal";
+
+@import "components/_pager";
+@import "components/_bulk_action_menu";
+@import "components/_service_announcement";
+@import "components/_bookmark_card";
+
+@tailwind base;
+@tailwind components;
+
+.tb.service-announcement {
+  @apply rounded-none border-r-0 border-t-0 border-l-0;
+
+  .announcement-icon {
+    @apply rounded-none;
+  }
+}
+
+@tailwind utilities;
+
+/* @tailwind screens; */

@@ -56,7 +56,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
     it "returns a success response" do
       Doorkeeper::Application.create! valid_attributes
       get :index, params: {}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
     it "returns a success response" do
       application = Doorkeeper::Application.create! valid_attributes
       get :show, params: { id: application.to_param }, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -72,7 +72,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
     it "returns a success response" do
       application = Doorkeeper::Application.create! valid_attributes
       get :edit, params: { id: application.to_param }, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -113,7 +113,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
         application = Doorkeeper::Application.create! valid_attributes
         put :update, params: { id: application.to_param, application: invalid_attributes }, session: valid_session
 
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "doesn't set the invalid redirect_uri" do

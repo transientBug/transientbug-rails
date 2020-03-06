@@ -1,0 +1,56 @@
+- content_for :page_title do
+  Viewing "#{ @role.name }"
+
+= model_tag @role, no_checkbox: true, only: [ :id, :name ]
+
+.ui.menu
+  = link_to edit_admin_role_path(@role), class: "item" do
+    %i.edit.icon
+    edit
+
+  .right.menu
+    .ui.simple.dropdown.item
+      more
+      %i.dropdown.icon
+      .menu
+
+        .header
+          %i.warning.sign.icon
+          DANGERZONE
+        .divider
+
+        = modal_tag @role, :delete, url: admin_role_path(@role) do
+          %i.trash.icon
+          delete
+
+%h2.ui.dividing.header Internal Stuff
+%table.ui.collapsing.celled.table
+  %tbody
+    %tr
+      %td
+        %b ID
+      %td
+        = @role.id
+    %tr
+      %td
+        %b Created At
+      %td
+        = @role.created_at.to_s(:long)
+
+%b Description
+= @role.description
+
+%h2.ui.dividing.header Permissions
+
+
+%table.ui.collapsing.celled.table
+  %thead
+    %tr
+      %th Name
+      %th Description
+  %tbody
+    - @role.permissions.each do |permission|
+      %tr
+        %td= permission.name
+        %td= permission.description
+  

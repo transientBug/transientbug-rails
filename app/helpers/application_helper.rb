@@ -7,7 +7,47 @@ module ApplicationHelper
     service_announcements = ServiceAnnouncement.displayable
     service_announcements = service_announcements.where(logged_in_only: false) unless current_user
 
-    render partial: "layouts/service_announcements", locals: { service_announcements: service_announcements }
+    render partial: "layouts/common/service_announcements", locals: { service_announcements: service_announcements }
+  end
+
+  def store_records records, **opts
+    records = Array(records)
+
+    records_type = records.model if records.respond_to? :model
+    records_type ||= records.first.class
+
+    attributes = Array(opts.delete(:only)).map(&:to_sym)
+    attributes ||= records_type.attribute_names.map(&:to_sym)
+
+    # force the ID to be present because reasons
+    attributes.unshift :id
+    attributes.uniq!
+
+    objects = records.each_with_object({}) do |record, memo|
+      memo[ record.id ] = attributes.each_with_object({}) do |attribute, record_memo|
+        record_memo[ attribute ] = record.send(attribute).to_s
+      end
+    end
+
+    {
+      type: records_type.name.to_s,
+      attributes: attributes,
+      objects: objects
+    }
+  end
+
+  # TODO: figure out if there is a way I could call this multiple times and
+  # merge the resulting data? maybe through an array that the JS processes?
+  def store_content data
+    content_for :store do
+      data.to_json.html_safe
+    end
+  end
+
+  def behavior_data name, **args
+    capture do
+      yield({ data: { behavior: name, args: args.to_json } })
+    end
   end
 
   # Builds out a "clickable item" div which contains all of the information
@@ -89,12 +129,9 @@ module ApplicationHelper
       data: data
     }.merge opts
 
-    display = "display: inline"
-    display = "display: none" if no_checkbox
-
     # Ensures that when we grab the siblings of the checkboxes that are
     # checked, that we'll end up with the correct div containing all the datas
-    tag.div style: display do
+    tag.div class: (no_checkbox ? "hidden" : "") do
       capture do
         concat tag.div(**options, &block)
         concat bulk_edit_checkbox model unless no_checkbox

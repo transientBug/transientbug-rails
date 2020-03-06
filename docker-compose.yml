@@ -34,12 +34,11 @@ services:
       - "redis:/data"
 
   sidekiq:
+    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "elasticsearch"
       - "redis"
-    build:
-      context: .
     volumes:
       - "./storage:/dropzone"
     command: bundle exec sidekiq -C config/sidekiq.yml
@@ -49,13 +48,12 @@ services:
       - ".env.production"
 
   clockwork:
+    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "elasticsearch"
       - "redis"
       - "sidekiq"
-    build:
-      context: .
     command: bundle exec clockwork clock.rb
     networks:
       - "services"
@@ -63,12 +61,11 @@ services:
       - ".env.production"
 
   rails:
+    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "elasticsearch"
       - "redis"
-    build:
-      context: .
     ports:
       - "8000:3000"
     volumes:
@@ -85,10 +82,9 @@ services:
       retries: 5
 
   cable:
+    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "redis"
-    build:
-      context: .
     command: bundle exec puma -p 28080 cable/config.ru
     ports:
       - "28080:28080"

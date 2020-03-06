@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :authorizations
   has_and_belongs_to_many :roles
+  has_many :permissions, through: :roles
 
   has_many :images
   has_many :bookmarks
@@ -54,17 +55,23 @@ class User < ApplicationRecord
     user_digest = ::Digest::SHA256.hexdigest "#{ auth_token }#{ pepper }"
 
     return false unless user_sent_token.bytesize == user_digest.bytesize
+
     ActiveSupport::SecurityUtils.secure_compare(user_sent_token, user_digest) && self
   end
 
   def owner_of? record
     return record.owner == self if record.respond_to? :owner
     return record.user_id == id if record.respond_to? :user_id
+
     false
   end
 
   def role? name
     roles.find { |role| role.name == name.to_s }
+  end
+
+  def permission? key
+    permissions.any? { |permission| permission.key == key.to_s }
   end
 
   private

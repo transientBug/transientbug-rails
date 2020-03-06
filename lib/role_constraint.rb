@@ -1,5 +1,5 @@
 class RoleConstraint
-  def initialize(*roles)
+  def initialize *roles
     @roles = roles
   end
 

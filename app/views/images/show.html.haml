@@ -1,4 +1,4 @@
-- content_for :meta do
+- content_for :head do
   %meta{ property: "og:type", content: "website" }
   %meta{ property: "og:url", content: request.original_url }
   %meta{ property: "og:title", content: @image.title }
@@ -19,15 +19,15 @@
   - if policy(@image).update?
     = link_to "edit", edit_image_path(@image), class: "ui item"
 
-  .ui.item{ style: "padding: 0px;" }
+  .ui.item
     .ui.small.labels
       - @image.tags.each do |tag|
         = link_to tag_images_path(tag) do
-          .ui.label{ class: [color_for(tag)] }= tag
+          .ui.label{ class: [ color_for(tag) ] }= tag
 
     - unless @image.source.blank?
       .ui.item
-        %b Source: #{link_to @image.source, @image.source}
+        %b Source: #{ link_to @image.source, @image.source }
 
   .right.menu
     .ui.item

@@ -4,7 +4,7 @@ RSpec.resource "v1 Bookmarks" do
 
   let(:bookmark) { create(:bookmark_with_tags, user: user) }
 
-  header "Content-Type", "application/vnd.api+json"
+  # header "Content-Type", "application/vnd.api+json"
   header "Accept", "application/vnd.api+json"
 
   parameter :auth_token, "Authentication Token", required: true
@@ -23,6 +23,8 @@ RSpec.resource "v1 Bookmarks" do
   end
 
   post "/api/v1/bookmarks" do
+    header "Content-Type", "application/vnd.api+json"
+
     with_options scope: :data do
       parameter :type, "bookmark", required: true
     end
@@ -68,6 +70,8 @@ RSpec.resource "v1 Bookmarks" do
   end
 
   patch "/api/v1/bookmarks/:id" do
+    header "Content-Type", "application/vnd.api+json"
+
     parameter :id, "Bookmark ID", required: true
 
     with_options scope: :data do

@@ -1,31 +1,19 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
-SET search_path = public, pg_catalog;
+SET row_security = off;
 
 --
 -- Name: color; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE color AS ENUM (
+CREATE TYPE public.color AS ENUM (
     'plain',
     'red',
     'orange',
@@ -47,7 +35,7 @@ CREATE TYPE color AS ENUM (
 -- Name: icon; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE icon AS ENUM (
+CREATE TYPE public.icon AS ENUM (
     'announcement',
     'help',
     'info',
@@ -63,7 +51,7 @@ CREATE TYPE icon AS ENUM (
 -- Name: import_type; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE import_type AS ENUM (
+CREATE TYPE public.import_type AS ENUM (
     'pinboard',
     'pocket'
 );
@@ -74,10 +62,10 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE active_storage_attachments (
+CREATE TABLE public.active_storage_attachments (
     id bigint NOT NULL,
     name character varying NOT NULL,
     record_type character varying NOT NULL,
@@ -91,7 +79,7 @@ CREATE TABLE active_storage_attachments (
 -- Name: active_storage_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE active_storage_attachments_id_seq
+CREATE SEQUENCE public.active_storage_attachments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -103,14 +91,14 @@ CREATE SEQUENCE active_storage_attachments_id_seq
 -- Name: active_storage_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE active_storage_attachments_id_seq OWNED BY active_storage_attachments.id;
+ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_storage_attachments.id;
 
 
 --
--- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE active_storage_blobs (
+CREATE TABLE public.active_storage_blobs (
     id bigint NOT NULL,
     key character varying NOT NULL,
     filename character varying NOT NULL,
@@ -126,7 +114,7 @@ CREATE TABLE active_storage_blobs (
 -- Name: active_storage_blobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE active_storage_blobs_id_seq
+CREATE SEQUENCE public.active_storage_blobs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -138,14 +126,14 @@ CREATE SEQUENCE active_storage_blobs_id_seq
 -- Name: active_storage_blobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE active_storage_blobs_id_seq OWNED BY active_storage_blobs.id;
+ALTER SEQUENCE public.active_storage_blobs_id_seq OWNED BY public.active_storage_blobs.id;
 
 
 --
--- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ar_internal_metadata (
+CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -154,10 +142,10 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: authorizations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: authorizations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE authorizations (
+CREATE TABLE public.authorizations (
     id bigint NOT NULL,
     user_id bigint NOT NULL,
     provider character varying,
@@ -179,7 +167,7 @@ CREATE TABLE authorizations (
 -- Name: authorizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE authorizations_id_seq
+CREATE SEQUENCE public.authorizations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -191,14 +179,14 @@ CREATE SEQUENCE authorizations_id_seq
 -- Name: authorizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE authorizations_id_seq OWNED BY authorizations.id;
+ALTER SEQUENCE public.authorizations_id_seq OWNED BY public.authorizations.id;
 
 
 --
--- Name: bookmarks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE bookmarks (
+CREATE TABLE public.bookmarks (
     id bigint NOT NULL,
     user_id bigint,
     webpage_id bigint,
@@ -213,7 +201,7 @@ CREATE TABLE bookmarks (
 -- Name: bookmarks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE bookmarks_id_seq
+CREATE SEQUENCE public.bookmarks_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -225,24 +213,24 @@ CREATE SEQUENCE bookmarks_id_seq
 -- Name: bookmarks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE bookmarks_id_seq OWNED BY bookmarks.id;
+ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
 
 
 --
--- Name: bookmarks_offline_caches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bookmarks_offline_caches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE bookmarks_offline_caches (
+CREATE TABLE public.bookmarks_offline_caches (
     bookmark_id bigint NOT NULL,
     offline_cache_id bigint NOT NULL
 );
 
 
 --
--- Name: bookmarks_tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bookmarks_tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE bookmarks_tags (
+CREATE TABLE public.bookmarks_tags (
     bookmark_id bigint NOT NULL,
     tag_id bigint NOT NULL,
     id bigint NOT NULL
@@ -253,7 +241,7 @@ CREATE TABLE bookmarks_tags (
 -- Name: bookmarks_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE bookmarks_tags_id_seq
+CREATE SEQUENCE public.bookmarks_tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -265,14 +253,14 @@ CREATE SEQUENCE bookmarks_tags_id_seq
 -- Name: bookmarks_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE bookmarks_tags_id_seq OWNED BY bookmarks_tags.id;
+ALTER SEQUENCE public.bookmarks_tags_id_seq OWNED BY public.bookmarks_tags.id;
 
 
 --
--- Name: clockwork_database_events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: clockwork_database_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE clockwork_database_events (
+CREATE TABLE public.clockwork_database_events (
     id bigint NOT NULL,
     frequency_quantity integer,
     frequency_period integer,
@@ -288,7 +276,7 @@ CREATE TABLE clockwork_database_events (
 -- Name: clockwork_database_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE clockwork_database_events_id_seq
+CREATE SEQUENCE public.clockwork_database_events_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -300,14 +288,14 @@ CREATE SEQUENCE clockwork_database_events_id_seq
 -- Name: clockwork_database_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE clockwork_database_events_id_seq OWNED BY clockwork_database_events.id;
+ALTER SEQUENCE public.clockwork_database_events_id_seq OWNED BY public.clockwork_database_events.id;
 
 
 --
--- Name: error_messages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: error_messages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE error_messages (
+CREATE TABLE public.error_messages (
     id bigint NOT NULL,
     key character varying,
     message text,
@@ -320,7 +308,7 @@ CREATE TABLE error_messages (
 -- Name: error_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE error_messages_id_seq
+CREATE SEQUENCE public.error_messages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -332,34 +320,34 @@ CREATE SEQUENCE error_messages_id_seq
 -- Name: error_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE error_messages_id_seq OWNED BY error_messages.id;
+ALTER SEQUENCE public.error_messages_id_seq OWNED BY public.error_messages.id;
 
 
 --
--- Name: error_messages_import_data; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: error_messages_import_data; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE error_messages_import_data (
+CREATE TABLE public.error_messages_import_data (
     import_datum_id bigint NOT NULL,
     error_message_id bigint NOT NULL
 );
 
 
 --
--- Name: error_messages_offline_caches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: error_messages_offline_caches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE error_messages_offline_caches (
+CREATE TABLE public.error_messages_offline_caches (
     offline_cache_id bigint NOT NULL,
     error_message_id bigint NOT NULL
 );
 
 
 --
--- Name: images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: images; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE images (
+CREATE TABLE public.images (
     id bigint NOT NULL,
     user_id bigint,
     title text,
@@ -375,7 +363,7 @@ CREATE TABLE images (
 -- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE images_id_seq
+CREATE SEQUENCE public.images_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -387,17 +375,17 @@ CREATE SEQUENCE images_id_seq
 -- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE images_id_seq OWNED BY images.id;
+ALTER SEQUENCE public.images_id_seq OWNED BY public.images.id;
 
 
 --
--- Name: import_data; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: import_data; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE import_data (
+CREATE TABLE public.import_data (
     id bigint NOT NULL,
     user_id bigint,
-    import_type import_type,
+    import_type public.import_type,
     complete boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -408,7 +396,7 @@ CREATE TABLE import_data (
 -- Name: import_data_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE import_data_id_seq
+CREATE SEQUENCE public.import_data_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -420,14 +408,14 @@ CREATE SEQUENCE import_data_id_seq
 -- Name: import_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE import_data_id_seq OWNED BY import_data.id;
+ALTER SEQUENCE public.import_data_id_seq OWNED BY public.import_data.id;
 
 
 --
--- Name: invitations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: invitations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE invitations (
+CREATE TABLE public.invitations (
     id bigint NOT NULL,
     code text,
     internal_note text,
@@ -443,7 +431,7 @@ CREATE TABLE invitations (
 -- Name: invitations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE invitations_id_seq
+CREATE SEQUENCE public.invitations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -455,14 +443,14 @@ CREATE SEQUENCE invitations_id_seq
 -- Name: invitations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE invitations_id_seq OWNED BY invitations.id;
+ALTER SEQUENCE public.invitations_id_seq OWNED BY public.invitations.id;
 
 
 --
--- Name: invitations_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: invitations_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE invitations_users (
+CREATE TABLE public.invitations_users (
     id bigint NOT NULL,
     invitation_id bigint NOT NULL,
     user_id bigint,
@@ -475,7 +463,7 @@ CREATE TABLE invitations_users (
 -- Name: invitations_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE invitations_users_id_seq
+CREATE SEQUENCE public.invitations_users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -487,14 +475,14 @@ CREATE SEQUENCE invitations_users_id_seq
 -- Name: invitations_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE invitations_users_id_seq OWNED BY invitations_users.id;
+ALTER SEQUENCE public.invitations_users_id_seq OWNED BY public.invitations_users.id;
 
 
 --
--- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE oauth_access_grants (
+CREATE TABLE public.oauth_access_grants (
     id bigint NOT NULL,
     resource_owner_id integer NOT NULL,
     application_id bigint NOT NULL,
@@ -511,7 +499,7 @@ CREATE TABLE oauth_access_grants (
 -- Name: oauth_access_grants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE oauth_access_grants_id_seq
+CREATE SEQUENCE public.oauth_access_grants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -523,14 +511,14 @@ CREATE SEQUENCE oauth_access_grants_id_seq
 -- Name: oauth_access_grants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE oauth_access_grants_id_seq OWNED BY oauth_access_grants.id;
+ALTER SEQUENCE public.oauth_access_grants_id_seq OWNED BY public.oauth_access_grants.id;
 
 
 --
--- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE oauth_access_tokens (
+CREATE TABLE public.oauth_access_tokens (
     id bigint NOT NULL,
     resource_owner_id integer,
     application_id bigint,
@@ -548,7 +536,7 @@ CREATE TABLE oauth_access_tokens (
 -- Name: oauth_access_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE oauth_access_tokens_id_seq
+CREATE SEQUENCE public.oauth_access_tokens_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -560,14 +548,14 @@ CREATE SEQUENCE oauth_access_tokens_id_seq
 -- Name: oauth_access_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE oauth_access_tokens_id_seq OWNED BY oauth_access_tokens.id;
+ALTER SEQUENCE public.oauth_access_tokens_id_seq OWNED BY public.oauth_access_tokens.id;
 
 
 --
--- Name: oauth_applications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_applications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE oauth_applications (
+CREATE TABLE public.oauth_applications (
     id bigint NOT NULL,
     name character varying NOT NULL,
     uid character varying NOT NULL,
@@ -587,7 +575,7 @@ CREATE TABLE oauth_applications (
 -- Name: oauth_applications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE oauth_applications_id_seq
+CREATE SEQUENCE public.oauth_applications_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -599,14 +587,14 @@ CREATE SEQUENCE oauth_applications_id_seq
 -- Name: oauth_applications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE oauth_applications_id_seq OWNED BY oauth_applications.id;
+ALTER SEQUENCE public.oauth_applications_id_seq OWNED BY public.oauth_applications.id;
 
 
 --
--- Name: offline_caches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: offline_caches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE offline_caches (
+CREATE TABLE public.offline_caches (
     id bigint NOT NULL,
     webpage_id bigint,
     root_id bigint,
@@ -619,7 +607,7 @@ CREATE TABLE offline_caches (
 -- Name: offline_caches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE offline_caches_id_seq
+CREATE SEQUENCE public.offline_caches_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -631,18 +619,82 @@ CREATE SEQUENCE offline_caches_id_seq
 -- Name: offline_caches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE offline_caches_id_seq OWNED BY offline_caches.id;
+ALTER SEQUENCE public.offline_caches_id_seq OWNED BY public.offline_caches.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: permissions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE roles (
+CREATE TABLE public.permissions (
+    id bigint NOT NULL,
+    key character varying,
+    name character varying,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.permissions_id_seq OWNED BY public.permissions.id;
+
+
+--
+-- Name: permissions_roles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.permissions_roles (
+    id bigint NOT NULL,
+    role_id bigint,
+    permission_id bigint
+);
+
+
+--
+-- Name: permissions_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.permissions_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: permissions_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.permissions_roles_id_seq OWNED BY public.permissions_roles.id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.roles (
     id bigint NOT NULL,
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    description character varying
 );
 
 
@@ -650,7 +702,7 @@ CREATE TABLE roles (
 -- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE roles_id_seq
+CREATE SEQUENCE public.roles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -662,33 +714,33 @@ CREATE SEQUENCE roles_id_seq
 -- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
+ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
 
 
 --
--- Name: roles_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: roles_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE roles_users (
+CREATE TABLE public.roles_users (
     role_id bigint NOT NULL,
     user_id bigint NOT NULL
 );
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
 
 --
--- Name: searches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: searches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE searches (
+CREATE TABLE public.searches (
     id bigint NOT NULL,
     user_id bigint,
     name character varying,
@@ -703,7 +755,7 @@ CREATE TABLE searches (
 -- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE searches_id_seq
+CREATE SEQUENCE public.searches_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -715,14 +767,14 @@ CREATE SEQUENCE searches_id_seq
 -- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE searches_id_seq OWNED BY searches.id;
+ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
 
 
 --
--- Name: service_announcements; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: service_announcements; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE service_announcements (
+CREATE TABLE public.service_announcements (
     id bigint NOT NULL,
     title text,
     message text,
@@ -733,8 +785,8 @@ CREATE TABLE service_announcements (
     updated_at timestamp without time zone NOT NULL,
     icon_text text,
     active boolean DEFAULT true,
-    icon icon,
-    color color,
+    icon public.icon,
+    color public.color,
     logged_in_only boolean DEFAULT false
 );
 
@@ -743,7 +795,7 @@ CREATE TABLE service_announcements (
 -- Name: service_announcements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE service_announcements_id_seq
+CREATE SEQUENCE public.service_announcements_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -755,14 +807,14 @@ CREATE SEQUENCE service_announcements_id_seq
 -- Name: service_announcements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE service_announcements_id_seq OWNED BY service_announcements.id;
+ALTER SEQUENCE public.service_announcements_id_seq OWNED BY public.service_announcements.id;
 
 
 --
--- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tags (
+CREATE TABLE public.tags (
     id bigint NOT NULL,
     label text,
     color text,
@@ -775,7 +827,7 @@ CREATE TABLE tags (
 -- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE tags_id_seq
+CREATE SEQUENCE public.tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -787,14 +839,14 @@ CREATE SEQUENCE tags_id_seq
 -- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE public.users (
     id bigint NOT NULL,
     username character varying,
     created_at timestamp without time zone NOT NULL,
@@ -809,7 +861,7 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -821,14 +873,14 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: webpages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: webpages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE webpages (
+CREATE TABLE public.webpages (
     id bigint NOT NULL,
     uri text,
     created_at timestamp without time zone NOT NULL,
@@ -840,7 +892,7 @@ CREATE TABLE webpages (
 -- Name: webpages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE webpages_id_seq
+CREATE SEQUENCE public.webpages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -852,646 +904,721 @@ CREATE SEQUENCE webpages_id_seq
 -- Name: webpages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE webpages_id_seq OWNED BY webpages.id;
+ALTER SEQUENCE public.webpages_id_seq OWNED BY public.webpages.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('active_storage_attachments_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('active_storage_blobs_id_seq'::regclass);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('public.active_storage_attachments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: active_storage_blobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY authorizations ALTER COLUMN id SET DEFAULT nextval('authorizations_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY bookmarks ALTER COLUMN id SET DEFAULT nextval('bookmarks_id_seq'::regclass);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: authorizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bookmarks_tags ALTER COLUMN id SET DEFAULT nextval('bookmarks_tags_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY clockwork_database_events ALTER COLUMN id SET DEFAULT nextval('clockwork_database_events_id_seq'::regclass);
+ALTER TABLE ONLY public.authorizations ALTER COLUMN id SET DEFAULT nextval('public.authorizations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bookmarks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY error_messages ALTER COLUMN id SET DEFAULT nextval('error_messages_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bookmarks_tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_data ALTER COLUMN id SET DEFAULT nextval('import_data_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY invitations ALTER COLUMN id SET DEFAULT nextval('invitations_id_seq'::regclass);
+ALTER TABLE ONLY public.bookmarks_tags ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: clockwork_database_events id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invitations_users ALTER COLUMN id SET DEFAULT nextval('invitations_users_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('oauth_access_grants_id_seq'::regclass);
+ALTER TABLE ONLY public.clockwork_database_events ALTER COLUMN id SET DEFAULT nextval('public.clockwork_database_events_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: error_messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_tokens ALTER COLUMN id SET DEFAULT nextval('oauth_access_tokens_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY oauth_applications ALTER COLUMN id SET DEFAULT nextval('oauth_applications_id_seq'::regclass);
+ALTER TABLE ONLY public.error_messages ALTER COLUMN id SET DEFAULT nextval('public.error_messages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY offline_caches ALTER COLUMN id SET DEFAULT nextval('offline_caches_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
+ALTER TABLE ONLY public.images ALTER COLUMN id SET DEFAULT nextval('public.images_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: import_data id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY searches ALTER COLUMN id SET DEFAULT nextval('searches_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY service_announcements ALTER COLUMN id SET DEFAULT nextval('service_announcements_id_seq'::regclass);
+ALTER TABLE ONLY public.import_data ALTER COLUMN id SET DEFAULT nextval('public.import_data_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: invitations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY public.invitations ALTER COLUMN id SET DEFAULT nextval('public.invitations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: invitations_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY webpages ALTER COLUMN id SET DEFAULT nextval('webpages_id_seq'::regclass);
+ALTER TABLE ONLY public.invitations_users ALTER COLUMN id SET DEFAULT nextval('public.invitations_users_id_seq'::regclass);
 
 
 --
--- Name: active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_access_grants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY active_storage_attachments
+ALTER TABLE ONLY public.oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_grants_id_seq'::regclass);
+
+
+--
+-- Name: oauth_access_tokens id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_tokens_id_seq'::regclass);
+
+
+--
+-- Name: oauth_applications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_applications ALTER COLUMN id SET DEFAULT nextval('public.oauth_applications_id_seq'::regclass);
+
+
+--
+-- Name: offline_caches id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offline_caches ALTER COLUMN id SET DEFAULT nextval('public.offline_caches_id_seq'::regclass);
+
+
+--
+-- Name: permissions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions ALTER COLUMN id SET DEFAULT nextval('public.permissions_id_seq'::regclass);
+
+
+--
+-- Name: permissions_roles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions_roles ALTER COLUMN id SET DEFAULT nextval('public.permissions_roles_id_seq'::regclass);
+
+
+--
+-- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
+
+
+--
+-- Name: searches id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.searches_id_seq'::regclass);
+
+
+--
+-- Name: service_announcements id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_announcements ALTER COLUMN id SET DEFAULT nextval('public.service_announcements_id_seq'::regclass);
+
+
+--
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: webpages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.webpages ALTER COLUMN id SET DEFAULT nextval('public.webpages_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
     ADD CONSTRAINT active_storage_attachments_pkey PRIMARY KEY (id);
 
 
 --
--- Name: active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: active_storage_blobs active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY active_storage_blobs
+ALTER TABLE ONLY public.active_storage_blobs
     ADD CONSTRAINT active_storage_blobs_pkey PRIMARY KEY (id);
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ar_internal_metadata
+ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
--- Name: authorizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: authorizations authorizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY authorizations
+ALTER TABLE ONLY public.authorizations
     ADD CONSTRAINT authorizations_pkey PRIMARY KEY (id);
 
 
 --
--- Name: bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bookmarks bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bookmarks
+ALTER TABLE ONLY public.bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
 
 
 --
--- Name: bookmarks_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bookmarks_tags bookmarks_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bookmarks_tags
+ALTER TABLE ONLY public.bookmarks_tags
     ADD CONSTRAINT bookmarks_tags_pkey PRIMARY KEY (id);
 
 
 --
--- Name: clockwork_database_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: clockwork_database_events clockwork_database_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY clockwork_database_events
+ALTER TABLE ONLY public.clockwork_database_events
     ADD CONSTRAINT clockwork_database_events_pkey PRIMARY KEY (id);
 
 
 --
--- Name: error_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: error_messages error_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY error_messages
+ALTER TABLE ONLY public.error_messages
     ADD CONSTRAINT error_messages_pkey PRIMARY KEY (id);
 
 
 --
--- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY images
+ALTER TABLE ONLY public.images
     ADD CONSTRAINT images_pkey PRIMARY KEY (id);
 
 
 --
--- Name: import_data_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: import_data import_data_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_data
+ALTER TABLE ONLY public.import_data
     ADD CONSTRAINT import_data_pkey PRIMARY KEY (id);
 
 
 --
--- Name: invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: invitations invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invitations
+ALTER TABLE ONLY public.invitations
     ADD CONSTRAINT invitations_pkey PRIMARY KEY (id);
 
 
 --
--- Name: invitations_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: invitations_users invitations_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invitations_users
+ALTER TABLE ONLY public.invitations_users
     ADD CONSTRAINT invitations_users_pkey PRIMARY KEY (id);
 
 
 --
--- Name: oauth_access_grants_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_access_grants oauth_access_grants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_grants
+ALTER TABLE ONLY public.oauth_access_grants
     ADD CONSTRAINT oauth_access_grants_pkey PRIMARY KEY (id);
 
 
 --
--- Name: oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_access_tokens oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_tokens
+ALTER TABLE ONLY public.oauth_access_tokens
     ADD CONSTRAINT oauth_access_tokens_pkey PRIMARY KEY (id);
 
 
 --
--- Name: oauth_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_applications oauth_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_applications
+ALTER TABLE ONLY public.oauth_applications
     ADD CONSTRAINT oauth_applications_pkey PRIMARY KEY (id);
 
 
 --
--- Name: offline_caches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: offline_caches offline_caches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY offline_caches
+ALTER TABLE ONLY public.offline_caches
     ADD CONSTRAINT offline_caches_pkey PRIMARY KEY (id);
 
 
 --
--- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: permissions permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY roles
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: permissions_roles permissions_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions_roles
+    ADD CONSTRAINT permissions_roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.roles
     ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schema_migrations
+ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 --
--- Name: searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: searches searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY searches
+ALTER TABLE ONLY public.searches
     ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
 
 
 --
--- Name: service_announcements_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: service_announcements service_announcements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY service_announcements
+ALTER TABLE ONLY public.service_announcements
     ADD CONSTRAINT service_announcements_pkey PRIMARY KEY (id);
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tags
+ALTER TABLE ONLY public.tags
     ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
--- Name: webpages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: webpages webpages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY webpages
+ALTER TABLE ONLY public.webpages
     ADD CONSTRAINT webpages_pkey PRIMARY KEY (id);
 
 
 --
--- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_active_storage_attachments_on_blob_id ON active_storage_attachments USING btree (blob_id);
+CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storage_attachments USING btree (blob_id);
 
 
 --
--- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON active_storage_attachments USING btree (record_type, record_id, name, blob_id);
+CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active_storage_attachments USING btree (record_type, record_id, name, blob_id);
 
 
 --
--- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON active_storage_blobs USING btree (key);
+CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
 
 
 --
--- Name: index_authorizations_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_authorizations_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_authorizations_on_user_id ON authorizations USING btree (user_id);
+CREATE INDEX index_authorizations_on_user_id ON public.authorizations USING btree (user_id);
 
 
 --
--- Name: index_bookmarks_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bookmarks_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_bookmarks_on_user_id ON bookmarks USING btree (user_id);
+CREATE INDEX index_bookmarks_on_user_id ON public.bookmarks USING btree (user_id);
 
 
 --
--- Name: index_bookmarks_on_user_id_and_webpage_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bookmarks_on_user_id_and_webpage_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_bookmarks_on_user_id_and_webpage_id ON bookmarks USING btree (user_id, webpage_id);
+CREATE UNIQUE INDEX index_bookmarks_on_user_id_and_webpage_id ON public.bookmarks USING btree (user_id, webpage_id);
 
 
 --
--- Name: index_bookmarks_on_webpage_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bookmarks_on_webpage_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_bookmarks_on_webpage_id ON bookmarks USING btree (webpage_id);
+CREATE INDEX index_bookmarks_on_webpage_id ON public.bookmarks USING btree (webpage_id);
 
 
 --
--- Name: index_images_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_images_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_images_on_user_id ON images USING btree (user_id);
+CREATE INDEX index_images_on_user_id ON public.images USING btree (user_id);
 
 
 --
--- Name: index_import_data_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_import_data_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_data_on_user_id ON import_data USING btree (user_id);
+CREATE INDEX index_import_data_on_user_id ON public.import_data USING btree (user_id);
 
 
 --
--- Name: index_invitations_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_invitations_on_code; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_invitations_on_code ON invitations USING btree (code);
+CREATE UNIQUE INDEX index_invitations_on_code ON public.invitations USING btree (code);
 
 
 --
--- Name: index_invitations_users_on_invitation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_invitations_users_on_invitation_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_invitations_users_on_invitation_id ON invitations_users USING btree (invitation_id);
+CREATE INDEX index_invitations_users_on_invitation_id ON public.invitations_users USING btree (invitation_id);
 
 
 --
--- Name: index_invitations_users_on_users_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_invitations_users_on_users_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_invitations_users_on_users_id ON invitations_users USING btree (user_id);
+CREATE INDEX index_invitations_users_on_users_id ON public.invitations_users USING btree (user_id);
 
 
 --
--- Name: index_oauth_access_grants_on_application_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_grants_on_application_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_oauth_access_grants_on_application_id ON oauth_access_grants USING btree (application_id);
+CREATE INDEX index_oauth_access_grants_on_application_id ON public.oauth_access_grants USING btree (application_id);
 
 
 --
--- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON oauth_access_grants USING btree (token);
+CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON public.oauth_access_grants USING btree (token);
 
 
 --
--- Name: index_oauth_access_tokens_on_application_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_tokens_on_application_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_oauth_access_tokens_on_application_id ON oauth_access_tokens USING btree (application_id);
+CREATE INDEX index_oauth_access_tokens_on_application_id ON public.oauth_access_tokens USING btree (application_id);
 
 
 --
--- Name: index_oauth_access_tokens_on_refresh_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_tokens_on_refresh_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON oauth_access_tokens USING btree (refresh_token);
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON public.oauth_access_tokens USING btree (refresh_token);
 
 
 --
--- Name: index_oauth_access_tokens_on_resource_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_tokens_on_resource_owner_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON oauth_access_tokens USING btree (resource_owner_id);
+CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON public.oauth_access_tokens USING btree (resource_owner_id);
 
 
 --
--- Name: index_oauth_access_tokens_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_access_tokens_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON oauth_access_tokens USING btree (token);
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON public.oauth_access_tokens USING btree (token);
 
 
 --
--- Name: index_oauth_applications_on_owner_id_and_owner_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_applications_on_owner_id_and_owner_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_oauth_applications_on_owner_id_and_owner_type ON oauth_applications USING btree (owner_id, owner_type);
+CREATE INDEX index_oauth_applications_on_owner_id_and_owner_type ON public.oauth_applications USING btree (owner_id, owner_type);
 
 
 --
--- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_oauth_applications_on_uid ON oauth_applications USING btree (uid);
+CREATE UNIQUE INDEX index_oauth_applications_on_uid ON public.oauth_applications USING btree (uid);
 
 
 --
--- Name: index_offline_caches_on_root_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_offline_caches_on_root_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_offline_caches_on_root_id ON offline_caches USING btree (root_id);
+CREATE INDEX index_offline_caches_on_root_id ON public.offline_caches USING btree (root_id);
 
 
 --
--- Name: index_offline_caches_on_webpage_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_offline_caches_on_webpage_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_offline_caches_on_webpage_id ON offline_caches USING btree (webpage_id);
+CREATE INDEX index_offline_caches_on_webpage_id ON public.offline_caches USING btree (webpage_id);
 
 
 --
--- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_permissions_on_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_roles_on_name ON roles USING btree (name);
+CREATE UNIQUE INDEX index_permissions_on_key ON public.permissions USING btree (key);
 
 
 --
--- Name: index_searches_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_permissions_roles_on_permission_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_searches_on_user_id ON searches USING btree (user_id);
+CREATE INDEX index_permissions_roles_on_permission_id ON public.permissions_roles USING btree (permission_id);
 
 
 --
--- Name: index_users_on_auth_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_permissions_roles_on_role_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_auth_token ON users USING btree (auth_token);
+CREATE INDEX index_permissions_roles_on_role_id ON public.permissions_roles USING btree (role_id);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE UNIQUE INDEX index_roles_on_name ON public.roles USING btree (name);
 
 
 --
--- Name: index_webpages_on_uri; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_searches_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_webpages_on_uri ON webpages USING btree (uri);
+CREATE INDEX index_searches_on_user_id ON public.searches USING btree (user_id);
 
 
 --
--- Name: fk_rails_181ad3d2bc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: index_users_on_auth_token; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bookmarks
-    ADD CONSTRAINT fk_rails_181ad3d2bc FOREIGN KEY (webpage_id) REFERENCES webpages(id);
+CREATE UNIQUE INDEX index_users_on_auth_token ON public.users USING btree (auth_token);
 
 
 --
--- Name: fk_rails_19cd822056; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY images
-    ADD CONSTRAINT fk_rails_19cd822056 FOREIGN KEY (user_id) REFERENCES users(id);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
--- Name: fk_rails_2ff3d85fb1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: index_webpages_on_uri; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_data
-    ADD CONSTRAINT fk_rails_2ff3d85fb1 FOREIGN KEY (user_id) REFERENCES users(id);
+CREATE UNIQUE INDEX index_webpages_on_uri ON public.webpages USING btree (uri);
 
 
 --
--- Name: fk_rails_330c32d8d9; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: bookmarks fk_rails_181ad3d2bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_grants
-    ADD CONSTRAINT fk_rails_330c32d8d9 FOREIGN KEY (resource_owner_id) REFERENCES users(id);
+ALTER TABLE ONLY public.bookmarks
+    ADD CONSTRAINT fk_rails_181ad3d2bc FOREIGN KEY (webpage_id) REFERENCES public.webpages(id);
 
 
 --
--- Name: fk_rails_368b358375; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: images fk_rails_19cd822056; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invitations_users
-    ADD CONSTRAINT fk_rails_368b358375 FOREIGN KEY (invitation_id) REFERENCES invitations(id);
+ALTER TABLE ONLY public.images
+    ADD CONSTRAINT fk_rails_19cd822056 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: fk_rails_4ecef5b8c5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: permissions_roles fk_rails_211043a277; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY authorizations
-    ADD CONSTRAINT fk_rails_4ecef5b8c5 FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.permissions_roles
+    ADD CONSTRAINT fk_rails_211043a277 FOREIGN KEY (role_id) REFERENCES public.roles(id);
 
 
 --
--- Name: fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: import_data fk_rails_2ff3d85fb1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_tokens
-    ADD CONSTRAINT fk_rails_732cb83ab7 FOREIGN KEY (application_id) REFERENCES oauth_applications(id);
+ALTER TABLE ONLY public.import_data
+    ADD CONSTRAINT fk_rails_2ff3d85fb1 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: fk_rails_828a222a6b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: oauth_access_grants fk_rails_330c32d8d9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invitations_users
-    ADD CONSTRAINT fk_rails_828a222a6b FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.oauth_access_grants
+    ADD CONSTRAINT fk_rails_330c32d8d9 FOREIGN KEY (resource_owner_id) REFERENCES public.users(id);
 
 
 --
--- Name: fk_rails_9a06b64fac; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: invitations_users fk_rails_368b358375; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY offline_caches
-    ADD CONSTRAINT fk_rails_9a06b64fac FOREIGN KEY (webpage_id) REFERENCES webpages(id);
+ALTER TABLE ONLY public.invitations_users
+    ADD CONSTRAINT fk_rails_368b358375 FOREIGN KEY (invitation_id) REFERENCES public.invitations(id);
 
 
 --
--- Name: fk_rails_b4b53e07b8; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: authorizations fk_rails_4ecef5b8c5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_grants
-    ADD CONSTRAINT fk_rails_b4b53e07b8 FOREIGN KEY (application_id) REFERENCES oauth_applications(id);
+ALTER TABLE ONLY public.authorizations
+    ADD CONSTRAINT fk_rails_4ecef5b8c5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: fk_rails_c1ff6fa4ac; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: oauth_access_tokens fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bookmarks
-    ADD CONSTRAINT fk_rails_c1ff6fa4ac FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.oauth_access_tokens
+    ADD CONSTRAINT fk_rails_732cb83ab7 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
 
 
 --
--- Name: fk_rails_e192b86393; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: permissions_roles fk_rails_7cc0b02d7d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY searches
-    ADD CONSTRAINT fk_rails_e192b86393 FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.permissions_roles
+    ADD CONSTRAINT fk_rails_7cc0b02d7d FOREIGN KEY (permission_id) REFERENCES public.permissions(id);
 
 
 --
--- Name: fk_rails_ee63f25419; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: invitations_users fk_rails_828a222a6b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_tokens
-    ADD CONSTRAINT fk_rails_ee63f25419 FOREIGN KEY (resource_owner_id) REFERENCES users(id);
+ALTER TABLE ONLY public.invitations_users
+    ADD CONSTRAINT fk_rails_828a222a6b FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: fk_rails_f6e4eda41a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: offline_caches fk_rails_9a06b64fac; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY offline_caches
-    ADD CONSTRAINT fk_rails_f6e4eda41a FOREIGN KEY (root_id) REFERENCES active_storage_attachments(id);
+ALTER TABLE ONLY public.offline_caches
+    ADD CONSTRAINT fk_rails_9a06b64fac FOREIGN KEY (webpage_id) REFERENCES public.webpages(id);
+
+
+--
+-- Name: oauth_access_grants fk_rails_b4b53e07b8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_grants
+    ADD CONSTRAINT fk_rails_b4b53e07b8 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
+
+
+--
+-- Name: bookmarks fk_rails_c1ff6fa4ac; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bookmarks
+    ADD CONSTRAINT fk_rails_c1ff6fa4ac FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: searches fk_rails_e192b86393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.searches
+    ADD CONSTRAINT fk_rails_e192b86393 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: oauth_access_tokens fk_rails_ee63f25419; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens
+    ADD CONSTRAINT fk_rails_ee63f25419 FOREIGN KEY (resource_owner_id) REFERENCES public.users(id);
+
+
+--
+-- Name: offline_caches fk_rails_f6e4eda41a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offline_caches
+    ADD CONSTRAINT fk_rails_f6e4eda41a FOREIGN KEY (root_id) REFERENCES public.active_storage_attachments(id);
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170810145446'),
@@ -1536,6 +1663,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180620161718'),
 ('20181204152019'),
 ('20181205204805'),
-('20190605150347');
+('20190605150347'),
+('20190720230313'),
+('20190724044957'),
+('20190724174108'),
+('20190820175931');
 
 

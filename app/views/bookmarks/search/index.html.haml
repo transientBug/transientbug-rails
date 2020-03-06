@@ -1,13 +1,19 @@
 - content_for :page_title do
   Searching Bookmarks
 
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
+
 .ui.search.mobile.only
   .ui.fluid.icon.input
-    = form_tag bookmarks_search_index_path, method: :get, style: "display: flex; flex: auto;" do
+    = form_tag bookmarks_search_index_path, method: :get do
       = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search Bookmarks ...", aria: { label: "search" }
     %i.search.icon
 
-%h1 Search Results
+- content_for :sidebar do
+  - if @bookmarks.any?
+    = render "bookmarks/bulk-actions"
+
+%h1.dividing Search Results
 - if @error
   = render partial: "query_error"
 - elsif params[:q].blank?
@@ -15,4 +21,11 @@
 - elsif @bookmarks.empty?
   = render partial: "no_results_state"
 - else
-  = render partial: "bookmarks/bookmarks_list", locals: { bookmarks: @bookmarks }
+  = paginate @bookmarks
+
+  - @bookmarks.each do |bookmark|
+    = render "components/bookmark_card", bookmark: bookmark do
+      = behavior_data "bulk-action-select-single", id: bookmark.id do |dataset|
+        = render "components/checkbox", dataset: dataset
+
+  = paginate @bookmarks

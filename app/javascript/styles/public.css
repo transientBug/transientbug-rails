@@ -1,0 +1,92 @@
+@import "components/_typography";
+@import "components/_buttons";
+@import "components/_checkbox";
+@import "components/_tables";
+@import "components/_time";
+
+@import "components/_tags";
+
+@import "components/_backgrounds";
+@import "components/_modal";
+
+@import "components/_pager";
+@import "components/_bulk_action_menu";
+@import "components/_service_announcement";
+@import "components/_bookmark_card";
+
+@tailwind base;
+@tailwind components;
+
+nav.navbar {
+  max-height: var(--navbar-height) !important;
+}
+
+.main:not(.old):not(.pages) {
+  @apply flex flex-col;
+
+  @screen lg {
+    @apply flex-row;
+  }
+}
+
+body.pages {
+  .tb.service-announcement {
+    @apply rounded-none border-r-0 border-t-0 border-l-0;
+
+    .announcement-icon {
+      @apply rounded-none;
+    }
+  }
+}
+
+.ui.footer.segment {
+  @apply mt-0;
+}
+
+.tb {
+  --sidebar-width: 24rem;
+  --navbar-height: 52px;
+
+  & hr {
+    @apply border-b border-gray-200 my-4;
+  }
+}
+
+aside.tb.sidebar-menu {
+  @apply w-full p-4 flex-shrink-0 block border-t border-b text-white;
+
+  background-color: #1b1c1d;
+
+  border-color: rgba(224, 224, 224, 0.2);
+
+  @screen lg {
+    @apply fixed inset-y-0 left-0;
+
+    width: var(--sidebar-width);
+    top: var(--navbar-height);
+  }
+
+  h2 {
+    @apply text-white;
+  }
+}
+
+main.tb {
+  @apply p-4 mt-0 flex flex-col;
+
+  /*
+   * Takes care of semantic UI adding a margin to the top of the last child in
+   * the ".pusher.main"
+   * */
+  margin-top: 0px !important;
+
+  @screen lg {
+    @apply relative;
+
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+  }
+}
+
+@tailwind utilities;
+/* @tailwind screens; */

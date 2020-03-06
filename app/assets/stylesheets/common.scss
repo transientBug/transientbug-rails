@@ -53,8 +53,13 @@ html, body{
   cursor: pointer;
 }
 
-.hidden:not(.responsive) {
+.ui.hidden:not(.responsive) {
   display: none !important;
+}
+
+.navbar-container {
+  display: flex;
+  flex-grow: 1;
 }
 
 // Semantic UI has these classes, however they're only applicable to

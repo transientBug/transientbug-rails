@@ -1,6 +1,6 @@
 module QueryGrammar
   class Compiler
-    class ES < Compiler
+    class Es < Compiler
       def context
         @context ||= {
           query: {},

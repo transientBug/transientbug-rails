@@ -1,37 +1,53 @@
 - content_for :page_title do
   Bookmark '#{ @bookmark.title }'
 
-- content_for :secondary_navbar do
-  - if @bookmark.offline_caches.any?
-    = link_to "offline cache", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "ui item"
+- content_for :sidebar do
+  .tb.bulk-action-menu
+    %h2 Actions
 
-  = link_to "edit", edit_bookmark_path(@bookmark), class: "ui item"
+    = link_to edit_bookmark_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      %i.pencil.icon
+      Edit
 
-  .ui.item{ style: "padding: 0px;" }
-    .ui.small.labels
-      - @bookmark.tags.each do |tag|
-        = link_to bookmarks_tag_path(tag) do
-          .ui.label{ class: [tag.color] }= tag.label
+    -# TODO: replace
+    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark), class: "button button-red-outline hover:button-red" do
+      %i.trash.can.icon
+      Delete
 
-  .right.menu
-    = link_to "recache", bookmark_cache_index_path(@bookmark), method: :post, class: "ui item"
+    %h2 Offline Archive
 
-    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark) do
-      delete
+    - if @bookmark.current_offline_cache.present?
+      .archive-info
+        Archive made
+        = render "components/time", time: @bookmark.current_offline_cache.created_at
 
-- content_for :custom_grid do
-  = model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
+      = link_to "View Archive", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "button button-white-outline hover:button-white text-white hover:text-gray-800"
+    - else
+      .archive-info
+        No archive available
 
-  .ui.fluid.horizontally.padded.stackable.grid
-    .eight.wide.column
-      %h2.ui.header
-        .content= @bookmark.title
+    = button_to bookmark_cache_index_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
+      - if @bookmark.offline_caches.any?
+        Re-Archive
+      - else
+        Archive
 
-      = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-      .date
-        = @bookmark.created_at.to_s(:long)
-        UTC
+= model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
 
-    .eight.wide.column
-      - if @bookmark.description.present?
-        = simple_format @bookmark.description
+.flex.flex-col.justify-between{ class: "lg:flex-row" }
+  .column.w-full{ class: "lg:mr-2 sm:mb-2" }
+    %h2.font-bold.text-3xl= @bookmark.title
+
+    = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
+    = render "components/time", time: @bookmark.created_at
+
+    = render "components/tags", tags: @bookmark.tags do |tag|
+      = bookmarks_tag_path(tag)
+
+  .column.w-full
+    - if @bookmark.description.present?
+      :markdown
+        #{ @bookmark.description }
+
+    - else
+      %em No description ...
