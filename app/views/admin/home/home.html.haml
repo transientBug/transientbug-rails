@@ -34,4 +34,5 @@
 
     .ui.list
       = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
-      = link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"
+      - if Rails.env.production?
+        = link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"

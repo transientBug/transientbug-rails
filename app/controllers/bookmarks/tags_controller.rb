@@ -1,11 +1,7 @@
 class Bookmarks::TagsController < ApplicationController
   before_action :set_tag, only: [ :show ]
 
-  # GET /bookmarks/tags
-  def index; end
-
   # GET /bookmarks/tags/thing
-  # GET /bookmarks/tags/thing.json
   def show
     @bookmarks = policy_scope(Bookmark)
       .joins(:bookmarks_tags)

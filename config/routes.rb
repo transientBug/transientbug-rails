@@ -102,6 +102,9 @@ Rails.application.routes.draw do
 
   constraints RoleConstraint.new(:admin) do
     mount Sidekiq::Web => "/sidekiq"
-    mount Logster::Web => "/logs"
+
+    if Rails.env.production?
+      mount Logster::Web => "/logs"
+    end
   end
 end

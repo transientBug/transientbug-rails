@@ -49,11 +49,8 @@ gem "haml-rails"
 gem "sass-rails"#, "~> 5.0"
 gem "uglifier"#, ">= 1.3.0"
 gem "webpacker"#, "~> 4.0"
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem "therubyracer", platforms: :ruby
-#
-# gem "coffee-rails" # uuuuuuugh
 gem "turbolinks"#, "~> 5"
+
 gem "semantic-ui-sass"#, "~> 2.2.12.0"
 gem "rails-assets-lodash", source: "https://rails-assets.org"
 gem "jquery-rails"
@@ -88,10 +85,6 @@ gem "doorkeeper"
 gem "pundit", github: "elabs/pundit"
 
 # Request making
-# gem "faraday"
-# gem "faraday-encoding"
-# gem "faraday_middleware"
-# gem "excon"
 gem "http"
 gem "addressable"
 # gem "robotstxt-parser", require: "robotstxt"
@@ -102,21 +95,18 @@ gem "nokogiri"
 # gem "ruby-readability"
 # gem "stopwords-filter"
 gem "mimemagic"
+gem "parslet"
 
-# Utils
 gem "exception_notification"
 gem "slack-notifier"
-gem "logster"
-
-gem "parslet"
 
 # API Documentation from RAD
 gem "apitome"
 
-# Security issues
-#gem "rubyzip", ">= 1.2.2"
-#gem "rack", ">= 2.0.6"
-#gem "loofah", ">= 2.2.3"
+group :production do
+  # Utils
+  gem "logster"
+end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -144,7 +134,7 @@ group :development, :test do
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails", github: 'rspec/rspec-rails', branch: '4-0-dev' #, "~> 3.5"
+  gem "rspec-rails", github: "rspec/rspec-rails", branch: "4-0-dev" #, "~> 3.5"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"
@@ -160,10 +150,6 @@ group :development, :test do
   # Document the API through rspec tests
   gem "rspec_api_documentation"
   gem "json_matchers"#, "~> 0.9"
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  # gem "spring"
-  # gem "spring-watcher-listen", "~> 2.0.0"
 end
 
 group :test do
@@ -190,8 +176,6 @@ group :test do
   gem "database_cleaner"
 
   # Check things
-  # gem "flay"
-  # gem "reek"
   gem "rubocop"
   gem "rubocop-rspec"
 end
