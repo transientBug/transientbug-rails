@@ -24,6 +24,179 @@
   }
 }
 
+
+/*
+ * ==============================================
+ *   Navbar                               hia j
+ * ==============================================
+ */
+.navbar {
+  @apply bg-red-600;
+}
+
+.navbar__container {
+  @apply mx-auto px-4;
+}
+
+@screen sm {
+  .navbar__container {
+    @apply px-6;
+  }
+}
+
+@screen lg {
+  .navbar__container {
+    @apply px-8;
+  }
+}
+
+.navbar__inner {
+  @apply flex items-center justify-between h-16;
+}
+
+.navbar__section {
+  @apply flex items-center;
+}
+
+.navbar__section--growable {
+  @apply flex-grow;
+}
+
+.navbar__row {
+  @apply flex items-baseline;
+}
+
+.navbar__row--centered {
+  @apply mx-auto w-7/12;
+}
+
+.navbar__logo-link {
+  @apply flex-shrink-0;
+}
+
+.navbar__logo-img {
+  @apply h-12 w-12;
+}
+
+.navbar__logo-header {
+  @apply hidden font-bold text-xl text-white whitespace-no-wrap;
+}
+
+@screen md {
+  .navbar__logo-header {
+    @apply block;
+  }
+}
+
+.navbar__button {
+  @apply px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 transition duration-150 ease-in-out;
+
+  &:hover, &:focus {
+    @apply navbar__button--hover;
+  }
+}
+
+.navbar__button--hover {
+  @apply text-white bg-red-700 outline-none;
+}
+
+.navbar__button--active {
+  @apply px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-red-900 outline-none;
+}
+
+/* Navbar search component
+ * ============================================
+ *   Navbar   | Searchbar        icon |   hia
+ * ============================================
+ */
+
+.searchbar {
+  @apply relative w-full inline-block;
+}
+
+.searchbar__input {
+  @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pr-10 appearance-none leading-normal shadow-inner transition duration-150 ease-in-out;
+
+  &:hover, &:focus {
+    @apply searchbar__input--focus;
+  }
+}
+
+.searchbar__input--focus {
+  @apply outline-none border-white;
+
+  & ~ .searchbar__right {
+    @apply text-white;
+  }
+}
+
+.searchbar__right {
+  @apply absolute top-0 right-0 h-full w-10 flex flex-col items-center justify-around text-gray-600 pointer-events-none;
+}
+
+.searchbar__icon {
+  @apply fill-current pointer-events-none w-4 h-4 transition duration-150 ease-in-out;
+}
+
+/* Dropdowns
+ * +---------+
+ * | trigger |
+ * +---------+
+ *
+ * +---------+
+ * | row     |
+ * +---------+
+ * | row     |
+ * | row     |
+ * | row     |
+ * +---------+
+ */
+.dropdown {
+  @apply relative inline-block text-left;
+}
+
+.dropdown__trigger {
+  @apply ;
+}
+
+.dropdown__container {
+  @apply origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg;
+}
+.dropdown__container--closed {
+  @apply hidden;
+}
+.dropdown__container--opened {
+  @apply block;
+}
+
+.dropdown__menu {
+  @apply rounded-md bg-white shadow-xs;
+}
+
+.dropdown__row {
+  @apply py-1;
+}
+
+.dropdown__link {
+  @apply block px-4 py-2 text-sm leading-5 text-gray-700;
+
+  &:hover, &:focus {
+    @apply dropdown__link--hover;
+  }
+}
+
+.dropdown__link--hover {
+  @apply bg-gray-200 text-gray-900 outline-none;
+}
+
+.dropdown__divider{
+  @apply border-t border-gray-300;
+}
+
+
+
+
+
 @tailwind utilities;
 
 /* @tailwind screens; */

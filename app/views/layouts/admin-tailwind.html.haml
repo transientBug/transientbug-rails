@@ -1,41 +1,22 @@
 !!! 5
 %html
   %head
-    %meta{ :content => "width=device-width, initial-scale=1, shrink-to-fit=no", "name" => "viewport" }
-    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
-    %meta{ :name => "turbolinks-cache-control", :content => "no-cache" }
+    = render "layouts/common/head" do
+      %title transientBug Admin #{ content_for :page_title }
 
-    = content_for :meta
-
-    %title
-      transientBug Admin #{ content_for :page_title }
-
-    = csrf_meta_tags
-
-    = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
+      = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [ "admin", controller_name, action_name ] }
+    = render "layouts/common/store"
+
     = render partial: "layouts/admin-tailwind/navbar"
 
     .content-and-sidebar
       = render partial: "layouts/admin-tailwind/sidebar"
 
       %section.content
-        -# TODO: Thing of a better way to handle fetching these, maybe as a default before action?
-        -# or just stick with a helper like the application helper uses?
-        -# TODO: Style these and get the icons working again in the new webpack flow
-        - service_announcements = ServiceAnnouncement.displayable
-        - if service_announcements&.any?
-          - service_announcements.each do |service_announcement|
-            .flash{ class: [ service_announcement.color, (service_announcement.icon ? "icon" : "")] }
-              - if service_announcement.icon
-                %i.icon{ class: [ service_announcement.icon ] }
-
-              .header
-                = service_announcement.title
-              %p
-                :markdown
-                  #{ service_announcement.message }
+        = render_service_announcements
 
         - flash.each do |type, message|
           .flash{ class: [type], role: "alert" }= message
@@ -45,5 +26,3 @@
 
         %main.main
           = yield
-
-  = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false

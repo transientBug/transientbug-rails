@@ -2,10 +2,5 @@
   %aside.sidebar
     = content_for :sidebar
 
-  -#%nav
-    %a.active{ href: "#" } Test
-    %a{ href: "#" } Test
-    %a{ href: "#" } Test
-
 - if partial_for? "menu"
   = render partial: "menu", locals: { count: @count }

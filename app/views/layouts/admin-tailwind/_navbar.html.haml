@@ -2,39 +2,38 @@
   = render partial: "navbar"
 
 %nav.navbar
-  .navbar-left
-    = link_to admin_root_path, class: "navbar-logo" do
-      = image_tag "bug_logo.png", class: "logo"
-      %span{ class: "hidden md:block" } transientBug Admin
+  .navbar__container
+    .navbar__inner
+      .navbar__section
+        = link_to admin_root_path, class: "navbar__logo-link" do
+          = image_tag "bug_logo.png", class: "navbar__logo-img"
+        %h2.navbar__logo-header transientBug Admin
 
-  .navbar-center
-    = content_for :navbar_center
-    -#%span.search
-      %input{ type: "search", role: "search" placeholder: "Search roles ..." }
+      .navbar__section.navbar__section--growable
+        .navbar__row.navbar__row--centered
+          = content_for :navbar_center
 
-      .search-icon
-        %svg{ class: "fill-current pointer-events-none text-white w-4 h-4", viewBox: "0 0 20 20" }
-          %path{ d: "M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" }
+      .navbar__section
+        .navbar__row
+          = content_for :navbar_right
 
-  .navbar-right
-    %ul
-      = content_for :navbar_right
+          .dropdown
+            %button.dropdown__trigger.navbar__button( zob-on-click="{ open: true }" )
+              Hi, #{ current_user.username }
 
-      %li
-        .dropdown
-          %button.dropdown-trigger
-            %span{ class: "pr-2" }
-              %img
-            Hi, #{ current_user.username }
-            %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
-              %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
+              %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
+                %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
 
-          .dropdown-menu.hidden
-            - if content_for? :navbar_dropdown
-              = content_for :navbar_dropdown
-              .divider
-            = link_to "Exit Admin", root_path, class: "dropdown-item"
-            .divider
-            = link_to "Logout", logout_path, class: "dropdown-item"
+            .dropdown__container.dropdown__container--closed( zob-bind-class="{ open: '.dropdown__container--opened' }" )
+              .dropdown__menu
+                - if content_for? :navbar_dropdown
+                  .dropdown__row
+                    = content_for :navbar_dropdown
+                  .dropdown__divider
 
+                .dropdown__row
+                  = link_to "Exit Admin", root_path, class: "dropdown__link"
 
+                .dropdown__divider
+                .dropdown__row
+                  = link_to "Logout", logout_path, class: "dropdown__link"
