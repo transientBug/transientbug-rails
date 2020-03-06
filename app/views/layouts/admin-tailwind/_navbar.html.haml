@@ -9,7 +9,7 @@
           = image_tag "bug_logo.png", class: "navbar__logo-img"
         %h2.navbar__logo-header transientBug Admin
 
-      .navbar__section.navbar__section--growable
+      .navbar__section.navbar__section--growable( class="hidden md:flex" )
         .navbar__row.navbar__row--centered
           = content_for :navbar_center
 
@@ -17,15 +17,19 @@
         .navbar__row
           = content_for :navbar_right
 
-          .dropdown
-            %button.dropdown__trigger.navbar__button( zob-on-click="{ open: true }" )
-              Hi, #{ current_user.username }
+          .dropdown.navbar__dropdown
+            = behavior_data "dropdown", active: "navbar__button--active" do |dataset|
+              %button.dropdown__trigger.navbar__button{ **dataset }
+                %span( class="hidden lg:inline mr-2" )
+                  Hi, #{ current_user.username }
 
-              %svg{ class: "h-3 fill-current inline", viewBox: "0 0 20 20" }
-                %path{ d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" }
+                %svg( viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="inline" )
+                  %line( x1="3" y1="12" x2="21" y2="12" )
+                  %line( x1="3" y1="6" x2="21" y2="6" )
+                  %line( x1="3" y1="18" x2="21" y2="18" )
 
-            .dropdown__container.dropdown__container--closed( zob-bind-class="{ open: '.dropdown__container--opened' }" )
-              .dropdown__menu
+            .dropdown__container.navbar__dropdown-container.hidden
+              .dropdown__menu.navbar__dropdown-menu
                 - if content_for? :navbar_dropdown
                   .dropdown__row
                     = content_for :navbar_dropdown

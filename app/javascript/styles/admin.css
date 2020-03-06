@@ -117,13 +117,25 @@
 .searchbar__input {
   @apply w-full bg-red-800 text-sm text-white border border-transparent rounded py-1 px-2 pr-10 appearance-none leading-normal shadow-inner transition duration-150 ease-in-out;
 
-  &:hover, &:focus {
+  &:hover {
+    @apply searchbar__input--hover;
+  }
+
+  &:focus {
     @apply searchbar__input--focus;
   }
 }
 
+.searchbar__input--hover {
+  @apply border-gray-500;
+
+  & ~ .searchbar__right {
+    @apply text-gray-500;
+  }
+}
+
 .searchbar__input--focus {
-  @apply outline-none border-white;
+  @apply border-white;
 
   & ~ .searchbar__right {
     @apply text-white;
@@ -161,10 +173,24 @@
 
 .dropdown__container {
   @apply origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    width: 0;
+    height: 0;
+    border-left: 0.60rem solid transparent;
+    border-bottom: 0.75rem solid white;
+    border-right: 0.60rem solid transparent;
+    right: 1rem;
+  }
 }
+
 .dropdown__container--closed {
   @apply hidden;
 }
+
 .dropdown__container--opened {
   @apply block;
 }
@@ -189,12 +215,50 @@
   @apply bg-gray-200 text-gray-900 outline-none;
 }
 
-.dropdown__divider{
+.dropdown__divider {
   @apply border-t border-gray-300;
 }
 
+/* ugh */
+.navbar__dropdown {
+  @apply dropdown;
 
+  position: inherit;
+}
 
+@screen lg {
+  .navbar__dropdown {
+    @apply dropdown relative;
+  }
+}
+
+.navbar__dropdown-container {
+  @apply dropdown__container w-screen rounded-none;
+
+  &:before {
+    display: none;
+  }
+}
+
+@screen lg {
+  .navbar__dropdown-container {
+    @apply dropdown__container;
+
+    &:before {
+      display: inherit;
+    }
+  }
+}
+
+.navbar__dropdown-menu {
+  @apply dropdown__menu rounded-none;
+}
+
+@screen lg {
+  .navbar__dropdown-menu {
+    @apply dropdown__menu;
+  }
+}
 
 
 @tailwind utilities;
