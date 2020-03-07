@@ -7,7 +7,7 @@
       .navbar__section
         = link_to admin_root_path, class: "navbar__logo-link" do
           = image_tag "bug_logo.png", class: "navbar__logo-img"
-        %h2.navbar__logo-header transientBug Admin
+          %h2.navbar__logo-header transientBug Admin
 
       .navbar__section.navbar__section--growable( class="hidden md:flex" )
         .navbar__row.navbar__row--centered
@@ -17,7 +17,7 @@
         .navbar__row
           = content_for :navbar_right
 
-          .dropdown.navbar__dropdown
+          .dropdown.navbar__dropdown.dropdown--hoverable
             = behavior_data "dropdown", active: "navbar__button--active" do |dataset|
               %button.dropdown__trigger.navbar__button{ **dataset }
                 %span( class="hidden lg:inline mr-2" )

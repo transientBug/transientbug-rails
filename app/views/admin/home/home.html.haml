@@ -1,21 +1,26 @@
 - content_for :page_title, "Home"
+- content_for :page_header, "Home"
 
-%h2 General Admin
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) General Admin
 
-= link_to "Service Announcements", admin_service_announcements_path
-= link_to "Oauth Applications", admin_applications_path
+%ul
+  %li= link_to "Service Announcements", admin_service_announcements_path
+  %li= link_to "Oauth Applications", admin_applications_path
 
-%h2 User Admin
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) User Admin
 
-= link_to "Invitations", admin_invitations_path
-= link_to "Roles", admin_roles_path
-= link_to "Users", admin_users_path
+%ul
+  %li= link_to "Invitations", admin_invitations_path
+  %li= link_to "Roles", admin_roles_path
+  %li= link_to "Users", admin_users_path
 
-%h2 Bookmark Related
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) Bookmark Related
 
-= link_to "Bookmarks", admin_bookmarks_path
+%ul
+  %li= link_to "Bookmarks", admin_bookmarks_path
 
-%h2 Misc
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) Misc
 
-= link_to "Sidekiq", sidekiq_web_path, data: { turbolinks: false }
-= link_to "Logster", logster_web_path, data: { turbolinks: false }
+%ul
+  %li= link_to "Sidekiq", sidekiq_web_path, data: { turbolinks: false }
+  %li= link_to "Logster", logster_web_path, data: { turbolinks: false }

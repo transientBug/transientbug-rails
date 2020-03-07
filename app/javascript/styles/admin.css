@@ -71,11 +71,11 @@
 }
 
 .navbar__logo-link {
-  @apply flex-shrink-0;
+  @apply flex-shrink-0 inline;
 }
 
 .navbar__logo-img {
-  @apply h-12 w-12;
+  @apply h-12 w-12 inline;
 }
 
 .navbar__logo-header {
@@ -84,7 +84,7 @@
 
 @screen md {
   .navbar__logo-header {
-    @apply block;
+    @apply inline;
   }
 }
 
@@ -167,24 +167,28 @@
   @apply relative inline-block text-left;
 }
 
+.dropdown--hoverable:hover > .dropdown__container {
+  @apply block;
+}
+
 .dropdown__trigger {
-  @apply ;
+  /*@apply ;*/
 }
 
 .dropdown__container {
-  @apply origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg;
+  @apply origin-top-right absolute right-0 pt-1 w-56 rounded-md shadow-lg z-10;
+}
 
-  &:before {
-    content: "";
-    position: absolute;
-    top: -0.75rem;
-    width: 0;
-    height: 0;
-    border-left: 0.60rem solid transparent;
-    border-bottom: 0.75rem solid white;
-    border-right: 0.60rem solid transparent;
-    right: 1rem;
-  }
+.dropdown__container--arrow:before {
+  content: "";
+  position: absolute;
+  top: -0.75rem;
+  width: 0;
+  height: 0;
+  border-left: 0.60rem solid transparent;
+  border-bottom: 0.75rem solid white;
+  border-right: 0.60rem solid transparent;
+  right: 1rem;
 }
 
 .dropdown__container--closed {
@@ -203,8 +207,12 @@
   @apply py-1;
 }
 
-.dropdown__link {
+.dropdown__item {
   @apply block px-4 py-2 text-sm leading-5 text-gray-700;
+}
+
+.dropdown__link {
+  @apply dropdown__item;
 
   &:hover, &:focus {
     @apply dropdown__link--hover;
@@ -215,11 +223,18 @@
   @apply bg-gray-200 text-gray-900 outline-none;
 }
 
+.dropdown__header {
+  @apply dropdown__item font-bold text-base text-gray-900 border-b border-gray-300;
+}
+
 .dropdown__divider {
   @apply border-t border-gray-300;
 }
 
-/* ugh */
+/*
+ * Specalized full width menu for small/mobile screens, ideal for
+ * faking an expanding navbar.
+ */
 .navbar__dropdown {
   @apply dropdown;
 
@@ -260,6 +275,51 @@
   }
 }
 
+/*
+ * A simplified dropdown requiring less markup and only having support for
+ * hovering to open.
+ *
+ * DOESN'T LOOK GREAT, NOT USED ATM
+ */
+.simple-dropdown {
+  @apply inline-block relative;
+
+  &:hover > .simple-dropdown__menu {
+    @apply block;
+  }
+}
+
+.simple-dropdown__trigger {
+  /*@apply bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center;*/
+}
+
+.simple-dropdown__menu {
+  @apply dropdown__container mt-0 pt-1 hidden rounded-md;
+
+  /*&:first-child {*/
+    /*@apply rounded-t-md;*/
+  /*}*/
+
+  /*&:last-child {*/
+    /*@apply rounded-b-md;*/
+  /*}*/
+}
+
+.simple-dropdown__item {
+  @apply dropdown__link dropdown__menu rounded-none;
+}
+
+.simple-dropdown__link {
+  @apply dropdown__link simple-dropdown__item;
+}
+
+.simple-dropdown__header {
+  @apply simple-dropdown__item dropdown__header;
+}
+
+.simple-dropdown__divider {
+  @apply dropdown__divider simple-dropdown__item p-0;
+}
 
 @tailwind utilities;
 

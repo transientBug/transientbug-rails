@@ -2,6 +2,7 @@ import Behavior, { OnEvent, ForBehavior } from "../lib/Behaviors"
 
 interface Args {
   active?: string
+  targetToggle?: string
 }
 
 @ForBehavior("dropdown")
@@ -16,8 +17,10 @@ export default class DropdownBehavior extends Behavior<Args> {
   click(event: MouseEvent) {
     event.preventDefault()
 
-    const isHidden = this.menu.classList.toggle("hidden")
-  
+    const isHidden = this.menu.classList.toggle(
+      this.args.targetToggle || "hidden"
+    )
+
     if (!this.args.active) return
     this.element.classList.toggle(this.args.active, !isHidden)
   }
