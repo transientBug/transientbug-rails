@@ -7,26 +7,31 @@
       = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
       = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-  %body{ class: [ "admin", controller_name, action_name ] }
+  %body.layout__body{ class: [ "admin", controller_name, action_name ] }
     = render "layouts/common/store"
 
     = render partial: "layouts/admin-tailwind/navbar"
 
-    %header( class="bg-white shadow" )
-      %div( class="lg:flex lg:items-center lg:justify-between mx-auto py-6 px-4 sm:px-6 lg:px-8" )
-        %div( class="flex-1 min-w-0" )
-          %h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" )
-            = content_for :page_header
+    %header.page-header
+      %div.page-header__container
+        %div.page-header__row
+          = render "components/admin/breadcrumbs" do
+            = content_for :breadcrumbs
 
-        %div( class="mt-5 flex lg:mt-0 lg:ml-4" )
+        %div.page-header__row
+          %div.page-header__main
+            %h2.page-header__title= content_for :page_title
 
-    %main
+          %div.page-header__actions
+            = content_for :page_actions
+
+    %main.layout__main
+      - flash.each do |type, message|
+        .flash{ class: "flash--#{ type }", role: "alert" }= message
+
       %div( class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" )
         %div( class="px-4 py-6 sm:px-0" )
-          = render_service_announcements
-
-          - flash.each do |type, message|
-            .flash{ class: "flash--#{ type }", role: "alert" }= message
+          -#= render_service_announcements
 
           -#%div( class="border-4 border-dashed border-gray-200 rounded-lg h-96" )
 
