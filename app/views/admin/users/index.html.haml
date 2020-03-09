@@ -5,9 +5,29 @@
   = link_to "Users", admin_users_url, aria: { current: "page" }
 
 - content_for :page_actions do
-  = link_to "New", admin_users_url, class: "button button--gray"
+  = link_to "New", new_admin_user_url, class: "button button--gray"
 
-%ul( class="min-w-full leading-normal border-gray-300 rounded-md border shadow-sm bg-white" )
+- content_for :page_meta do
+  %div( class="flex items-center text-sm leading-5 text-gray-500" )
+    = render "components/feather_icon", icon: "users"
+    %span.ml-2
+      = "#{ @count} User".pluralize @count
+      total
+
+
+%ul( class="min-w-full leading-normal border-gray-300 md:rounded-md border shadow-sm bg-white mb-4" )
+  %li( class="px-5 py-5 border-b border-gray-300 text-sm" )
+    %div( class="flex items-center justify-between" )
+      .mr-2
+        = render "components/checkbox" do
+          Select All
+
+      .w-full.mr-2.flex.flex-row
+
+      %div
+        = paginate @users
+
+%ul( class="min-w-full leading-normal border-gray-300 md:rounded-md border shadow-sm bg-white" )
   - if @users.any?
     - @users.each do |user|
       %li( class="px-5 py-5 border-b border-gray-300 text-sm" )
@@ -24,27 +44,23 @@
           %div.w-full.mr-2.hidden( class="md:block" )
             .flex
               %strong.mr-1 Roles:
-              %ul
-                - user.roles.map(&:name).map(&:humanize).each do |role|
-                  %li= role
+              - user.roles.map(&:name).map(&:humanize).each do |role|
+                %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.bg-gray-200.text-gray-800.mx-1= role
 
             .flex
               %strong.mr-1 Created:
               = render "components/time", time: user.created_at
 
           %div
-            .flex.flex-row
-              = link_to admin_user_path(user), class: "" do 
-                %i.expand.icon
+            .button-group
+              = link_to admin_user_path(user), class: "button button--gray" do
+                = render "components/feather_icon", icon: "maximize"
                 View
 
-              .dropdown.dropdown--hoverable
+              .button.button--gray.button--icon.dropdown.dropdown--hoverable
                 = behavior_data "dropdown" do |dataset|
-                  %button.dropdown__trigger{ **dataset }
-                    %svg( viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="inline" )
-                      %line( x1="3" y1="12" x2="21" y2="12" )
-                      %line( x1="3" y1="6" x2="21" y2="6" )
-                      %line( x1="3" y1="18" x2="21" y2="18" )
+                  %button.dropdown__trigger{  **dataset }
+                    = render "components/feather_icon", icon: "chevron-down"
 
                 .dropdown__container.hidden
                   .dropdown__menu
@@ -53,7 +69,5 @@
                       = link_to "Edit", edit_admin_user_path(user), class: "dropdown__link"
 
   - else
-    %li( class="px-5 py-5 border-b border-gray-200 bg-white text-sm" )
+    %li( class="px-5 py-5 border-b border-gray-300 text-sm" )
       No users yet (this might be a problem, yo)
-
-= paginate @users

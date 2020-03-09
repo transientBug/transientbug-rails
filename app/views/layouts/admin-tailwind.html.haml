@@ -21,6 +21,8 @@
         %div.page-header__row
           %div.page-header__main
             %h2.page-header__title= content_for :page_title
+            %div.page-header__meta( class="mt-0 flex flex-row flex-wrap md:mt-1 md:flex-col" )
+              = content_for :page_meta
 
           %div.page-header__actions
             = content_for :page_actions
@@ -30,9 +32,8 @@
         .flash{ class: "flash--#{ type }", role: "alert" }= message
 
       %div( class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" )
-        %div( class="px-4 py-6 sm:px-0" )
-          -#= render_service_announcements
+        -#= render_service_announcements
 
-          -#%div( class="border-4 border-dashed border-gray-200 rounded-lg h-96" )
+        -#%div( class="border-4 border-dashed border-gray-200 rounded-lg h-96" )
 
-          = yield
+        = yield

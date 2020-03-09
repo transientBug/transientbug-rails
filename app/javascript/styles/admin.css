@@ -196,7 +196,9 @@
 }
 
 .searchbar__icon {
-  @apply fill-current pointer-events-none w-4 h-4 transition duration-150 ease-in-out;
+  & > svg.feather {
+    @apply stroke-current pointer-events-none w-4 h-4 transition duration-150 ease-in-out;
+  }
 }
 
 /* Dropdowns
@@ -213,7 +215,7 @@
  * +---------+
  */
 .dropdown {
-  @apply relative inline-block text-left;
+  @apply relative inline-flex text-left;
 }
 
 .dropdown--hoverable:hover > .dropdown__container {
@@ -226,18 +228,8 @@
 
 .dropdown__container {
   @apply origin-top-right absolute right-0 pt-1 w-56 rounded-md shadow-lg z-10;
-}
 
-.dropdown__container--arrow:before {
-  content: "";
-  position: absolute;
-  top: -0.75rem;
-  width: 0;
-  height: 0;
-  border-left: 0.60rem solid transparent;
-  border-bottom: 0.75rem solid white;
-  border-right: 0.60rem solid transparent;
-  right: 1rem;
+  top: 2.5rem;
 }
 
 .dropdown__container--closed {
@@ -368,6 +360,12 @@
   }
 }
 
+.breadcrumbs__separator {
+  & > svg.feather {
+    @apply stroke-current w-4 h-4 mx-1;
+  }
+}
+
 /*
  * Buttons
  */
@@ -376,12 +374,16 @@
 }
 
 .button {
-  @apply inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md cursor-pointer transition duration-150 ease-in-out;
+  @apply inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md shadow cursor-pointer transition duration-150 ease-in-out;
 
   @add-mixin button-colors transparent, transparent, gray-800;
 
   &:focus {
     @apply outline-none shadow-outline border-blue-300;
+  }
+
+  & > svg.feather {
+    @apply h-4 w-4 mx-1 stroke-current;
   }
 }
 
@@ -393,6 +395,25 @@
   }
 }
 
+.button--icon {
+  @apply px-1;
+}
+
+.button-group {
+  @apply flex flex-row;
+
+  & .button:not(:last-child) {
+    @apply rounded-r-none;
+  }
+
+  & .button:not(:first-child) {
+    @apply border-l-0 rounded-l-none;
+
+    &:hover {
+      @apply border-l-0;
+    }
+  }
+}
 
 @tailwind utilities;
 
