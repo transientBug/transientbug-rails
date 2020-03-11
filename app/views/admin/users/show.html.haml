@@ -35,24 +35,26 @@
     = "#{ image_count } Gif".pluralize image_count
 
 .resource-list
-  .resource-list__row.flex-col.items-start
-    .flex
-      %strong.mr-1 ID:
-      = @user.id
-
-    .flex
+  .resource-list__row
+    .resource__list__col
       %strong.mr-1 Username:
       = @user.username
 
-    .flex
+    .resource__list__col
       %strong.mr-1 Email:
       = @user.email
 
-    .flex
+    .resource__list__col
+      %strong.mr-1 ID:
+      = @user.id
+
+  .resource-list__row
+    .resource__list__col
+      %strong.mr-1 Created:
+      = render "components/time", time: @user.created_at
+
+  .resource-list__row
+    .resource__list__col
       %strong.mr-1 Roles:
       - @user.roles.map(&:name).map(&:humanize).each do |role|
         %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.bg-gray-200.text-gray-800.mx-1= role
-
-    .flex
-      %strong.mr-1 Created:
-      = render "components/time", time: @user.created_at

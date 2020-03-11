@@ -1,6 +1,6 @@
 import { EVENT_MAP } from "./constants"
 
-class Behavior<S extends {}> {
+class Behavior<S = {}> {
   static readonly OnBehavior: string
 
   constructor(readonly element: HTMLElement, readonly args: S) {}

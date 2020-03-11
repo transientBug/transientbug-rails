@@ -35,7 +35,13 @@
         .flashes
           .flashes__container
             - flash.each do |type, message|
-              .flashes__flash.flashes__flash--fade-out( class="flashes__flash--#{ type }" role="alert" )= message
+              .flashes__flash( class="flashes__flash--#{ type }" role="alert" )
+                .flashes__message= message
+
+                .flashes__close
+                  = behavior_data "close-flash" do |dataset|
+                    %button.flashes__close-button{ **dataset }
+                      = render "components/feather_icon", icon: "x"
 
         -#= render_service_announcements
 
