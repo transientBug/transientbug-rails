@@ -7,31 +7,36 @@
       = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
       = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-  %body.layout__body{ class: [ "admin", controller_name, action_name ] }
+  %body.layout__body{ class: "admin__#{ controller_name }--#{ action_name }" }
     = render "layouts/common/store"
 
     = render partial: "layouts/admin-tailwind/navbar"
 
     %header.page-header
       %div.page-header__container
-        %div.page-header__row
-          = render "components/admin/breadcrumbs" do
-            = content_for :breadcrumbs
+        - if content_for? :breadcrumbs
+          %div.page-header__row
+            = render "components/admin/breadcrumbs" do
+              = content_for :breadcrumbs
 
         %div.page-header__row
           %div.page-header__main
             %h2.page-header__title= content_for :page_title
-            %div.page-header__meta( class="mt-0 flex flex-row flex-wrap md:mt-1 md:flex-col" )
-              = content_for :page_meta
+            - if content_for? :page_meta
+              %div.page-header__meta
+                = content_for :page_meta
 
-          %div.page-header__actions
-            = content_for :page_actions
+          - if content_for? :page_actions
+            %div.page-header__actions
+              = content_for :page_actions
 
     %main.layout__main
-      - flash.each do |type, message|
-        .flash{ class: "flash--#{ type }", role: "alert" }= message
+      %div.layout__content
+        .flashes
+          .flashes__container
+            - flash.each do |type, message|
+              .flashes__flash.flashes__flash--fade-out( class="flashes__flash--#{ type }" role="alert" )= message
 
-      %div( class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" )
         -#= render_service_announcements
 
         -#%div( class="border-4 border-dashed border-gray-200 rounded-lg h-96" )

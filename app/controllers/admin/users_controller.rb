@@ -4,7 +4,7 @@ class Admin::UsersController < AdminController
   before_action :set_count
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
-  # GET /users
+  # GET /admin/users
   def index
     user_table = User.arel_table
 
@@ -18,43 +18,34 @@ class Admin::UsersController < AdminController
     @users = @users.order(created_at: :desc).page params[:page]
   end
 
-  # GET /users/new
+  # GET /admin/users/new
   def new
     @user = User.new
   end
 
-  # POST /users
+  # POST /admin/users
   def create
     @user = User.new new_user_params
 
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to [:admin, @user], notice: "User was successfully created." }
-      else
-        format.html { render :new }
-      end
+    unless @user.save
+      headers["Location"] = new_admin_user_url
+      return render :new, status: 400
     end
+
+    redirect_to [:admin, @user], notice: "User was successfully created."
   end
 
-  # GET /users/1
-  def show
-    respond_to do |format|
-      format.html { render :show }
-    end
-  end
+  # GET /admin/users/1
+  def show; end
 
-  # GET /users/1/edit
+  # GET /admin/users/1/edit
   def edit; end
 
-  # PATCH/PUT /users/1
+  # PATCH/PUT /admin/users/1
   def update
-    respond_to do |format|
-      if @user.update(edit_user_params)
-        format.html { redirect_to [:admin, @user], notice: "User was successfully updated." }
-      else
-        format.html { render :edit }
-      end
-    end
+    return render :edit unless @user.update edit_user_params
+
+    redirect_to [:admin, @user], notice: "User was successfully updated."
   end
 
   private

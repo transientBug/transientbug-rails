@@ -30,6 +30,22 @@
 
 .layout__main {}
 
+.layout__content {
+  @apply mx-auto py-6 px-0;
+}
+
+@screen md {
+  .layout__content {
+    @apply px-6;
+  }
+}
+
+@screen lg {
+  .layout__content {
+    @apply px-8;
+  }
+}
+
 /*
  * ==============================================
  *   Navbar                               hia j
@@ -107,50 +123,6 @@
 
 .navbar__button--active {
   @apply px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-red-900 outline-none;
-}
-
-/*
- * Specalized full width menu for small/mobile screens, ideal for
- * faking an expanding navbar.
- */
-.navbar__dropdown {
-  @apply dropdown;
-
-  position: inherit;
-}
-
-@screen lg {
-  .navbar__dropdown {
-    @apply dropdown relative;
-  }
-}
-
-.navbar__dropdown-container {
-  @apply dropdown__container w-screen rounded-none;
-
-  &:before {
-    display: none;
-  }
-}
-
-@screen lg {
-  .navbar__dropdown-container {
-    @apply dropdown__container;
-
-    &:before {
-      display: inherit;
-    }
-  }
-}
-
-.navbar__dropdown-menu {
-  @apply dropdown__menu rounded-none;
-}
-
-@screen lg {
-  .navbar__dropdown-menu {
-    @apply dropdown__menu;
-  }
 }
 
 /* Navbar search component
@@ -273,6 +245,52 @@
 }
 
 /*
+ * Specalized full width menu for small/mobile screens, ideal for
+ * faking an expanding navbar.
+ */
+.navbar__dropdown {
+  @apply dropdown;
+
+  position: inherit;
+}
+
+@screen lg {
+  .navbar__dropdown {
+    @apply dropdown relative;
+  }
+}
+
+.navbar__dropdown-container {
+  @apply dropdown__container w-screen rounded-none;
+
+  top: 3.5rem;
+
+  &:before {
+    display: none;
+  }
+}
+
+@screen lg {
+  .navbar__dropdown-container {
+    @apply dropdown__container;
+
+    &:before {
+      display: inherit;
+    }
+  }
+}
+
+.navbar__dropdown-menu {
+  @apply dropdown__menu rounded-none;
+}
+
+@screen lg {
+  .navbar__dropdown-menu {
+    @apply dropdown__menu;
+  }
+}
+
+/*
  * Page Headers
  */
 
@@ -327,7 +345,15 @@
 }
 
 .page-header__meta {
-  /*@apply ;*/
+  @apply mt-0 flex flex-row flex-wrap mt-2;
+}
+
+.page-header__metadata {
+  @apply flex items-center text-sm leading-5 text-gray-500 mr-4;
+
+  & > svg.feather {
+    @apply mr-1;
+  }
 }
 
 .page-header__actions {
@@ -376,7 +402,7 @@
 .button {
   @apply inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md shadow cursor-pointer transition duration-150 ease-in-out;
 
-  @add-mixin button-colors transparent, transparent, gray-800;
+  @add-mixin button-colors white, white, gray-800;
 
   &:focus {
     @apply outline-none shadow-outline border-blue-300;
@@ -391,7 +417,15 @@
   @add-mixin button-colors white, gray-300, gray-700;
 
   &:hover {
-    @add-mixin button-colors gray-200, gray-300, gray-700;
+    @add-mixin button-colors gray-200, gray-300, gray-900;
+  }
+}
+
+.button--green {
+  @add-mixin button-colors white, green-800, green-900;
+
+  &:hover {
+    @add-mixin button-colors green-800, green-900, white;
   }
 }
 
@@ -399,6 +433,11 @@
   @apply px-1;
 }
 
+/*
+ * Button groups
+ *
+ * These feel like a bit of a hack for BEM but idk, who cares
+ */
 .button-group {
   @apply flex flex-row;
 
@@ -413,6 +452,129 @@
       @apply border-l-0;
     }
   }
+}
+
+/*
+ * Flash notifications
+ */
+.flashes {
+  @apply relative;
+}
+
+.flashes__container {
+  @apply absolute top-0 w-full;
+}
+
+.flashes__flash {
+  @apply flex-col inline-flex justify-center px-4 py-5 w-full shadow-md bg-white;
+}
+
+@screen md {
+  .flashes__flash {
+    @apply rounded-md;
+  }
+}
+
+.flashes__flash--fade-out {
+}
+
+.flashes__flash--notice {
+}
+
+.flashes__flash--info {
+  @apply bg-blue-600;
+}
+
+.flashes__flash--error {
+  @apply bg-red-500;
+}
+
+
+/*
+ * Admin side index lists
+ */
+.resource-list {
+  @apply min-w-full leading-normal border-gray-300 border shadow-sm bg-white mb-4;
+}
+
+@screen md {
+  .resource-list {
+    @apply rounded-md;
+  }
+}
+
+.resource-list__row {
+  @apply px-5 py-5 border-b border-gray-300 text-sm flex items-center justify-between;
+}
+
+.resource-list__column:not(:last-child) {
+  @apply mr-2;
+}
+
+/*
+ * Forms
+ */
+
+.form {
+  @apply form flex flex-col w-full;
+}
+
+.form__fieldset {
+  @apply border-2 border-gray-500 rounded-md py-2 mb-2;
+}
+
+.form__legend {
+  @apply font-bold text-gray-700 text-3xl leading-9 truncate ml-5;
+}
+
+@screen md {
+  .form__legend {
+    @apply text-2xl leading-7;
+  }
+}
+
+.form__field {
+  @apply px-3 mb-6;
+}
+
+@screen md {
+  .form__field {
+    @apply  mb-3;
+  }
+}
+
+.form__field--error {
+  @apply text-red-700;
+
+  & .form__label {}
+
+  & .form__input {
+    @apply border-red-700;
+
+    &:active, &:focus {
+      @apply border-red-400;
+    }
+  }
+}
+
+.form__label {
+  @apply block uppercase tracking-wide text-xs font-bold;
+}
+
+.form__input {
+  @apply appearance-none block w-full bg-gray-100 border rounded py-2 px-3;
+
+  &:active, &:focus {
+    @apply border-blue-400;
+  }
+}
+
+.form__field-error {
+  @apply text-xs italic;
+}
+
+.form__actions {
+  @apply ;
 }
 
 @tailwind utilities;

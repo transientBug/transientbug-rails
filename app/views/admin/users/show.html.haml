@@ -1,53 +1,58 @@
 - content_for :page_title do
   Viewing "#{ @user.username }"
 
-.ui.menu
-  = link_to edit_admin_user_path(@user), class: "item" do
-    %i.edit.icon
-    edit
+- content_for :breadcrumbs do
+  = link_to "Home", admin_root_url
+  = link_to "Users", admin_users_url
+  = link_to @user.username, admin_user_url(@user), aria: { current: "page" }
 
-  = link_to admin_user_password_index_path(@user), class: "item" do
-    %i.unlock.alternative.icon
-    change password
+- content_for :page_actions do
+  .button-group
+    = link_to edit_admin_user_path(@user), class: "button button--gray" do
+      = render "components/feather_icon", icon: "edit"
+      Edit
 
-%h2.ui.dividing.header Internal Stuff
-%table.ui.collapsing.celled.table
-  %tbody
-    %tr
-      %td
-        %b ID
-      %td
-        = @user.id
-    %tr
-      %td
-        %b Username
-      %td
-        = @user.username
-    %tr
-      %td
-        %b Email
-      %td
-        = @user.email
-    %tr
-      %td
-        %b Roles
-      %td
-        = @user.roles.map(&:name).join ", "
-    %tr
-      %td
-        %b Created At
-      %td
-        = @user.created_at.to_s(:long)
+    .button.button--gray.button--icon.dropdown.dropdown--hoverable
+      = behavior_data "dropdown" do |dataset|
+        %button.dropdown__trigger{  **dataset }
+          = render "components/feather_icon", icon: "chevron-down"
 
-%h2.ui.dividing.header High Level Stats
+      .dropdown__container.hidden
+        .dropdown__menu
+          .dropdown__row
+            %h6.dropdown__header DangerZone
+            = link_to "Change Password", admin_user_password_index_path(@user), class: "dropdown__link"
 
-.ui.statistics
-  .statistic
+- content_for :page_meta do
+  .page-header__metadata
     - bookmark_count = @user.bookmarks.count
-    .value= bookmark_count
-    .label= "Bookmark".pluralize bookmark_count
+    = render "components/feather_icon", icon: "bookmark"
+    = "#{ bookmark_count } Bookmark".pluralize bookmark_count
 
-  .statistic
+  .page-header__metadata
     - image_count = @user.images.count
-    .value= image_count
-    .label= "Image".pluralize image_count
+    = render "components/feather_icon", icon: "image"
+    = "#{ image_count } Gif".pluralize image_count
+
+.resource-list
+  .resource-list__row.flex-col.items-start
+    .flex
+      %strong.mr-1 ID:
+      = @user.id
+
+    .flex
+      %strong.mr-1 Username:
+      = @user.username
+
+    .flex
+      %strong.mr-1 Email:
+      = @user.email
+
+    .flex
+      %strong.mr-1 Roles:
+      - @user.roles.map(&:name).map(&:humanize).each do |role|
+        %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.bg-gray-200.text-gray-800.mx-1= role
+
+    .flex
+      %strong.mr-1 Created:
+      = render "components/time", time: @user.created_at
