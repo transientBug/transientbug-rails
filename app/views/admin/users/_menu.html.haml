@@ -1,0 +1,19 @@
+.item
+  .header Users
+
+.item
+  .ui.transparent.icon.input
+    = form_tag admin_users_path, method: :get do
+      = search_field_tag "q", params[:q], class: "ui prompt", placeholder: "Search ...", aria: { label: "search" }
+    %i.search.link.icon
+
+= active_link_to admin_users_path, active: :exclusive, class: "item" do
+  Index
+  - if defined?(count) && count
+    .ui.label= count
+
+= active_link_to new_admin_user_path, class: "item" do
+  %i.plus.icon
+  New
+
+= content_for :menu

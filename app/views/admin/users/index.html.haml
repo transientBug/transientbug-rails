@@ -16,7 +16,7 @@
 %ul.resource-list
   %li.resource-list__row
     .resource-list__column
-      = render "components/checkbox" do
+      -#= render "components/checkbox" do
         Select All
 
     .resource-list__column.w-full
@@ -29,7 +29,7 @@
     - @users.each do |user|
       %li.resource-list__row
         .resource-list__column
-          = render "components/checkbox"
+          -#= render "components/checkbox"
 
         .resource-list__column.w-full
           %div( class="text-sm leading-5 font-medium text-gray-900" )

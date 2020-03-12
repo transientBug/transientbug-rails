@@ -27,10 +27,7 @@ class Admin::UsersController < AdminController
   def create
     @user = User.new new_user_params
 
-    unless @user.save
-      headers["Location"] = new_admin_user_url
-      return render :new, status: 400
-    end
+    return render :new, status: 400 unless @user.save
 
     redirect_to [:admin, @user], notice: "User was successfully created."
   end
@@ -43,7 +40,7 @@ class Admin::UsersController < AdminController
 
   # PATCH/PUT /admin/users/1
   def update
-    return render :edit unless @user.update edit_user_params
+    return render :edit, status: 400 unless @user.update edit_user_params
 
     redirect_to [:admin, @user], notice: "User was successfully updated."
   end
