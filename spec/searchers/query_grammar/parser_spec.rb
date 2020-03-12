@@ -60,7 +60,7 @@ RSpec.describe QueryGrammar::Parser do
       it { is_expected.not_to parse(input) }
     end
 
-    context "when negated expression" do
+    context "when negated group" do
       let(:input) { "NOT (b adsf)" }
 
       it { is_expected.to parse(input) }
