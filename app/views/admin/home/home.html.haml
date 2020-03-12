@@ -1,38 +1,26 @@
-- content_for :page_title do
-  Home
+- content_for :page_title, "Admin Dashboard"
 
-.ui.padded.equal.width.stackable.grid
-  .column
-    %h2.dividing.header general admin
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) General Admin
 
-    .ui.list
-      = link_to "service announcements", admin_service_announcements_path, class: "item"
-      = link_to "oauth applications", admin_applications_path, class: "item"
+%ul
+  %li= link_to "Service Announcements", admin_service_announcements_path
+  %li= link_to "Oauth Applications", admin_applications_path
 
-  .column
-    %h2.dividing.header user admin
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) User Admin
 
-    .ui.list
-      = link_to "invitations", admin_invitations_path, class: "item"
-      = link_to "roles", admin_roles_path, class: "item"
-      = link_to "users", admin_users_path, class: "item"
+%ul
+  %li= link_to "Invitations", admin_invitations_path
+  %li= link_to "Roles", admin_roles_path
+  %li= link_to "Users", admin_users_path
 
-  .column
-    %h2.dividing.header bookmark related
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) Bookmark Related
 
-    .ui.list
-      = link_to "bookmarks", admin_bookmarks_path, class: "item"
+%ul
+  %li= link_to "Bookmarks", admin_bookmarks_path
 
-  .column
-    %h2.dividing.header image related
+%h2( class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate" ) Misc
 
-    .ui.list
-      .item "Coming Soon"
-
-  .column
-    %h2.dividing.header misc dev
-
-    .ui.list
-      = link_to "sidekiq", sidekiq_web_path, data: { turbolinks: false }, class: "item"
-      - if Rails.env.production?
-        = link_to "logster", logster_web_path, data: { turbolinks: false }, class: "item"
+%ul
+  %li= link_to "Sidekiq", sidekiq_web_path, data: { turbolinks: false }
+  - if Rails.env.production?
+    %li= link_to "Logster", logster_web_path, data: { turbolinks: false }

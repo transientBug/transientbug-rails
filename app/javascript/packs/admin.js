@@ -1,3 +1,3 @@
-import "../lib/common"
+import "../common"
 
 import "../styles/admin"
