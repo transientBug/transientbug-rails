@@ -1,0 +1,11 @@
+- links = yield.split "\n"
+
+%nav.breadcrumbs( aria-label="Breadcrumb" )
+  %ol.breadcrumbs__list
+    - links.each_with_index do |link, index|
+      %li.breadcrumbs__item
+        = link.html_safe
+
+        - unless (index + 1) >= links.length
+          .breadcrumbs__separator
+            = render "components/feather_icon", icon: "chevron-right"

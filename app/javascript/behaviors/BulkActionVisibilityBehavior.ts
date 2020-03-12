@@ -17,7 +17,6 @@ export default class BulkActionVisibilityBehavior extends Behavior<{}> {
   protected subscriber = () => {
     const { selection } = store.getState() as RootState
 
-    if (selection.selection.length > 0) this.element.classList.remove("hidden")
-    else this.element.classList.add("hidden")
+    this.element.classList.toggle("hidden", selection.selection.length == 0)
   }
 }
