@@ -1,0 +1,19 @@
+- dataset ||= {}
+- clipId = "_clip-#{ SecureRandom.uuid }"
+
+- label = yield
+- has_label = label.present?
+
+%label{ class: "flex justify-start items-start", **dataset }
+  %div{ class: "border border-gray-600 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500 #{ has_label ? "mr-2" : "" }" }
+    %input{ type: :checkbox, class: "opacity-0 absolute", autocomplete: "off" }
+
+    %svg{ class: "fill-current w-4 h-4 text-gray-600 pointer-events-none inverted", viewBox: "0 0 20 20" }
+      %clipPath{ id: clipId }
+        %path{ d: "M20,20l-20,0l0,-20l20,0l0,20Zm-17,-9.291l4.9,5.129l9.1,-9.525l-2.1,-2.151l-7,7.543l-2.8,-3.429l-2.1,2.433Z" }
+
+      %g{ clip: { path: "url(##{ clipId })" } }
+        %path{ d: "M20,3.5c0,-1.932 -1.568,-3.5 -3.5,-3.5l-13,0c-1.932,0 -3.5,1.568 -3.5,3.5l0,13c0,1.932 1.568,3.5 3.5,3.5l13,0c1.932,0 3.5,-1.568 3.5,-3.5l0,-13Z" }
+
+  - if has_label
+    %div{ class: "select-none whitespace-no-wrap" }= label

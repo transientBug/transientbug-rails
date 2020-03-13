@@ -1,0 +1,62 @@
+@define-mixin button-colors $bg, $border, $text {
+  @apply bg-$(bg) text-$(text) border border-$(border);
+
+  transition: all 100ms ease-in-out;
+}
+
+.button {
+  @apply text-center font-semibold py-3 px-4 mt-2 rounded cursor-pointer;
+
+  @add-mixin button-colors transparent, transparent, gray-800;
+
+  & > i, & > icon {
+    @apply mx-1;
+  }
+}
+
+@variants hover, active {
+  .button-gray {
+    @add-mixin button-colors gray-400, transparent, gray-800;
+  }
+
+  /*
+   * TODO: Is there a better pattern for this sort of pattern
+   * where a solid button starts off dimmer and gets brighter/darker
+   * when hovered over or active?
+   */
+  .button-light-gray {
+    @add-mixin button-colors gray-300, transparent, gray-600;
+  }
+
+  .button-gray-outline {
+    @add-mixin button-colors transparent, gray-700, gray-800;
+  }
+
+  .button-light-gray-outline {
+    @add-mixin button-colors transparent, gray-500, gray-600;
+  }
+
+  .button-white {
+    @add-mixin button-colors white, transparent, gray-900;
+  }
+
+  .button-white-outline {
+    @add-mixin button-colors transparent, white, gray-900;
+  }
+
+  .button-red {
+    @add-mixin button-colors red-600, transparent, white;
+  }
+
+  .button-light-red {
+    @add-mixin button-colors red-300, transparent, red-600;
+  }
+
+  .button-red-outline {
+    @add-mixin button-colors transparent, red-600, red-600;
+  }
+
+  .button-light-red-outline {
+    @add-mixin button-colors transparent, red-300, red-600;
+  }
+}

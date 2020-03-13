@@ -1,4 +1,6 @@
 class ProfilesController < ApplicationController
+  layout "page"
+
   require_login!
   before_action :set_user
 

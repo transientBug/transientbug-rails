@@ -1,0 +1,7 @@
+.tb.tags {
+  @apply flex flex-row flex-wrap mt-1;
+}
+
+.tb.tag {
+  @apply inline-block bg-gray-200 rounded px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-1;
+}

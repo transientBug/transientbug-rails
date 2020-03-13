@@ -19,25 +19,33 @@
 
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self, :https
-  policy.font_src    :self, :https, :data, "fonts.gstatic.com"
+  policy.font_src    :self, :https, :data
   policy.img_src     :self, :https, :data
   policy.object_src  :none
-  policy.script_src  :self, :https, :unsafe_inline
-  policy.style_src   :self, :https, :unsafe_inline, "fonts.googleapis.com"
+  policy.script_src  :self, :https
+  policy.style_src   :self, :https
 
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
-    policy.script_src  :self, :https, :unsafe_inline, :unsafe_eval, "http://localhost:*", "http://0.0.0.0:*"
-    policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035"
+    policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_eval, :unsafe_inline
+    policy.connect_src :self, :https, "http://localhost:3036", "ws://localhost:3036"
+    policy.style_src :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_inline
   end
 
   # Specify URI for violation reports
-  # policy.report_uri  "/csp-violation-report-endpoint"
+  policy.report_uri  "/csp-violation-report"
 end
 
 # If you are using UJS then enable automatic nonce generation
-Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
-
+unless Rails.env.development?
+  Rails.application.config.content_security_policy_nonce_generator = -> request do
+    if request.env['HTTP_TURBOLINKS_REFERRER'].present?
+      request.env['HTTP_X_TURBOLINKS_NONCE']
+    else
+      SecureRandom.base64(16)
+    end
+  end
+end
 # Set the nonce only to specific directives
 # Rails.application.config.content_security_policy_nonce_directives = %w(script-src)
 

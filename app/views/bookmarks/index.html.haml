@@ -1,6 +1,29 @@
 - content_for :page_title do
   Bookmarks
 
-%h1 Your Bookmarks
+%h2.dividing Your bookmarks
 
-= render partial: "bookmarks_list", locals: { bookmarks: @bookmarks }
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
+
+- content_for :sidebar do
+  - if @bookmarks.any?
+    = render "bookmarks/bulk-actions"
+
+- if @bookmarks.any?
+  = paginate @bookmarks
+
+  - @bookmarks.each do |bookmark|
+    = render "components/bookmark_card", bookmark: bookmark do
+      = behavior_data "bulk-action-select-single", id: bookmark.id do |dataset|
+        = render "components/checkbox", dataset: dataset
+
+  = paginate @bookmarks
+
+- else
+  %h1
+    %i.bookmark.icon
+    No bookmarks found!
+
+  %p
+    Maybe
+    = link_to "make one?", new_bookmark_path

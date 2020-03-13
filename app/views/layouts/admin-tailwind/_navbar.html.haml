@@ -1,0 +1,43 @@
+- if partial_for? "navbar"
+  = render partial: "navbar"
+
+%nav.navbar
+  .navbar__container
+    .navbar__inner
+      .navbar__section
+        = link_to admin_root_path, class: "navbar__logo-link" do
+          = image_tag "bug_logo.png", class: "navbar__logo-img"
+          %h2.navbar__logo-header transientBug Admin
+
+      .navbar__section.navbar__section--growable( class="hidden md:flex" )
+        .navbar__row.navbar__row--centered
+          = content_for :navbar_center
+
+      .navbar__section
+        .navbar__row
+          = content_for :navbar_right
+
+          .dropdown.navbar__dropdown.dropdown--hoverable
+            = behavior_data "dropdown", active: "navbar__button--active" do |dataset|
+              %button.dropdown__trigger.navbar__button{ **dataset }
+                %span( class="hidden lg:inline mr-2" )
+                  Hi, #{ current_user.username }
+
+                %svg( viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="inline" )
+                  %line( x1="3" y1="12" x2="21" y2="12" )
+                  %line( x1="3" y1="6" x2="21" y2="6" )
+                  %line( x1="3" y1="18" x2="21" y2="18" )
+
+            .dropdown__container.navbar__dropdown-container.hidden
+              .dropdown__menu.navbar__dropdown-menu
+                - if content_for? :navbar_dropdown
+                  .dropdown__row
+                    = content_for :navbar_dropdown
+                  .dropdown__divider
+
+                .dropdown__row
+                  = link_to "Exit Admin", root_path, class: "dropdown__link"
+
+                .dropdown__divider
+                .dropdown__row
+                  = link_to "Logout", logout_path, class: "dropdown__link"

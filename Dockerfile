@@ -1,21 +1,16 @@
 FROM ruby:2.6.3-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 
-RUN apk add --no-cache --update build-base postgresql-dev postgresql git curl
+WORKDIR /app
+VOLUME ["/dropzone"]
 
 RUN echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpinelinux.org/alpine/edge/community\nhttp://dl-cdn.alpinelinux.org/alpine/edge/testing' > /etc/apk/repositories && \
-    apk add --no-cache nodejs-current yarn
-
-RUN mkdir /app
-RUN mkdir /dropzone
-WORKDIR /app
-
-COPY Gemfile Gemfile.lock ./
-RUN echo "install: --no-document" > $HOME/.gemrc && echo "update: --no-document" >> $HOME/.gemrc
-RUN bundle install --binstubs --jobs 4 --without development test
+    apk add --no-cache build-base gcompat git curl postgresql-dev postgresql nodejs-current yarn && \
+    echo "install: --no-document" > $HOME/.gemrc && \
+    echo "update: --no-document" >> $HOME/.gemrc
 
 COPY . .
-
-VOLUME ["/app/public", "/dropzone"]
+RUN bundle install --binstubs --jobs 4 --without development test && \
+    bundle exec rake tmp:create
 
 CMD bundle exec puma -C config/puma.rb

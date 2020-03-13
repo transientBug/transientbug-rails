@@ -1,0 +1,13 @@
+input:not(:checked) + svg {
+  display: none;
+}
+
+input:checked + svg {
+  display: block;
+
+  &.inverted {
+    @apply h-6 w-6;
+
+    flex-shrink: 0;
+  }
+}
