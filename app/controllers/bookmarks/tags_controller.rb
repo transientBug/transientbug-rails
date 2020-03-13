@@ -5,7 +5,6 @@ class Bookmarks::TagsController < ApplicationController
   def index; end
 
   # GET /bookmarks/tags/thing
-  # GET /bookmarks/tags/thing.json
   def show
     @bookmarks = policy_scope(Bookmark)
       .joins(:bookmarks_tags)

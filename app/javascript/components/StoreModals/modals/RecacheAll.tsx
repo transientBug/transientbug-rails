@@ -6,19 +6,23 @@ import Button from "../../Button"
 
 import { bulk } from "../../../api"
 
-import pluralize from "pluralize"
 import Turbolinks from "turbolinks"
+import pluralize from "pluralize"
 
-import { connect } from "../../../store"
+import { connect } from "react-redux"
+import { RootState } from "../../../store/store"
 
-interface RecacheAllModalProps {
+interface OwnProps {
   close: ModalClose
-  records: any[]
-  ids: number[]
-  headers: string[]
-  wording: string
   url: string
 }
+
+interface StateProps {
+  ids: number[]
+  wording: string
+}
+
+type RecacheAllModalProps = OwnProps & StateProps
 
 const RecacheAllModal: React.FC<RecacheAllModalProps> = ({
   close,
@@ -68,8 +72,8 @@ const RecacheAllModal: React.FC<RecacheAllModalProps> = ({
 }
 
 export default connect(
-  ({ records, selection }) => ({
-    ids: selection,
+  ({ records, selection }: RootState) => ({
+    ids: selection.selection,
     wording: records.type
   }),
   {}

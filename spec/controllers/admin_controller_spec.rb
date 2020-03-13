@@ -37,7 +37,7 @@ RSpec.describe AdminController do
     end
 
     context "with an admin user" do
-      let(:user) { create :user, :with_role, role_names: :admin }
+      let(:user) { create :user, :with_permissions, roles_and_permissions: { admin: [] } }
 
       before do
         session[:user_id] = user.id

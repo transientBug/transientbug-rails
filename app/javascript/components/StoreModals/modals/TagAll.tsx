@@ -8,21 +8,25 @@ import CreatableSelect from "react-select/async-creatable"
 
 import { get, bulk } from "../../../api"
 
-import pluralize from "pluralize"
 import Turbolinks from "turbolinks"
+import pluralize from "pluralize"
 import { debounce } from "lodash"
 
-import { connect } from "../../../store"
+import { connect } from "react-redux"
+import { RootState } from "../../../store/store"
 
-interface TagAllModalProps {
+interface OwnProps {
   close: ModalClose
-  records: any[]
-  ids: number[]
-  headers: string[]
-  wording: string
   url: string
   autocompleteUrl: string
 }
+
+interface StateProps {
+  ids: number[]
+  wording: string
+}
+
+type TagAllModalProps = OwnProps & StateProps
 
 const TagAllModal: React.FC<TagAllModalProps> = ({
   close,
@@ -110,8 +114,8 @@ const TagAllModal: React.FC<TagAllModalProps> = ({
 }
 
 export default connect(
-  ({ records, selection }) => ({
-    ids: selection,
+  ({ records, selection }: RootState) => ({
+    ids: selection.selection,
     wording: records.type
   }),
   {}

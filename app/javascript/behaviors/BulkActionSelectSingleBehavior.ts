@@ -1,7 +1,7 @@
 import Behavior, { ForBehavior, OnEvent } from "../lib/Behaviors"
 
-import store from "../store"
-import { operations } from "../store/selections"
+import store, { RootState } from "../store/store"
+import { actions } from "../store/slices/selections"
 
 interface Args {
   id: string | number
@@ -18,16 +18,18 @@ export default class BulkActionSelectSingleBehavior extends Behavior<Args> {
   }
 
   OnDisconnect = () => {
-    store.unsubscribe(this.unsubscribe)
+    this.unsubscribe()
   }
 
   @OnEvent("click")
   click(event) {
-    if (this.checkbox.checked) store.dispatch(operations.add(this.args.id))
-    else store.dispatch(operations.remove(this.args.id))
+    if (this.checkbox.checked) store.dispatch(actions.add(this.args.id))
+    else store.dispatch(actions.remove(this.args.id))
   }
 
-  protected subscriber = ({ selection }) => {
-    this.checkbox.checked = selection.includes(this.args.id)
+  protected subscriber = () => {
+    const { selection } = store.getState() as RootState
+
+    this.checkbox.checked = selection.selection.includes(this.args.id)
   }
 }

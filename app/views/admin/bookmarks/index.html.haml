@@ -1,21 +1,39 @@
 - content_for :page_title do
   Bookmarks
 
-- content_for :store do
-  != { records: store_records(@bookmarks, only: [:id, :title, :uri]) }.to_json
+- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
 
 - content_for :menu do
   .bulk-action-menu
-    = react_component "BulkActions/Header"
-    = react_component "BulkActions/admin/RecacheAll", actionUrl: admin_bookmarks_bulk_recache_path
-    = react_component "BulkActions/admin/DeleteAll", actionUrl: admin_bookmarks_bulk_delete_path
+    = behavior_data "bulk-action-visibility" do |vis_dataset|
+      .hidden{ **vis_dataset }
+        %h2
+          Bulk Actions
+          %small
+            (
+            = behavior_data "bulk-action-count" do |dataset|
+              %span{ **dataset }
+            selected bookmarks )
+
+        = behavior_data "display-modal", modal: "TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path do |dataset|
+          %button{ class: "button button-light-gray button-gray-outline text-gray-800 hover:button-gray", **dataset }
+            %i.tags.icon
+            Add Tags
+
+        = behavior_data "display-modal", modal: "DeleteAll", actionUrl: bookmarks_bulk_delete_path do |dataset|
+          %button{ class: "button button-red-outline hover:button-red text-red hover:text-white", **dataset }
+            %i.trash.icon
+            Delete All
 
 = paginate @bookmarks
 
 %table.ui.celled.table
   %thead
     %tr
-      %th= react_component "BulkActions/SelectAll"
+      %th
+        = behavior_data "bulk-action-select-all" do |dataset|
+          = render "components/checkbox", dataset: dataset
+
       %th Actions
       %th ID
       %th Creator
@@ -27,7 +45,10 @@
     - if @bookmarks.any?
       - @bookmarks.each do |bookmark|
         %tr
-          %td.collapsing= react_component "BulkActions/SelectSingle", id: bookmark.id
+          %td.collapsing
+            = behavior_data "bulk-action-select-single", id: bookmark.id do |dataset|
+              = render "components/checkbox", dataset: dataset
+
           %td.collapsing
             .ui.buttons
               = link_to admin_bookmark_path(bookmark), class: "ui icon button" do 
