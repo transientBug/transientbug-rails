@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   # Ruby blocks don't closure over more than local variables, but we can
   # get around that with this "cloaker" hack. First we make an

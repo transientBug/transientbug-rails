@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Bookmarks::Bulk::DeletesController < ApplicationController
   require_login!
   before_action :set_bookmarks

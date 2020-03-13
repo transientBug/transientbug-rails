@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Oauth::Applications::Bulk::DeletesController < ApplicationController
   require_login!
   before_action :set_applications

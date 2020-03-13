@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebpageCacheService
   class Render
     extend Forwardable

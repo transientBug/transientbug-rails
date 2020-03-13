@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   class Transformer < Parslet::Transform
     attr_reader :index

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe BookmarksIndex, type: :chewy do
   describe ".build_host_iterations" do
     subject { described_class.build_host_iterations bookmark }

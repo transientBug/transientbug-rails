@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookmarkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve

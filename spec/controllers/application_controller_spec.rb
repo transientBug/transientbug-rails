@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ApplicationController do
   describe "#require_login" do
     controller do

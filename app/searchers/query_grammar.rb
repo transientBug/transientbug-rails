@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   class Error < StandardError
     def initialize message, line, column, original=nil, *args

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::BookmarksController < AdminController
   before_action :set_count
   before_action :set_bookmark, only: [ :show, :destroy ]

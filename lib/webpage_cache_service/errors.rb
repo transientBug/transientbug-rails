@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebpageCacheService
   # Basic extension of a hash the provides a basic ActiveModel::Errors like
   # interface which remaining serializable and easy to work with.

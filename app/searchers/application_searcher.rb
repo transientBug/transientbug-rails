@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationSearcher
   class << self
     attr_reader :index, :compiler, :search

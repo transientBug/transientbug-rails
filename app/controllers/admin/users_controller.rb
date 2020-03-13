@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Admin::UsersController < AdminController
   layout "admin-tailwind"
 
   before_action :set_count
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update]
 
   # GET /admin/users
   def index

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Doorkeeper::ApplicationPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve

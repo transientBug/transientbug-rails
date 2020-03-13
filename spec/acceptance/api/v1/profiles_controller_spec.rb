@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.resource "v1 Profile" do
   let(:user) { create(:user) }
   let(:auth_token) { "#{ user.email }:#{ user.api_token }" }

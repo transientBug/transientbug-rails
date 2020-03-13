@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Bookmarks::Tags::AutocompleteController < ApplicationController
   # GET /bookmarks/tags/autocomplete.json
   def index

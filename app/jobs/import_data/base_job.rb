@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImportData::BaseJob < ApplicationJob
   queue_as :default
   attr_reader :import_data

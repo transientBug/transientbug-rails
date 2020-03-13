@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::InvitationsController < AdminController
   before_action :set_count
   before_action :set_invitation, only: [:show, :edit, :update, :destroy]

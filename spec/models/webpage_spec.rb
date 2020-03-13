@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Webpage do
   describe "bookmark associations" do
     it "has many bookmarks" do

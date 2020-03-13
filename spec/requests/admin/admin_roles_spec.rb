@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 # https://relishapp.com/rspec/rspec-rails/docs/request-specs/request-spec

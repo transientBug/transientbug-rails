@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require "rspec_api_documentation/dsl"
 
 RspecApiDocumentation.configure do |config|
-  config.request_headers_to_include = %w[ Content-Type Accept ]
-  config.response_headers_to_include = %w[ Content-Type ]
+  config.request_headers_to_include = [ "Content-Type", "Accept" ]
+  config.response_headers_to_include = [ "Content-Type" ]
 
   config.format = :json
 
   config.define_group :api_v1 do |group_config|
-    group_config.docs_dir = Rails.root.join("doc", "api", "v1")
+    group_config.docs_dir = Rails.root.join("doc/api/v1")
 
     group_config.filter = :api_v1
   end

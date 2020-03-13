@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe AdminController do
   controller do
     def action_requiring_admin

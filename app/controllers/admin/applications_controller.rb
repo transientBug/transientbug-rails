@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ApplicationsController < AdminController
   before_action :set_count
   before_action :set_application, only: [:show, :edit, :update, :destroy]

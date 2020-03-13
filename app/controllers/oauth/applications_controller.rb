@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Oauth::ApplicationsController < ApplicationController
   layout "page"
 
@@ -32,7 +34,7 @@ class Oauth::ApplicationsController < ApplicationController
   def edit; end
 
   def update
-    if @application.update_attributes(application_params)
+    if @application.update(application_params)
       flash[:info] = "Application updated"
       redirect_to oauth_application_url(@application)
     else

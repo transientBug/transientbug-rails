@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::RolesController < AdminController
   before_action :set_count
   before_action :set_role, only: [:show, :edit, :update, :destroy]

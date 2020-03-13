@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookmarksIndex < Chewy::Index
   settings analysis: {
     analyzer: {

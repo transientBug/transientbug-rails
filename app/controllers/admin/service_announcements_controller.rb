@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ServiceAnnouncementsController < AdminController
   before_action :set_count
   before_action :set_service_announcement, only: [:show, :edit, :update, :destroy]
