@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   class Index
     class Dsl

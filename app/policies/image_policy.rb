@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -16,7 +18,7 @@ class ImagePolicy < ApplicationPolicy
   end
 
   def show?
-    return !record.disabled? unless user.present?
+    return !record.disabled? if user.blank?
 
     user.role? :admin
   end

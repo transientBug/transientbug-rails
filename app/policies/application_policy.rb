@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -15,7 +17,7 @@ class ApplicationPolicy
   end
 
   def create?
-    return false unless user.present?
+    return false if user.blank?
 
     return true if user.role? :admin
 
@@ -27,7 +29,7 @@ class ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
 
     return true if user.role? :admin
 
@@ -39,7 +41,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
 
     return true if user.role? :admin
 

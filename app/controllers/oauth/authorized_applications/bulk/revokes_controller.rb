@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Oauth::AuthorizedApplications::Bulk::RevokesController < ApplicationController
   require_login!
 

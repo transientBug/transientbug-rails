@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveRecordUpsert
   def upsert *attributes
     find_or_create_by(*attributes)

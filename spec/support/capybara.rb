@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "selenium/webdriver"
 
 # https://robots.thoughtbot.com/headless-feature-specs-with-chrome

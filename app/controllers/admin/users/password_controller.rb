@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Users::PasswordController < AdminController
   before_action :set_user
 

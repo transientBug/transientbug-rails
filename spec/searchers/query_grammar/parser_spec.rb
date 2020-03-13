@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "parslet/rig/rspec"
 
 RSpec.describe QueryGrammar::Parser do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   # Query Grammar Definition
   # Enables parsing something like this:

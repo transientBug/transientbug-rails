@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Admin::UsersController < AdminController
   layout "admin-tailwind"
 
   before_action :set_count
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update]
 
   # GET /admin/users
   def index
@@ -27,7 +29,7 @@ class Admin::UsersController < AdminController
   def create
     @user = User.new new_user_params
 
-    return render :new, status: 400 unless @user.save
+    return render :new, status: :bad_request unless @user.save
 
     redirect_to [:admin, @user], notice: "User was successfully created."
   end
@@ -40,7 +42,7 @@ class Admin::UsersController < AdminController
 
   # PATCH/PUT /admin/users/1
   def update
-    return render :edit, status: 400 unless @user.update edit_user_params
+    return render :edit, status: :bad_request unless @user.update edit_user_params
 
     redirect_to [:admin, @user], notice: "User was successfully updated."
   end

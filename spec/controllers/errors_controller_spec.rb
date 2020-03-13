@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ErrorsController, type: :controller do
   describe "GET #not_found" do
     it "returns http success" do

@@ -115,6 +115,8 @@ group :development do
 
   gem "better_errors"
   gem "binding_of_caller"
+
+  gem "annotate"
 end
 
 group :development, :test do
@@ -134,7 +136,7 @@ group :development, :test do
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails", github: "rspec/rspec-rails", branch: "4-0-dev" #, "~> 3.5"
+  gem "rspec-rails", "~> 4.0.0.beta"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"
@@ -163,9 +165,6 @@ group :test do
   # Test rack things
   gem "rack-test"#, "~> 0.7.0"
 
-  # A Mockery of Time
-  gem "timecop"
-
   # A Mockery of Requests
   gem "webmock"
 
@@ -176,6 +175,7 @@ group :test do
   gem "database_cleaner"
 
   # Check things
-  gem "rubocop"
-  gem "rubocop-rspec"
+  gem "rubocop", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rails", require: false
 end

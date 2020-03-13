@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "clockwork"
 require "clockwork/database_events"
 require_relative "./config/boot"

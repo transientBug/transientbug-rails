@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Invitations::Bulk::DisablesController < AdminController
   before_action :set_invitation
 

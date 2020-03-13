@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImportData::PinboardJob < ImportData::BaseJob
   def parse_file
     JSON.parse import_data.upload.download
@@ -7,7 +9,7 @@ class ImportData::PinboardJob < ImportData::BaseJob
     raw_tags = entry["tags"].split(",").map(&:chomp)
     tags = Tag.find_or_create_tags tags: raw_tags
 
-    created_at = Time.parse entry["time"]
+    created_at = Time.zone.parse entry["time"]
 
     # See also https://pinboard.in/api/#posts_add
     #

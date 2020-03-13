@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Nearly 100% copy pasta from devise
 # https://github.com/plataformatec/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
 module PreviousRedirectStorage

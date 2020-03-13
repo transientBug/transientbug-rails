@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Bookmarks::CheckController < Api::V1Controller
   # GET /api/v1/bookmarks/check
   def index

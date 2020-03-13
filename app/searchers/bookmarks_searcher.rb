@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookmarksSearcher < ApplicationSearcher
   define_index do
     # Sets up information about which types from the search index can have what

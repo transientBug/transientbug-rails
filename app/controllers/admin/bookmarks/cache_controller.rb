@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "webpage_cache_service"
 
 class Admin::Bookmarks::CacheController < AdminController

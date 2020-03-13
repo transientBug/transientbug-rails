@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FormHelpers
   def errors_for field
     has_error = object.errors.key? field

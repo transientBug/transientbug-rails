@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QueryGrammar
   module Ast
     autoload :Node, "query_grammar/ast/node"

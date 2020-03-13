@@ -22,7 +22,7 @@ jobs:
 
       - name: Install deps
         run: |
-          gem install rubocop rubocop-rspec
+          gem install rubocop rubocop-rspec rubocop-rails
 
       - name: Run rubocop
         run: |

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::BookmarksController < Api::V1Controller
   before_action :set_bookmark, only: [:show, :update, :destroy]
 
