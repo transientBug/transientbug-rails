@@ -1,9 +1,6 @@
 class BookmarkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      # return scope.where(public: true) unless user.present?
-      # return scope.all if user.role? :admin
-
       scope.where(user: user).order(created_at: :desc)
     end
   end

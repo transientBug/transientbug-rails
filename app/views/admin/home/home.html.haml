@@ -22,4 +22,5 @@
 
 %ul
   %li= link_to "Sidekiq", sidekiq_web_path, data: { turbolinks: false }
-  %li= link_to "Logster", logster_web_path, data: { turbolinks: false }
+  - if Rails.env.production?
+    %li= link_to "Logster", logster_web_path, data: { turbolinks: false }

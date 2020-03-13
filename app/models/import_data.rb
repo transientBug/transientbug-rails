@@ -10,7 +10,7 @@ class ImportData < ApplicationRecord
     pocket: "pocket"
   }
 
-  after_create :schedule_import
+  after_create_commit :schedule_import
 
   def schedule_import
     ImportDataJob.perform_later import_data: self

@@ -142,47 +142,6 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
--- Name: authorizations; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.authorizations (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    provider character varying,
-    uid character varying,
-    name character varying,
-    nickname character varying,
-    email character varying,
-    image character varying,
-    token character varying,
-    secret character varying,
-    expires boolean,
-    expires_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: authorizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.authorizations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: authorizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.authorizations_id_seq OWNED BY public.authorizations.id;
-
-
---
 -- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -737,40 +696,6 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: searches; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.searches (
-    id bigint NOT NULL,
-    user_id bigint,
-    name character varying,
-    description text,
-    query jsonb,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.searches_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
-
-
---
 -- Name: service_announcements; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -840,6 +765,15 @@ CREATE SEQUENCE public.tags_id_seq
 --
 
 ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
+
+
+--
+-- Name: task_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.task_records (
+    version character varying NOT NULL
+);
 
 
 --
@@ -919,13 +853,6 @@ ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT n
 --
 
 ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
-
-
---
--- Name: authorizations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.authorizations ALTER COLUMN id SET DEFAULT nextval('public.authorizations_id_seq'::regclass);
 
 
 --
@@ -1034,13 +961,6 @@ ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_
 
 
 --
--- Name: searches id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.searches_id_seq'::regclass);
-
-
---
 -- Name: service_announcements id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1090,14 +1010,6 @@ ALTER TABLE ONLY public.active_storage_blobs
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
-
-
---
--- Name: authorizations authorizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.authorizations
-    ADD CONSTRAINT authorizations_pkey PRIMARY KEY (id);
 
 
 --
@@ -1229,14 +1141,6 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: searches searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.searches
-    ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
-
-
---
 -- Name: service_announcements service_announcements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1287,13 +1191,6 @@ CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active
 --
 
 CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
-
-
---
--- Name: index_authorizations_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_authorizations_on_user_id ON public.authorizations USING btree (user_id);
 
 
 --
@@ -1451,13 +1348,6 @@ CREATE UNIQUE INDEX index_roles_on_name ON public.roles USING btree (name);
 
 
 --
--- Name: index_searches_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_searches_on_user_id ON public.searches USING btree (user_id);
-
-
---
 -- Name: index_users_on_auth_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1527,14 +1417,6 @@ ALTER TABLE ONLY public.invitations_users
 
 
 --
--- Name: authorizations fk_rails_4ecef5b8c5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.authorizations
-    ADD CONSTRAINT fk_rails_4ecef5b8c5 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
 -- Name: oauth_access_tokens fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1588,14 +1470,6 @@ ALTER TABLE ONLY public.bookmarks
 
 ALTER TABLE ONLY public.active_storage_attachments
     ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
-
-
---
--- Name: searches fk_rails_e192b86393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.searches
-    ADD CONSTRAINT fk_rails_e192b86393 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -1667,6 +1541,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190720230313'),
 ('20190724044957'),
 ('20190724174108'),
-('20190820175931');
+('20190820175931'),
+('20191007044907'),
+('20200306005902'),
+('20200306022709');
 
 
