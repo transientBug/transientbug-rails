@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Users::PasswordController < AdminController
+  layout "admin-tailwind"
+
   before_action :set_user
 
   # GET /admin/users/1/password
@@ -8,13 +10,9 @@ class Admin::Users::PasswordController < AdminController
 
   # POST /admin/users/1/password
   def create
-    respond_to do |format|
-      if @user.update password_params
-        format.html { redirect_to admin_user_path(@user), notice: "Password updated." }
-      else
-        format.html { render :index }
-      end
-    end
+    return render :index, status: :bad_request unless @user.update password_params
+
+    redirect_to admin_user_path(@user), notice: "Password updated."
   end
 
   private

@@ -3,7 +3,6 @@
 class Admin::UsersController < AdminController
   layout "admin-tailwind"
 
-  before_action :set_count
   before_action :set_user, only: [:show, :edit, :update]
 
   # GET /admin/users
@@ -18,6 +17,8 @@ class Admin::UsersController < AdminController
     @users = User.all
     @users = @users.where(base_where) if query_param.present? && !query_param.empty?
     @users = @users.order(created_at: :desc).page params[:page]
+
+    @count = User.count
   end
 
   # GET /admin/users/new
@@ -51,10 +52,6 @@ class Admin::UsersController < AdminController
 
   def set_user
     @user = User.find params[:id]
-  end
-
-  def set_count
-    @count = User.count
   end
 
   def role_models

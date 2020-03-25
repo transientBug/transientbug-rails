@@ -61,8 +61,10 @@
               .dropdown__container.hidden
                 .dropdown__menu
                   .dropdown__row
-                    %h6.dropdown__header DangerZone
                     = link_to "Edit", edit_admin_user_path(user), class: "dropdown__link"
+                  .dropdown__row
+                    %h6.dropdown__header DangerZone
+                    = link_to "Change Password", admin_user_password_index_path(user), class: "dropdown__link"
 
   - else
     %li( class="px-5 py-5 border-b border-gray-300 text-sm" )
