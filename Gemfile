@@ -103,6 +103,8 @@ gem "slack-notifier"
 # API Documentation from RAD
 gem "apitome"
 
+gem "annotate"
+
 group :production do
   # Utils
   gem "logster"
@@ -116,7 +118,6 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
 
-  gem "annotate"
 end
 
 group :development, :test do
