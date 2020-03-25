@@ -11,6 +11,7 @@ class Admin::Users::PasswordController < AdminController
   # POST /admin/users/1/password
   def create
     return render :index, status: :bad_request unless @user.update password_params
+
     redirect_to admin_user_path(@user), notice: "Password updated."
   end
 
