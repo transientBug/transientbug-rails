@@ -1,19 +1,29 @@
-= form_for [:admin, user], url: admin_user_password_index_path(user), html: { class: "ui fluid form" } do |f|
+= form_with model: user, url: admin_user_password_index_url(user), method: :post, local: true, class: "form" do |form|
   - if user.errors.any?
-    .ui.message.error
+    .form__errors
       %h2= "#{ pluralize user.errors.count, "error" } prohibited this user from being saved:"
-      %ul
+      %ul.form__errors-list
         - user.errors.full_messages.each do |message|
-          %li= message
+          %li.form__errors-item= message
 
-  %h4.ui.dividing.header Users Password
+  %fieldset.form__fieldset
+    %legend.form__legend Password
 
-  .required.field
-    = f.label :password
-    = f.password_field :password, aria: { describedby: "Users Password" }
+    - form.errors_for :password do |has_error, error_messages|
+      .form__field{ class: ("form__field--error" if has_error) }
+        = form.label :password, class: "form__label"
+        = form.password_field :password, aria: { describedby: "Users Password" }, class: "form__input"
 
-  .required.field
-    = f.label :password_confirmation
-    = f.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }
+        - if has_error
+          %p.form__field-error= error_messages.join(", ")
 
-  = f.submit "Save", class: "ui positive right floated submit button"
+    - form.errors_for :password_confirmation do |has_error, error_messages|
+      .form__field{ class: ("form__field--error" if has_error) }
+        = form.label :password_confirmation, class: "form__label"
+        = form.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }, class: "form__input"
+
+        - if has_error
+          %p.form__field-error= error_messages.join(", ")
+
+  .form__actions
+    = form.submit "Save", class: "button button--green"
