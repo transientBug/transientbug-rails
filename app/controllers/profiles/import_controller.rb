@@ -1,4 +1,6 @@
 class Profiles::ImportController < ApplicationController
+  layout "page"
+
   require_login!
 
   # GET /profiles/imports

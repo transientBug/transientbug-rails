@@ -1,3 +1,3 @@
-import KeyboardShortcut from "./KeyboardShortcut";
+import KeyboardShortcut from "./KeyboardShortcut"
 
-export default KeyboardShortcut;
+export default KeyboardShortcut

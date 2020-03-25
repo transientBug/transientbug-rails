@@ -4,3 +4,4 @@ scssTypes: yarn watch-typings
 worker: bundle exec sidekiq
 cron: bundle exec clockwork clock.rb
 mail: mailcatcher -f
+elasticsearch: elasticsearch

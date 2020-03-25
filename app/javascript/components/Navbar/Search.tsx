@@ -1,65 +1,65 @@
-import React, { useEffect, useState, useRef, ChangeEvent } from "react";
+import React, { useEffect, useState, useRef, ChangeEvent } from "react"
 
-import KeyboardShortcut from "../KeyboardShortcut";
-import Dropdown from "./Dropdown";
+import KeyboardShortcut from "../KeyboardShortcut"
+import Dropdown from "./Dropdown"
 
-import * as styles from "./Search.module.scss";
+import * as styles from "./Search.module.scss"
 
 interface SearchProps {
-  query: string;
-  path: string;
-  placeholder: string;
+  query: string
+  path: string
+  placeholder: string
 }
 
 const Search: React.FC<SearchProps> = ({
   query = "",
   path = "",
-  placeholder = "Search Bookmarks ..."
+  placeholder = `Search your bookmarks (Press "/" to focus)`
 }) => {
-  const wrapperRef = useRef<HTMLDivElement>();
-  const queryInputRef = useRef<HTMLInputElement>();
-  const formRef = useRef<HTMLFormElement>();
+  const wrapperRef = useRef<HTMLDivElement>()
+  const queryInputRef = useRef<HTMLInputElement>()
+  const formRef = useRef<HTMLFormElement>()
 
   const submit = (e: Event) => {
-    formRef.current.submit();
-    e.preventDefault();
-  };
+    formRef.current.submit()
+    e.preventDefault()
+  }
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const open = (e: Event) => {
-    setIsOpen(true);
-    e.preventDefault();
-  };
+    setIsOpen(true)
+    e.preventDefault()
+  }
 
   const close = (e: Event) => {
-    setIsOpen(false);
-    e.preventDefault();
-  };
+    setIsOpen(false)
+    e.preventDefault()
+  }
 
   useEffect(() => {
-    if (!isOpen) queryInputRef.current.blur();
-    else queryInputRef.current.focus();
-  }, [isOpen]);
+    if (!isOpen) queryInputRef.current.blur()
+    else queryInputRef.current.focus()
+  }, [isOpen])
 
   const handleOutsideClick = (e: MouseEvent) => {
-    if (wrapperRef.current.contains(e.target as Node)) return;
-    if (!isOpen) return;
+    if (wrapperRef.current.contains(e.target as Node)) return
+    if (!isOpen) return
 
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick, false);
+    document.addEventListener("mousedown", handleOutsideClick, false)
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick, false);
-    };
-  }, [handleOutsideClick]);
+      document.removeEventListener("mousedown", handleOutsideClick, false)
+    }
+  }, [handleOutsideClick])
 
-  const [queryInput, setQueryInput] = useState(query);
+  const [queryInput, setQueryInput] = useState(query)
   const updateQuery = (e: ChangeEvent<HTMLInputElement>) =>
-    setQueryInput(e.target.value);
+    setQueryInput(e.target.value)
 
   return (
     <div
@@ -94,7 +94,7 @@ const Search: React.FC<SearchProps> = ({
       </div>
       {isOpen && <Dropdown search={submit} close={close} />}
     </div>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

@@ -4,6 +4,6 @@ module.exports = {
   loader: 'eslint-loader',
   enforce: "pre",
   options: {
-    failOnError: true
+    failOnError: false
   }
 }

@@ -1,12 +1,18 @@
 !!! 5
 %html
   %head
-    = render partial: "layouts/head"
+    = render "layouts/common/head" do
+      %title transientBug #{ content_for :page_title }
 
-    = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
-    = javascript_pack_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_link_tag "public", media: "all", "data-turbolinks-track": "reload"
+      = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+
+      = stylesheet_pack_tag "public", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name ] }
-    = render partial: "layouts/body"
+    = render "layouts/common/store"
 
-    = render partial: "layouts/footer"
+    = render "layouts/application/body"
+
+    = render "layouts/common/footer"

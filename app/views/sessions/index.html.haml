@@ -1,28 +1,27 @@
 - content_for :page_title do
   Login
 
-- content_for :custom_grid do
-  .ui.stackable.center.aligned.grid
-    .ui.middle.aligned.row
-      .six.wide.column
-        %h2.ui.image.header
-          = image_tag "bug_logo.png", class: "image"
-          .content
-            Login
+.ui.stackable.center.aligned.grid
+  .ui.middle.aligned.row
+    .six.wide.column
+      %h2.ui.image.header
+        = image_tag "bug_logo.png", class: "image"
+        .content
+          Login
 
-        = form_tag login_path, method: :post, class: "ui form" do
-          .ui.error.message
-          .field
-            .ui.left.icon.input
-              %i.user.icon
-              = text_field_tag "email", "", placeholder: "Email"
+      = form_tag login_path, method: :post, class: "ui form" do
+        .ui.error.message
+        .field
+          .ui.left.icon.input
+            %i.user.icon
+            = text_field_tag "email", "", placeholder: "Email"
 
-          .field
-            .ui.left.icon.input
-              %i.lock.icon
-              = password_field_tag "password", "", placeholder: "**************"
+        .field
+          .ui.left.icon.input
+            %i.lock.icon
+            = password_field_tag "password", "", placeholder: "**************"
 
-          = submit_tag "Login", class: "ui fluid large green submit button"
+        = submit_tag "Login", class: "ui fluid large green submit button"
 
-        .ui.message
-          Have an invite code? #{ link_to "Use it!", invites_path }
+      .ui.message
+        Have an invite code? #{ link_to "Use it!", invites_path }

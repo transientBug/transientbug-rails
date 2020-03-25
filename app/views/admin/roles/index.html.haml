@@ -1,0 +1,62 @@
+- content_for :page_title do
+  Roles
+
+- content_for :menu do
+  .item.hidden{ data: { group: "bulk-edit-menu" } }
+    .divider
+    .header Bulk Actions
+    .menu
+      .item
+        .ui.fluid.icon.button
+          %i.hide.icon
+          add permission to all
+
+      .item
+        .ui.fluid.icon.negative.basic.button
+          %i.trash.icon
+          delete all
+
+%table.ui.celled.table
+  %thead
+    %tr
+      %th= select_all_checkbox
+      %th Actions
+      %th ID
+      %th Name
+      %th Permissions
+      %th Created At
+
+  %tbody
+    - if @roles.any?
+      - @roles.each do |role|
+        %tr
+          %td.collapsing= model_tag role, only: [ :id, :name ]
+          %td.collapsing
+            .ui.buttons
+              = link_to admin_role_path(role), class: "ui icon button" do 
+                %i.expand.icon
+                view
+
+              .ui.simple.dropdown.icon.button
+                %i.dropdown.icon
+                .menu
+                  .divider
+                  .header
+                    %i.warning.sign.icon
+                    DANGERZONE
+
+                  = link_to edit_admin_role_path(role), class: "item" do
+                    %i.edit.icon
+                    edit
+
+          %td.collapsing= role.id
+          %td= role.name
+          %td= role.permissions.map { |permission| permission.name }.join ", "
+          %td.collapsing= role.created_at.to_s(:long)
+
+    - else
+      %tr
+        %td{ colspan: 6 }
+          No roles yet (this might be a problem, yo)
+
+= paginate @roles

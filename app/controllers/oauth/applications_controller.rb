@@ -1,4 +1,6 @@
 class Oauth::ApplicationsController < ApplicationController
+  layout "page"
+
   require_login!
   before_action :set_application, only: [:show, :edit, :update, :destroy]
 
@@ -20,7 +22,7 @@ class Oauth::ApplicationsController < ApplicationController
     authorize @application
 
     if @application.save
-      flash[:notice] = "Application registered"
+      flash[:info] = "Application registered"
       redirect_to oauth_application_url(@application)
     else
       render :new
@@ -31,7 +33,7 @@ class Oauth::ApplicationsController < ApplicationController
 
   def update
     if @application.update_attributes(application_params)
-      flash[:notice] = "Application updated"
+      flash[:info] = "Application updated"
       redirect_to oauth_application_url(@application)
     else
       render :edit
@@ -39,7 +41,7 @@ class Oauth::ApplicationsController < ApplicationController
   end
 
   def destroy
-    flash[:notice] = "Application deleted" if @application.destroy
+    flash[:info] = "Application deleted" if @application.destroy
     redirect_to oauth_applications_url
   end
 

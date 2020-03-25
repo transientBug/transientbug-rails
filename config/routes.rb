@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
       collection do
         scope as: :bookmarks do
+          resources :tag_wizard, only: [:index, :update]
+
           resources :search, only: [:index]
 
           resources :tags, only: [:index, :show] do
@@ -88,6 +90,8 @@ Rails.application.routes.draw do
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all
 
+  resources :csp_violation_report, only: [:create], path: '/csp-violation-report', format: false, defaults: { format: :js }
+
   resources :images do
     collection do
       get "search"
@@ -98,6 +102,9 @@ Rails.application.routes.draw do
 
   constraints RoleConstraint.new(:admin) do
     mount Sidekiq::Web => "/sidekiq"
-    mount Logster::Web => "/logs"
+
+    if Rails.env.production?
+      mount Logster::Web => "/logs"
+    end
   end
 end

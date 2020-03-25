@@ -1,0 +1,11 @@
+{
+  "semi": false,
+  "overrides": [
+    {
+      "files": "*.module.scss.d.ts",
+      "options": {
+        "semi": true
+      }
+    }
+  ]
+}

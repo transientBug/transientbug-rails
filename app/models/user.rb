@@ -1,34 +1,22 @@
 class User < ApplicationRecord
   default_scope { includes(:roles) }
 
-  has_many :authorizations
   has_and_belongs_to_many :roles
+  has_many :permissions, through: :roles
 
   has_many :images
-  has_many :bookmarks
-  has_many :searches
 
+  has_many :bookmarks
   has_many :import_data
 
   has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
   validates :username, presence: true
-  validates :email, presence: true
+  validates :email, presence: true, uniqueness: true
 
   has_secure_password
 
   before_create :set_auth_token
-
-  def self.find_or_create_from_auth_hash! auth_hash
-    email = auth_hash.dig "info", "email"
-
-    fail "Provider #{ auth_hash['provider'] } does not provide an email!" unless email.present?
-
-    find_by email: email
-    # find_or_create_by email: email do |user|
-    #   user.username = auth_hash.dig 'info', 'name'
-    # end
-  end
 
   def self.generate_unique_secure_token
     SecureRandom.uuid
@@ -67,6 +55,10 @@ class User < ApplicationRecord
 
   def role? name
     roles.find { |role| role.name == name.to_s }
+  end
+
+  def permission? key
+    permissions.any? { |permission| permission.key == key.to_s }
   end
 
   private

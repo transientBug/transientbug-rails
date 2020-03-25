@@ -1,0 +1,48 @@
+name: Styles
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - master
+
+jobs:
+  Rubocop:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+
+      - name: Install deps
+        run: |
+          gem install rubocop rubocop-rspec
+
+      - name: Run rubocop
+        run: |
+          rubocop
+
+  ESLint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Node 12.8
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.8.x
+
+      - name: Install deps
+        run: |
+          yarn install
+
+      - name: Run eslint
+        run: |
+          yarn lint
