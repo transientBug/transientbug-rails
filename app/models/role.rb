@@ -23,9 +23,7 @@ class Role < ApplicationRecord
     Permission.new("admin.access", "Access Admin Panel", "Access to the main admin panel")
   ].freeze
 
-  PERMISSIONS_BY_KEY = PERMISSIONS.each_with_object({}) do |permission, memo|
-    memo[permission.key] = permission
-  end.freeze
+  PERMISSIONS_BY_KEY = PERMISSIONS.index_by(&:key).freeze
 
   before_validation :clean_permissions
   validates :name, presence: true, uniqueness: true
@@ -46,7 +44,7 @@ class Role < ApplicationRecord
   protected
 
   def clean_permissions
-    self.permission_keys = permission_keys.reject { |key| key.blank? }
+    self.permission_keys = permission_keys.reject(&:blank?)
   end
 
   def valid_permission_keys
