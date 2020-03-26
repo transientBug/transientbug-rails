@@ -9,7 +9,7 @@
 roles = {
   admin: ["admin.access"],
   user: []
-].map do |role, permission_keys|
+}.map do |role, permission_keys|
   Role.create name: role, permission_keys: permissions_keys
 end
 
