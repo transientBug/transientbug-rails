@@ -1,5 +1,1 @@
 require: rubocop-rails
-
-# Just no.
-Rails/IndexWith:
-  Enabled: false

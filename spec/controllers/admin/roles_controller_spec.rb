@@ -41,7 +41,7 @@ RSpec.describe Admin::RolesController, type: :controller do
     }
   end
 
-  let(:user) { create :user, :with_permissions, roles_and_permissions: { admin: [ "admin.access" ] } }
+  let(:user) { create :user, :with_permissions, permissions: [ "admin.access" ] }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -85,7 +85,7 @@ RSpec.describe Admin::RolesController, type: :controller do
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do
         post :create, params: { role: invalid_attributes }, session: valid_session
-        expect(response).to be_successful
+        expect(response).to be_bad_request
       end
     end
   end
@@ -134,7 +134,7 @@ RSpec.describe Admin::RolesController, type: :controller do
       it "returns a success response (i.e. to display the 'edit' template)" do
         role = Role.create! valid_attributes
         put :update, params: { id: role.to_param, role: invalid_attributes }, session: valid_session
-        expect(response).to be_successful
+        expect(response).to be_bad_request
       end
     end
   end

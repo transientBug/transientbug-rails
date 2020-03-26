@@ -6,15 +6,11 @@ FactoryBot.define do
 
     trait :with_permissions do
       transient do
-        permission_names { [ "default.default" ] }
+        permission_keys { [ "default.default" ] }
       end
 
       after(:create) do |role, evaluator|
-        permissions = Array(evaluator.permission_names).map do |name|
-          create :permission, name: name, key: name
-        end
-
-        role.permissions = permissions
+        role.permission_keys = evaluator.permission_keys
       end
     end
   end

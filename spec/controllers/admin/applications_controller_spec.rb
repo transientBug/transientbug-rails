@@ -43,7 +43,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
     }
   end
 
-  let(:user) { create :user, :with_permissions, roles_and_permissions: { admin: [] } }
+  let(:user) { create :user, :with_permissions, permissions: [] }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in

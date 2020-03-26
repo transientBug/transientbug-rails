@@ -50,7 +50,7 @@
 
       .menu
         = link_to "Profile", profile_path, class: "item"
-        = link_to "Admin Panel", admin_root_path, class: "item" if current_user.role? :admin
+        = link_to "Admin Panel", admin_root_path, class: "item" if current_user.permission? "admin.access"
         = link_to "Logout", logout_path, class: "item"
 
   - else

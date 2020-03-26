@@ -31,7 +31,7 @@
         .menu
           = link_to "Profile", profile_path, class: "item"
           = content_for :navbar_dropdown
-          - if current_user.role? :admin
+          - if current_user.permission? "admin.access"
             .divider
             = link_to "Admin Panel", admin_root_path, class: "item"
           = link_to "Logout", logout_path, class: "item"
