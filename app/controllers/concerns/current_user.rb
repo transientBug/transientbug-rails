@@ -12,11 +12,6 @@ module CurrentUser
       before_action :store_user_location!, if: :storable_location?
       before_action :render_not_found, **opts, unless: :signed_in?
     end
-
-    def require_admin! **opts
-      before_action :store_user_location!, if: :storable_location?
-      before_action :render_not_found, **opts, unless: :admin?
-    end
   end
 
   protected
@@ -31,10 +26,6 @@ module CurrentUser
 
   def signed_in?
     current_user.present?
-  end
-
-  def admin?
-    signed_in? && current_user&.role?(:admin)
   end
 
   def current_user= user

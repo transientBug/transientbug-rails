@@ -19,8 +19,6 @@ class ApplicationPolicy
   def create?
     return false if user.blank?
 
-    return true if user.role? :admin
-
     user.owner_of? record
   end
 
@@ -31,8 +29,6 @@ class ApplicationPolicy
   def update?
     return false if user.blank?
 
-    return true if user.role? :admin
-
     user.owner_of? record
   end
 
@@ -42,8 +38,6 @@ class ApplicationPolicy
 
   def destroy?
     return false if user.blank?
-
-    return true if user.role? :admin
 
     user.owner_of? record
   end

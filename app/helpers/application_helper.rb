@@ -26,8 +26,8 @@ module ApplicationHelper
     attributes.uniq!
 
     objects = records.each_with_object({}) do |record, memo|
-      memo[ record.id ] = attributes.each_with_object({}) do |attribute, record_memo|
-        record_memo[ attribute ] = record.send(attribute).to_s
+      memo[ record.id ] = attributes.index_with do |attribute|
+        record.send(attribute).to_s
       end
     end
 
@@ -117,8 +117,8 @@ module ApplicationHelper
     attributes << :id
     attributes.uniq!
 
-    attribute_values = attributes.each_with_object({}) do |attribute, memo|
-      memo[ attribute ] = model.send(attribute).to_s
+    attribute_values = attributes.index_with do |attribute|
+      model.send(attribute).to_s
     end
 
     no_checkbox = opts.delete(:no_checkbox)

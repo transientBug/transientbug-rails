@@ -20,6 +20,6 @@
 
   .field
     .ui.checkbox
-      = f.collection_check_boxes :permission_ids, Permission.all, :id, :name
+      = f.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name
 
   = f.submit "save", class: "ui positive right floated submit button"

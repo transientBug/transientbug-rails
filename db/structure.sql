@@ -582,69 +582,6 @@ ALTER SEQUENCE public.offline_caches_id_seq OWNED BY public.offline_caches.id;
 
 
 --
--- Name: permissions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.permissions (
-    id bigint NOT NULL,
-    key character varying,
-    name character varying,
-    description character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.permissions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.permissions_id_seq OWNED BY public.permissions.id;
-
-
---
--- Name: permissions_roles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.permissions_roles (
-    id bigint NOT NULL,
-    role_id bigint,
-    permission_id bigint
-);
-
-
---
--- Name: permissions_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.permissions_roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: permissions_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.permissions_roles_id_seq OWNED BY public.permissions_roles.id;
-
-
---
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -653,7 +590,8 @@ CREATE TABLE public.roles (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    description character varying
+    description character varying,
+    permission_keys character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -940,20 +878,6 @@ ALTER TABLE ONLY public.offline_caches ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- Name: permissions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions ALTER COLUMN id SET DEFAULT nextval('public.permissions_id_seq'::regclass);
-
-
---
--- Name: permissions_roles id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions_roles ALTER COLUMN id SET DEFAULT nextval('public.permissions_roles_id_seq'::regclass);
-
-
---
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1106,22 +1030,6 @@ ALTER TABLE ONLY public.oauth_applications
 
 ALTER TABLE ONLY public.offline_caches
     ADD CONSTRAINT offline_caches_pkey PRIMARY KEY (id);
-
-
---
--- Name: permissions permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions
-    ADD CONSTRAINT permissions_pkey PRIMARY KEY (id);
-
-
---
--- Name: permissions_roles permissions_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions_roles
-    ADD CONSTRAINT permissions_roles_pkey PRIMARY KEY (id);
 
 
 --
@@ -1320,27 +1228,6 @@ CREATE INDEX index_offline_caches_on_webpage_id ON public.offline_caches USING b
 
 
 --
--- Name: index_permissions_on_key; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_permissions_on_key ON public.permissions USING btree (key);
-
-
---
--- Name: index_permissions_roles_on_permission_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_permissions_roles_on_permission_id ON public.permissions_roles USING btree (permission_id);
-
-
---
--- Name: index_permissions_roles_on_role_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_permissions_roles_on_role_id ON public.permissions_roles USING btree (role_id);
-
-
---
 -- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1385,14 +1272,6 @@ ALTER TABLE ONLY public.images
 
 
 --
--- Name: permissions_roles fk_rails_211043a277; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions_roles
-    ADD CONSTRAINT fk_rails_211043a277 FOREIGN KEY (role_id) REFERENCES public.roles(id);
-
-
---
 -- Name: import_data fk_rails_2ff3d85fb1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1422,14 +1301,6 @@ ALTER TABLE ONLY public.invitations_users
 
 ALTER TABLE ONLY public.oauth_access_tokens
     ADD CONSTRAINT fk_rails_732cb83ab7 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
-
-
---
--- Name: permissions_roles fk_rails_7cc0b02d7d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.permissions_roles
-    ADD CONSTRAINT fk_rails_7cc0b02d7d FOREIGN KEY (permission_id) REFERENCES public.permissions(id);
 
 
 --
@@ -1544,6 +1415,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190820175931'),
 ('20191007044907'),
 ('20200306005902'),
-('20200306022709');
+('20200306022709'),
+('20200326181535'),
+('20200326182101');
 
 
