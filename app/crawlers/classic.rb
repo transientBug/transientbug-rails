@@ -35,18 +35,37 @@ class Document
     @dependencies ||= {}
   end
 
-  # TODO: What if this is JSON and instead of xpath it's a json_path?
-  def nokogiri
-    @nokogiri ||= Nokogiri::HTML(response.body)
-  rescue => e
-    debugger
+  def add_dependency dep
+    binding.pry unless dep.is_a? Document
+    fail "dependency must be a Document, got `#{ dep.class }`" unless dep.is_a? Document
+
+    dep.parent = self
+    dependencies[dep.uri] = dep
   end
 
-  def_delegators :nokogiri, :xpath
+  def inspect
+    "#<Document:TODO content-type=#{ content_type } uri=#{ uri }>"
+  end
+end
 
-  # TODO: move this logic to a "dependency resolver/parser"
-  def asset_links
-    root_uri = Addressable::URI.parse @uri
+class DependencyResolver
+  def initialize doc
+    @doc = doc
+  end
+
+  # TODO: how
+  def resolve
+    return resolve_html if @doc.content_type == "text/html"
+
+    []
+  end
+
+  protected
+
+  def resolve_html
+    root_uri = Addressable::URI.parse @doc.uri
+
+    nokogiri = Nokogiri::HTML(@doc.response.body)
 
     [
       "//link[@rel='stylesheet']/@href",
@@ -56,16 +75,9 @@ class Document
       .map(&:to_s)
       .uniq
       .compact
+      .reject { |src| src.start_with? "data:" } # TODO: should this reject all non http/https instead?
       .map(&Addressable::URI.method(:parse))
       .map { |link| (root_uri + link).to_s }
-  end
-
-  def add_dependency dep
-    binding.pry unless dep.is_a? Document
-    fail "dependency must be a Document, got `#{ dep.class }`" unless dep.is_a? Document
-
-    dep.parent = self
-    dependencies[dep.uri] = dep
   end
 end
 
@@ -134,12 +146,14 @@ class Classic
   end
 
   def fetch_assets_for root
-    root.asset_links.each do |link|
+    DependencyResolver.new(root).resolve.each do |link|
       root.add_dependency crawl_deps link
     end
   end
 
   def request uri
+    return if uri.start_with? "data:"
+
     Document.new(uri).tap do |document|
       puts "Fetching uri: '#{ uri }'"
 
