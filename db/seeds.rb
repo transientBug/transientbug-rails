@@ -10,7 +10,7 @@ roles = {
   admin: ["admin.access"],
   user: []
 }.map do |role, permission_keys|
-  Role.create name: role, permission_keys: permissions_keys
+  Role.create name: role, permission_keys: permission_keys
 end
 
 User.create(
