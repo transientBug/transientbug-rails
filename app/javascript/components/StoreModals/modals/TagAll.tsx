@@ -40,6 +40,7 @@ const TagAllModal: React.FC<TagAllModalProps> = ({
   const count = ids.length
   const pluralString = pluralize(`${count} ${wording}`, count)
 
+  // prettier-ignore
   const tagAll = async () => {
     await bulk.tag(url, ids, tags.map(tag => tag.value))
     Turbolinks.visit(window.location, { replace: true })

@@ -19,7 +19,7 @@ ReactRailsUJS.getConstructor = className => {
   let Component = componentRequireContext("./" + filename)
 
   // Then access each key:
-  keys.forEach(function(k) {
+  keys.forEach(k => {
     Component = Component[k]
   })
 

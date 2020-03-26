@@ -9,7 +9,7 @@ module.exports = {
   ],
 
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: "module",
     ecmaFeatures: {
       jsx: true
@@ -74,7 +74,6 @@ module.exports = {
         "no-unused-vars": "off",
 
         "@typescript-eslint/explicit-member-accessibility": "off",
-        "@typescript-eslint/no-angle-bracket-type-assertion": "warn",
         "@typescript-eslint/no-array-constructor": "warn",
         "@typescript-eslint/no-namespace": "error",
         "@typescript-eslint/no-unused-vars": [
@@ -86,6 +85,7 @@ module.exports = {
         ],
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-parameter-properties": "off",
+        "@typescript-eslint/no-empty-function": "off",
 
         "react/prop-types": "off"
       }
