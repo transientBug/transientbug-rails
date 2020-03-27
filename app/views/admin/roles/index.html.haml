@@ -38,7 +38,7 @@
         .resource-list__column.w-full.hidden( class="md:block" )
           .flex
             %strong.mr-1 Permissions:
-            = role.permissions.map(&:name).join ", "
+            = role.permission_keys.length
 
           .flex
             %strong.mr-1 Created:
