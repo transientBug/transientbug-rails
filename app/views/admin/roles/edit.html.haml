@@ -1,13 +1,11 @@
-- content_for :page_title do
-  Editing "#{ @role.name }"
+- content_for :page_title, "Edit Role #{ @role.name }"
 
-- content_for :menu do
-  .item
-    .divider
-    .header Role
-    .menu
-      = link_to admin_role_path(@role), class: "item" do
-        %i.expand.icon
-        view
+- content_for :breadcrumbs do
+  = link_to "Home", admin_root_url
+  = link_to "Roles", admin_roles_url
+  = link_to @role.name, admin_role_url(@role)
+  = link_to "Edit", edit_admin_role_url(@role), aria: { current: "page" }
 
-= render partial: "form", locals: { role: @role }
+.resource-list
+  .resource-list__row
+    = render "form", role: @role

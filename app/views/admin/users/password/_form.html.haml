@@ -1,29 +1,14 @@
-= form_with model: user, url: admin_user_password_index_url(user), method: :post, local: true, class: "form" do |form|
-  - if user.errors.any?
-    .form__errors
-      %h2= "#{ pluralize user.errors.count, "error" } prohibited this user from being saved:"
-      %ul.form__errors-list
-        - user.errors.full_messages.each do |message|
-          %li.form__errors-item= message
+= form_with model: user, url: admin_user_password_index_url(user), method: :post, local: true, class: "form", builder: AdminFormBuilder do |form|
+  = form.all_errors
 
-  %fieldset.form__fieldset
-    %legend.form__legend Password
+  = form.fieldset "Password" do
+    = form.error_group :password do
+      = form.label :password
+      = form.password_field :password, aria: { describedby: "Users Password" }
 
-    - form.errors_for :password do |has_error, error_messages|
-      .form__field{ class: ("form__field--error" if has_error) }
-        = form.label :password, class: "form__label"
-        = form.password_field :password, aria: { describedby: "Users Password" }, class: "form__input"
+    = form.error_group :password_confirmation do
+      = form.label :password_confirmation
+      = form.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }
 
-        - if has_error
-          %p.form__field-error= error_messages.join(", ")
-
-    - form.errors_for :password_confirmation do |has_error, error_messages|
-      .form__field{ class: ("form__field--error" if has_error) }
-        = form.label :password_confirmation, class: "form__label"
-        = form.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }, class: "form__input"
-
-        - if has_error
-          %p.form__field-error= error_messages.join(", ")
-
-  .form__actions
-    = form.submit "Save", class: "button button--green"
+  = form.actions do
+    = form.submit "Save"

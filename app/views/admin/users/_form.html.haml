@@ -1,66 +1,40 @@
-= form_with model: [:admin, user], local: true, class: "form" do |form|
-  - if user.errors.any?
-    .form__errors
-      %h2= "#{ pluralize user.errors.count, "error" } prohibited this user from being saved:"
-      %ul.form__errors-list
-        - user.errors.full_messages.each do |message|
-          %li.form__errors-item= message
+= form_with model: [:admin, user], local: true, class: "form", builder: AdminFormBuilder do |form|
+  = form.all_errors
 
-  %fieldset.form__fieldset
-    %legend.form__legend Profile Info
+  = form.fieldset "Profile Info" do
+    = form.error_group :username do
+      = form.label :username
+      = form.text_field :username, aria: { describedby: "Users Username" }
 
-    - form.errors_for :username do |has_error, error_messages|
-      .form__field{ class: ("form__field--error" if has_error) }
-        = form.label :username, class: "form__label"
-        = form.text_field :username, aria: { describedby: "Users Username" }, class: "form__input"
-
-        - if has_error
-          %p.form__field-error= error_messages.join(", ")
-
-    - form.errors_for :username do |has_error, error_messages|
-      .form__field{ class: ("form__field--error" if has_error) }
-        = form.label :email, class: "form__label"
-        = form.email_field :email, aria: { describedby: "Users Email" }, class: "form__input"
-
-        - if has_error
-          %p.form__field-error= error_messages.join(", ")
+    = form.error_group :username do
+      = form.label :email
+      = form.email_field :email, aria: { describedby: "Users Email" }
 
     - if user.new_record?
-      - form.errors_for :username do |has_error, error_messages|
-        .form__field{ class: ("form__field--error" if has_error) }
-          = form.label :password, class: "form__label"
-          = form.password_field :password, aria: { describedby: "Users Password" }, class: "form__input"
+      = form.error_group :username do
+        = form.label :password
+        = form.password_field :password, aria: { describedby: "Users Password" }
 
-          - if has_error
-            %p.form__field-error= error_messages.join(", ")
-
-      - form.errors_for :username do |has_error, error_messages|
-        .form__field{ class: ("form__field--error" if has_error) }
-          = form.label :password_confirmation, class: "form__label"
-          = form.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }, class: "form__input"
-
-          - if has_error
-            %p.form__field-error= error_messages.join(", ")
+      = form.error_group :username do
+        = form.label :password_confirmation
+        = form.password_field :password_confirmation, aria: { describedby: "Users Password Confirmation" }
 
     - else
       .form__field
-        = form.label :password, class: "form__label"
+        = form.label :password
         %p To edit the users password, please use the separate "Change password" flow to help prevent accidental changes.
 
-  %fieldset.form__fieldset
-    %legend.form__legend Permissions
+  = form.fieldset "Permissions" do
+    = form.error_group :role_ids do
+      - if current_user == user
+        %p For safety reasons, you aren't allowed to edit your own roles. Please have another Admin do so for you.
 
-    - form.errors_for :role_ids do |has_error, error_messages|
-      .form__field{ class: ("form__field--error" if has_error) }
-        - if current_user == user
-          %p For safety reasons, you aren't allowed to edit your own roles. Please have another Admin do so for you.
+      - else
+        = form.collection_check_boxes :role_ids, Role.all, :id, :name do |role_check_box|
+          = role_check_box.label do
+            = role_check_box.check_box
+            = role_check_box.text
+          %br
 
-        - else
-          = form.collection_check_boxes :role_ids, Role.all, :id, :name do |role_check_box|
-            = role_check_box.label do
-              = role_check_box.check_box
-              = role_check_box.text.humanize
-            %br
-
-  .form__actions
-    = form.submit "Save", class: "button button--green"
+  = form.actions do
+    = form.submit "Save"

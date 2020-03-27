@@ -1,56 +1,64 @@
-- content_for :page_title do
-  Viewing "#{ @role.name }"
+- content_for :page_title, "Role #{ @role.name }"
 
-= model_tag @role, no_checkbox: true, only: [ :id, :name ]
+- content_for :breadcrumbs do
+  = link_to "Home", admin_root_url
+  = link_to "Roles", admin_roles_url
+  = link_to @role.name, admin_role_url(@role), aria: { current: "page" }
 
-.ui.menu
-  = link_to edit_admin_role_path(@role), class: "item" do
-    %i.edit.icon
-    edit
+- content_for :page_actions do
+  .button-group
+    = link_to edit_admin_role_path(@role), class: "button button--gray" do
+      = render "components/feather_icon", icon: "edit"
+      Edit
 
-  .right.menu
-    .ui.simple.dropdown.item
-      more
-      %i.dropdown.icon
-      .menu
+    .button.button--gray.button--icon.dropdown.dropdown--hoverable
+      = behavior_data "dropdown" do |dataset|
+        %button.dropdown__trigger{  **dataset }
+          = render "components/feather_icon", icon: "chevron-down"
 
-        .header
-          %i.warning.sign.icon
-          DANGERZONE
-        .divider
+      .dropdown__container.hidden
+        .dropdown__menu
+          .dropdown__row
+            %h6.dropdown__header DangerZone
+            = link_to "Delete", admin_role_url(@role), method: :delete, data: { confirm: "Are you sure?" }, class: "dropdown__link"
 
-        = modal_tag @role, :delete, url: admin_role_path(@role) do
-          %i.trash.icon
-          delete
+- content_for :page_meta do
+  .page-header__metadata
+    - user_count = @role.users.count
+    = render "components/feather_icon", icon: "users"
+    = "#{ user_count } User".pluralize user_count
 
-%h2.ui.dividing.header Internal Stuff
-%table.ui.collapsing.celled.table
-  %tbody
-    %tr
-      %td
-        %b ID
-      %td
-        = @role.id
-    %tr
-      %td
-        %b Created At
-      %td
-        = @role.created_at.to_s(:long)
+  .page-header__metadata
+    - permission_count = @role.permission_keys.length
+    = render "components/feather_icon", icon: "sliders"
+    = "#{ permission_count } Permission".pluralize permission_count
 
-%b Description
-= @role.description
+.resource-list
+  .resource-list__row
+    .resource__list__col
+      %strong.mr-1 Name:
+      = @role.name
 
-%h2.ui.dividing.header Permissions
+    .resource__list__col
+      %strong.mr-1 ID:
+      = @role.id
 
+  .resource-list__row
+    .resource__list__col
+      %strong.mr-1 Description:
+      = @role.description
 
-%table.ui.collapsing.celled.table
-  %thead
-    %tr
-      %th Name
-      %th Description
-  %tbody
-    - @role.permissions.each do |permission|
-      %tr
-        %td= permission.name
-        %td= permission.description
-  
+  .resource-list__row
+    .resource__list__col
+      %strong.mr-1 Created:
+      = render "components/time", time: @role.created_at
+
+  .resource-list__row
+    .resource__list__col
+      %strong.mr-1 Permissions:
+      %ul
+        - @role.permissions.each do |permission|
+          %li
+            = permission.name
+            \-
+            = permission.description

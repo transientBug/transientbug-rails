@@ -26,8 +26,11 @@ class Role < ApplicationRecord
   PERMISSIONS_BY_KEY = PERMISSIONS.index_by(&:key).freeze
 
   before_validation :clean_permissions
-  validates :name, presence: true, uniqueness: true
   validate :valid_permission_keys
+
+  validates :name, presence: true, uniqueness: true
+
+  has_and_belongs_to_many :users, inverse_of: :roles
 
   def permissions
     permission_keys.map do |key|

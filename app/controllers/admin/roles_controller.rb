@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::RolesController < AdminController
-  before_action :set_count
+  layout "admin-tailwind"
+
   before_action :set_role, only: [:show, :edit, :update, :destroy]
 
   # GET /admin/roles
@@ -16,6 +17,8 @@ class Admin::RolesController < AdminController
     @roles = Role.all
     @roles = @roles.where(base_where) if query_param.present? && !query_param.empty?
     @roles = @roles.order(name: :asc).page params[:page]
+
+    @count = Role.count
   end
 
   # GET /admin/roles/new
@@ -56,10 +59,6 @@ class Admin::RolesController < AdminController
 
   def set_role
     @role = Role.find params[:id]
-  end
-
-  def set_count
-    @count = Role.count
   end
 
   def role_params

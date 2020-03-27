@@ -40,7 +40,7 @@
         .resource-list__column.w-full.hidden( class="md:block" )
           .flex
             %strong.mr-1 Roles:
-            - user.roles.map(&:name).map(&:humanize).each do |role|
+            - user.roles.map(&:name).each do |role|
               %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.bg-gray-200.text-gray-800.mx-1= role
 
           .flex

@@ -1,4 +1,11 @@
 - content_for :page_title do
   New Role
 
-= render partial: "form", locals: { role: @role }
+- content_for :breadcrumbs do
+  = link_to "Home", admin_root_url
+  = link_to "Roles", admin_roles_url
+  = link_to "New", new_admin_role_url, aria: { current: "page" }
+
+.resource-list
+  .resource-list__row
+    = render "form", role: @role

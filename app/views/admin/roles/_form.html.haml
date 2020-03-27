@@ -1,25 +1,22 @@
-= form_for [:admin,role], html: { class: "ui fluid form" } do |f|
-  - if role.errors.any?
-    .ui.message.error
-      %h2= "#{ pluralize role.errors.count, "error" } prohibited this role from being saved:"
-      %ul
-        - role.errors.full_messages.each do |message|
-          %li= message
+= form_with model: [:admin, role], class: "form", local: true, builder: AdminFormBuilder do |form|
+  = form.all_errors
 
-  %h4.ui.dividing.header basic info 
+  = form.fieldset "Base Info" do
+    = form.error_group :name do
+      = form.label :name
+      = form.text_field :name, aria: { describedby: "Role's Name" }
 
-  .required.field
-    = f.label :name
-    = f.text_field :name, aria: { describedby: "role name" }
+    = form.error_group :description do
+      = form.label :description
+      = form.text_area :description, aria: { describedby: "Role's Description" }
 
-  .field
-    = f.label :description
-    = f.text_area :description, aria: { describedby: "description" }
+  = form.fieldset "Permissions" do
+    = form.error_group :permission_keys do
+      = form.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name do |role_check_box|
+        = role_check_box.label do
+          = role_check_box.check_box
+          = role_check_box.text.humanize
+        %br
 
-  %h4.ui.dividing.header permissions
-
-  .field
-    .ui.checkbox
-      = f.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name
-
-  = f.submit "save", class: "ui positive right floated submit button"
+  = form.actions do
+    = form.submit "Save"

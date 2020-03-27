@@ -1,62 +1,66 @@
-- content_for :page_title do
-  Roles
+- content_for :page_title, "All Roles"
 
-- content_for :menu do
-  .item.hidden{ data: { group: "bulk-edit-menu" } }
-    .divider
-    .header Bulk Actions
-    .menu
-      .item
-        .ui.fluid.icon.button
-          %i.hide.icon
-          add permission to all
+- content_for :breadcrumbs do
+  = link_to "Home", admin_root_url
+  = link_to "Roles", admin_roles_url, aria: { current: "page" }
 
-      .item
-        .ui.fluid.icon.negative.basic.button
-          %i.trash.icon
-          delete all
+- content_for :page_actions do
+  = link_to "New", new_admin_role_url, class: "button button--gray"
 
-%table.ui.celled.table
-  %thead
-    %tr
-      %th= select_all_checkbox
-      %th Actions
-      %th ID
-      %th Name
-      %th Permissions
-      %th Created At
+- content_for :page_meta do
+  .page-header__metadata
+    = render "components/feather_icon", icon: "sliders"
+    = "#{ @count} Role".pluralize @count
+    total
 
-  %tbody
-    - if @roles.any?
-      - @roles.each do |role|
-        %tr
-          %td.collapsing= model_tag role, only: [ :id, :name ]
-          %td.collapsing
-            .ui.buttons
-              = link_to admin_role_path(role), class: "ui icon button" do 
-                %i.expand.icon
-                view
+%ul.resource-list
+  %li.resource-list__row
+    .resource-list__column
+      = render "components/checkbox" do
+        Select All
 
-              .ui.simple.dropdown.icon.button
-                %i.dropdown.icon
-                .menu
-                  .divider
-                  .header
-                    %i.warning.sign.icon
-                    DANGERZONE
+    .resource-list__column.w-full
 
-                  = link_to edit_admin_role_path(role), class: "item" do
-                    %i.edit.icon
-                    edit
+    .resource-list__column.w-full
+      = paginate @roles
 
-          %td.collapsing= role.id
-          %td= role.name
-          %td= role.permissions.map { |permission| permission.name }.join ", "
-          %td.collapsing= role.created_at.to_s(:long)
+%ul.resource-list
+  - if @roles.any?
+    - @roles.each do |role|
+      %li.resource-list__row
+        .resource-list__column
+          = render "components/checkbox"
 
-    - else
-      %tr
-        %td{ colspan: 6 }
-          No roles yet (this might be a problem, yo)
+        .resource-list__column.w-full
+          %div( class="text-sm leading-5 font-medium text-gray-900" )
+            = role.name
 
-= paginate @roles
+        .resource-list__column.w-full.hidden( class="md:block" )
+          .flex
+            %strong.mr-1 Permissions:
+            = role.permissions.map(&:name).join ", "
+
+          .flex
+            %strong.mr-1 Created:
+            = render "components/time", time: role.created_at
+
+        .resource-list__column
+          .button-group
+            = link_to admin_role_path(role), class: "button button--gray" do
+              = render "components/feather_icon", icon: "maximize"
+              View
+
+            .button.button--gray.button--icon.dropdown.dropdown--hoverable
+              = behavior_data "dropdown" do |dataset|
+                %button.dropdown__trigger{  **dataset }
+                  = render "components/feather_icon", icon: "chevron-down"
+
+              .dropdown__container.hidden
+                .dropdown__menu
+                  .dropdown__row
+                    = link_to "Edit", edit_admin_role_path(role), class: "dropdown__link"
+
+  - else
+    %li.resource-list__row
+      .resource-list__column
+        No roles yet (this might be a problem, yo)
