@@ -1,27 +1,9 @@
-import Behavior, { OnEvent, ForBehavior } from "../lib/Behaviors"
+import Behavior, { ZobBehavior, ValueBinding } from "../lib/Zob"
 
-interface Args {
-  active?: string
-  targetToggle?: string
-}
+@ZobBehavior("dropdown")
+export default class DropdownBehavior extends Behavior {
+  @ValueBinding isOpen = false
+  @ValueBinding isClosed = true
 
-@ForBehavior("dropdown")
-export default class DropdownBehavior extends Behavior<Args> {
-  protected menu: any
-
-  OnConnect = () => {
-    this.menu = this.element.nextElementSibling
-  }
-
-  @OnEvent("click")
-  click(event: MouseEvent) {
-    event.preventDefault()
-
-    const isHidden = this.menu.classList.toggle(
-      this.args.targetToggle || "hidden"
-    )
-
-    if (!this.args.active) return
-    this.element.classList.toggle(this.args.active, !isHidden)
-  }
+  toggleIsOpen = () => (this.isOpen = !(this.isClosed = this.isOpen))
 }

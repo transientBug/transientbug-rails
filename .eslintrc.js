@@ -86,6 +86,7 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-parameter-properties": "off",
         "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
 
         "react/prop-types": "off"
       }

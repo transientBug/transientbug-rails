@@ -1,12 +1,12 @@
-import { DataBehaviors } from "../lib/Behaviors"
+import { Zob } from "../lib/Zob"
 
 const behaviorsRequireContext = require.context("../behaviors", true, /\.ts/)
-const dataBehaviors = new DataBehaviors(behaviorsRequireContext)
+const zob = new Zob(behaviorsRequireContext)
 
 document.addEventListener("turbolinks:load", () => {
-  dataBehaviors.connect()
+  zob.Setup()
 })
 
 document.addEventListener("turbolinks:before-render", () => {
-  dataBehaviors.disconnect()
+  zob.Teardown()
 })

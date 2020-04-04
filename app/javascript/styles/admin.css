@@ -13,6 +13,10 @@
 /*@import "components/_service_announcement";*/
 /*@import "components/_bookmark_card";*/
 
+
+@import "admin/_dialogue";
+@import "admin/_kbd";
+
 @tailwind base;
 @tailwind components;
 

@@ -2,11 +2,9 @@ import Behavior, { ZobBehavior, ValueBinding } from "../lib/Zob"
 
 import store from "../store/store"
 
-@ZobBehavior("bulk-action-visibility")
-export default class BulkActionVisibilityBehavior extends Behavior {
+@ZobBehavior("bulk-action-template")
+export default class BulkActionTemplateBehavior extends Behavior {
   protected unsubscribe: any
-
-  @ValueBinding hasNoSelection = true
 
   Setup = () => {
     this.unsubscribe = store.subscribe(this.subscriber)
@@ -17,7 +15,12 @@ export default class BulkActionVisibilityBehavior extends Behavior {
   }
 
   protected subscriber = () => {
-    const { selection } = store.getState()
-    this.hasNoSelection = selection.selection.length === 0
+    const {
+      selection: { selection }
+    } = store.getState()
+
+    for (const selected of selection) {
+      const row = (this.element as HTMLTemplateElement).content.cloneNode(true)
+    }
   }
 }

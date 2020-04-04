@@ -1,6 +1,6 @@
-import Behavior, { ForBehavior } from "../lib/Behaviors"
+import Behavior, { ZobBehavior, ValueBinding } from "../lib/Zob"
 
-import store, { RootState } from "../store/store"
+import store from "../store/store"
 
 /*
 I originally wanted to use lodash.template here, writing some template into the html
@@ -9,21 +9,22 @@ uses Function which is an implicit eval and isn't CSP safe :/
 
 It's a toss up between this and the react component
 */
-@ForBehavior("bulk-action-count")
-export default class BulkActionCountBehavior extends Behavior<{}> {
+@ZobBehavior("bulk-action-count")
+export default class BulkActionCountBehavior extends Behavior {
   protected unsubscribe: any
 
-  OnConnect = () => {
+  @ValueBinding selectedCount = 0
+
+  Setup = () => {
     this.unsubscribe = store.subscribe(this.subscriber)
   }
 
-  OnDisconnect = () => {
+  Teardown = () => {
     this.unsubscribe()
   }
 
   protected subscriber = () => {
-    const { selection } = store.getState() as RootState
-
-    this.element.innerHTML = selection.selection.length.toString()
+    const { selection } = store.getState()
+    this.selectedCount = selection.selection.length
   }
 }

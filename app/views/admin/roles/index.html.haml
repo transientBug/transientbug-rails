@@ -13,13 +13,21 @@
     = "#{ @count} Role".pluralize @count
     total
 
+- store_content records: store_records(@roles, only: [:id, :name, :description])
+
 %ul.resource-list
   %li.resource-list__row
     .resource-list__column
-      = render "components/checkbox" do
+      = render "components/checkbox", dataset: zob("bulk-action-select-all") do
         Select All
 
-    .resource-list__column.w-full
+    .resource-list__column.w-full.items-center.flex.hidden{ ":class": { hidden: "hasNoSelection" }.to_json, **zob("bulk-action-visibility") }
+      %h2 Selection:
+
+      %span{ ":text": "selectedCount", **zob("bulk-action-count") }
+
+      %button.button.button--gray{ "@click": "open", **zob("display-modal", modal: "bulk-add-permissions-dialog") } Add Permissions
+      %button.button.button--red{ "@click": "open", **zob("display-modal", modal: "bulk-delete-dialog") } Delete
 
     .resource-list__column.w-full
       = paginate @roles
@@ -29,7 +37,7 @@
     - @roles.each do |role|
       %li.resource-list__row
         .resource-list__column
-          = render "components/checkbox"
+          = render "components/checkbox", dataset: zob("bulk-action-select-single", id: role.id)
 
         .resource-list__column.w-full
           %div( class="text-sm leading-5 font-medium text-gray-900" )
@@ -50,12 +58,11 @@
               = render "components/feather_icon", icon: "maximize"
               View
 
-            .button.button--gray.button--icon.dropdown.dropdown--hoverable
-              = behavior_data "dropdown" do |dataset|
-                %button.dropdown__trigger{  **dataset }
-                  = render "components/feather_icon", icon: "chevron-down"
+            .button.button--gray.button--icon.dropdown.dropdown--hoverable{  **zob("dropdown") }
+              %button.dropdown__trigger{ **zob.on(click: "toggleIsOpen") }
+                = render "components/feather_icon", icon: "chevron-down"
 
-              .dropdown__container.hidden
+              .dropdown__container.hidden{ **zob.bind(class: { hidden: "isClosed" }) }
                 .dropdown__menu
                   .dropdown__row
                     = link_to "Edit", edit_admin_role_path(role), class: "dropdown__link"
@@ -64,3 +71,51 @@
     %li.resource-list__row
       .resource-list__column
         No roles yet (this might be a problem, yo)
+
+%dialog#bulk-add-permissions-dialog{ **zob("modal") }
+  .modal__container
+    .dialog.dialog--dark
+      .dialog__header
+        %h2.dialog__title Bulk add Permissions to Roles
+        %button.dialog__close{ "@click": "close" }
+          %kbd.kbd.kbd--dark
+            esc
+
+      .dialog__content
+        %p
+          All permissions selected here will be added to all the selected roles.
+
+      .dialog__actions
+        %button.button.button--blue Add Permissions
+        %button.button.button--gray{ "@click": "close" } Cancel
+
+%dialog#bulk-delete-dialog{ **zob("modal") }
+  .modal__container
+    .dialog.dialog--danger
+      .dialog__header
+        %h2.dialog__title Delete Selected Roles?
+        %button.dialog__close{ "@click": "close" }
+          %kbd.kbd.kbd--dark
+            esc
+
+      .dialog__content
+        %p
+          Are you
+          %strong sure
+          you want to delete these roles?
+
+        %table.resource-list
+          %thead
+            %tr.resource-list__row
+              %th Name
+              %th Description
+
+          %tbody
+            %template{ **zob("template-selection") }
+              %tr.resource-list__row
+                %td{ ":text": "name" } Name
+                %td{ ":text": "description" } Description
+
+      .dialog__actions
+        %button.button.button--red Delete All
+        %button.button.button--gray{ "@click": "close" } Cancel

@@ -1,0 +1,104 @@
+.modaled {
+  overflow: hidden;
+}
+
+.modal__overlay {
+  @apply fixed w-full h-auto inset-0 z-50 overflow-scroll flex justify-center items-center;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog {
+  background: transparent;
+}
+
+dialog::backdrop { /* native */
+  @apply modal__overlay;
+}
+
+dialog + .backdrop { /* polyfill */
+  @apply modal__overlay;
+}
+
+.modal__container {
+  @apply max-w-full mx-auto z-50 flex;
+
+  /*max-height: calc(100% - 70px);*/
+
+  /*margin-top: 60px;*/
+  /*margin-bottom: 10px;*/
+
+  @screen md {
+    width: 800px;
+  }
+}
+
+.dialog {
+  @apply text-left flex flex-col shadow rounded w-full;
+
+  & > * {
+    @apply px-6 py-4 flex-grow flex-shrink;
+  }
+}
+
+.dialog--light {
+  @apply bg-white text-black;
+
+  & .dialog__header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  }
+
+  & .dialog__actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+  }
+}
+
+.dialog--dark {
+  @apply text-white bg-gray-600;
+
+  & .dialog__header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+  }
+
+  & .dialog__actions {
+    border-top: 1px solid rgba(255, 255, 255, 0.17);
+  }
+}
+
+.dialog--danger {
+  @apply dialog--light;
+
+  background: linear-gradient(87deg, #db2828 0, #f55036 100%);
+}
+
+.dialog__header {
+  @apply flex justify-between items-center;
+}
+
+.dialog__title {
+  @apply text-xl;
+}
+
+.dialog__close {
+  @apply cursor-pointer z-50 text-gray-900;
+
+  opacity: 0.5;
+
+  transition: all 250ms linear;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.dialog__content {
+  @apply my-5 overflow-scroll;
+}
+
+.dialog__actions {
+  @apply flex flex-row justify-between items-center;
+
+  & > *:not(:first-child) {
+    @apply ml-2;
+  }
+}

@@ -1,6 +1,6 @@
 import { BEHAVIOR } from "./constants"
 
-function ForBehavior(name: string) {
+function ZobBehavior(name: string) {
   return <T extends { new (...args: any[]): {} }>(constructor: T) => {
     Object.defineProperty(constructor, BEHAVIOR, {
       writable: false,
@@ -11,4 +11,4 @@ function ForBehavior(name: string) {
   }
 }
 
-export default ForBehavior
+export default ZobBehavior
