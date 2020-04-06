@@ -1,6 +1,6 @@
-export const BEHAVIOR = Symbol("Zob Behavior Class")
-export const ZOB = Symbol("Zob Behavior Instance")
+export const BEHAVIOR_KEY = Symbol("Zob Behavior Class")
+export const ZOB_INSTANCE = Symbol("Zob Behavior Instance")
 
-export const OBSERVABLES = Symbol("Zob Observer Subscribers")
+export const OBSERVERS = Symbol("Zob Observer Subscribers")
 
 export const elementSelector = `[zob-behavior]`

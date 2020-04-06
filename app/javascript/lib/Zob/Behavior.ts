@@ -1,98 +1,115 @@
 import { walk } from "./utils"
-import { ZOB } from "./constants"
+import { ZOB_INSTANCE } from "./constants"
 import ValueBindingSubscriber from "./ValueBindingSubscriber"
 
 const zobPrefix = "zob-"
 
-class Binding {
-  readonly binders: Record<string, string> = {}
+const normalizeAttributeName = (name: string) => {
+  if (name.startsWith("@")) return name.replace("@", "zob-on:")
+  if (name.startsWith(":")) return name.replace(":", "zob-bind:")
 
-  constructor(
-    readonly element: Element,
-    readonly attributeToChange: string,
-    binderValue: string
-  ) {
-    if (attributeToChange === "class")
-      this.binders = Object.entries(
-        JSON.parse(binderValue) as Record<string, string>
-      ).reduce((memo, [cssClass, onChangeValue]) => {
-        return { ...memo, [onChangeValue]: cssClass }
-      }, {})
-    else this.binders = { [binderValue]: "__default" }
-  }
-
-  change = (valueName: string, value: any) => {
-    const binder = this.binders[valueName]
-
-    if (!binder) return
-
-    switch (this.attributeToChange) {
-      case "class":
-        this.element.classList.toggle(binder, value)
-        break
-      case "text":
-        this.element.textContent = value
-        break
-      case "html":
-        this.element.innerHTML = value
-        break
-      default:
-        this.element.setAttribute(this.attributeToChange, value)
-    }
-  }
+  return name
 }
 
-class Behavior<S = {}> {
-  targets: Record<string, Element | undefined> = {}
-  bindings: Binding[] = []
+const zobAttributes = (element: Element) =>
+  Array.from(element.attributes)
+    .map(attr => {
+      const name = normalizeAttributeName(attr.name)
 
-  constructor(readonly element: Element, readonly args: S) {
-    this[ZOB] = this
+      if (!name.startsWith(zobPrefix)) return null
+
+      const [directive, key] = name.substring(zobPrefix.length).split(":", 2)
+      const { value } = attr
+
+      return {
+        directive,
+        key,
+        value
+      }
+    })
+    .filter(Boolean)
+
+class Behavior {
+  protected args: Record<string, string> = {}
+
+  constructor(readonly element: Element) {
+    this.args = zobAttributes(this.element)
+      .filter(({ directive }) => directive === "arg")
+      .reduce((memo, { key, value }) => ({ ...memo, [key]: value }), {})
+
+    this.setupEventListeners(this.element)
+  }
+
+  walkWithoutNested = (
+    element: Element,
+    callback: (element: Element, attributes: any) => void | boolean
+  ) => {
+    walk(element, el => {
+      if (el[ZOB_INSTANCE]) return false
+
+      // if (el.hasAttribute("zob-behavior")) {
+      //   el[ZOB_INSTANCE] = new Behavior(el)
+      //   return false
+      // }
+
+      const zobibutes = zobAttributes(el).filter(
+        ({ directive }) => directive !== "behavior"
+      )
+
+      return callback(el, zobibutes)
+    })
+  }
+
+  setupEventListeners = (el: Element) => {
+    this.walkWithoutNested(el, (element, attributes) => {
+      attributes.forEach(({ directive, key, value }) => {
+        if (directive !== "on") return
+
+        const callee = this[value]
+        console.log(`event: ${key} => ${value}`, callee, this)
+
+        element.addEventListener(key, callee)
+      })
+    })
+  }
+
+  updateDataBindings = (el: Element) => {
+    this.walkWithoutNested(el, (element, attributes) => {
+      attributes.forEach(({ directive, key, value }) => {
+        if (directive !== "bind") return
+
+        const callee = this[value]
+        console.log(`bind: ${key} => ${value}`, callee, this)
+
+        switch (key) {
+          case "class":
+            const cssClassesToValues = JSON.parse(value) as Record<
+              string,
+              string
+            >
+
+            Object.entries(cssClassesToValues).forEach(([cssClass, val]) => {
+              element.classList.toggle(cssClass, this[val])
+            })
+            break
+          case "text":
+            element.textContent = callee
+            break
+          case "html":
+            element.innerHTML = callee
+            break
+          default:
+            element.setAttribute(key, callee)
+        }
+      })
+    })
   }
 
   Setup = () => {}
   Teardown = () => {}
 
   __setup = () => {
-    walk(this.element, el => {
-      Array.from(el.attributes).forEach(attr => {
-        let name = attr.name
-        if (name.startsWith("@")) name = name.replace("@", "zob-on:")
-        if (name.startsWith(":")) name = name.replace(":", "zob-bind:")
-
-        if (!name.startsWith(zobPrefix)) return
-
-        const [action, key] = name.substring(zobPrefix.length).split(":", 2)
-        const { value } = attr
-
-        const caller = this[value]
-
-        if (action === "behavior" || action.startsWith("args")) return
-
-        switch (action) {
-          case "target":
-            this.targets[value] = el
-            break
-          case "on":
-            el.addEventListener(key, caller)
-            break
-          case "bind":
-            this.bindings.push(new Binding(el, key, value))
-            break
-          default:
-            console.warn("Unknown action", action)
-        }
-      })
-    })
-
     this.Setup()
-
-    this.bindings.forEach(binding => {
-      Object.keys(binding.binders).forEach(valueName => {
-        console.log("reseting", valueName, this[valueName])
-        binding.change(valueName, this[valueName])
-      })
-    })
   }
 
   __teardown = () => {
@@ -101,7 +118,7 @@ class Behavior<S = {}> {
   }
 
   @ValueBindingSubscriber UpdateBindings = (prop: string, value: any) =>
-    this.bindings.forEach(binding => binding.change(prop, value))
+    this.updateDataBindings(this.element)
 }
 
 export default Behavior

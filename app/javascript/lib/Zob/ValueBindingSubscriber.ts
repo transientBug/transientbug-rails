@@ -1,7 +1,7 @@
-import { OBSERVABLES } from "./constants"
+import { OBSERVERS } from "./constants"
 
 const ValueBindingSubscriber: PropertyDecorator = (target, propertyKey) => {
-  ;(target[OBSERVABLES] = target[OBSERVABLES] || []).push(propertyKey)
+  ;(target[OBSERVERS] = target[OBSERVERS] || []).push(propertyKey)
 }
 
 export default ValueBindingSubscriber

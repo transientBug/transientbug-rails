@@ -27,7 +27,7 @@
                 %line( x1="3" y1="6" x2="21" y2="6" )
                 %line( x1="3" y1="18" x2="21" y2="18" )
 
-            .dropdown__container.navbar__dropdown-container.hidden{ ":class": { "hidden": "isClosed" }.to_json }
+            .dropdown__container.navbar__dropdown-container.hidden{ ":class": { "hidden": "isOpen" }.to_json }
               .dropdown__menu.navbar__dropdown-menu
                 - if content_for? :navbar_dropdown
                   .dropdown__row

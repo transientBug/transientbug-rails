@@ -1,7 +1,5 @@
-import { BEHAVIOR, elementSelector } from "./constants"
+import { BEHAVIOR_KEY, elementSelector, ZOB_INSTANCE } from "./constants"
 import Behavior from "./Behavior"
-
-const argsPrefix = "zob-args-"
 
 class Zob {
   readonly behaviors: Record<string, typeof Behavior> = {}
@@ -13,7 +11,7 @@ class Zob {
       .reduce((memo, behaviorFile) => {
         const behavior = behaviorsRequireContext(behaviorFile)["default"]
 
-        memo[behavior[BEHAVIOR]] = behavior
+        memo[behavior[BEHAVIOR_KEY]] = behavior
 
         return memo
       }, {})
@@ -24,7 +22,7 @@ class Zob {
   Setup = () => {
     const elements = document.querySelectorAll(elementSelector)
 
-    console.groupCollapsed(`[Zob] Connecting ${elements.length} Behaviors`)
+    console.group(`[Zob] Connecting ${elements.length} Behaviors`)
     elements.forEach(this.setupBehavior)
     console.groupEnd()
   }
@@ -44,13 +42,6 @@ class Zob {
   protected setupBehavior = (element: Element) => {
     const behavior = element.getAttribute("zob-behavior")
 
-    const args = Array.from(element.attributes)
-      .filter(attr => attr.name.startsWith(argsPrefix))
-      .reduce((memo, attr) => {
-        const name = attr.name.substring(argsPrefix.length)
-        return { ...memo, [name]: attr.value }
-      }, {})
-
     if (!this.behaviors[behavior]) {
       console.warn(`[Zob] Unknown behavior ${behavior} for element`, element)
       return
@@ -61,12 +52,12 @@ class Zob {
     console.debug(
       `[Zob] Connecting ${behavior} to element`,
       element,
-      behaviorKlass,
-      args
+      behaviorKlass
     )
 
     try {
-      const behaviorInstance = new behaviorKlass(element, args)
+      const behaviorInstance = new behaviorKlass(element)
+      element[ZOB_INSTANCE] = behaviorInstance
       this.connectedBehaviors.push(behaviorInstance)
 
       behaviorInstance.__setup()

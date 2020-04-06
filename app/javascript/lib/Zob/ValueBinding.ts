@@ -1,4 +1,4 @@
-import { OBSERVABLES } from "./constants"
+import { OBSERVERS } from "./constants"
 
 const ValueBinding: PropertyDecorator = (target, propertyKey) => {
   const value = target[propertyKey]
@@ -17,9 +17,10 @@ const ValueBinding: PropertyDecorator = (target, propertyKey) => {
       return Reflect.get(this, hiddenPropertyKey)
     },
     set(newVal) {
-      this[OBSERVABLES].forEach(observer =>
-        this[observer]?.(propertyKey, newVal)
-      )
+      if (this[OBSERVERS])
+        this[OBSERVERS].forEach(observer =>
+          this[observer]?.(propertyKey, newVal)
+        )
 
       return Reflect.set(this, hiddenPropertyKey, newVal)
     }
