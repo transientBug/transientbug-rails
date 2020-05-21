@@ -27,10 +27,10 @@ class Role < ApplicationRecord
 
     # Images
     Permission.new("images.admin", "Admin Images", "Access to admin specific features for images"),
-    Permission.new("images.create", "Create Images", ""),
-    Permission.new("images.show", "View Images", ""),
-    Permission.new("images.update", "Update Images", ""),
-    Permission.new("images.destroy", "Delete Images", "")
+    Permission.new("images.create", "Create Images", "Create new images"),
+    Permission.new("images.show", "View All Images", "View all images including disabled ones"),
+    Permission.new("images.update", "Update Images", "Update existing images"),
+    Permission.new("images.destroy", "Delete Images", "Delete existing images")
   ].freeze
 
   PERMISSIONS_BY_KEY = PERMISSIONS.index_by(&:key).freeze
