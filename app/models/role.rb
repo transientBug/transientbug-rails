@@ -20,7 +20,12 @@ Permission = Struct.new :key, :name, :description
 
 class Role < ApplicationRecord
   PERMISSIONS = [
-    Permission.new("admin.access", "Access Admin Panel", "Access to the main admin panel")
+    Permission.new("admin.access", "Access Admin Panel", "Access to the main admin panel"),
+    Permission.new("images.admin", "Admin Images", "Access to admin specific features for images"),
+    Permission.new("images.create", "Create Images", ""),
+    Permission.new("images.show", "View Images", ""),
+    Permission.new("images.update", "Update Images", ""),
+    Permission.new("images.destroy", "Delete Images", "")
   ].freeze
 
   PERMISSIONS_BY_KEY = PERMISSIONS.index_by(&:key).freeze

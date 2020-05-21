@@ -20,7 +20,7 @@ class ImagePolicy < ApplicationPolicy
   end
 
   def update?
-    user.permission? "images.update"
+    user&.permission? "images.update"
   end
 
   def destroy?

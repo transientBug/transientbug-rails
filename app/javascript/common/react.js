@@ -26,9 +26,9 @@ ReactRailsUJS.getConstructor = className => {
   // support `export default`
   if (Component.__esModule) Component = Component["default"]
 
-  const StoreWrapper = (...args) => (
+  const StoreWrapper = ({ ...props }) => (
     <Provider store={store}>
-      <Component {...args} />
+      <Component {...props} />
     </Provider>
   )
 
