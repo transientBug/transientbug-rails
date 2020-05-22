@@ -2,6 +2,14 @@
 
 require "rspec_api_documentation/dsl"
 
+module RspecApiDocumentation
+  class RackTestClient < ClientBase
+    def response_body
+      last_response.body.encode("utf-8")
+    end
+  end
+end
+
 RspecApiDocumentation.configure do |config|
   config.request_headers_to_include = [ "Content-Type", "Accept" ]
   config.response_headers_to_include = [ "Content-Type" ]

@@ -101,7 +101,7 @@ gem "exception_notification"
 gem "slack-notifier"
 
 # API Documentation from RAD
-gem "apitome"
+gem "apitome", github: "jejacks0n/apitome"
 
 gem "annotate"
 
@@ -137,7 +137,7 @@ group :development, :test do
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails", "~> 4.0.0.beta"
+  gem "rspec-rails", "~> 4.0.0"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"
