@@ -24,8 +24,8 @@ gem "connection_pool"
 # gem "aws-sdk-s3", "~> 1"
 
 # Caching - Rails 5.2 shipped with a redis cache for fragments, but doesn't
-# provide session storage via redis too, which redis-rails does.
-gem "redis-rails"
+# provide session storage via redis too, which redis-actionpack does.
+gem "redis-actionpack"
 gem "redis-rack-cache"
 
 # CORS & other Security
