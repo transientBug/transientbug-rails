@@ -22,8 +22,8 @@ class Role < ApplicationRecord
   PERMISSIONS = [
     # Admin
     Permission.new("admin.access", "Access Admin Panel", "Access to the main admin panel"),
-    Permission.new("admin.logs", "Delete Images", "Access the admin logster view"),
-    Permission.new("admin.sidekiq", "Delete Images", "Access the admin sidekiq panel"),
+    Permission.new("admin.logs", "Access Admin Logs", "Access the admin logster view"),
+    Permission.new("admin.sidekiq", "Access Admin Sidekiq", "Access the admin sidekiq panel"),
 
     # Images
     Permission.new("images.admin", "Admin Images", "Access to admin specific features for images"),
