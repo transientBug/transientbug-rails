@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # start coverage before anything else
 require_relative "support/simplecov"
 

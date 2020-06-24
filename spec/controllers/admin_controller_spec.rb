@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe AdminController do
   controller do
     def action_requiring_admin
@@ -6,6 +8,8 @@ RSpec.describe AdminController do
   end
 
   before do
+    skip "removed the require_admin since things are hidden behind a constraint"
+
     routes.draw do
       get "action_requiring_admin" => "admin#action_requiring_admin"
     end
@@ -37,7 +41,7 @@ RSpec.describe AdminController do
     end
 
     context "with an admin user" do
-      let(:user) { create :user, :with_permissions, roles_and_permissions: { admin: [] } }
+      let(:user) { create :user, :with_permissions, permissions: ["admin.access"] }
 
       before do
         session[:user_id] = user.id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImagesIndex < Chewy::Index
   settings analysis: {
     analyzer: {

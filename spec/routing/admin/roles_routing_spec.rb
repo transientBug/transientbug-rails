@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Admin::RolesController, type: :routing do
   describe "routing" do
     before do
       # rubocop:disable RSpec/AnyInstance
-      allow_any_instance_of(RoleConstraint).to receive(:matches?).and_return(true)
+      allow_any_instance_of(PermissionConstraint).to receive(:matches?).and_return(true)
       # rubocop:enable RSpec/AnyInstance
     end
 

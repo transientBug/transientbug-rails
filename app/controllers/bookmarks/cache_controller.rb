@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "webpage_cache_service"
 
 class Bookmarks::CacheController < ApplicationController
@@ -6,6 +8,7 @@ class Bookmarks::CacheController < ApplicationController
   require_login!
   before_action :set_bookmark
 
+  # rubocop:disable Rails/OutputSafety
   # GET /bookmarks/1/cache
   def index
     render :unavailable, status: :not_found unless @bookmark.current_offline_cache
@@ -15,6 +18,7 @@ class Bookmarks::CacheController < ApplicationController
 
     render html: renderer.render.html_safe
   end
+  # rubocop:enable Rails/OutputSafety
 
   # POST /bookmarks/1/cache
   def create
@@ -28,6 +32,7 @@ class Bookmarks::CacheController < ApplicationController
     key = params[:key]
 
     render(plain: "404 Not Found", status: :not_found) && return unless renderer.asset?(key: key)
+
     send_data renderer.asset(key: key).read, type: renderer.content_type(key: key), disposition: "inline"
   end
 

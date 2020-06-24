@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Bookmarks::Bulk::DeletesController < AdminController
   before_action :set_bookmarks
 

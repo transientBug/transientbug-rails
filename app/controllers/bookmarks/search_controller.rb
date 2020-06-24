@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Bookmarks::SearchController < ApplicationController
   require_login!
 

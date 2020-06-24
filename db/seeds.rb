@@ -6,11 +6,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-roles = [
-  :admin,
-  :user
-].map do |role|
-  Role.create name: role
+roles = {
+  admin: ["admin.access"],
+  user: []
+}.map do |role, permission_keys|
+  Role.create name: role, permission_keys: permission_keys
 end
 
 User.create(

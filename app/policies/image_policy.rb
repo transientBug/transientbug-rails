@@ -1,24 +1,30 @@
+# frozen_string_literal: true
+
 class ImagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      return scope.all.order(:title) if user&.role? :admin
+      return scope.all.order(:title) if user&.permission? "images.admin"
 
       scope.where(disabled: false).order(:title)
     end
   end
 
   def create?
-    user&.role? :admin
-  end
-
-  def destroy?
-    user&.role? :admin
+    user&.permission? "images.create"
   end
 
   def show?
-    return !record.disabled? unless user.present?
+    return !record.disabled? if user.blank?
 
-    user.role? :admin
+    user.permission? "images.show"
+  end
+
+  def update?
+    user&.permission? "images.update"
+  end
+
+  def destroy?
+    user&.permission? "images.destroy"
   end
 
   def permitted_attributes

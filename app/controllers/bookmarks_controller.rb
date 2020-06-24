@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookmarksController < ApplicationController
   require_login!
   before_action :set_bookmark, only: [ :show, :edit, :update, :destroy ]

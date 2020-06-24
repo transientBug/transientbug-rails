@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Invitations::Bulk::DeletesController < AdminController
   before_action :set_invitation
 

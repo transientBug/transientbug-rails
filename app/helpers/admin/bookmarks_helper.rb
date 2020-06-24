@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin::BookmarksHelper
   def error_count_label error_messages
     error_count = error_messages.count

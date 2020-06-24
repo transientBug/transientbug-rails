@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::RolesController < AdminController
   before_action :set_count
   before_action :set_role, only: [:show, :edit, :update, :destroy]
@@ -23,15 +25,11 @@ class Admin::RolesController < AdminController
 
   # POST /admin/roles
   def create
-    @role = Role.new(role_params)
+    @role = Role.new role_params
 
-    respond_to do |format|
-      if @role.save
-        format.html { redirect_to [:admin, @role], notice: "Role was successfully created." }
-      else
-        format.html { render :new }
-      end
-    end
+    return render :new, status: :bad_request unless @role.save
+
+    redirect_to [:admin, @role], notice: "Role was successfully created."
   end
 
   # GET /admin/roles/1
@@ -42,27 +40,22 @@ class Admin::RolesController < AdminController
 
   # PATCH/PUT /admin/roles/1
   def update
-    respond_to do |format|
-      if @role.update(role_params)
-        format.html { redirect_to [:admin, @role], notice: "Role was successfully updated." }
-      else
-        format.html { render :edit }
-      end
-    end
+    return render :edit, status: :bad_request unless @role.update role_params
+
+    redirect_to [:admin, @role], notice: "Role was successfully updated."
   end
 
   # DELETE /admin/roles/1
   def destroy
     @role.destroy
-    respond_to do |format|
-      format.html { redirect_to admin_roles_url, notice: "Role was successfully destroyed." }
-    end
+
+    redirect_to admin_roles_url, notice: "Role was successfully destroyed."
   end
 
   private
 
   def set_role
-    @role = Role.includes(:permissions).find(params[:id])
+    @role = Role.find params[:id]
   end
 
   def set_count
@@ -70,6 +63,6 @@ class Admin::RolesController < AdminController
   end
 
   def role_params
-    params.require(:role).permit :name, :description, permission_ids: []
+    params.require(:role).permit :name, :description, permission_keys: []
   end
 end

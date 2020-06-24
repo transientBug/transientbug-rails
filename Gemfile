@@ -24,8 +24,8 @@ gem "connection_pool"
 # gem "aws-sdk-s3", "~> 1"
 
 # Caching - Rails 5.2 shipped with a redis cache for fragments, but doesn't
-# provide session storage via redis too, which redis-rails does.
-gem "redis-rails"
+# provide session storage via redis too, which redis-actionpack does.
+gem "redis-actionpack"
 gem "redis-rack-cache"
 
 # CORS & other Security
@@ -101,7 +101,9 @@ gem "exception_notification"
 gem "slack-notifier"
 
 # API Documentation from RAD
-gem "apitome"
+gem "apitome", github: "jejacks0n/apitome"
+
+gem "annotate"
 
 group :production do
   # Utils
@@ -115,6 +117,7 @@ group :development do
 
   gem "better_errors"
   gem "binding_of_caller"
+
 end
 
 group :development, :test do
@@ -134,7 +137,7 @@ group :development, :test do
 
   # Test everything
   gem "rspec"
-  gem "rspec-rails", github: "rspec/rspec-rails", branch: "4-0-dev" #, "~> 3.5"
+  gem "rspec-rails", "~> 4.0.0"
 
   # Build out better factories than the yaml fixtures
   gem "factory_bot_rails"
@@ -163,9 +166,6 @@ group :test do
   # Test rack things
   gem "rack-test"#, "~> 0.7.0"
 
-  # A Mockery of Time
-  gem "timecop"
-
   # A Mockery of Requests
   gem "webmock"
 
@@ -176,6 +176,7 @@ group :test do
   gem "database_cleaner"
 
   # Check things
-  gem "rubocop"
-  gem "rubocop-rspec"
+  gem "rubocop", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rails", require: false
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Bookmarks::TagWizardController, type: :controller do
@@ -7,7 +9,7 @@ RSpec.describe Bookmarks::TagWizardController, type: :controller do
     }
   end
 
-  let(:user) { create :user, :with_permissions, roles_and_permissions: { admin: [] } }
+  let(:user) { create :user, :with_permissions, permissions: [] }
 
   let(:valid_session) do
     {

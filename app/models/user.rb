@@ -1,8 +1,26 @@
+# frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :bigint           not null, primary key
+#  auth_token      :text
+#  email           :text
+#  password_digest :string
+#  username        :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_auth_token  (auth_token) UNIQUE
+#  index_users_on_email       (email) UNIQUE
+#
 class User < ApplicationRecord
   default_scope { includes(:roles) }
 
   has_and_belongs_to_many :roles
-  has_many :permissions, through: :roles
 
   has_many :images
 
@@ -53,12 +71,8 @@ class User < ApplicationRecord
     false
   end
 
-  def role? name
-    roles.find { |role| role.name == name.to_s }
-  end
-
   def permission? key
-    permissions.any? { |permission| permission.key == key.to_s }
+    roles.any? { |role| role.permission? key }
   end
 
   private

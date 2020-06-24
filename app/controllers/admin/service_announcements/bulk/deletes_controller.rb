@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ServiceAnnouncements::Bulk::DeletesController < AdminController
   before_action :set_service_announcement
 

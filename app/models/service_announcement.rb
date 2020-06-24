@@ -1,3 +1,23 @@
+# frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: service_announcements
+#
+#  id             :bigint           not null, primary key
+#  active         :boolean          default("true")
+#  color          :enum
+#  color_text     :text
+#  end_at         :datetime
+#  icon           :enum
+#  icon_text      :text
+#  logged_in_only :boolean          default("false")
+#  message        :text
+#  start_at       :datetime
+#  title          :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
 class ServiceAnnouncement < ApplicationRecord
   # https://semantic-ui.com/globals/site.html#colors
   enum color: {

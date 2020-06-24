@@ -19,16 +19,16 @@ ReactRailsUJS.getConstructor = className => {
   let Component = componentRequireContext("./" + filename)
 
   // Then access each key:
-  keys.forEach(function(k) {
+  keys.forEach(k => {
     Component = Component[k]
   })
 
   // support `export default`
   if (Component.__esModule) Component = Component["default"]
 
-  const StoreWrapper = (...args) => (
+  const StoreWrapper = ({ ...props }) => (
     <Provider store={store}>
-      <Component {...args} />
+      <Component {...props} />
     </Provider>
   )
 

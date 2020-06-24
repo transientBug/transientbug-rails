@@ -1,5 +1,5 @@
 require "sidekiq/web"
-require_relative "../lib/role_constraint"
+require_relative "../lib/permission_constraint"
 
 def draw name
   path = Rails.root.join "config", "routes", "#{ name }.rb"
@@ -100,10 +100,12 @@ Rails.application.routes.draw do
     end
   end
 
-  constraints RoleConstraint.new(:admin) do
+  constraints PermissionConstraint.new("admin.sidekiq") do
     mount Sidekiq::Web => "/sidekiq"
+  end
 
-    if Rails.env.production?
+  if Rails.env.production?
+    constraints PermissionConstraint.new("admin.logs") do
       mount Logster::Web => "/logs"
     end
   end

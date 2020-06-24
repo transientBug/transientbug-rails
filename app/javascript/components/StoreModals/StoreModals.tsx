@@ -56,6 +56,7 @@ const StoreModals: React.FC<StoreModalsProps> = ({
   )
 }
 
+// prettier-ignore
 export default withErrorBoundary(
   connect(
     ({ modals }: RootState) => ({ modal: modals.stack[0] }),

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < ApplicationController
   layout "page"
 
@@ -10,7 +12,7 @@ class SessionsController < ApplicationController
   def new
     @user = User.find_by(email: params[:email])&.authenticate params[:password]
 
-    return redirect_to login_url, notice: "Unable to log you in!" unless @user.present?
+    return redirect_to login_url, notice: "Unable to log you in!" if @user.blank?
 
     self.current_user = @user
 

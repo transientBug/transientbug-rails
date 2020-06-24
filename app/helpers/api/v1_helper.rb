@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V1Helper
   # Kaminari doesn't provide helpers for absolute URLs to pagination for use in
   # JSON API spec pagination.

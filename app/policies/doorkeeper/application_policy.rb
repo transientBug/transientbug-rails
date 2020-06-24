@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 class Doorkeeper::ApplicationPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      # return scope.where(public: true) unless user.present?
-      # return scope.all if user.role? :admin
-
       scope.order(created_at: :desc)
     end
   end

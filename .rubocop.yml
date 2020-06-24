@@ -1,8 +1,10 @@
 inherit_from:
   - .rubocop_rspec.yml
+  - .rubocop_rails.yml
+  - .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
@@ -58,13 +60,6 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Enabled: false
-
-Naming/FileName:
-  Exclude:
-    - Gemfile
-    - Rakefile
-    - Thorfile
-    - Guardfile
 
 # Multi-line method chaining should be done with leading dots.
 Layout/DotPosition:
@@ -134,8 +129,7 @@ Style/Alias:
 
 # All of rails uses this compact definition so lets just not fight it
 Style/ClassAndModuleChildren:
-  Exclude:
-    - app/**/*.rb
+  Enabled: false
 
 # This is the ugliest rule and makes it hard to read what is getting
 # assigned, imo.
@@ -144,12 +138,6 @@ Style/ConditionalAssignment:
 
 Style/Documentation:
   Enabled: false # Eventually this should be turned of but for now lots of things remain undocumented
-
-# magic comments? nooooooo. at least not right now
-# This disables the need for the # frozen_string_literal: true
-# comments that are recommended for the move to ruby 3
-Style/FrozenStringLiteralComment:
-  Enabled: false
 
 # Why use a method to check if a number is a number?
 # This normally wants you to use #zero? instead of == 0 which seems rightly
@@ -194,3 +182,12 @@ Style/WordArray:
 # I like the like shortcut though
 Style/RescueStandardError:
   Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true

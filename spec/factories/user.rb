@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence(:username) { |n| "person#{ n }" }
@@ -6,35 +8,15 @@ FactoryBot.define do
     password { "12345" }
     password_confirmation { password }
 
-    trait :with_role do
-      transient do
-        role_names { [ :default ] }
-      end
-
-      after(:create) do |user, evaluator|
-        Kernel.warn <<~MSG
-          DEPRECATION WARNING: the User factory trait :with_role is deprecated and will be removed soon, please use :with_permissions!
-        MSG
-
-        roles = Array(evaluator.role_names).map do |name|
-          create :role, name: name
-        end
-
-        user.roles = roles
-      end
-    end
-
     trait :with_permissions do
       transient do
-        roles_and_permissions { { default: [ "default.default" ] } }
+        permissions { [ "default.default" ] }
       end
 
       after(:create) do |user, evaluator|
-        roles = evaluator.roles_and_permissions.to_a.map do |(name, permissions)|
-          create(:role, :with_permissions, name: name, permission_names: permissions)
-        end
+        role = create(:role, :with_permissions, name: "test.default", permission_keys: evaluator.permissions)
 
-        user.roles = roles
+        user.roles << role
       end
     end
   end

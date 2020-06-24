@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1Controller < ApiController
   include Pundit
   include ActionController::HttpAuthentication::Basic::ControllerMethods
@@ -29,7 +31,7 @@ class Api::V1Controller < ApiController
     @current_user ||= basic_auth
     @current_user ||= oauth_auth
 
-    render_unauthorized "Invalid API Credentials" unless @current_user.present?
+    render_unauthorized "Invalid API Credentials" if @current_user.blank?
   end
 
   def token_auth

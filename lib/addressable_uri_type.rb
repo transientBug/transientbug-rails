@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is used with ActiveModels .attribute which allows us to write custom
 # serializers and deserializers, in this case, treating a string in the
 # database as an Addressable::URI object in ruby land
