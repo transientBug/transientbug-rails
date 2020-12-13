@@ -47,18 +47,18 @@ services:
     env_file:
       - ".env.production"
 
-  clockwork:
-    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
-    depends_on:
-      - "postgres"
-      - "elasticsearch"
-      - "redis"
-      - "sidekiq"
-    command: bundle exec clockwork clock.rb
-    networks:
-      - "services"
-    env_file:
-      - ".env.production"
+  #clockwork:
+    #image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    #depends_on:
+      #- "postgres"
+      #- "elasticsearch"
+      #- "redis"
+      #- "sidekiq"
+    #command: bundle exec clockwork clock.rb
+    #networks:
+      #- "services"
+    #env_file:
+      #- ".env.production"
 
   rails:
     image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
@@ -76,25 +76,25 @@ services:
     env_file:
       - ".env.production"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost", "||", "exit", "1"]
+      test: "curl -f http://localhost/"
       interval: 1m
       timeout: 10s
       retries: 5
 
-  cable:
-    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
-    depends_on:
-      - "redis"
-    command: bundle exec puma -p 28080 cable/config.ru
-    ports:
-      - "28080:28080"
-    #volumes:
-      #- ".:/app"
-    networks:
-      - "exposed"
-      - "services"
-    env_file:
-      - ".env.production"
+  #cable:
+    #image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    #depends_on:
+      #- "redis"
+    #command: bundle exec puma -p 28080 cable/config.ru
+    #ports:
+      #- "28080:28080"
+    ##volumes:
+      ##- ".:/app"
+    #networks:
+      #- "exposed"
+      #- "services"
+    #env_file:
+      #- ".env.production"
 
 volumes:
   redis:
