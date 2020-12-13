@@ -12,7 +12,6 @@ RUN apk add --no-cache build-base gcompat git curl postgresql-dev postgresql nod
 COPY . .
 RUN bundle config set without 'development test' && \
     bundle install --jobs 4 && \
-    bundle binstubs && \
     bundle exec rake tmp:create
 
 ENTRYPOINT ["/bin/bash", "docker/entrypoint.sh"]
