@@ -23,5 +23,7 @@ module TransientBug
     end
 
     config.exceptions_app = routes
+
+    config.active_storage.draw_routes = false
   end
 end

@@ -1,4 +1,4 @@
-FROM ruby:2.6.3-alpine
+FROM ruby:2.7.2-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 
 WORKDIR /app
@@ -10,7 +10,8 @@ RUN apk add --no-cache build-base gcompat git curl postgresql-dev postgresql nod
     echo "update: --no-document" >> $HOME/.gemrc
 
 COPY . .
-RUN bundle install --binstubs --jobs 4 --without development test && \
+RUN bundle config set without 'development test' && \
+    bundle install --jobs 4 && \
     bundle exec rake tmp:create
 
-CMD bundle exec puma -C config/puma.rb
+ENTRYPOINT ["/bin/bash", "docker/entrypoint.sh"]
