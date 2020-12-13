@@ -14,4 +14,4 @@ RUN bundle config set without 'development test' && \
     bundle install --jobs 4 && \
     bundle exec rake tmp:create
 
-ENTRYPOINT ["/bin/bash", "docker/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
