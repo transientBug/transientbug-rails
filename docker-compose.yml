@@ -76,7 +76,7 @@ services:
     env_file:
       - ".env.production"
     healthcheck:
-      test: "curl -f http://localhost/"
+      test: "curl -f http://localhost:8000/"
       interval: 1m
       timeout: 10s
       retries: 5
