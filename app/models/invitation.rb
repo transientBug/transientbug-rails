@@ -5,7 +5,7 @@
 # Table name: invitations
 #
 #  id            :bigint           not null, primary key
-#  available     :integer          default("1")
+#  available     :integer          default(1)
 #  code          :text
 #  description   :text
 #  internal_note :text

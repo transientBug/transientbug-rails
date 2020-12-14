@@ -9,12 +9,3 @@ test:
 dropzone:
   service: Disk
   root: /dropzone
-
-s3:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.aws[:access_key_id] %>
-  secret_access_key: <%= Rails.application.credentials.aws[:secret_access_key] %>
-  region: nyc3
-  endpoint: https://nyc3.digitaloceanspaces.com
-  force_path_style: true
-  bucket: "transientbug"

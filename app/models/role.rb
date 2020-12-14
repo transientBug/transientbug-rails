@@ -7,7 +7,7 @@
 #  id              :bigint           not null, primary key
 #  description     :string
 #  name            :text             not null
-#  permission_keys :string           default("{}"), not null, is an Array
+#  permission_keys :string           default([]), not null, is an Array
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

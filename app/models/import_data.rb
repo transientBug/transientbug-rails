@@ -5,7 +5,7 @@
 # Table name: import_data
 #
 #  id          :bigint           not null, primary key
-#  complete    :boolean          default("false")
+#  complete    :boolean          default(FALSE)
 #  import_type :enum
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

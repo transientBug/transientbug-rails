@@ -5,9 +5,9 @@
 # Table name: images
 #
 #  id         :bigint           not null, primary key
-#  disabled   :boolean          default("false")
+#  disabled   :boolean          default(FALSE)
 #  source     :text
-#  tags       :text             default("{}"), is an Array
+#  tags       :text             default([]), is an Array
 #  title      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
