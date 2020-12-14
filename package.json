@@ -32,7 +32,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
     "immer": "^6.0.2",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "mousetrap": "^1.6.2",
     "pluralize": "^8.0.0",
     "postcss-mixins": "^6.2.2",
