@@ -21,7 +21,7 @@ services:
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health", "||", "exit", "1"]
+      test: "curl -f http://localhost:9200/_cluster/health"
       interval: 1m
       timeout: 10s
       retries: 5
@@ -41,7 +41,7 @@ services:
       - "redis"
     volumes:
       - "./storage:/dropzone"
-    command: bundle exec sidekiq -C config/sidekiq.yml
+    command: ["bundle exec sidekiq -C config/sidekiq.yml"]
     networks:
       - "services"
     env_file:

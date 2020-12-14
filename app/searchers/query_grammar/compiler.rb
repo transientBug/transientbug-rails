@@ -54,7 +54,7 @@ module QueryGrammar
       QueryGrammar::Cloaker.new(bind: self).cloak(*args, &visitors[name])
     rescue => e
       # Hack to remove this method_missing from the backtrace
-      e.set_backtrace e.backtrace[1..-1]
+      e.set_backtrace e.backtrace[1..]
       fail e
     end
   end

@@ -20,7 +20,7 @@ module QueryGrammar
 
       def to_s
         inside = items.map(&:to_s).join(" #{ conjoiner.to_s.upcase } ")
-        "(" + inside + ")"
+        "(#{ inside })"
       end
 
       def == other

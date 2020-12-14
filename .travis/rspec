@@ -1,7 +1,0 @@
-#!/bin/bash
-set -ev
-
-./.travis/common
-
-echo "Running Specs"
-bundle exec rspec

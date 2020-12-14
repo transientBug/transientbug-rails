@@ -27,11 +27,9 @@ module QueryGrammar
         true
       end
 
-      # rubocop:disable Style/MethodMissingSuper
       def method_missing func, *args, **_opts, &block
         @operator[ func ] = args.first || block
       end
-      # rubocop:enable Style/MethodMissingSuper
     end
   end
 end

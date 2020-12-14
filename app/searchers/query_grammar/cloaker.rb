@@ -41,11 +41,9 @@ module QueryGrammar
       @_parent_binding.respond_to_missing?(*args)
     end
 
-    # rubocop:disable Style/MethodMissingSuper
     def method_missing method, *args, **opts, &block
       args << opts if opts.any?
       @_parent_binding.send method, *args, &block
     end
-    # rubocop:enable Style/MethodMissingSuper
   end
 end

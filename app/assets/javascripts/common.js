@@ -8,37 +8,12 @@ document.addEventListener("turbolinks:load", () => {
   $(".sidebar.icon").parent().on("click", () => $(".ui.sidebar").sidebar("toggle"))
 
   tagDropdown(
-    "[data-behavior~=autocomplete-image-tags]",
-    "autocomplete image tags", {
-      name: "title",
-      value: "title"
-    }
-  )
-
-  tagDropdown(
     "[data-behavior~=autocomplete-bookmark-tags]",
     "autocomplete bookmark tags", {
       name: "label",
       value: "label"
     }
   )
-
-  // Setup searching for things. This could probably be simplified with data attributes.
-  $("[data-behavior~=search-images]").search({
-    type: "category",
-    minCharacters: 2,
-    cache: false,
-    searchFields   : [
-      "title"
-    ],
-    apiSettings: {
-      cache: false,
-      action: "search images"
-    },
-    fields: {
-      url: "view"
-    }
-  })
 
   $("[data-behavior~=search-bookmarks]").search({
     minCharacters: 2,

@@ -12,9 +12,9 @@ module Admin::BookmarksHelper
       color = "red"
     end
 
-    content_tag :div, class: "ui label #{ color }" do
+    tag.div(class: "ui label #{ color }") do
       capture do
-        concat content_tag(:i, "", class: "icon #{ icon }")
+        concat tag.i("", class: "icon #{ icon }")
         concat "#{ error_count } Error".pluralize(error_count)
       end
     end

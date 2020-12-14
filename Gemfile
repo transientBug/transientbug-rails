@@ -21,6 +21,10 @@ gem "hiredis"
 gem "connection_pool"
 # gem "active_record_upsert" # Has issues with arel deps wnd the rails 5.2 beta
 
+# Temp for image exports
+# gem "sequel"
+# gem "sqlite3"
+
 # gem "aws-sdk-s3", "~> 1"
 
 # Caching - Rails 5.2 shipped with a redis cache for fragments, but doesn't

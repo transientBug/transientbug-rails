@@ -27,7 +27,4 @@ class Image < ApplicationRecord
   validates :title, presence: true
 
   has_one_attached :image
-
-  update_index("images#image") { self }
-  update_index("images#tag") { tags.map(&ImagesIndex::TagStruct.method(:from)) }
 end

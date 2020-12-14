@@ -29,11 +29,6 @@
     = render "components/feather_icon", icon: "bookmark"
     = "#{ bookmark_count } Bookmark".pluralize bookmark_count
 
-  .page-header__metadata
-    - image_count = @user.images.count
-    = render "components/feather_icon", icon: "image"
-    = "#{ image_count } Gif".pluralize image_count
-
 .resource-list
   .resource-list__row
     .resource__list__col

@@ -92,14 +92,6 @@ Rails.application.routes.draw do
 
   resources :csp_violation_report, only: [:create], path: '/csp-violation-report', format: false, defaults: { format: :js }
 
-  resources :images do
-    collection do
-      get "search"
-      get "tags/autocomplete", action: :autocomplete, as: "tags_autocomplete"
-      get "tag/:tag", action: :tag, as: "tag"
-    end
-  end
-
   constraints PermissionConstraint.new("admin.sidekiq") do
     mount Sidekiq::Web => "/sidekiq"
   end

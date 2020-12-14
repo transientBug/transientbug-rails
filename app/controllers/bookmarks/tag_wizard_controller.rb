@@ -44,7 +44,7 @@ class Bookmarks::TagWizardController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(:tags).tap do |obj|
-      tag_input = params.dig(:bookmark).fetch(:tags, [])
+      tag_input = params[:bookmark].fetch(:tags, [])
       tag_input = tag_input.split(",") if tag_input.is_a? String
 
       tags = Tag.find_or_create_tags tags: tag_input

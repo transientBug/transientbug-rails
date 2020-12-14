@@ -45,7 +45,7 @@ module QueryGrammar
       line, column = deepest.source.line_and_column deepest.pos
 
       message = <<~MSG
-        unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..-1] }
+        unexpected input at line #{ line } column #{ column } - #{ deepest.message } #{ input[(column - 1)..] }
       MSG
 
       fail ScanError.new(message, line, column, e)
