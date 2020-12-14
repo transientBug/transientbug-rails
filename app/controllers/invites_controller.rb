@@ -57,7 +57,7 @@ class InvitesController < ApplicationController
 
     return if @invitations_user
 
-    query = <<~SQL
+    query = <<~SQL.squish
       UPDATE invitations
       SET available = available - 1
       WHERE available > 0
