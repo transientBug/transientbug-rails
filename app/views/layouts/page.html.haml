@@ -4,15 +4,10 @@
     = render "layouts/common/head" do
       %title transientBug #{ content_for :page_title }
 
-      = stylesheet_link_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
-
-      = stylesheet_pack_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_pack_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name ] }
-    = render "layouts/common/store"
-
-    = render "layouts/page/body"
+    = yield
 
     = render "layouts/common/footer"

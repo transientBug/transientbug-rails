@@ -48,20 +48,13 @@ gem "tzinfo-data"
 # Views
 gem "haml"
 gem "haml-rails"
+gem "view_component", require: "view_component/engine"
 
 gem "inline_svg"
 
 # Javascript and CSS
-gem "sass-rails"#, "~> 5.0"
-gem "uglifier"#, ">= 1.3.0"
 gem "webpacker"#, "~> 4.0"
 gem "turbolinks"#, "~> 5"
-
-gem "semantic-ui-sass"#, "~> 2.2.12.0"
-gem "rails-assets-lodash", source: "https://rails-assets.org"
-gem "jquery-rails"
-gem "react-rails"
-gem "ejs" # javascript templates for things like fancy delete modals
 
 # Better link styling
 gem "active_link_to"
@@ -76,7 +69,7 @@ gem "jbuilder"
 gem "sidekiq"
 
 # Cron like scheduled/repeating tasks
-gem "clockwork"
+# gem "clockwork"
 
 # Auth
 # Provider

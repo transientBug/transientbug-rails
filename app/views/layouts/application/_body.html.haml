@@ -1,14 +1,8 @@
 = render "layouts/common/navbar"
-= render "layouts/common/mobile_nav"
 
 .ui.pusher.main
   %aside.tb.sidebar-menu
     = content_for :sidebar
 
   %main.tb
-    = render_service_announcements
-    = semantic_flash
-
     = yield
-
-= react_component "StoreModals"

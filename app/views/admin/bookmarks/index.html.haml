@@ -1,29 +1,22 @@
 - content_for :page_title do
   Bookmarks
-
-- store_content records: store_records(@bookmarks, only: [:id, :title, :uri])
-
 - content_for :menu do
   .bulk-action-menu
-    = behavior_data "bulk-action-visibility" do |vis_dataset|
-      .hidden{ **vis_dataset }
-        %h2
-          Bulk Actions
-          %small
-            (
-            = behavior_data "bulk-action-count" do |dataset|
-              %span{ **dataset }
-            selected bookmarks )
+    .hidden
+      %h2
+        Bulk Actions
+        %small
+          (
+            %span
+          selected bookmarks )
 
-        = behavior_data "display-modal", modal: "TagAll", actionUrl: bookmarks_bulk_tag_path, autocompleteUrl: bookmarks_autocomplete_index_path do |dataset|
-          %button{ class: "button button-light-gray button-gray-outline text-gray-800 hover:button-gray", **dataset }
-            %i.tags.icon
-            Add Tags
+        %button{ class: "button button-light-gray button-gray-outline text-gray-800 hover:button-gray" }
+          %i.tags.icon
+          Add Tags
 
-        = behavior_data "display-modal", modal: "DeleteAll", actionUrl: bookmarks_bulk_delete_path do |dataset|
-          %button{ class: "button button-red-outline hover:button-red text-red hover:text-white", **dataset }
-            %i.trash.icon
-            Delete All
+        %button{ class: "button button-red-outline hover:button-red text-red hover:text-white" }
+          %i.trash.icon
+          Delete All
 
 = paginate @bookmarks
 
@@ -31,8 +24,7 @@
   %thead
     %tr
       %th
-        = behavior_data "bulk-action-select-all" do |dataset|
-          = render "components/checkbox", dataset: dataset
+        = render "components/checkbox"
 
       %th Actions
       %th ID
@@ -46,8 +38,7 @@
       - @bookmarks.each do |bookmark|
         %tr
           %td.collapsing
-            = behavior_data "bulk-action-select-single", id: bookmark.id do |dataset|
-              = render "components/checkbox", dataset: dataset
+            = render "components/checkbox"
 
           %td.collapsing
             .ui.buttons
@@ -58,18 +49,16 @@
               .ui.simple.dropdown.icon.button
                 %i.dropdown.icon
                 .menu
-                  = modal_tag bookmark, :recache, url: admin_bookmark_cache_index_path(bookmark) do
-                    %i.download.icon
-                    recache
+                  %i.download.icon
+                  recache
 
                   .divider
                   .header
                     %i.warning.sign.icon
                     DANGERZONE
 
-                  = modal_tag bookmark, :delete, url: admin_bookmark_path(bookmark) do
-                    %i.trash.icon
-                    delete
+                  %i.trash.icon
+                  delete
 
           %td.collapsing= bookmark.id
           %td.collapsing= link_to bookmark.user.username, admin_user_path(bookmark.user)
@@ -92,5 +81,3 @@
           No bookmarks made yet
 
 = paginate @bookmarks
-
-= react_component "StoreModals"

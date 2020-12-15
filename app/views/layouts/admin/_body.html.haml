@@ -1,10 +1,6 @@
 = render "layouts/admin/navbar"
-= render "layouts/admin/mobile_nav"
 
 .ui.pusher.main
-  = render_service_announcements
-  = semantic_flash
-
   .ui.fluid.stackable.container
     - if partial_for? "menu"
       .ui.padded.two.column.stackable.grid

@@ -4,13 +4,8 @@
     = render "layouts/common/head" do
       %title transientBug Admin #{ content_for :page_title }
 
-      = stylesheet_link_tag "admin", media: "all", "data-turbolinks-track": "reload"
-      = javascript_include_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
-
-      = stylesheet_pack_tag "admin", media: "all", "data-turbolinks-track": "reload"
-      = javascript_pack_tag "admin", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name ] }
-    = render "layouts/common/store"
-
     = render "layouts/admin/body"
