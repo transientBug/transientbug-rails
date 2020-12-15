@@ -8,6 +8,6 @@
       = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
   %body{ class: [  controller_name, action_name, "bg-gray-50" ] }
-    = render "layouts/application/body"
+    = yield
 
     = render "layouts/common/footer"

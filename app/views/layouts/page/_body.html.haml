@@ -1,9 +1,0 @@
-= render "layouts/common/navbar"
-
-.ui.pusher.main.old
-  - if content_for? :secondary_navbar
-    .ui.fluid.secondary.top.attached.stackable.menu
-      = content_for :secondary_navbar
-
-  .ui.fluid.horizontally.padded.stackable.container
-    = yield

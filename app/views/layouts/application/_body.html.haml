@@ -1,8 +1,5 @@
-= render "layouts/common/navbar"
+= render "layouts/application/navbar"
 
-.ui.pusher.main
-  %aside.tb.sidebar-menu
-    = content_for :sidebar
+= content_for :sidebar
 
-  %main.tb
-    = yield
+= yield
