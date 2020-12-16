@@ -1,28 +1,10 @@
 - content_for :page_title do
   Home
 
-.ui.segment
-  %h2.ui.dividing.header Quick Stats
+= render(StatsComponent.new(title: "Bookmark Stats")) do |c|
+  = c.stats([ { title: "Total Bookmarks", number: @stats[:total_count] }, { title: "Untagged Bookmarks", number: @stats[:untagged_count] }, { title: "Tags", number: 0 } ])
 
-  .ui.statistics
-    .statistic
-      .value= @stats[:total_count]
-      .label Total Bookmarks
-
-    - if @stats[:untagged_count] != 0
-      .statistic.red
-        .value= @stats[:untagged_count]
-        .label
-          = link_to "Untagged Bookmarks", bookmarks_search_index_path(q: "NOT has:tags")
-          %br
-          = link_to "Tag Wizard", bookmarks_tag_wizard_index_path, class: "ui mini button"
-
-    - else
-      .statistic
-        .value= @stats[:untagged_count]
-        .label Untagged Bookmarks!
-
-%h2.ui.dividing.header Most recent bookmarks
-
-- @recent_bookmarks.each do |bookmark|
-  = render "components/bookmark_card", bookmark: bookmark, with_select: false
+.bg-white.shadow.overflow-hidden.rounded-md
+  %ul.divide-y.divide-gray-200
+    - @recent_bookmarks.each do |bookmark|
+      %li= render BookmarkCardComponent.new(bookmark: bookmark)

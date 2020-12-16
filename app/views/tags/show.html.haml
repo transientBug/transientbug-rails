@@ -1,5 +1,5 @@
 - content_for :page_title do
-  Bookmarks
+  Bookmarks Tagged '#{ @tag.label }'
 
 - if @bookmarks.any?
   = paginate @bookmarks

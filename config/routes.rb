@@ -53,31 +53,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tags, only: [:index, :show]
+
   resources :bookmarks do
     scope module: :bookmarks do
       resources :cache, only: [:index, :create] do
         collection do
           match "/*key", to: "cache#show", via: [:get]
-        end
-      end
-
-      collection do
-        scope as: :bookmarks do
-          resources :tag_wizard, only: [:index, :update]
-
-          resources :search, only: [:index]
-
-          resources :tags, only: [:index, :show] do
-            collection do
-              resources :autocomplete, only: [:index], module: "tags"
-            end
-          end
-
-          namespace :bulk do
-            resource :tag, only: [:update]
-            resource :recache, only: [:create]
-            resource :delete, only: [:destroy]
-          end
         end
       end
     end

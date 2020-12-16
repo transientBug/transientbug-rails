@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class Bookmarks::TagsController < ApplicationController
+class TagsController < ApplicationController
   before_action :set_tag, only: [ :show ]
 
-  # GET /bookmarks/tags
+  # GET /tags
   def index; end
 
-  # GET /bookmarks/tags/thing
+  # GET /tags/1
   def show
     @bookmarks = policy_scope(Bookmark)
       .joins(:bookmarks_tags)

@@ -1,0 +1,7 @@
+%div
+  %h3.text-lg.leading-6.font-medium.text-gray-900
+    = @title
+
+  %dl.mt-5.grid.grid-cols-1.rounded.bg-white.overflow-hidden.shadow.divide-y.divide-gray-200.md:grid-cols-3.md:divide-y-0.md:divide-x
+    - stats.each do |stat|
+      = stat
