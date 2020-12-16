@@ -61,19 +61,20 @@
               = inline_svg_pack_tag "feather/heart.svg", class: "text-cerise-500 h-6 w-6"
               in Colorado
 
-      .mt-8.xl:mt-0
-        %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
-          Request an invite
-        %p.mt-4.text-base.text-gray-300
-          We won't send you spam, and will only use this email address to inform you of your invite code.
+      - unless signed_in?
+        .mt-8.xl:mt-0
+          %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+            Request an invite
+          %p.mt-4.text-base.text-gray-300
+            We won't send you spam, and will only use this email address to inform you of your invite code.
 
-        %form.mt-4.sm:flex.sm:max-w-md
-          %label.sr-only{:for => "emailAddress"} Email address
-          %input#emailAddress.appearance-none.min-w-0.w-full.bg-white.border.border-transparent.rounded-md.py-2.px-4.text-base.text-gray-900.placeholder-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white.focus:border-white.focus:placeholder-gray-400{:autocomplete => "email", :name => "emailAddress", :placeholder => "Email ...", :required => "", :type => "email"}
+          %form.mt-4.sm:flex.sm:max-w-md
+            %label.sr-only{:for => "emailAddress"} Email address
+            %input#emailAddress.appearance-none.min-w-0.w-full.bg-white.border.border-transparent.rounded-md.py-2.px-4.text-base.text-gray-900.placeholder-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white.focus:border-white.focus:placeholder-gray-400{:autocomplete => "email", :name => "emailAddress", :placeholder => "Email ...", :required => "", :type => "email"}
 
-          .mt-3.rounded-md.sm:mt-0.sm:ml-3.sm:flex-shrink-0
-            %button.w-full.bg-limegreen-500.border.border-transparent.rounded-md.py-2.px-4.flex.items-center.justify-center.text-base.font-medium.text-white.hover:bg-limegreen-600.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-limegreen-500{:type => "submit"}
-              Request Invite
+            .mt-3.rounded-md.sm:mt-0.sm:ml-3.sm:flex-shrink-0
+              %button.w-full.bg-limegreen-500.border.border-transparent.rounded-md.py-2.px-4.flex.items-center.justify-center.text-base.font-medium.text-white.hover:bg-limegreen-600.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-limegreen-500{:type => "submit"}
+                Request Invite
 
     .mt-8.border-t.border-gray-700.pt-8.md:flex.md:items-center.md:justify-between
       .flex.space-x-6.md:order-2

@@ -32,14 +32,14 @@
             Leaving: "transition ease-in-out duration-300 transform"
             From: "translate-x-0"
             To: "-translate-x-full"
-          .relative.max-w-xs.w-full.bg-white.pt-5.pb-4.flex-1.flex.flex-col
+          .relative.max-w-xs.w-full.bg-gray-800.pt-5.pb-4.flex-1.flex.flex-col
             .absolute.top-0.right-0.-mr-12.pt-2
               %button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white( data-action="click->menu#toggle" )
                 %span.sr-only Close sidebar
                 = inline_svg_pack_tag "feather/x.svg", class: "h-6 w-6 text-white"
 
-            .flex-shrink-0.px-4.flex.items-center
-              = image_tag "bug_logo.png", class: "h-8 w-auth"
+            .flex-shrink-0.px-4.flex.items-center.justify-center
+              = image_tag "bug_logo.png", class: "h-16 w-auth"
 
             .mt-5.flex-1.h-0.overflow-y-auto
               %nav.px-2.space-y-1
@@ -105,38 +105,48 @@
                       %span.sr-only Open user menu
                       = inline_svg_pack_tag "feather/user.svg", class: "h-6 w-6"
 
-                  /
-                    Profile dropdown panel, show/hide based on dropdown state.
-                    
-                    Entering: "transition ease-out duration-100"
-                    From: "transform opacity-0 scale-95"
-                    To: "transform opacity-100 scale-100"
-                    Leaving: "transition ease-in duration-75"
-                    From: "transform opacity-100 scale-100"
-                    To: "transform opacity-0 scale-95"
-                  .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.py-1.hidden{"aria-labelledby" => "user-menu", "aria-orientation" => "vertical", :role => "menu"}( data-dropdown-target="menu" data-controller="menu" )
-                    = link_to "Settings", profile_path, class: "block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem"
+                    /
+                      Dropdown panel, show/hide based on dropdown state.
 
-                    - if current_user.permission? "admin.access"
-                      %hr.border-gray-500
-                      = link_to "Admin", admin_root_path, class: "block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem"
-                      %hr.border-gray-500
+                      Entering: "transition ease-out duration-100"
+                      From: "transform opacity-0 scale-95"
+                      To: "transform opacity-100 scale-100"
+                      Leaving: "transition ease-in duration-75"
+                      From: "transform opacity-100 scale-100"
+                      To: "transform opacity-0 scale-95"
+                    .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-dropdown-target="menu" data-controller="menu" )
+                      .px-4.py-3
+                        %p.text-sm
+                          Signed in as
+                        %p.text-sm.font-medium.text-gray-900.truncate
+                          = current_user.username
 
-                    = link_to "Log out", logout_path, class: "block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem"
+                      .py-1( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
+                        = link_to profile_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
+                          = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                          Settings
+
+                      - if current_user.permission? "admin.access"
+                        .py-1
+                          = link_to admin_root_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
+                            = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                            Admin
+
+                      .py-1
+                        %form( method="DELETE" action="/logout" )
+                          %button( type="submit" class="group flex items-center  w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" )
+                            = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                            Log out
 
           %main.flex-1.relative.overflow-y-auto.focus:outline-none{:tabindex => "0"}
-            .py-6
-
+            .py-6.space-y-4
               .md:flex.md:items-center.md:justify-between
                 .flex-1.min-w-0
                   %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
                     = content_for :page_title
 
-                .mt-4.flex.md:mt-0.md:ml-4
+                .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
                   = content_for :page_actions
-
-              -#.px-4.sm:px-6.md:px-0
-                %h1.text-2xl.font-semibold.text-gray-900= content_for :page_title
 
               .px-4.sm:px-6.md:px-0.space-y-4
                 = yield

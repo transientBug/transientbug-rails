@@ -3,7 +3,7 @@
     %p.text-sm.font-medium.text-royalblue-600.truncate
       = link_to @bookmark.title, bookmark_path(@bookmark)
 
-    .ml-2.flex-shrink-0.flex
+    .ml-2.flex-shrink-0.flex.space-x-1
       = render TagComponent.with_collection(@bookmark.tags)
 
   .mt-2.sm:flex.sm:justify-between
@@ -11,7 +11,7 @@
       = link_to @bookmark.uri.host.to_s, @bookmark.uri.to_s, title: @bookmark.uri.to_s, class: "flex items-center text-sm text-gray-500"
 
     .mt-2.flex.items-center.text-sm.text-gray-500.sm:mt-0
+      = inline_svg_pack_tag "feather/calendar.svg", class: "flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+
       %p
         = render RelativeTimeComponent.new(time: @bookmark.created_at)
-
-      = inline_svg_pack_tag "feather/calendar.svg", class: "flex-shrink-0 ml-1.5 h-5 w-5 text-gray-400"

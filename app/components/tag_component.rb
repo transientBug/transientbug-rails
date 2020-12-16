@@ -7,6 +7,19 @@ class TagComponent < ViewComponent::Base
 
   def color
     {
-    }.fetch tag.color, "bg-limegreen-500"
+      red: :red,
+      orange: :orange,
+      yellow: :yellow,
+      olive: :olive,
+      green: :limegreen,
+      teal: :teal,
+      blue: :blue,
+      violet: :violet,
+      purple: :purple,
+      pink: :pink,
+      brown: :brown,
+      grey: :gray,
+      black: :gray
+    }.transform_keys(&:to_s).fetch tag.color, "limegreen"
   end
 end
