@@ -4,10 +4,8 @@
 - if @bookmarks.any?
   = paginate @bookmarks
 
-  .bg-white.shadow.overflow-hidden.rounded-md
-    %ul.divide-y.divide-gray-200
-      - @bookmarks.each do |bookmark|
-        %li= render BookmarkCardComponent.new(bookmark: bookmark)
+  .space-y-3
+    = render BookmarkCardComponent.with_collection(@bookmarks)
 
   = paginate @bookmarks
 

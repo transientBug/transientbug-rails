@@ -4,7 +4,5 @@
 = render(StatsComponent.new(title: "Bookmark Stats")) do |c|
   = c.stats([ { title: "Total Bookmarks", number: @stats[:total_count] }, { title: "Untagged Bookmarks", number: @stats[:untagged_count] }, { title: "Tags", number: 0 } ])
 
-.bg-white.shadow.overflow-hidden.rounded-md
-  %ul.divide-y.divide-gray-200
-    - @recent_bookmarks.each do |bookmark|
-      %li= render BookmarkCardComponent.new(bookmark: bookmark)
+.space-y-3
+  = render BookmarkCardComponent.with_collection(@recent_bookmarks)

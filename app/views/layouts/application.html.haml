@@ -7,148 +7,144 @@
       = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
       = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-  %body{ class: [  controller_name, action_name, "bg-gray-50" ] }
-    .h-screen.overflow-hidden.flex( data-controller="sidebar" )
-      / Off-canvas menu for mobile, show/hide based on off-canvas menu state.
-      .md:hidden.hidden( data-controller="menu" data-sidebar-target="menu" )
-        .fixed.inset-0.z-40.flex
-          /
-            Off-canvas menu overlay, show/hide based on off-canvas menu state.
-            
-            Entering: "transition-opacity ease-linear duration-300"
-            From: "opacity-0"
-            To: "opacity-100"
-            Leaving: "transition-opacity ease-linear duration-300"
-            From: "opacity-100"
-            To: "opacity-0"
-          .fixed.inset-0{"aria-hidden" => "true"}
-            .absolute.inset-0.bg-gray-800.opacity-75
-          /
-            Off-canvas menu, show/hide based on off-canvas menu state.
-            
-            Entering: "transition ease-in-out duration-300 transform"
-            From: "-translate-x-full"
-            To: "translate-x-0"
-            Leaving: "transition ease-in-out duration-300 transform"
-            From: "translate-x-0"
-            To: "-translate-x-full"
-          .relative.max-w-xs.w-full.bg-gray-800.pt-5.pb-4.flex-1.flex.flex-col
-            .absolute.top-0.right-0.-mr-12.pt-2
-              %button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white( data-action="click->menu#toggle" )
-                %span.sr-only Close sidebar
-                = inline_svg_pack_tag "feather/x.svg", class: "h-6 w-6 text-white"
+  %body.bg-gray-50.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
+    %header.bg-gray-800( data-controller="sidebar" )
+      .max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8
+        .relative.h-16.flex.justify-between
+          .relative.z-10.px-2.flex.lg:px-0
+            .flex-shrink-0.flex.items-center
+              = image_tag "bug_logo.png", class: "block h-8 w-auto", alt: "transient bug"
 
-            .flex-shrink-0.px-4.flex.items-center.justify-center
-              = image_tag "bug_logo.png", class: "h-16 w-auth"
+          .relative.z-0.flex-1.px-2.flex.items-center.justify-center.sm:absolute.sm:inset-0
+            .w-full.sm:max-w-xs
+              %label.sr-only(for="search") Search
+              .relative
+                .pointer-events-none.absolute.inset-y-0.left-0.pl-3.flex.items-center
+                  = feather_svg "search", class: "h-5 w-5 text-gray-400"
 
-            .mt-5.flex-1.h-0.overflow-y-auto
-              %nav.px-2.space-y-1
-                / Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                = link_to bookmarks_path, class: "bg-gray-100 text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium" do
-                  / Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
-                  = inline_svg_pack_tag "feather/bookmark.svg", class: "text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                  Bookmarks
+                %input#search.block.w-full.bg-gray-700.border.border-transparent.rounded-md.py-2.pl-10.pr-3.text-sm.placeholder-gray-400.focus:outline-none.focus:bg-white.focus:border-white.focus:ring-white.focus:text-gray-900.focus:placeholder-gray-500.sm:text-sm(name="search" placeholder="Search" type="search")/
 
-                = link_to tags_path, class: "text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium" do
-                  = inline_svg_pack_tag "feather/tag.svg", class: "text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                  Tags
+          .relative.z-10.flex.items-center.lg:hidden
+            / Mobile menu button
+            %button.rounded-md.p-2.inline-flex.items-center.justify-center.text-gray-400.hover:bg-gray-700.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white(aria-expanded="false" data-action="sidebar#open")
+              %span.sr-only Open menu
+              / Icon when menu is closed.
+              /
+                Heroicon name: menu
 
-          .flex-shrink-0.w-14
-            / Dummy element to force sidebar to shrink to fit close icon
+                Menu open: "hidden", Menu closed: "block"
+              = feather_svg "menu", class: "block h-6 w-6"
 
-      / Static sidebar for desktop
-      .hidden.md:flex.md:flex-shrink-0
-        .w-64.flex.flex-col
-          / Sidebar component, swap this element with another sidebar if you like
-          .pt-5.pb-4.flex.flex-col.flex-grow.overflow-y-auto.bg-gray-800
-            .flex-shrink-0.px-4.flex.items-center.justify-center
-              = image_tag "bug_logo.png", class: "h-16 w-auth"
+              / Icon when menu is open.
+              /
+                Heroicon name: x
 
-            .flex-grow.mt-5.flex.flex-col
-              %nav.flex-1.px-2.space-y-1
-                / Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                = link_to bookmarks_path, class: "bg-gray-100 text-gray-900 group rounded-md py-2 px-2 flex items-center text-sm font-medium" do
-                  / Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
-                  = inline_svg_pack_tag "feather/bookmark.svg", class: "text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                  Bookmarks
+                Menu open: "block", Menu closed: "hidden"
+              = feather_svg "x", class: "hidden h-6 w-6"
 
-                = link_to tags_path, class: "bg-gray-100 text-gray-900 group rounded-md py-2 px-2 flex items-center text-sm font-medium" do
-                  = inline_svg_pack_tag "feather/tag.svg", class: "text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                  Tags
+          .hidden.lg:relative.lg:z-10.lg:ml-4.lg:flex.lg:items-center
+            %button.bg-gray-800.flex-shrink-0.rounded-full.p-1.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
+              %span.sr-only View notifications
+              = feather_svg "bell", class: "h-6 w-6"
 
-      .flex-1.flex.flex-col.overflow-scroll
-        .flex-1.max-w-4xl.mx-auto.w-full.flex.flex-col.md:px-8.xl:px-0.min-h-screen
-          .relative.z-10.flex-shrink-0.h-16.border-b.border-gray-200.flex
-            %button.border-r.border-gray-200.px-4.text-gray-500.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-indigo-500.md:hidden( data-action="click->sidebar#open" )
-              %span.sr-only Open sidebar
-              = inline_svg_pack_tag "feather/menu.svg", class: "h-6 w-6"
+            / Profile dropdown
+            .flex-shrink-0.relative.ml-4( data-controller="dropdown" )
+              %div
+                %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-500{"aria-haspopup" => "true"}( data-action="click->dropdown#toggle" )
+                  %span.sr-only Open user menu
+                  = inline_svg_pack_tag "feather/user.svg", class: "h-6 w-6"
 
-            .flex-1.flex.justify-between.px-4.md:px-0
-              .flex-1.flex
-                %form.w-full.flex.md:ml-0{:action => "#", :method => "GET"}
-                  %label.sr-only{:for => "search_field"} Search
-                  .relative.w-full.text-gray-400.focus-within:text-gray-600
-                    .pointer-events-none.absolute.inset-y-0.left-0.flex.items-center
-                      = inline_svg_pack_tag "feather/search.svg", class: "h-5 w-5"
+                /
+                  Dropdown panel, show/hide based on dropdown state.
 
-                    %input#search_field.block.h-full.w-full.border-transparent.py-2.pl-8.pr-3.text-gray-900.placeholder-gray-500.focus:outline-none.focus:placeholder-gray-400.focus:ring-0.focus:border-transparent.sm:text-sm.bg-gray-50{:name => "search", :placeholder => "Search", :type => "search"}
+                  Entering: "transition ease-out duration-100"
+                  From: "transform opacity-0 scale-95"
+                  To: "transform opacity-100 scale-100"
+                  Leaving: "transition ease-in duration-75"
+                  From: "transform opacity-100 scale-100"
+                  To: "transform opacity-0 scale-95"
+                .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-dropdown-target="menu" data-controller="menu" )
+                  .px-4.py-3
+                    %p.text-sm
+                      Signed in as
+                    %p.text-sm.font-medium.text-gray-900.truncate
+                      = current_user.username
 
-              .ml-4.flex.items-center.md:ml-6
-                %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-500
-                  %span.sr-only View notifications
-                  = inline_svg_pack_tag "feather/bell.svg", class: "h-6 w-6"
+                  .py-1( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
+                    = link_to profile_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
+                      = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                      Settings
 
-                / Profile dropdown
-                .ml-3.relative( data-controller="dropdown" )
-                  %div
-                    %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-500{"aria-haspopup" => "true"}( data-action="click->dropdown#toggle" )
-                      %span.sr-only Open user menu
-                      = inline_svg_pack_tag "feather/user.svg", class: "h-6 w-6"
+                  - if current_user.permission? "admin.access"
+                    .py-1
+                      = link_to admin_root_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
+                        = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                        Admin
 
-                    /
-                      Dropdown panel, show/hide based on dropdown state.
+                  .py-1
+                    = form_with url: "/logout", method: :delete, local: true do |f|
+                      = f.button type: :submit, class: "group flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900", role: "menuitem" do
+                        = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                        Log out
 
-                      Entering: "transition ease-out duration-100"
-                      From: "transform opacity-0 scale-95"
-                      To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                      From: "transform opacity-100 scale-100"
-                      To: "transform opacity-0 scale-95"
-                    .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-dropdown-target="menu" data-controller="menu" )
-                      .px-4.py-3
-                        %p.text-sm
-                          Signed in as
-                        %p.text-sm.font-medium.text-gray-900.truncate
-                          = current_user.username
+        %nav.hidden.lg:py-2.lg:flex.lg:space-x-8(aria-label="Global")
+          / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
+          -#%a.bg-gray-900.text-white.rounded-md.py-2.px-3.inline-flex.items-center.text-sm.font-medium(href="#") Dashboard
+          = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
+          = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
+          = active_link_to "Tags", tags_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
 
-                      .py-1( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
-                        = link_to profile_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                          = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                          Settings
+      /
+        Mobile menu, toggle classes based on menu state.
 
-                      - if current_user.permission? "admin.access"
-                        .py-1
-                          = link_to admin_root_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                            = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                            Admin
+        Menu open: "block", Menu closed: "hidden"
+      %nav.hidden.lg:hidden( aria-label="Global" data-controller="menu" data-sidebar-target="menu")
+        .pt-2.pb-3.px-2.space-y-1
+          / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
+          -#%a.bg-gray-900.text-white.block.rounded-md.py-2.px-3.text-base.font-medium(href="#") Dashboard
+          = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
+          = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
+          = active_link_to "Tags", tags_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
 
-                      .py-1
-                        %form( method="DELETE" action="/logout" )
-                          %button( type="submit" class="group flex items-center  w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" )
-                            = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                            Log out
+        .border-t.border-gray-700.pt-4.pb-3
+          .px-4.flex.items-center
+            .flex-shrink-0
+              = inline_svg_pack_tag "feather/user.svg", class: "rounded-full h-10 w-10 text-white"
 
-          %main.flex-1.relative.overflow-y-auto.focus:outline-none{:tabindex => "0"}
-            .py-6.space-y-4
-              .md:flex.md:items-center.md:justify-between
-                .flex-1.min-w-0
-                  %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
-                    = content_for :page_title
+            .ml-3
+              .text-base.font-medium.text-white Signed in as
+              .text-sm.font-medium.text-gray-400= current_user.username
 
-                .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
-                  = content_for :page_actions
+            %button.ml-auto.flex-shrink-0.bg-gray-800.rounded-full.p-1.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
+              %span.sr-only View notifications
+              = feather_svg "bell", class: "h-6 w-6"
 
-              .px-4.sm:px-6.md:px-0.space-y-4
-                = yield
+          .mt-3.px-2.space-y-1
+            = link_to profile_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
+              = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+              Settings
 
-        = render "layouts/common/footer"
+            - if current_user.permission? "admin.access"
+              = link_to admin_root_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
+                = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                Admin
+
+            = form_with url: "/logout", method: :delete, local: true do |f|
+              = f.button type: :submit, class: "flex w-full rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
+                = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                Log out
+
+  %main.relative.max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8.flex-grow.w-full.overflow-y-auto.focus:outline-none{:tabindex => "0"}
+    .py-6.space-y-4.-mx-2.sm:mx-0
+      .md:flex.md:items-center.md:justify-between.px-4.sm:px-0
+        .flex-1.min-w-0
+          %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
+            = content_for :page_title
+
+        .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
+          = content_for :page_actions
+
+      .w-full.sm:overflow-hidden.space-y-4
+        = yield
+
+  = render "layouts/common/footer"

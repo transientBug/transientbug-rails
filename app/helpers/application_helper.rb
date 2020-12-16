@@ -17,4 +17,8 @@ module ApplicationHelper
       current_controller
     ].concat(args).flatten.compact.join "/"
   end
+
+  def feather_svg name, **opts
+    inline_svg_pack_tag "feather/#{ name }.svg", **opts
+  end
 end

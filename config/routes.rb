@@ -25,8 +25,9 @@ Rails.application.routes.draw do
 
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
+  match "/logout", to: "sessions#destroy", via: [:delete]
+
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
-  match "/logout", to: "sessions#destroy", via: [:get, :delete]
 
   resources :invites, only: [:index, :create, :show, :update]
 
