@@ -1,3 +1,6 @@
-%time{ datetime: @time.rfc2822, title: @time.to_s(:long_ordinal) }
-  = distance_of_time_in_words_to_now(@time)
-  ago
+.flex.items-center.text-xs.text-gray-500
+  = inline_svg_pack_tag "feather/calendar.svg", class: "flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+
+  %time{ datetime: machine_exact, title: human_exact }
+    = relative_word
+    ago

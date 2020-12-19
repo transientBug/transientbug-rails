@@ -7,7 +7,7 @@
       = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
       = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-  %body{ class: [  controller_name, action_name, "bg-gray-50" ] }
+  %body.bg-gray-200{ class: [  controller_name, action_name ] }
     = yield
 
     = render "layouts/common/footer"

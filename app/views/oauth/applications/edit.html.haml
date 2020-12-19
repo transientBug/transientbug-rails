@@ -1,8 +1,7 @@
 - content_for :page_title do
   Editing "#{ @application.name }"
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %h2 Editing "#{ @application.name }"
 
-%h2.ui.dividing.header Editing "#{ @application.name }"
-
-= render partial: "form", locals: { application: @application }
+  = render "form", application: @application

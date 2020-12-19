@@ -1,12 +1,9 @@
 - content_for :page_title do
   404 Not Found
 
-.ui.stackable.center.aligned.grid
-  .ui.middle.aligned.row
-    .six.wide.column
-      %h1.ui.header Nothing to see here
-      %p This isn't the page you're looking for, but we don't know where that one went.
-      %p
-        Perhaps you need to
-        = link_to "login", login_url
-        first?
+%h1 Nothing to see here
+%p This isn't the page you're looking for, but we don't know where that one went.
+%p
+  Perhaps you need to
+  = link_to "login", login_url
+  first?

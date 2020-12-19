@@ -1,32 +1,22 @@
 - content_for :page_title do
   Viewing "#{ @application.name }"
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %h2= @application.name
 
-%h2.ui.dividing.header= @application.name
+  = link_to "Edit", edit_oauth_application_path(@application)
 
-.ui.fluid.text.stackable.menu
-  .ui.item
-    = link_to "Edit", edit_oauth_application_path(@application)
+  = link_to oauth_application_path(@application), method: :delete, data: { confirm: "Are you sure?" } do
+    Delete
 
-  .right.menu
-    .item{ data: { behavior: "modal", template: "public/templates/oauth/applications/delete", url: oauth_application_path(@application), model: JSON.parse(@application.to_json) } }
-      %i.trash.icon
-      delete
+  Client ID:
+  %code= @application.uid
 
-.ui.relaxed.divided.list
-  .item
-    Client ID:
-    %code= @application.uid
+  Client Secret:
+  %code= @application.secret
 
-  .item
-    Client Secret:
-    %code= @application.secret
+  Scopes:
+  %code= @application.scopes
 
-  .item
-    Scopes:
-    %code= @application.scopes
-
-  .item
-    Callback URLs:
-    %pre= @application.redirect_uri
+  Callback URLs:
+  %pre= @application.redirect_uri

@@ -1,7 +1,36 @@
-.ui.tabular.stackable.menu
-  = active_link_to "Profile Settings", profile_path, class: "item", active: :exclusive
-  = active_link_to "Import", profile_import_index_path, class: "item"
-  = active_link_to "Authorized Apps", oauth_authorized_applications_path, class: "item"
+.lg:grid.lg:grid-cols-12.lg:gap-x-5
+  %aside.py-6.px-2.sm:px-6.lg:py-0.lg:px-0.lg:col-span-3
+    %nav.space-y-1
+      = active_link_to profile_path, active: :exclusive, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "user", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(profile_path, active: :exclusive, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Contact Info
 
-  .right.menu
-    = active_link_to "Developer Apps", oauth_applications_path, class: "item"
+      -#= active_link_to profile_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "lock", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(profile_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Security
+
+      = active_link_to profile_import_index_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "upload", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(profile_import_index_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Import
+
+      -#= active_link_to profile_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "download", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(profile_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Export
+
+      = active_link_to oauth_authorized_applications_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "smartphone", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(oauth_authorized_applications_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Authorized Apps
+
+    .my-10.border-t.border-gray-400
+
+    %nav.space-y-1
+      -#= active_link_to profile_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "code", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(profile_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        Developer Settings
+
+      = active_link_to oauth_applications_path, class: "group rounded-md px-3 py-2 flex items-center text-sm font-medium", class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "bg-gray-50 text-limegreen-600 hover:bg-white" do
+        = feather_svg "cpu", class: ["flex-shrink-0 -ml-1 mr-3 h-6 w-6", active_link_to_class(oauth_applications_path, class_inactive: "text-gray-400 group-hover:text-gray-500", class_active: "text-limegreen-500") ]
+        OAuth Apps
+
+  .space-y-6.sm:px-6.lg:px-0.lg:col-span-9
+    = yield

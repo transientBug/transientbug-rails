@@ -7,144 +7,20 @@
       = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
       = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-  %body.bg-gray-50.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
-    %header.bg-gray-800( data-controller="sidebar" )
-      .max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8
-        .relative.h-16.flex.justify-between
-          .relative.z-10.px-2.flex.lg:px-0
-            .flex-shrink-0.flex.items-center
-              = image_tag "bug_logo.png", class: "block h-8 w-auto", alt: "transient bug"
+  %body.bg-gray-200.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
+    = render "layouts/common/navbar"
 
-          .relative.z-0.flex-1.px-2.flex.items-center.justify-center.sm:absolute.sm:inset-0
-            .w-full.sm:max-w-xs
-              %label.sr-only(for="search") Search
-              .relative
-                .pointer-events-none.absolute.inset-y-0.left-0.pl-3.flex.items-center
-                  = feather_svg "search", class: "h-5 w-5 text-gray-400"
+    %main.relative.max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8.flex-grow.w-full.overflow-y-auto.focus:outline-none{:tabindex => "0"}
+      .py-6.space-y-4.-mx-2.sm:mx-0
+        .md:flex.md:items-center.md:justify-between.px-4.sm:px-0
+          .flex-1.min-w-0
+            %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
+              = content_for :page_title
 
-                %input#search.block.w-full.bg-gray-700.border.border-transparent.rounded-md.py-2.pl-10.pr-3.text-sm.placeholder-gray-400.focus:outline-none.focus:bg-white.focus:border-white.focus:ring-white.focus:text-gray-900.focus:placeholder-gray-500.sm:text-sm(name="search" placeholder="Search" type="search")/
+          .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
+            = content_for :page_actions
 
-          .relative.z-10.flex.items-center.lg:hidden
-            / Mobile menu button
-            %button.rounded-md.p-2.inline-flex.items-center.justify-center.text-gray-400.hover:bg-gray-700.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white(aria-expanded="false" data-action="sidebar#open")
-              %span.sr-only Open menu
-              / Icon when menu is closed.
-              /
-                Heroicon name: menu
+        .w-full.space-y-4
+          = yield
 
-                Menu open: "hidden", Menu closed: "block"
-              = feather_svg "menu", class: "block h-6 w-6"
-
-              / Icon when menu is open.
-              /
-                Heroicon name: x
-
-                Menu open: "block", Menu closed: "hidden"
-              = feather_svg "x", class: "hidden h-6 w-6"
-
-          .hidden.lg:relative.lg:z-10.lg:ml-4.lg:flex.lg:items-center
-            %button.bg-gray-800.flex-shrink-0.rounded-full.p-1.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
-              %span.sr-only View notifications
-              = feather_svg "bell", class: "h-6 w-6"
-
-            / Profile dropdown
-            .flex-shrink-0.relative.ml-4( data-controller="dropdown" )
-              %div
-                %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-500{"aria-haspopup" => "true"}( data-action="click->dropdown#toggle" )
-                  %span.sr-only Open user menu
-                  = inline_svg_pack_tag "feather/user.svg", class: "h-6 w-6"
-
-                /
-                  Dropdown panel, show/hide based on dropdown state.
-
-                  Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                  Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-                .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-dropdown-target="menu" data-controller="menu" )
-                  .px-4.py-3
-                    %p.text-sm
-                      Signed in as
-                    %p.text-sm.font-medium.text-gray-900.truncate
-                      = current_user.username
-
-                  .py-1( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
-                    = link_to profile_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                      = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                      Settings
-
-                  - if current_user.permission? "admin.access"
-                    .py-1
-                      = link_to admin_root_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                        = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                        Admin
-
-                  .py-1
-                    = form_with url: "/logout", method: :delete, local: true do |f|
-                      = f.button type: :submit, class: "group flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900", role: "menuitem" do
-                        = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                        Log out
-
-        %nav.hidden.lg:py-2.lg:flex.lg:space-x-8(aria-label="Global")
-          / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-          -#%a.bg-gray-900.text-white.rounded-md.py-2.px-3.inline-flex.items-center.text-sm.font-medium(href="#") Dashboard
-          = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
-          = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
-          = active_link_to "Tags", tags_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
-
-      /
-        Mobile menu, toggle classes based on menu state.
-
-        Menu open: "block", Menu closed: "hidden"
-      %nav.hidden.lg:hidden( aria-label="Global" data-controller="menu" data-sidebar-target="menu")
-        .pt-2.pb-3.px-2.space-y-1
-          / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-          -#%a.bg-gray-900.text-white.block.rounded-md.py-2.px-3.text-base.font-medium(href="#") Dashboard
-          = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
-          = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
-          = active_link_to "Tags", tags_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
-
-        .border-t.border-gray-700.pt-4.pb-3
-          .px-4.flex.items-center
-            .flex-shrink-0
-              = inline_svg_pack_tag "feather/user.svg", class: "rounded-full h-10 w-10 text-white"
-
-            .ml-3
-              .text-base.font-medium.text-white Signed in as
-              .text-sm.font-medium.text-gray-400= current_user.username
-
-            %button.ml-auto.flex-shrink-0.bg-gray-800.rounded-full.p-1.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
-              %span.sr-only View notifications
-              = feather_svg "bell", class: "h-6 w-6"
-
-          .mt-3.px-2.space-y-1
-            = link_to profile_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-              = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-              Settings
-
-            - if current_user.permission? "admin.access"
-              = link_to admin_root_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-                = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                Admin
-
-            = form_with url: "/logout", method: :delete, local: true do |f|
-              = f.button type: :submit, class: "flex w-full rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-                = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                Log out
-
-  %main.relative.max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8.flex-grow.w-full.overflow-y-auto.focus:outline-none{:tabindex => "0"}
-    .py-6.space-y-4.-mx-2.sm:mx-0
-      .md:flex.md:items-center.md:justify-between.px-4.sm:px-0
-        .flex-1.min-w-0
-          %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
-            = content_for :page_title
-
-        .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
-          = content_for :page_actions
-
-      .w-full.sm:overflow-hidden.space-y-4
-        = yield
-
-  = render "layouts/common/footer"
+    = render "layouts/common/footer"

@@ -1,65 +1,31 @@
 - content_for :page_title do
   Developer - OAuth2 Apps
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %h2 Developer OAuth2 Apps
 
-%h2.ui.dividing.header Developer OAuth2 Apps
+  = link_to new_oauth_application_path do
+    New
 
-.ui.stackable.menu
-  .ui.item
-    = link_to new_oauth_application_path do
-      %i.add.icon
-      new
-
-  .right.menu
-    = bulk_edit_action "delete-all", url: oauth_applications_bulk_delete_path do
-      %i.trash.icon
-      delete all
-
-%table.ui.celled.table
-  %thead
-    %tr
-      %th= select_all_checkbox
-      %th Actions
-      %th Name
-      %th Callback URLs
-      %th Created At (UTC)
-
-  %tbody
-    - if @applications.any?
-      - @applications.each do |application|
-        %tr
-          %td.collapsing= model_tag application, only: [:uid, :name]
-          %td.collapsing
-            .ui.buttons
-              = link_to oauth_application_path(application), class: "ui icon button" do 
-                %i.expand.icon
-                view
-
-              .ui.simple.dropdown.icon.button
-                %i.dropdown.icon
-                .menu
-                  = link_to edit_oauth_application_path(application), class: "item" do
-                    %i.edit.icon
-                    edit
-
-                  .divider
-                  .header
-                    %i.warning.sign.icon
-                    DANGERZONE
-
-                  = modal_tag application, :delete, url: oauth_application_path(application) do
-                    %i.trash.icon
-                    delete
-
-          %td= application.name
-          %td
-            %pre.mobile.hidden= application.redirect_uri
-          %td= application.created_at.to_s(:long)
-
-    - else
+  %table
+    %thead
       %tr
-        %td{ colspan: 5 }
-          No applications made yet
+        %th Name
+        %th Callback URLs
+        %th Created At (UTC)
 
-= paginate @applications
+    %tbody
+      - if @applications.any?
+        - @applications.each do |application|
+          %tr
+            %td= application.name
+            %td
+              %pre.hidden.sm:block= application.redirect_uri
+            %td= application.created_at.to_s(:long)
+
+      - else
+        %tr
+          %td{ colspan: 2 }
+            No applications made yet
+
+  = paginate @applications

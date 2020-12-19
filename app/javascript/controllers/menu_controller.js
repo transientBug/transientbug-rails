@@ -1,9 +1,9 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "" ]
+  static classes = [ "hidden" ]
 
   toggle() {
-    this.element.classList.toggle("hidden")
+    this.element.classList.toggle(this.hiddenClass)
   }
 }

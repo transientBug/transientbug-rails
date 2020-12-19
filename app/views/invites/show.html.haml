@@ -1,52 +1,26 @@
 - content_for :page_title do
   = @invitation.title
 
-.ui.middle.aligned.center.aligned.horizontally.padded.grid
-  .column
-    %h2.ui.header= @invitation.title
-    %p= @invitation.description
+%h2= @invitation.title
+%p= @invitation.description
 
-    = form_for @user, url: invite_path(@invitation.code), method: :patch, html: { class: "ui form" } do |f|
-      - if @user.errors.any?
-        .ui.message.error
-          %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
-          %ul
-            - @user.errors.full_messages.each do |message|
-              %li= message
+= form_with model: @user, url: invite_path(@invitation.code), method: :patch, class: "" do |f|
+  - if @user.errors.any?
+    %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
+    %ul
+      - @user.errors.full_messages.each do |message|
+        %li= message
 
-      .ui.list
-        .item
-          .content
-            .header Username
-            .description Used only for personalizing the site and communications; It does not have to be unique
+  = f.label :username
+  = f.text_field :username, placeholder: "Username"
 
-        .item
-          .content
-            .header Email
-            .description Used to contact you, help recover a lost password and identify you during login; It does have to be unique.
+  = f.label :email
+  = f.text_field :email, placeholder: "Email"
 
-      .required.field
-        = f.label :username
-        .ui.left.icon.input
-          %i.user.icon
-          = f.text_field :username, placeholder: "Username"
+  = f.label :password
+  = f.password_field :password, placeholder: "**************"
 
-      .required.field
-        = f.label :email
-        .ui.left.icon.input
-          %i.user.icon
-          = f.text_field :email, placeholder: "Email"
+  = f.label :password_confirmation
+  = f.password_field :password_confirmation, placeholder: "**************"
 
-      .required.field
-        = f.label :password
-        .ui.left.icon.input
-          %i.lock.icon
-          = f.password_field :password, placeholder: "**************"
-
-      .required.field
-        = f.label :password_confirmation
-        .ui.left.icon.input
-          %i.lock.icon
-          = f.password_field :password_confirmation, placeholder: "**************"
-
-      = f.submit "Register", class: "ui right floated green submit button"
+  = f.submit "Register", class: ""

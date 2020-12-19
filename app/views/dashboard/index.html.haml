@@ -1,8 +1,9 @@
 - content_for :page_title do
   Home
 
-= render(StatsComponent.new(title: "Bookmark Stats")) do |c|
+= render(StatsComponent.new) do |c|
   = c.stats([ { title: "Total Bookmarks", number: @stats[:total_count] }, { title: "Untagged Bookmarks", number: @stats[:untagged_count] }, { title: "Tags", number: 0 } ])
 
+%h3 Recent Bookmarks
 .space-y-3
   = render BookmarkCardComponent.with_collection(@recent_bookmarks)

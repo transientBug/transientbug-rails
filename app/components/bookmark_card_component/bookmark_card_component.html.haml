@@ -1,17 +1,16 @@
 .bg-white.shadow.overflow-hidden.md:rounded-md.px-4.py-4.sm:px-6
   .sm:flex.items-center.justify-between
-    %p.text-sm.font-medium.text-royalblue-600.truncate
+    %p.font-medium.text-royalblue-700.truncate
       = link_to @bookmark.title, bookmark_path(@bookmark)
+      %small.text-gray-500.text-sm (#{ link_to @bookmark.uri.host.to_s, @bookmark.uri.to_s, title: @bookmark.uri.to_s })
 
-    .flex-shrink-0.flex.space-x-1
-      = render TagComponent.with_collection(@bookmark.tags)
+  - if @bookmark.description
+    .mt-2.sm:flex.sm:justify-between.items-baseline
+      %p= truncate @bookmark.description
 
-  .mt-2.sm:flex.sm:justify-between
+  .mt-2.sm:flex.sm:justify-between.items-baseline
     .sm:flex
-      = link_to @bookmark.uri.host.to_s, @bookmark.uri.to_s, title: @bookmark.uri.to_s, class: "flex items-center text-sm text-gray-500"
+      = render RelativeTimeComponent.new(time: @bookmark.created_at)
 
-    .mt-2.flex.items-center.text-sm.text-gray-500.sm:mt-0
-      = inline_svg_pack_tag "feather/calendar.svg", class: "flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-
-      %p
-        = render RelativeTimeComponent.new(time: @bookmark.created_at)
+    .flex-shrink-0.flex.space-x-1.mt-2.sm:mt-0
+      = render TagComponent.with_collection(@bookmark.tags)

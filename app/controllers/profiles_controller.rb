@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
   def update
     respond_to do |format|
       if @user.update user_params
-        format.html { redirect_to profile_path, notice: "Profile updated" }
+        format.html { redirect_to profile_path, notice: "Contact info updated" }
       else
         format.html { render :show }
       end

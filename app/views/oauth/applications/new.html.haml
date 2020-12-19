@@ -1,8 +1,7 @@
 - content_for :page_title do
   New OAuth2 App
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %h2 New OAuth2 App
 
-%h2.ui.dividing.header New OAuth2 App
-
-= render partial: "form", locals: { application: @application }
+  = render "form", application: @application

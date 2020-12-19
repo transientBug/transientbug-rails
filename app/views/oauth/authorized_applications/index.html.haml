@@ -1,40 +1,24 @@
 - content_for :page_title do
   Authorized Apps
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %h2 Authorized Apps
 
-%h2.ui.dividing.header Authorized Apps
-
-.ui.stackable.menu
-  .right.menu
-    = bulk_edit_action "revoke-all", url: oauth_authorized_applications_bulk_revoke_path do
-      %i.trash.icon
-      revoke all
-
-%table.ui.celled.table
-  %thead
-    %tr
-      %th= select_all_checkbox
-      %th Actions
-      %th Application Name
-      %th Created At (UTC)
-  %tbody
-    - if @applications.any?
-      - @applications.each do |application|
-        %tr
-          %td.collapsing= model_tag application, only: [:id, :name]
-          %td.collapsing
-            .ui.buttons
-              = modal_tag application, :revoke, url: oauth_authorized_application_path(application), class: "ui icon button" do
-                %i.trash.icon
-                revoke
-
-          %td= application.name
-          %td= application.created_at.to_s(:long)
-
-    - else
+  %table
+    %thead
       %tr
-        %td{ colspan: 5 }
-          No applications authorized
+        %th Application Name
+        %th Created At (UTC)
+    %tbody
+      - if @applications.any?
+        - @applications.each do |application|
+          %tr
+            %td= application.name
+            %td= application.created_at.to_s(:long)
 
-= paginate @applications
+      - else
+        %tr
+          %td{ colspan: 2 }
+            No applications authorized
+
+  = paginate @applications

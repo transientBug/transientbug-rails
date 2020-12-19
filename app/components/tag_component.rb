@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TagComponent < ViewComponent::Base
-  def initialize(tag:)
+  def initialize tag:
     @tag = tag
   end
 
