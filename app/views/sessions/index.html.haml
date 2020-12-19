@@ -1,14 +1,40 @@
 - content_for :page_title do
   Login
 
-= image_tag "bug_logo.png", class: ""
-Login
+.sm:mx-auto.sm:w-full.sm:max-w-md
+  -#= image_tag "bug_logo.png", class: "mx-auto h-12 w-auto"
 
-= form_with url: login_path, method: :post, class: "" do
-  = text_field_tag "email", "", placeholder: "Email"
+  %h2.mt-6.text-center.text-3xl.font-extrabold.text-gray-900
+    Welcome Back
 
-  = password_field_tag "password", "", placeholder: "**************"
+  %p.mt-2.text-center.text-sm.text-gray-600.max-w
+    Have an invite code?
+    = link_to "Use it!", invites_path, class: "font-medium text-limegreen-500 hover:text-limegreen-600"
 
-  = submit_tag "Login", class: ""
+.mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
+  .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
+    = form_with url: login_path, method: :post, class: "space-y-6" do
+      %div
+        %label.block.text-sm.font-medium.text-gray-700(for="email")
+          Email address
+        .mt-1
+          = text_field_tag "email", "", placeholder: "Email", class: "default-input w-full"
 
-  Have an invite code? #{ link_to "Use it!", invites_path }
+      %div
+        %label.block.text-sm.font-medium.text-gray-700(for="password")
+          Password
+        .mt-1
+          = password_field_tag "password", "", placeholder: "**************", class: "default-input w-full"
+
+      -#.flex.items-center.justify-between
+        .flex.items-center
+          %input#remember_me.h-4.w-4.text-indigo-600.focus:ring-indigo-500.border-gray-300.rounded(name="remember_me" type="checkbox")
+          %label.ml-2.block.text-sm.text-gray-900(for="remember_me")
+            Remember me
+
+        .text-sm
+          %a.font-medium.text-indigo-600.hover:text-indigo-500(href="#")
+            Forgot your password?
+
+      %div
+        = submit_tag "Log in", class: "default-btn w-full bg-limegreen-500 hover:bg-limegreen-600"

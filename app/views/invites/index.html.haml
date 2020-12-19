@@ -1,11 +1,22 @@
 - content_for :page_title do
   Invitations
 
-%h2 Invitations
+.sm:mx-auto.sm:w-full.sm:max-w-md
+  -#= image_tag "bug_logo.png", class: "mx-auto h-12 w-auto"
 
-%p Open registration for transientBug is currently closed, however if you have received an invite code, you can enter it below to proceed with registration.
+  %h2.mt-6.text-center.text-3xl.font-extrabold.text-gray-900
+    Hey There!
 
-= form_with url: invites_path, method: :post, class: "" do
-  = label_tag "code", "Invite Code"
-  = text_field_tag "code", "", placeholder: "12345"
-  = button_tag "Use", class: "", type: "submit"
+  %p.mt-2.text-center.text-sm.text-gray-600.max-w
+    transientBug isn't open for general registration just yet, however if I've personally sent you an invite code you're in luck! Enter it below to validate and claim the invite and proceed with finalizing your account!
+
+.mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
+  .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
+    = form_with url: invites_path, method: :post, class: "space-y-6" do
+      %div
+        = label_tag "code", "Invite Code", class: "block text-sm font-medium text-gray-700"
+        .mt-1
+          = text_field_tag "code", "", placeholder: "12345", class: "default-input w-full"
+
+      %div
+        = submit_tag "Claim!", class: "default-btn w-full bg-limegreen-500 hover:bg-limegreen-600"

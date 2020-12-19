@@ -2,19 +2,20 @@
   Authorized Apps
 
 = render "profiles/tabs" do
-  %h2 Authorized Apps
+  %p
+    You've authorized these apps to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
   %table
     %thead
       %tr
         %th Application Name
-        %th Created At (UTC)
+        %th Created At
     %tbody
       - if @applications.any?
         - @applications.each do |application|
           %tr
             %td= application.name
-            %td= application.created_at.to_s(:long)
+            %td= render RelativeTimeComponent.new time: application.created_at
 
       - else
         %tr

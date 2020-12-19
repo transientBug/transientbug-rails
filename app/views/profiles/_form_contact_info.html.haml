@@ -15,16 +15,16 @@
         .mt-6.grid.grid-cols-4.gap-6
           .col-span-4.sm:col-span-2
             = f.label :username, class: "block text-sm font-medium text-gray-700"
-            = f.text_field :username, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-limegreen-500 focus:border-gray-900 sm:text-sm"
+            = f.text_field :username, class: "mt-1 w-full default-input"
             %p.mt-2.text-sm.text-gray-500
               We use this to personalize the site and our communications with you. Your username does not have to be unique.
 
         .mt-6.grid.grid-cols-4.gap-6
           .col-span-4.sm:col-span-2
             = f.label :email, class: "block text-sm font-medium text-gray-700"
-            = f.email_field :email, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-limegreen-500 focus:border-gray-900 sm:text-sm"
+            = f.email_field :email, class: "mt-1 w-full default-input"
             %p.mt-2.text-sm.text-gray-500
               We only use this to identify you during login, contact you with important site updates, and to help you recover a lost password. Your email does have to be unique.
 
       .px-4.py-3.bg-gray-50.text-right.sm:px-6
-        = f.submit "Update", class: "cursor-pointer bg-gray-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-limegreen-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-limegreen-500"
+        = f.submit "Update", class: "default-btn inline-flex bg-gray-500 hover:bg-limegreen-500"

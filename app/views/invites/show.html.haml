@@ -1,26 +1,47 @@
 - content_for :page_title do
   = @invitation.title
 
-%h2= @invitation.title
-%p= @invitation.description
+.sm:mx-auto.sm:w-full.sm:max-w-md
+  -#= image_tag "bug_logo.png", class: "mx-auto h-12 w-auto"
 
-= form_with model: @user, url: invite_path(@invitation.code), method: :patch, class: "" do |f|
-  - if @user.errors.any?
-    %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
-    %ul
-      - @user.errors.full_messages.each do |message|
-        %li= message
+  %h2.mt-6.text-center.text-3xl.font-extrabold.text-gray-900
+    Well Hello!
+    = @invitation.title
 
-  = f.label :username
-  = f.text_field :username, placeholder: "Username"
+  %p.mt-2.text-center.text-sm.text-gray-600.max-w
+    We need a little bit more information about you before you're good to go. It'll be quick though.
 
-  = f.label :email
-  = f.text_field :email, placeholder: "Email"
+  %p.mt-2.text-center.text-sm.text-gray-600.max-w
+    = @invitation.description
 
-  = f.label :password
-  = f.password_field :password, placeholder: "**************"
+.mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
+  .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
+    = form_with model: @user, url: invite_path(@invitation.code), method: :patch, class: "space-y-6" do |f|
+      - if @user.errors.any?
+        %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
+        %ul
+          - @user.errors.full_messages.each do |message|
+            %li= message
 
-  = f.label :password_confirmation
-  = f.password_field :password_confirmation, placeholder: "**************"
+      %div
+        = f.label :username, class: "block text-sm font-medium text-gray-700"
+        .mt-1
+          = f.text_field :username, placeholder: "Username", class: "default-input w-full"
 
-  = f.submit "Register", class: ""
+      %div
+        = f.label :email, class: "block text-sm font-medium text-gray-700"
+        .mt-1
+          = f.text_field :email, placeholder: "Email", class: "default-input w-full"
+
+      %div
+        = f.label :password, class: "block text-sm font-medium text-gray-700"
+        .mt-1
+          = f.password_field :password, placeholder: "**************", class: "default-input w-full"
+
+      %div
+        = f.label :password_confirmation, class: "block text-sm font-medium text-gray-700"
+        .mt-1
+          = f.password_field :password_confirmation, placeholder: "**************", class: "default-input w-full"
+
+      %div
+        = f.submit "Register", class: "default-btn w-full bg-limegreen-500 hover:bg-limegreen-600"
