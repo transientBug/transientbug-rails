@@ -40,4 +40,13 @@
                     No applications made yet
 
       .px-4.py-3.bg-gray-50.text-right.sm:px-6
-        = paginate @applications
+        - pagination = paginate @applications, theme: "card_footer"
+        - if pagination.present?
+          = pagination
+        - else
+          %nav.py-3.flex.items-center.justify-between( aria-label="Pagination" )
+            .hidden.sm:block
+              %p.text-sm.text-gray-700
+                Showing
+                %span.font-medium all
+                results

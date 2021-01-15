@@ -1,0 +1,12 @@
+= paginator.render do
+  %nav.py-3.flex.items-center.justify-between( aria-label="Pagination" )
+    .hidden.sm:block
+      %p.text-sm.text-gray-700
+        Page
+        %span.font-medium= current_page
+        of
+        %span.font-medium= total_pages
+
+    .flex-1.flex.justify-between.sm:justify-end
+      = prev_page_tag unless current_page.first?
+      = next_page_tag unless current_page.last?
