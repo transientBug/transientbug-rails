@@ -27,8 +27,8 @@
                     %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900= application.name
                     %td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
                       = render RelativeTimeComponent.new(time: application.created_at)
-                    -#%td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
-                      = link_to "Inspect", oauth_application_path(application), class: "text-indigo-600 hover:text-indigo-900"
+                    %td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
+                      = link_to "Revoke", oauth_application_path(application), class: "text-sm font-medium text-gray-400 hover:text-gray-900", method: :delete, data: { confirm: "Are you sure you want to revoke this apps access to your account? You can always reauthorize the app at a later time." }
 
               - else
                 %tr

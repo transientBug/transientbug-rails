@@ -2,21 +2,42 @@
   Viewing "#{ @application.name }"
 
 = render "profiles/tabs" do
-  %h2= @application.name
+  %section( aria-labelledby="app_info" )
+    = render CardComponent.new do |c|
+      = c.with :header do
+        .ml-4.mt-4
+          %h2#app_info.text-lg.leading-6.font-medium.text-gray-900= @application.name
+          .mt-1.text-sm.text-gray-500
+            -#You've authorized this app to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
-  = link_to "Edit", edit_oauth_application_path(@application)
+        .ml-4.mt-4.flex-shrink-0
+          = link_to oauth_application_path(@application), class: "text-sm font-medium text-gray-400 hover:text-gray-900", method: :delete, data: { confirm: "Are you sure?" } do
+            Delete
 
-  = link_to oauth_application_path(@application), method: :delete, data: { confirm: "Are you sure?" } do
-    Delete
+          = link_to "Edit", edit_oauth_application_path(@application), class: "default-btn inline-flex bg-gray-500 hover:bg-limegreen-500"
 
-  Client ID:
-  %code= @application.uid
+      = c.with :body do
+        %dl.grid.grid-cols-1.gap-x-4.gap-y-8.sm:grid-cols-2
+          .sm:col-span-2
+            %dt.text-sm.font-medium.text-gray-500
+              Scopes
+            %dd.mt-1.text-sm.text-gray-900
+              %code.select-all= @application.scopes
 
-  Client Secret:
-  %code= @application.secret
+          .sm:col-span-2
+            %dt.text-sm.font-medium.text-gray-500
+              Callback URLs
+            %dd.mt-1.text-sm.text-gray-900
+              %code.select-all= @application.redirect_uri
 
-  Scopes:
-  %code= @application.scopes
+          .sm:col-span-2
+            %dt.text-sm.font-medium.text-gray-500
+              Client ID
+            %dd.mt-1.text-sm.text-gray-900
+              %code.select-all= @application.uid
 
-  Callback URLs:
-  %pre= @application.redirect_uri
+          .sm:col-span-2
+            %dt.text-sm.font-medium.text-gray-500
+              Client Secret
+            %dd.mt-1.text-sm.text-gray-900
+              %code.select-all= @application.secret

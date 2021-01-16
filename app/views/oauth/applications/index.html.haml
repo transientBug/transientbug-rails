@@ -1,5 +1,5 @@
 - content_for :page_title do
-  Developer - OAuth2 Apps
+  Developer - Apps
 
 = render "profiles/tabs" do
   %section( aria-labelledby="oauth_table" )
@@ -32,7 +32,7 @@
                     %td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
                       = render RelativeTimeComponent.new(time: application.created_at)
                     %td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
-                      = link_to "Inspect", oauth_application_path(application), class: "text-indigo-600 hover:text-indigo-900"
+                      = link_to "Inspect", oauth_application_path(application), class: "text-sm font-medium text-gray-400 hover:text-gray-900"
 
               - else
                 %tr
