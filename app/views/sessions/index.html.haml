@@ -28,13 +28,13 @@
 
       -#.flex.items-center.justify-between
         .flex.items-center
-          %input#remember_me.h-4.w-4.text-indigo-600.focus:ring-indigo-500.border-gray-300.rounded(name="remember_me" type="checkbox")
+          %input#remember_me.h-4.w-4.text-limegreen-600.focus:ring-limegreen-500.border-gray-300.rounded(name="remember_me" type="checkbox")
           %label.ml-2.block.text-sm.text-gray-900(for="remember_me")
             Remember me
 
         .text-sm
-          %a.font-medium.text-indigo-600.hover:text-indigo-500(href="#")
+          %a.font-medium.text-limegreen-600.hover:text-limegreen-500(href="#")
             Forgot your password?
 
       %div
-        = submit_tag "Log in", class: "default-btn w-full bg-limegreen-500 hover:bg-limegreen-600"
+        = submit_tag "Log in", class: "btn -primary w-full"

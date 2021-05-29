@@ -2,19 +2,19 @@
   = @bookmark.title
 
 - content_for :page_actions do
-  = link_to "Delete", bookmark_path(@bookmark), method: :delete, class: "text-sm font-medium text-gray-400 hover:text-gray-900", data: { confirm: "Are you sure?" }
+  = link_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { confirm: "Are you sure?" }
 
-  = link_to "Edit", edit_bookmark_path(@bookmark), class: "default-btn inline-flex bg-gray-500 hover:bg-limegreen-500"
+  = link_to "Edit", edit_bookmark_path(@bookmark), class: "btn -secondary"
 
 .flex.flex-col.justify-between.lg:flex-row.px-4.sm:px-0
-  .w-full.flex.flex-col.lg:mr-2.sm:mb-2
+  .w-full.flex.flex-col.lg:mr-2.sm:mb-2.space-y-3
     = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
     = render RelativeTimeComponent.new(time: @bookmark.created_at)
 
     %div
       = render TagComponent.with_collection(@bookmark.tags)
 
-  .w-full
+  .w-full.mt-4
     - if @bookmark.description.present?
       :markdown
         #{ @bookmark.description }

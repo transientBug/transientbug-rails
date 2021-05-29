@@ -11,10 +11,10 @@
             -#You've authorized this app to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
         .ml-4.mt-4.flex-shrink-0
-          = link_to oauth_application_path(@application), class: "text-sm font-medium text-gray-400 hover:text-gray-900", method: :delete, data: { confirm: "Are you sure?" } do
+          = link_to oauth_application_path(@application), class: "btn -tertiary", method: :delete, data: { confirm: "Are you sure?" } do
             Delete
 
-          = link_to "Edit", edit_oauth_application_path(@application), class: "default-btn inline-flex bg-gray-500 hover:bg-limegreen-500"
+          = link_to "Edit", edit_oauth_application_path(@application), class: "btn -secondary"
 
       = c.with :body do
         %dl.grid.grid-cols-1.gap-x-4.gap-y-8.sm:grid-cols-2

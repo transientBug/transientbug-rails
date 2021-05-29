@@ -4,7 +4,10 @@
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
         = header
 
-    .mt-6
+      .mt-6
+        = body
+
+    - else
       = body
 
   - if footer.present?

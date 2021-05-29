@@ -1,48 +1,54 @@
 - content_for :page_title do
   Authorize "#{ @pre_auth.client.name }"
 
-%code= @pre_auth.client.application.name
-By #{ @pre_auth.client.application.owner.username }
-Would like to access your transientBug account
+.sm:mx-auto.sm:w-full.sm:max-w-lg
+  .mb-2
+    %p
+      %code= @pre_auth.client.application.name
+    %p
+      By #{ @pre_auth.client.application.owner.username }
+    %p
+      Would like to access your transientBug account
 
-%p
-  This application will have access to create, update, delete and view all your stored bookmarks.
+    %p
+      This application will have access to create, update, delete and view all your stored bookmarks.
 
-- if @pre_auth.scopes.count > 0
-  %p This application will be able to:
+  -#- if @pre_auth.scopes.count > 0
+    -#%p This application will be able to:
 
-  %ul
-    - @pre_auth.scopes.each do |scope|
-      %li= scope
+    -#%ul
+      -#- @pre_auth.scopes.each do |scope|
+        -#%li= scope
 
-= form_with url: oauth_authorization_path, method: :post do
-  = hidden_field_tag :client_id, @pre_auth.client.uid
-  = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
-  = hidden_field_tag :state, @pre_auth.state
-  = hidden_field_tag :response_type, @pre_auth.response_type
-  = hidden_field_tag :scope, @pre_auth.scope
-  = submit_tag "Authorize", class: ""
+  = form_with url: oauth_authorization_path, method: :post do
+    = hidden_field_tag :client_id, @pre_auth.client.uid
+    = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+    = hidden_field_tag :state, @pre_auth.state
+    = hidden_field_tag :response_type, @pre_auth.response_type
+    = hidden_field_tag :scope, @pre_auth.scope
+    = submit_tag "Authorize", class: "btn -primary w-full"
 
-%small
-  Authorizing will redirect you back to the application.
-  %br
-  You can revoke access to this app at anytime from the
-  = link_to "authorized apps page", oauth_authorized_applications_url
-  in your account settings.
+  .my-2
+    Authorizing will redirect you back to the application.
+    %br
+    You can revoke access to this app at anytime from the
+    = link_to "authorized apps page", oauth_authorized_applications_url, class: "text-blue-500 underline hover:text-blue-600"
+    in your account settings.
 
-%small
-  - if @pre_auth.client.application.official
-    %strong Official App.
-    This app is owned and operated by the transientBug team.
-  - else
-    %strong Not Official.
-    This app has no affiliation with the transientBug team.
+  .flex.flex-row.space-x-2.divide-x.divide-gray-400.text-sm
+    .flex-1.flex.flex-col.justify-center.items-center.px-2
+      - if @pre_auth.client.application.official
+        %strong Official App.
+        This app is owned and operated by the transientBug team.
+      - else
+        %strong Not Official.
+        This app has no affiliation with the transientBug team.
 
-%small
-  Created
-  %strong= time_ago_in_words(@pre_auth.client.application.created_at)
-  ago
+    .flex-1.flex.flex-col.items-center.px-2
+      Created
+      %strong= time_ago_in_words(@pre_auth.client.application.created_at)
+      ago
 
-%small
-  = link_to "https://oauth.net/2/" do
-    Learn about OAuth
+    .flex-1.flex.flex-col.items-center.px-2
+      = link_to "https://oauth.net/2/", class: "text-blue-500 underline hover:text-blue-600" do
+        Learn about OAuth
