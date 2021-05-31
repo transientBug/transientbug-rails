@@ -1,9 +1,9 @@
-= form_for [:admin, service_announcement], html: { class: "ui fluid form" } do |f|
-  - if service_announcement.errors.any?
+= form_for [:admin, @service_announcement], html: { class: "generic-form" } do |f|
+  - if @service_announcement.errors.any?
     .ui.message.error
-      %h2= "#{ pluralize service_announcement.errors.count, "error" } prohibited this service announcement from being saved:"
+      %h2= "#{ pluralize @service_announcement.errors.count, "error" } prohibited this service announcement from being saved:"
       %ul
-        - service_announcement.errors.full_messages.each do |message|
+        - @service_announcement.errors.full_messages.each do |message|
           %li= message
 
   %h4.ui.dividing.header User Facing Info 
@@ -31,7 +31,7 @@
           .default.text Announcement
           .menu
             - ServiceAnnouncement.icons.each do |k, v|
-              .item{ data: { value: k }, class: [ service_announcement.icon == k ? "active selected" : "" ] }
+              .item{ data: { value: k }, class: [ @service_announcement.icon == k ? "active selected" : "" ] }
                 %i.icon{ class: k }
                 = k.humanize
 
@@ -43,7 +43,7 @@
           .default.text Plain
           .menu
             - ServiceAnnouncement.colors.each do |k, v|
-              .item{ data: { value: k }, class: [ service_announcement.color == k ? "active selected" : "" ] }
+              .item{ data: { value: k }, class: [ @service_announcement.color == k ? "active selected" : "" ] }
                 %i.square.icon{ class: k }
                 = k.humanize
 

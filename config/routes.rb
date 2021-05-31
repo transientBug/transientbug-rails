@@ -79,9 +79,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  if Rails.env.production?
-    constraints PermissionConstraint.new("admin.logs") do
-      mount Logster::Web => "/logs"
-    end
+  constraints PermissionConstraint.new("admin.logs") do
+    mount Logster::Web => "/logs"
   end
 end

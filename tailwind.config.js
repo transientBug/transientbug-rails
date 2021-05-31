@@ -3,7 +3,11 @@ const colors = require('tailwindcss/colors')
 // tb green: hsl(80.1, 100%, 35.1%)
 // also known as bg-limegreen-500
 module.exports = {
-  purge: [],
+  mode: "jit",
+  purge: [
+   './public/**/*.html',
+   './app/**/*.{js,jsx,ts,tsx,vue,haml,erb}',
+  ],
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {

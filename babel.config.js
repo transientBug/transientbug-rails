@@ -22,7 +22,8 @@ module.exports = function(api) {
         {
           targets: {
             node: 'current'
-          }
+          },
+          shippedProposals: true
         }
       ],
       (isProductionEnv || isDevelopmentEnv) && [
@@ -32,7 +33,8 @@ module.exports = function(api) {
           useBuiltIns: 'entry',
           corejs: 3,
           modules: false,
-          exclude: ['transform-typeof-symbol']
+          exclude: ['transform-typeof-symbol'],
+          shippedProposals: true
         }
       ]
     ].filter(Boolean),

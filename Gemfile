@@ -49,6 +49,7 @@ gem "tzinfo-data"
 gem "haml"
 gem "haml-rails"
 gem "view_component", require: "view_component/engine"
+gem "turbo-rails"
 
 gem "inline_svg"
 
@@ -67,6 +68,9 @@ gem "jbuilder"
 
 # ActiveJob Worker
 gem "sidekiq"
+
+# Logs
+gem "logster"
 
 # Cron like scheduled/repeating tasks
 # gem "clockwork"
@@ -103,11 +107,6 @@ gem "slack-notifier"
 gem "apitome", github: "jejacks0n/apitome"
 
 gem "annotate"
-
-group :production do
-  # Utils
-  gem "logster"
-end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.

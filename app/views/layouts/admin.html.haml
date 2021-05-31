@@ -4,8 +4,8 @@
     = render "layouts/common/head" do
       %title transientBug Admin #{ content_for :page_title }
 
-      = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
-      = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_pack_tag "admin", media: "all", "data-turbo-track": "reload"
+      = javascript_pack_tag "admin", "data-turbo-track": "reload", "data-turbo-eval": false
 
-  %body{ class: [  controller_name, action_name, "bg-gray-50" ] }
+  %body{ class: [  controller_name, action_name, "relative bg-gray-50" ] }
     = render "layouts/admin/body"

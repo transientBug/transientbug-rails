@@ -1,0 +1,33 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Service Announcements
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "Edit", "#", class: "tab active" %>
+      <%= link_to "Preview", "#", class: "tab" %>
+    <% end %>
+
+    <% c.actions do %>
+      <%= button_to admin_service_announcement_path(@service_announcement), method: :patch, params: { service_announcement: { active: !@service_announcement.active } }, class: "btn -tertiary" do %>
+          <% if @service_announcement.active %>
+            <%= inline_svg_pack_tag "feather/eye-off.svg" %>
+            <span class="ml-2">Deactivate</span>
+          <% else %>
+            <%= inline_svg_pack_tag "feather/eye.svg" %>
+            <span class="ml-2">Activate</span>
+          <% end %>
+        <% end %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Service Announcements", href: admin_service_announcements_path },
+      { name: @service_announcement.id, href: admin_service_announcement_path(@service_announcement) }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render partial: "form", service_announcement: @service_announcement %>

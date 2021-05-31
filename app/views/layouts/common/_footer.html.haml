@@ -20,7 +20,7 @@
                   = link_to "Profile", profile_path, class: "text-base text-gray-300 hover:text-white"
 
               %li
-                = link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbolinks: false }, class: "text-base text-gray-300 hover:text-white"
+                = link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
 
               - if Rails.env.development?
                 %li
@@ -32,13 +32,13 @@
 
             %ul.mt-4.space-y-4
               %li
-                = link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues", data: { turbolinks: false }, class: "text-base text-gray-300 hover:text-white"
+                = link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues", data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
 
               %li
                 = link_to "FAQ", faq_path, class: "text-base text-gray-300 hover:text-white"
 
               %li
-                = link_to "API Docs", apitome.root_path, data: { turbolinks: false }, class: "text-base text-gray-300 hover:text-white"
+                = link_to "API Docs", apitome.root_path, data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
 
               %li
                 = link_to "Terms of Service", tos_path, class: "text-base text-gray-300 hover:text-white"
@@ -78,7 +78,7 @@
 
     .mt-8.border-t.border-gray-700.pt-8.md:flex.md:items-center.md:justify-between
       .flex.space-x-6.md:order-2
-        = link_to "https://github.com/transientBug/transientbug-rails", data: { turbolinks: false }, class: "text-gray-400 hover:text-gray-300" do
+        = link_to "https://github.com/transientBug/transientbug-rails", data: { turbo: false }, class: "text-gray-400 hover:text-gray-300" do
           %span.sr-only Github
           = inline_svg_pack_tag "feather/github.svg", class: "h-6 w-6"
 
