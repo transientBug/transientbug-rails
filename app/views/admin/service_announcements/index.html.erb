@@ -22,7 +22,7 @@
   <% end %>
 <% end %>
 
-<%= form_with  scope: :filter, method: :get, local: true, class: "generic-form" do |f| %>
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
   <%# Handle persisting the tab filter too on search %>
   <%= f.hidden_field :status, value: params.dig(:filter, :status) %>
 

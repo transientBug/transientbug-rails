@@ -6,7 +6,7 @@ module.exports = {
   mode: "jit",
   purge: [
    './public/**/*.html',
-   './app/**/*.{js,jsx,ts,tsx,vue,haml,erb}',
+   './app/**/*.{js,ts,haml,erb,rb}',
   ],
   darkMode: "class", // or 'media' or 'class'
   theme: {

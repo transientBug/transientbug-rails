@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
   <%= render Admin::PageHeaderComponent.new do |c| %>
     <% c.title do %>
-      Service Announcements
+      Edit Service Announcement
     <% end %>
 
     <% c.tabs do %>
@@ -30,4 +30,4 @@
   <% end %>
 <% end %>
 
-<%= render partial: "form", service_announcement: @service_announcement %>
+<%= render "form", service_announcement: @service_announcement %>

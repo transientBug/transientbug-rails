@@ -1,14 +1,14 @@
 <% content_for :page_header do %>
   <%= render Admin::PageHeaderComponent.new do |c| %>
     <% c.title do %>
-      New Service Announcement
+      Edit Service Announcement
     <% end %>
   <% end %>
 
   <%= render Admin::BreadcrumbsComponent.new do |c| %>
     <% c.crumbs([
       { name: "Service Announcements", href: admin_service_announcements_path },
-      { name: "Service Announcements", href: new_admin_service_announcement_path }
+      { name: @service_announcement.id, href: admin_service_announcement_path(@service_announcement) }
     ]) %>
   <% end %>
 <% end %>
