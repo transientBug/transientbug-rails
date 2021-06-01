@@ -28,20 +28,6 @@ class Admin::ServiceAnnouncementsController < AdminController
     end
   end
 
-  private def filters() = params.permit(filter: {})[:filter].to_h
-
-  private def filter_methods
-    @filter_methods ||= Filters.methods.map { [_1.match(%r{^filter_on_(.*)$})&.captures&.first, _1] }.filter { _1[0] }
-  end
-
-  private def with_filters base_query
-    filter_methods.reduce(base_query) do |query, (key, method)|
-      next query unless filters[key]
-
-      Filters.send(method, query, filters[key], filters)
-    end
-  end
-
   # GET /service_announcements
   def index
     @service_announcements = with_filters(ServiceAnnouncement.all).order(created_at: :desc).page params[:page]
@@ -112,12 +98,26 @@ class Admin::ServiceAnnouncementsController < AdminController
     params.require(:service_announcement).permit(
       :title,
       :message,
-      :color,
-      :icon,
+      :color_text,
+      :icon_text,
       :start_at,
       :end_at,
-      :active,
-      :logged_in_only
+      :logged_in_only,
+      :active
     )
+  end
+
+  def filters() = params.permit(filter: {})[:filter].to_h
+
+  def filter_methods
+    @filter_methods ||= Filters.methods.map { [_1.match(%r{^filter_on_(.*)$})&.captures&.first, _1] }.filter { _1[0] }
+  end
+
+  def with_filters base_query
+    filter_methods.reduce(base_query) do |query, (key, method)|
+      next query unless filters[key]
+
+      Filters.send(method, query, filters[key], filters)
+    end
   end
 end

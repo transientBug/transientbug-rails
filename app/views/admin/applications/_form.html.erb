@@ -1,0 +1,57 @@
+<%= default_form_with model: [:admin, @application], scope: :appliction, url: admin_application_path, data: { turbo: false } do |f| %>
+  <% if @application.errors.any? %>
+    <h2><%= pluralize @application.errors.count, "error" %> prohibited this application from being saved:</h2>
+    <ul>
+      <% @application.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= f.section title: "Details", subtitle: "" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_field :owner_id %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_field :name %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :redirect_uri, help_text: "Use this string for local tests: <code>#{ Doorkeeper.configuration.native_redirect_uri }</code>".html_safe %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :scopes, help_text: "Separate scopes with spaces. Leave blank to use the default scopes.".html_safe %>
+      </div>
+    </div>
+
+  <% end %>
+
+  <%= f.section title: "Internal", subtitle: "" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <div class="relative flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :official, class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :official, class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">Do we, the transientBug operators, certify that this application is official?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn -primary" %>
+  </div>
+<% end %>

@@ -1,4 +1,4 @@
-<%= form_for [:admin, @service_announcement], builder: Admin::DefaultFormBuilder, html: { class: "generic-form" } do |f| %>
+<%= default_form_with model: [:admin, @service_announcement], data: { turbo: false } do |f| %>
   <% if @service_announcement.errors.any? %>
     <h2><%= pluralize @service_announcement.errors.count, "error" %> prohibited this service announcement from being saved:</h2>
     <ul>
@@ -8,59 +8,57 @@
     </ul>
   <% end %>
 
-  <div class="form-wrapper">
-    <%= f.section title: "User Facing", subtitle: "What the announcement looks like and says" do %>
-      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div class="sm:col-span-4">
-          <%= f.text_field :title %>
-        </div>
+  <%= f.section title: "User Facing", subtitle: "What the announcement looks like and says" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_field :title %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :message, help_text: "Messages are formatted as Markdown, using the #{ link_to 'Redcarpet', 'https://github.com/vmg/redcarpet' } gem.".html_safe %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-3">
+        <%= f.text_field :icon_text %>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div class="sm:col-span-4">
-          <%= f.text_area :message, help_text: "Messages are formatted as Markdown, using the #{ link_to 'Redcarpet', 'https://github.com/vmg/redcarpet' } gem.".html_safe %>
-        </div>
+      <div class="sm:col-span-3">
+        <%= f.color_field :color_text, class: "w-auto" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= f.section title: "Scheduling", subtitle: "When and to whom to show the announcement" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-2">
+        <%= f.date_field :start_at, help_text: "Leave blank to have the announcement be shown immediately" %>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div class="sm:col-span-3">
-          <%= f.text_field :icon %>
-        </div>
-
-        <div class="sm:col-span-3">
-          <%= f.color_field :color, class: "w-auto" %>
-        </div>
+      <div class="sm:col-span-2">
+        <%= f.date_field :end_at, help_text: "Leave blank to have the announcement be shown indefinitely or until manually deactivated" %>
       </div>
-    <% end %>
+    </div>
 
-    <%= f.section title: "Scheduling", subtitle: "When and to whom to show the announcement" do %>
-      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div class="sm:col-span-2">
-          <%= f.date_field :start_at, help_text: "Leave blank to have the announcement be shown immediately" %>
-        </div>
-
-        <div class="sm:col-span-2">
-          <%= f.date_field :end_at, help_text: "Leave blank to have the announcement be shown indefinitely or until manually deactivated" %>
-        </div>
-      </div>
-
-      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div class="sm:col-span-4">
-          <div class="relative flex items-start">
-            <div class="flex items-center h-5">
-              <%= f.check_box :logged_in_only, class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
-            </div>
-            <div class="ml-3 text-sm">
-              <%= f.label :logged_in_only, class: "font-medium text-gray-700" %>
-              <p class="text-gray-500">Should this announcement be only for logged in users?</p>
-            </div>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <div class="relative flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :logged_in_only, class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :logged_in_only, class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">Should this announcement be only for logged in users?</p>
           </div>
         </div>
       </div>
-    <% end %>
-
-    <div class="actions">
-      <%= f.submit class: "btn -primary" %>
     </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn -primary" %>
   </div>
 <% end %>

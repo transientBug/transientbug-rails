@@ -58,9 +58,8 @@
           <tr>
             <td class="w-full">
               <div class="flex items-center">
-                <div class="flex-shrink-0 h-10 w-10">
-                  <%= service_announcement.icon %>
-                  <%= service_announcement.color %>
+                <div class="flex-shrink-0 p-4 rounded-md h-18 w-18" style="background-color: <%= service_announcement.color_text || "white" %>">
+                  <%= inline_svg_pack_tag "feather/#{service_announcement.icon_text || "radio"}.svg" %>
                 </div>
                 <div class="ml-4">
                   <div class="text-sm font-medium text-gray-900">
