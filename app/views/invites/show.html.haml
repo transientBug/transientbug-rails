@@ -16,7 +16,7 @@
 
 .mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
   .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
-    = form_with model: @user, url: invite_path(@invitation.code), method: :patch, class: "space-y-6" do |f|
+    = form_with model: @user, url: invite_path(@invitation.code), method: :patch, data: { turbo: false }, class: "space-y-6" do |f|
       - if @user.errors.any?
         %h2= "#{ pluralize @user.errors.count, "error" } prohibited this user from being saved:"
         %ul

@@ -1,5 +1,5 @@
 %section( aria-labelledby="bookmark_form" )
-  = form_with model: bookmark, html: { autocomplete: "off" } do |f|
+  = form_with model: bookmark, data: { turbo: false }, html: { autocomplete: "off" } do |f|
     = render CardComponent.new do |c|
       -#= c.with :header do
         .ml-4.mt-4

@@ -13,7 +13,7 @@
 
 .mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
   .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
-    = form_with url: login_path, method: :post, class: "space-y-6" do
+    = form_with url: login_path, method: :post, class: "space-y-6", data: { turbo: false } do
       %div
         %label.block.text-sm.font-medium.text-gray-700(for="email")
           Email address

@@ -1,0 +1,16 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      New Invitation
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Invitations", href: admin_invitations_path },
+      { name: "New Invitation", href: new_admin_invitation_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render "form", invitation: @invitation %>

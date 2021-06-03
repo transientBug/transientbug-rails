@@ -1,0 +1,15 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Sidekiq
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Sidekiq", href: admin_sidekiq_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<iframe src="<%= sidekiq_web_path %>" class="h-full w-full" />

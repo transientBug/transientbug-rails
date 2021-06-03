@@ -56,18 +56,6 @@ class Admin::DefaultFormBuilder < ActionView::Helpers::FormBuilder
   # def checkbox method, opts={}, checked_value="1", unchecked_value="0"
   # end
 
-  def row
-    @template.content_tag :div, class: "mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" do
-      @template.capture { yield }
-    end
-  end
-
-  def col span=4
-    @template.content_tag :div, class: "sm:col-span-#{span}" do
-      @template.capture { yield }
-    end
-  end
-
   private
 
   def color_field_wrapper method, opts={}

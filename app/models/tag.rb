@@ -34,8 +34,8 @@ class Tag < ApplicationRecord
   has_many :bookmarks_tags
   has_many :bookmarks, through: :bookmarks_tags
 
-  update_index("tags#tag") { self }
-  update_index("tags#bookmark") { bookmarks }
+  update_index("tags") { self }
+  update_index("bookmarks") { bookmarks }
 
   def self.find_or_create_tags tags: []
     tags.map do |tag|

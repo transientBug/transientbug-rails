@@ -1,5 +1,5 @@
 %section( aria-labelledby="import_form" )
-  = form_with model: @import_data, url: profile_import_index_path, method: :post, local: true do |f|
+  = form_with model: @import_data, url: profile_import_index_path, method: :post, local: true, data: { turbo: false } do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
       .bg-white.py-6.px-4.sm:p-6
         %div

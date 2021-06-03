@@ -1,5 +1,5 @@
 %section( aria-labelledby="user_contact_settings" )
-  = form_with model: @user, url: profile_path, method: :post do |f|
+  = form_with model: @user, url: profile_path, method: :post, data: { turbo: false } do |f|
     = render CardComponent.new do |c|
       = c.with :header do
         .ml-4.mt-4
