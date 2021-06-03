@@ -1,8 +1,0 @@
-- content_for :navbar_center do
-  = form_with url: admin_users_url, method: :get, local: true, class: "w-full" do |form|
-    %span.searchbar( class="relative w-full inline-block" )
-      = form.search_field :q, class: "searchbar__input", placeholder: "Search users ...", value: params[:q]
-
-      .searchbar__right
-        .searchbar__icon
-          = render "components/feather_icon", icon: "search"

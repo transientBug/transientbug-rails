@@ -18,66 +18,53 @@ module.exports = function(api) {
   return {
     presets: [
       isTestEnv && [
-        require('@babel/preset-env').default,
+        '@babel/preset-env',
         {
           targets: {
             node: 'current'
-          }
+          },
+          shippedProposals: true
         }
       ],
       (isProductionEnv || isDevelopmentEnv) && [
-        require('@babel/preset-env').default,
+        '@babel/preset-env',
         {
           forceAllTransforms: true,
           useBuiltIns: 'entry',
           corejs: 3,
           modules: false,
-          exclude: ['transform-typeof-symbol']
-        }
-      ],
-      [
-        require('@babel/preset-react').default,
-        {
-          development: isDevelopmentEnv || isTestEnv,
-          useBuiltIns: true
+          exclude: ['transform-typeof-symbol'],
+          shippedProposals: true
         }
       ]
     ].filter(Boolean),
     plugins: [
-      require('babel-plugin-macros'),
-      require('@babel/plugin-syntax-dynamic-import').default,
-      isTestEnv && require('babel-plugin-dynamic-import-node'),
-      require('@babel/plugin-transform-destructuring').default,
+      'babel-plugin-macros',
+      '@babel/plugin-syntax-dynamic-import',
+      isTestEnv && 'babel-plugin-dynamic-import-node',
+      '@babel/plugin-transform-destructuring',
       [
-        require('@babel/plugin-proposal-class-properties').default,
+        '@babel/plugin-proposal-class-properties',
         {
           loose: true
         }
       ],
       [
-        require('@babel/plugin-proposal-object-rest-spread').default,
+        '@babel/plugin-proposal-object-rest-spread',
         {
           useBuiltIns: true
         }
       ],
       [
-        require('@babel/plugin-transform-runtime').default,
+        '@babel/plugin-transform-runtime',
         {
-          helpers: false,
-          regenerator: true,
-          corejs: false
+          helpers: false
         }
       ],
       [
-        require('@babel/plugin-transform-regenerator').default,
+        '@babel/plugin-transform-regenerator',
         {
           async: false
-        }
-      ],
-      isProductionEnv && [
-        require('babel-plugin-transform-react-remove-prop-types').default,
-        {
-          removeImport: true
         }
       ]
     ].filter(Boolean)

@@ -3,6 +3,9 @@ require_relative "../../lib/permission_constraint"
 namespace :admin, constraints: PermissionConstraint.new("admin.access") do
   root "home#home"
 
+  get "/sidekiq", to: "home#sidekiq"
+  get "/logster", to: "home#logster"
+
   resources :service_announcements do
     scope module: :service_announcements do
       scope as: :service_announcements do

@@ -1,0 +1,131 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Users
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "All", admin_users_path, class: ["tab", ("active" if params.dig(:filter, :status).blank?)] %>
+      <%= link_to "Active", admin_users_path(filter: {status: :active}), class: ["tab", ("active" if params.dig(:filter, :status) == "active")] %>
+      <%= link_to "Inactive", admin_users_path(filter: {status: :inactive}), class: ["tab", ("active" if params.dig(:filter, :status) == "inactive")] %>
+    <% end %>
+
+    <% c.actions do %>
+      <%= link_to "New User", new_admin_user_path, class: "btn -primary" %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Users", href: admin_users_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
+  <%# Handle persisting the tab filter too on search %>
+  <%= f.hidden_field :status, value: params.dig(:filter, :status) %>
+
+  <div class="field-group">
+    <%= f.label :username, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :username_type, class: "sr-only" %>
+      <%= f.select :username_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :username_type)}, class: "prefix" %>
+
+      <%= f.text_field :username, value: params.dig(:filter, :username), class: "input" %>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :email_type, class: "sr-only" %>
+      <%= f.select :email_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :email_type)}, class: "prefix" %>
+
+      <%= f.text_field :email, value: params.dig(:filter, :email), class: "input" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Filter", class: "btn -secondary" %>
+    <%= link_to "Clear Filters", admin_users_path, class: "btn -tertiary" %>
+  </div>
+<% end %>
+
+<% if @users.any? %>
+  <div class="generic-table-wrapper">
+    <table class="generic-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Roles</th>
+          <th>Created At</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="w-full">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 p-4 rounded-md h-18 w-18">
+                  <%= inline_svg_pack_tag "feather/user.svg" %>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    <%= user.username %>
+                  </div>
+                  <div class="text-sm text-gray-900">
+                    <%= user.email %>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <strong class="mr-1">Roles:</strong>
+                <% user.roles.map(&:name).map(&:humanize).each do |role| %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800 mx-1"><%= role %></span>
+                <% end %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm text-gray-500">
+                <%= user.created_at.to_s(:short) %>
+              </div>
+            </td>
+            <td class="justify-right">
+              <div class="btn-group">
+                <%= link_to admin_user_path(user), class: "btn -secondary" do %>
+                  <%= inline_svg_pack_tag "feather/maximize-2.svg" %>
+                  <span class="ml-2">View</span>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @users, views_prefix: "admin" %>
+<% else %>
+  <%= render Admin::ZeroStateComponent.new do |c| %>
+    <% if params[:filter] %>
+       <% c.title do %>
+         Nothing Found
+       <% end %>
+      <% c.actions do %>
+        <p>No users match the specified filters<p>
+        <%= link_to "Clear Filters", admin_users_path, class: "btn -secondary" %>
+      <% end %>
+    <% else %>
+      <% c.actions do %>
+        <p>No users made yet.</p>
+        <%= link_to "Make one?", new_admin_user_path, class: "btn -primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

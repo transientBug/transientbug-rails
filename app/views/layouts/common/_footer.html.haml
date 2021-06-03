@@ -1,52 +1,86 @@
-.ui.inverted.vertical.footer.segment
-  .ui.center.aligned.container
-    .ui.stackable.inverted.divided.grid
-      .three.wide.column
-        %h4.ui.inverted.header All the Links!
-        .ui.inverted.link.list
-          .item= link_to "Home", home_path
+%footer.bg-gray-800{"aria-labelledby" => "footerHeading"}
+  %h2#footerHeading.sr-only Footer
+  .max-w-7xl.mx-auto.py-12.px-4.sm:px-6.lg:py-16.lg:px-8
+    .xl:grid.xl:grid-cols-3.xl:gap-8
+      .grid.grid-cols-2.gap-8.xl:col-span-2
+        .md:grid.md:grid-cols-2.md:gap-8
+          %div
+            %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+              All the Links!
 
-          - if signed_in?
-            .item= link_to "Bookmarks", bookmarks_path
-            .item= link_to "Profile", profile_path
+            %ul.mt-4.space-y-4
+              %li
+                = link_to "Home", home_path, class: "text-base text-gray-300 hover:text-white"
 
-          - if Rails.env.development?
-            .item= link_to "Dev Auth", auth_path(:developer)
+              - if signed_in?
+                %li
+                  = link_to "Bookmarks", bookmarks_path, class: "text-base text-gray-300 hover:text-white"
 
-          .item= link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbolinks: false }
+                %li
+                  = link_to "Profile", profile_path, class: "text-base text-gray-300 hover:text-white"
 
-      .three.wide.column
-        %h4.ui.inverted.header All the Credits!
-        .ui.inverted.link.list
-          .item= link_to "Tailwind CSS", "https://tailwindcss.com/", data: { turbolinks: false }
-          .item= link_to "Stimulus.js", "https://stimulusjs.org/", data: { turbolinks: false }
-          .item= link_to "Rails 6.1", "https://github.com/rails/rails", data: { turbolinks: false }
-          .item
-            = link_to "https://github.com/transientBug/transientbug-rails", data: { turbolinks: false } do
-              %i.github.icon
-              The codez
+              %li
+                = link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
 
-      .four.wide.column
-        %h4.ui.inverted.header All the Love!
-        %p
-          Made with
-        %p
-          %i.red.heart.icon
-        %p
-          in Boulder, Colorado
+              - if Rails.env.development?
+                %li
+                  = link_to "Dev Auth", auth_path(:developer), class: "text-base text-gray-300 hover:text-white"
 
-      .six.wide.column
-        %h4.ui.inverted.header transientBug
-        %p Dedicated to being the worst storagemahjigger for bookmarks, with a dash of these newfangled anima-motion still-frames called "gah-iffs".
+          .mt-12.md:mt-0
+            %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+              Support
 
-    .ui.inverted.section.divider
+            %ul.mt-4.space-y-4
+              %li
+                = link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues", data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
 
-    = image_tag "bug_logo.png", class: "ui centered mini image"
+              %li
+                = link_to "FAQ", faq_path, class: "text-base text-gray-300 hover:text-white"
 
-    .ui.horizontal.inverted.small.divided.link.list
-      .item= link_to "Submit a bug", "https://github.com/transientBug/transientbug-rails/issues", data: { turbolinks: false }
-      .item= link_to "FAQ", faq_path
-      .item= link_to "API Docs", apitome.root_path, data: { turbolinks: false }
-      .item support (at) transientbug.ninja
-      .item= link_to "Terms of Service", tos_path
-      .item= link_to "Privacy Policy", privacy_path
+              %li
+                = link_to "API Docs", apitome.root_path, data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
+
+              %li
+                = link_to "Terms of Service", tos_path, class: "text-base text-gray-300 hover:text-white"
+
+              %li
+                = link_to "Privacy Policy", privacy_path, class: "text-base text-gray-300 hover:text-white"
+
+        .md:grid.md:grid-cols-2.md:gap-8
+          %div
+            %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+              About tB
+            %p.mt-4.space-y-4.text-base.text-gray-300.hover:text-white
+              Dedicated to being the worst storagemahjigger for bookmarks.
+
+          .mt-12.md:mt-0
+            %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+              All the Love!
+            %p.text-base.text-gray-300.hover:text-white.mt-4.space-y-4
+              Made with
+              = inline_svg_pack_tag "feather/heart.svg", class: "text-cerise-500 h-6 w-6"
+              in Colorado
+
+      -#- unless signed_in?
+        .mt-8.xl:mt-0
+          %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase
+            Request an invite
+          %p.mt-4.text-base.text-gray-300
+            We won't send you spam, and will only use this email address to inform you of your invite code.
+
+          %form.mt-4.sm:flex.sm:max-w-md.default-form
+            %label.sr-only{:for => "emailAddress"} Email address
+            %input#emailAddress.appearance-none.min-w-0.w-full.bg-white.border.border-transparent.rounded-md.py-2.px-4.text-base.text-gray-900.placeholder-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white.focus:border-white.focus:placeholder-gray-400{:autocomplete => "email", :name => "emailAddress", :placeholder => "Email ...", :required => "", :type => "email"}
+
+            .mt-3.rounded-md.sm:mt-0.sm:ml-3.sm:flex-shrink-0
+              %button.w-full.bg-limegreen-500.border.border-transparent.rounded-md.py-2.px-4.flex.items-center.justify-center.text-base.font-medium.text-white.hover:bg-limegreen-600.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-limegreen-500{:type => "submit"}
+                Request Invite
+
+    .mt-8.border-t.border-gray-700.pt-8.md:flex.md:items-center.md:justify-between
+      .flex.space-x-6.md:order-2
+        = link_to "https://github.com/transientBug/transientbug-rails", data: { turbo: false }, class: "text-gray-400 hover:text-gray-300" do
+          %span.sr-only Github
+          = inline_svg_pack_tag "feather/github.svg", class: "h-6 w-6"
+
+      %p.mt-8.text-base.text-gray-400.md:mt-0.md:order-1
+        support (at) transientbug.ninja

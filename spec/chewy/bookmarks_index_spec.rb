@@ -38,14 +38,14 @@ RSpec.describe BookmarksIndex, type: :chewy do
     end
   end
 
-  describe ".build_tag_suggest" do
-    subject { described_class.build_tag_suggest tag }
+  # describe ".build_tag_suggest" do
+    # subject { described_class.build_tag_suggest tag }
 
-    let(:tag) { create :tag }
+    # let(:tag) { create :tag }
 
-    context "with a normal" do
-      it { is_expected.to be_a(Hash) }
-      it { is_expected.to include(input: a_kind_of(String), contexts: a_kind_of(Hash)) }
-    end
-  end
+    # context "with a normal" do
+      # it { is_expected.to be_a(Hash) }
+      # it { is_expected.to include(input: a_kind_of(String), contexts: a_kind_of(Hash)) }
+    # end
+  # end
 end

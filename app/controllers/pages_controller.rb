@@ -4,7 +4,9 @@ class PagesController < ApplicationController
   layout "page"
 
   def main
-    redirect_to :home if signed_in?
+    return redirect_to :home if signed_in?
+
+    render :main, layout: "blank"
   end
 
   def faq; end

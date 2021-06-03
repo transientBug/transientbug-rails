@@ -1,5 +1,14 @@
-= form_with model: @import_data, url: profile_import_index_path, method: :post, class: "ui fluid form", local: true do |f|
-  .required.field
-    = f.file_field :upload, aria: { describedby: "Upload file" }
+%section( aria-labelledby="import_form" )
+  = form_with model: @import_data, url: profile_import_index_path, method: :post, local: true, data: { turbo: false } do |f|
+    .shadow.sm:rounded-md.sm:overflow-hidden
+      .bg-white.py-6.px-4.sm:p-6
+        %div
+          %h2#import_form.text-lg.leading-6.font-medium.text-gray-900 Import
+          -#%p.mt-1.text-sm.text-gray-500 .
 
-  = f.submit "Import", class: "ui positive right floated submit button"
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.file_field :upload, aria: { describedby: "Upload file" }, class: "mt-1 w-full default-input"
+
+      .px-4.py-3.bg-gray-50.text-right.sm:px-6
+        = f.submit "Import", class: "btn -secondary"

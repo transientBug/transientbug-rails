@@ -1,0 +1,122 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Invitations
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "All", admin_invitations_path, class: ["tab", "active"] %>
+    <% end %>
+
+    <% c.actions do %>
+      <%= link_to "New Invitation", new_admin_invitation_path, class: "btn -primary" %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "All Invitations", href: admin_invitations_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
+  <div class="field-group">
+    <%= f.label :title, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :title_type, class: "sr-only" %>
+      <%= f.select :title_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :title_type)}, class: "prefix" %>
+
+      <%= f.text_field :title, value: params.dig(:filter, :title), class: "input" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Filter", class: "btn -secondary" %>
+    <%= link_to "Clear Filters", admin_invitations_path, class: "btn -tertiary" %>
+  </div>
+<% end %>
+
+<% if @invitations.any? %>
+  <div class="generic-table-wrapper">
+    <table class="generic-table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Title & Description</th>
+          <th>Internal Note</th>
+          <th>Created At</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invitations.each do |invitation| %>
+          <tr>
+            <td>
+              <div class="flex items-center">
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    <%= invitation.code %>
+                  </div>
+                  <div class="text-sm text-gray-900">
+                    <%= invitation.available %>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="flex items-center">
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    <%= invitation.title %>
+                  </div>
+                  <div class="text-sm text-gray-900 truncate">
+                    <%= invitation.description %>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm font-medium text-gray-900 truncate">
+                <%= invitation.internal_note %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm text-gray-500">
+                <%= invitation.created_at.to_s(:short) %>
+              </div>
+            </td>
+            <td class="justify-right">
+              <div class="btn-group">
+                <%= link_to admin_invitation_path(invitation), class: "btn -secondary" do %>
+                  <%= inline_svg_pack_tag "feather/maximize-2.svg" %>
+                  <span class="ml-2">View</span>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @invitations, views_prefix: "admin" %>
+<% else %>
+  <%= render Admin::ZeroStateComponent.new do |c| %>
+    <% if params[:filter] %>
+       <% c.title do %>
+         Nothing Found
+       <% end %>
+      <% c.actions do %>
+        <p>No invitations match the specified filters<p>
+        <%= link_to "Clear Filters", admin_invitations_path, class: "btn -secondary" %>
+      <% end %>
+    <% else %>
+      <% c.actions do %>
+        <p>No invitations made yet.</p>
+        <%= link_to "Make one?", new_admin_invitation_path, class: "btn -primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

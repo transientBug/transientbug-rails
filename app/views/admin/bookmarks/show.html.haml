@@ -4,7 +4,7 @@
 = model_tag @bookmark, no_checkbox: true, only: [ :id, :title, :uri ]
 
 .ui.menu
-  = link_to bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "item" do
+  = link_to bookmark_cache_index_path(@bookmark), data: { turbo: false }, class: "item" do
     %i.eye.icon
     view cache
 

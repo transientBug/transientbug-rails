@@ -1,0 +1,16 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Edit OAuth Application 
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "OAuth Applications", href: admin_applications_path },
+      { name: @application.id, href: admin_application_path(@application) }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render "form", application: @application %>

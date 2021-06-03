@@ -1,0 +1,46 @@
+<%= default_form_with model: [:admin, @invitation], data: { turbo: false } do |f| %>
+  <% if @invitation.errors.any? %>
+    <h2><%= pluralize @invitation.errors.count, "error" %> prohibited this invitation from being saved:</h2>
+    <ul>
+      <% @invitation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= f.section title: "User Facing", subtitle: "Customize it a little" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_field :title %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :description, help_text: "Messages are formatted as Markdown, using the #{ link_to 'Redcarpet', 'https://github.com/vmg/redcarpet' } gem.".html_safe %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= f.section title: "Internal", subtitle: "How many, what code and notes about the invite for future reference" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-2">
+        <%= f.number_field :available %>
+      </div>
+
+      <div class="sm:col-span-2">
+        <%= f.text_field :code, input_opts: {disabled: !@invitation.new_record?}, help_text: "You can optionally use a custom code for this invite. If you don't choose one, one will be generated for you." %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :internal_note, help_text: "It's recommended to put a little internal note about what this invitation is for." %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn -primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,111 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      OAuth Applications
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "All", admin_applications_path, class: ["tab", ("active" if params.dig(:filter, :official).blank?)] %>
+      <%= link_to "Official", admin_applications_path(filter: {official: true}), class: ["tab", ("active" if params.dig(:filter, :official) == "true")] %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "OAuth Applications", href: admin_applications_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
+  <%# Handle persisting the tab filter too on search %>
+  <%= f.hidden_field :official, value: params.dig(:filter, :official) %>
+
+  <div class="field-group">
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :name_type, class: "sr-only" %>
+      <%= f.select :name_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :name_type)}, class: "prefix" %>
+
+      <%= f.text_field :name, value: params.dig(:filter, :name), class: "input" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Filter", class: "btn -secondary" %>
+    <%= link_to "Clear Filters", admin_applications_path, class: "btn -tertiary" %>
+  </div>
+<% end %>
+
+<% if @applications.any? %>
+  <div class="generic-table-wrapper">
+    <table class="generic-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Owner ID</th>
+          <th>Official?</th>
+          <th>Created At</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @applications.each do |application| %>
+          <tr>
+            <td class="w-full">
+              <div class="text-sm font-medium text-gray-900">
+                <%= application.name %>
+              </div>
+            </td>
+            <td class="w-full">
+              <div class="text-sm font-medium text-gray-900">
+                <%= link_to application.owner.id, admin_user_path(application.owner) %>
+              </div>
+            </td>
+            <td class="w-full">
+              <div class="text-sm font-medium text-gray-900">
+                <% if application.official %>
+                  <%= inline_svg_pack_tag "feather/check.svg" %>
+                <% else %>
+                  <%= inline_svg_pack_tag "feather/x.svg" %>
+                <% end %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm text-gray-500">
+                <%= application.created_at.to_s(:short) %>
+              </div>
+            </td>
+            <td class="justify-right">
+              <div class="btn-group">
+                <%= link_to admin_application_path(application), class: "btn -secondary" do %>
+                  <%= inline_svg_pack_tag "feather/maximize-2.svg" %>
+                  <span class="ml-2">View</span>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @applications, views_prefix: "admin" %>
+<% else %>
+  <%= render Admin::ZeroStateComponent.new do |c| %>
+    <% if params[:filter] %>
+       <% c.title do %>
+         Nothing Found
+       <% end %>
+      <% c.actions do %>
+        <p>No OAuth applications match the specified filters<p>
+        <%= link_to "Clear Filters", admin_applications_path, class: "btn -secondary" %>
+      <% end %>
+    <% else %>
+      <% c.actions do %>
+        <p>No OAuth applications made yet.</p>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

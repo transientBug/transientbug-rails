@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  layout "page"
-
   before_action :redirect_home, only: [ :index, :new ], if: :signed_in?
 
   require_login! only: [ :destroy ]

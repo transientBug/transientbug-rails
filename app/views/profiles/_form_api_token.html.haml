@@ -1,0 +1,29 @@
+%section( aria-labelledby="api_token" )
+  = render CardComponent.new do |c|
+    = c.with :header do
+      .ml-4.mt-4
+        %h2#api_token.text-lg.leading-6.font-medium.text-gray-900 API Token
+        %p.mt-1.text-sm.text-gray-500 How you can access the api with personal tools.
+
+    = c.with :body do
+      %p
+        API Documentation can be found #{ link_to "here.", apitome.root_path }
+
+      %p.mt-2
+        If you are building an app or extension that interacts with the transientBug API, you should make a
+        = link_to "new OAuth2 Application", oauth_applications_path
+        and make use of the OAuth2 Authorization Code flow if at all possible.
+
+      %p.mt-2
+        You can
+        = link_to "click here", oauth_authorized_applications_path
+        to see your currently authorized applications and revoke any of them at any time.
+
+      %p.mt-2
+        .px-4.py-2.bg-gray-200.shadow-inner.rounded-md.w-full.select-all.cursor-text.truncate
+          = @user.api_token
+
+    = c.with :footer do
+      = link_to profile_regenerate_index_path(@service_announcement), class: "btn -secondary", method: :post do
+        = feather_svg "refresh-cw", class: "h-5 w-5 mr-2"
+        Regenerate

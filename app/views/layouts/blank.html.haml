@@ -1,0 +1,13 @@
+!!! 5
+%html
+  %head
+    = render "layouts/common/head" do
+      %title transientBug #{ content_for :page_title }
+
+      = stylesheet_pack_tag "application", media: "all", "data-turbo-track": "reload"
+      = javascript_pack_tag "application", "data-turbo-track": "reload", "data-turbo-eval": false
+
+  %body.bg-gray-200{ class: [  controller_name, action_name ] }
+    = yield
+
+    = render "layouts/common/footer"

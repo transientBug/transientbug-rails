@@ -1,0 +1,19 @@
+%section.params
+  %h3= t(:parameters, scope: :apitome)
+  .table-responsive
+    %table.table.table-bordered
+      %tr
+        - param_headers(params).each do |title|
+          %th= title
+      - params.each do |param|
+        %tr
+          %td.name
+            - if param["scope"]
+              %code= "#{ Array(param["scope"]).push(param["name"]).flatten.join "." }"
+            - else
+              %code= param["name"]
+            - if param["required"]
+              %span.label.label-danger.required= t(:required, scope: :apitome)
+          %td.description= param["description"]
+          - param_extras(params).each do |extra|
+            %td.extra= param[extra]

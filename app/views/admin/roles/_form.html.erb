@@ -1,0 +1,47 @@
+<%= default_form_with model: [:admin, @role], data: { turbo: false } do |f| %>
+  <% if @role.errors.any? %>
+    <h2><%= pluralize @role.errors.count, "error" %> prohibited this role from being saved:</h2>
+    <ul>
+      <% @role.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= f.section title: "Info", subtitle: "" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_field :name %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.text_area :description %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= f.section title: "Permissions", subtitle: "" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-4">
+        <%= f.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name do |role_check_box| %>
+          <%= role_check_box.label class: "font-medium text-gray-700" do %>
+            <div class="relative flex items-start">
+              <div class="flex items-center h-5">
+                <%= role_check_box.check_box class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= role_check_box.text.humanize %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn -primary" %>
+  </div>
+<% end %>

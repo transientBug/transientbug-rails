@@ -1,0 +1,15 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Dashboard
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Dashboard", href: admin_root_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+

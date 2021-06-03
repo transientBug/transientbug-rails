@@ -25,8 +25,9 @@ Rails.application.routes.draw do
 
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
+  match "/logout", to: "sessions#destroy", via: [:delete]
+
   match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
-  match "/logout", to: "sessions#destroy", via: [:get, :delete]
 
   resources :invites, only: [:index, :create, :show, :update]
 
@@ -53,31 +54,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tags, only: [:index, :show]
+
   resources :bookmarks do
     scope module: :bookmarks do
       resources :cache, only: [:index, :create] do
         collection do
           match "/*key", to: "cache#show", via: [:get]
-        end
-      end
-
-      collection do
-        scope as: :bookmarks do
-          resources :tag_wizard, only: [:index, :update]
-
-          resources :search, only: [:index]
-
-          resources :tags, only: [:index, :show] do
-            collection do
-              resources :autocomplete, only: [:index], module: "tags"
-            end
-          end
-
-          namespace :bulk do
-            resource :tag, only: [:update]
-            resource :recache, only: [:create]
-            resource :delete, only: [:destroy]
-          end
         end
       end
     end
@@ -96,9 +79,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  if Rails.env.production?
-    constraints PermissionConstraint.new("admin.logs") do
-      mount Logster::Web => "/logs"
-    end
+  constraints PermissionConstraint.new("admin.logs") do
+    mount Logster::Web => "/logs"
   end
 end

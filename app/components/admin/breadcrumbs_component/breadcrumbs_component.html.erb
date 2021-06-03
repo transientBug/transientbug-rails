@@ -1,0 +1,16 @@
+<nav class="bg-white border-b border-gray-200 flex shadow-sm" aria-label="Breadcrumb">
+  <ol class=" w-full px-4 flex space-x-4">
+    <li class="flex">
+      <div class="flex items-center">
+        <%= link_to admin_root_path, class: "text-gray-400 hover:text-gray-500" do %>
+          <%= inline_svg_pack_tag "feather/home.svg", class: "flex-shrink-0 h-5 w-5" %>
+          <span class="sr-only">Home</span>
+        <% end %>
+      </div>
+    </li>
+
+    <% crumbs.each do |crumb| %>
+      <%= crumb %>
+    <% end %>
+  </ol>
+</nav>

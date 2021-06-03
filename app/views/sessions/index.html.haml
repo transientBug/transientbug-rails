@@ -1,27 +1,40 @@
 - content_for :page_title do
   Login
 
-.ui.stackable.center.aligned.grid
-  .ui.middle.aligned.row
-    .six.wide.column
-      %h2.ui.image.header
-        = image_tag "bug_logo.png", class: "image"
-        .content
-          Login
+.sm:mx-auto.sm:w-full.sm:max-w-md
+  -#= image_tag "bug_logo.png", class: "mx-auto h-12 w-auto"
 
-      = form_tag login_path, method: :post, class: "ui form" do
-        .ui.error.message
-        .field
-          .ui.left.icon.input
-            %i.user.icon
-            = text_field_tag "email", "", placeholder: "Email"
+  %h2.mt-6.text-center.text-3xl.font-extrabold.text-gray-900
+    Welcome Back
 
-        .field
-          .ui.left.icon.input
-            %i.lock.icon
-            = password_field_tag "password", "", placeholder: "**************"
+  %p.mt-2.text-center.text-sm.text-gray-600.max-w
+    Have an invite code?
+    = link_to "Use it!", invites_path, class: "font-medium text-limegreen-500 hover:text-limegreen-600"
 
-        = submit_tag "Login", class: "ui fluid large green submit button"
+.mt-8.sm:mx-auto.sm:w-full.sm:max-w-md
+  .bg-white.py-8.px-4.shadow.sm:rounded-lg.sm:px-10
+    = form_with url: login_path, method: :post, class: "space-y-6", data: { turbo: false } do
+      %div
+        %label.block.text-sm.font-medium.text-gray-700(for="email")
+          Email address
+        .mt-1
+          = text_field_tag "email", "", placeholder: "Email", class: "default-input w-full"
 
-      .ui.message
-        Have an invite code? #{ link_to "Use it!", invites_path }
+      %div
+        %label.block.text-sm.font-medium.text-gray-700(for="password")
+          Password
+        .mt-1
+          = password_field_tag "password", "", placeholder: "**************", class: "default-input w-full"
+
+      -#.flex.items-center.justify-between
+        .flex.items-center
+          %input#remember_me.h-4.w-4.text-limegreen-600.focus:ring-limegreen-500.border-gray-300.rounded(name="remember_me" type="checkbox")
+          %label.ml-2.block.text-sm.text-gray-900(for="remember_me")
+            Remember me
+
+        .text-sm
+          %a.font-medium.text-limegreen-600.hover:text-limegreen-500(href="#")
+            Forgot your password?
+
+      %div
+        = submit_tag "Log in", class: "btn -primary w-full"

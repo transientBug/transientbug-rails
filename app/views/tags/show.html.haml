@@ -1,0 +1,18 @@
+- content_for :page_title do
+  Bookmarks Tagged '#{ @tag.label }'
+
+- if @bookmarks.any?
+  = paginate @bookmarks
+
+  .space-y-3
+    = render BookmarkCardComponent.with_collection(@bookmarks)
+
+  = paginate @bookmarks
+
+- else
+  %h1
+    No bookmarks found!
+
+  %p
+    Maybe
+    = link_to "make one?", new_bookmark_path

@@ -1,0 +1,9 @@
+<% if page.current? %>
+  <%= link_to url, title: page, class: "z-10 bg-limegreen-50 border-limegreen-500 text-limegreen-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium", remote: remote do %>
+    <%= page %>
+  <% end %>
+<% else %>
+  <%= link_to url, title: page, class: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium", remote: remote do %>
+    <%= page %>
+  <% end %>
+<% end %>

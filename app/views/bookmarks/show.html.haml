@@ -1,50 +1,20 @@
 - content_for :page_title do
-  Bookmark '#{ @bookmark.title }'
+  = @bookmark.title
 
-- content_for :sidebar do
-  .tb.bulk-action-menu
-    %h2 Actions
+- content_for :page_actions do
+  = link_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { confirm: "Are you sure?" }
 
-    = link_to edit_bookmark_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
-      %i.pencil.icon
-      Edit
+  = link_to "Edit", edit_bookmark_path(@bookmark), class: "btn -secondary"
 
-    -# TODO: replace
-    = modal_tag @bookmark, :delete, url: bookmark_path(@bookmark), class: "button button-red-outline hover:button-red" do
-      %i.trash.can.icon
-      Delete
-
-    %h2 Offline Archive
-
-    - if @bookmark.current_offline_cache.present?
-      .archive-info
-        Archive made
-        = render "components/time", time: @bookmark.current_offline_cache.created_at
-
-      = link_to "View Archive", bookmark_cache_index_path(@bookmark), data: { turbolinks: false }, class: "button button-white-outline hover:button-white text-white hover:text-gray-800"
-    - else
-      .archive-info
-        No archive available
-
-    = button_to bookmark_cache_index_path(@bookmark), class: "button button-white-outline hover:button-white text-white hover:text-gray-800" do
-      - if @bookmark.offline_caches.any?
-        Re-Archive
-      - else
-        Archive
-
-= model_tag @bookmark, only: [ :uri, :title ], no_checkbox: true
-
-.flex.flex-col.justify-between{ class: "lg:flex-row" }
-  .column.w-full{ class: "lg:mr-2 sm:mb-2" }
-    %h2.font-bold.text-3xl= @bookmark.title
-
+.flex.flex-col.justify-between.lg:flex-row.px-4.sm:px-0
+  .w-full.flex.flex-col.lg:mr-2.sm:mb-2.space-y-3
     = link_to @bookmark.uri.to_s, @bookmark.uri.to_s
-    = render "components/time", time: @bookmark.created_at
+    = render RelativeTimeComponent.new(time: @bookmark.created_at)
 
-    = render "components/tags", tags: @bookmark.tags do |tag|
-      = bookmarks_tag_path(tag)
+    %div
+      = render TagComponent.with_collection(@bookmark.tags)
 
-  .column.w-full
+  .w-full.mt-4
     - if @bookmark.description.present?
       :markdown
         #{ @bookmark.description }

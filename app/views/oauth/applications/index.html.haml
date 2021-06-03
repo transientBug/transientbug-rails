@@ -1,65 +1,51 @@
 - content_for :page_title do
-  Developer - OAuth2 Apps
+  Developer - Apps
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %section( aria-labelledby="oauth_table" )
+    = render CardComponent.new do |c|
+      = c.with :header do
+        .ml-4.mt-4
+          %h2#oauth_table.text-lg.leading-6.font-medium.text-gray-900 Developer OAuth2 Apps
+          .mt-1.text-sm.text-gray-500
+            Build applications that interact with the transientBug API
 
-%h2.ui.dividing.header Developer OAuth2 Apps
+        .ml-4.mt-4.flex-shrink-0
+          =link_to new_oauth_application_path, class: "btn -primary" do
+            Create new app
 
-.ui.stackable.menu
-  .ui.item
-    = link_to new_oauth_application_path do
-      %i.add.icon
-      new
+      = c.with :body do
+        %table.min-w-full.divide-y.divide-gray-200
+          %thead.bg-gray-50
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider( scope="col" ) Name
+              %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider( scope="col" ) Created At
+              %th.relative.px-6.py-3( scope="col" )
+                %span.sr-only Actions
 
-  .right.menu
-    = bulk_edit_action "delete-all", url: oauth_applications_bulk_delete_path do
-      %i.trash.icon
-      delete all
+          %tbody.bg-white.divide-y.divide-gray-200
+            - if @applications.any?
+              - @applications.each do |application|
+                %tr
+                  %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900= application.name
+                  %td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
+                    = render RelativeTimeComponent.new(time: application.created_at)
+                  %td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
+                    = link_to "Inspect", oauth_application_path(application), class: "text-sm font-medium text-gray-400 hover:text-gray-900"
 
-%table.ui.celled.table
-  %thead
-    %tr
-      %th= select_all_checkbox
-      %th Actions
-      %th Name
-      %th Callback URLs
-      %th Created At (UTC)
+            - else
+              %tr
+                %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900{ colspan: 3 }
+                  No applications made yet
 
-  %tbody
-    - if @applications.any?
-      - @applications.each do |application|
-        %tr
-          %td.collapsing= model_tag application, only: [:uid, :name]
-          %td.collapsing
-            .ui.buttons
-              = link_to oauth_application_path(application), class: "ui icon button" do 
-                %i.expand.icon
-                view
-
-              .ui.simple.dropdown.icon.button
-                %i.dropdown.icon
-                .menu
-                  = link_to edit_oauth_application_path(application), class: "item" do
-                    %i.edit.icon
-                    edit
-
-                  .divider
-                  .header
-                    %i.warning.sign.icon
-                    DANGERZONE
-
-                  = modal_tag application, :delete, url: oauth_application_path(application) do
-                    %i.trash.icon
-                    delete
-
-          %td= application.name
-          %td
-            %pre.mobile.hidden= application.redirect_uri
-          %td= application.created_at.to_s(:long)
-
-    - else
-      %tr
-        %td{ colspan: 5 }
-          No applications made yet
-
-= paginate @applications
+      = c.with :footer do
+        - pagination = paginate @applications, theme: "card_footer"
+        - if pagination.present?
+          = pagination
+        - else
+          %nav.py-3.flex.items-center.justify-between( aria-label="Pagination" )
+            .hidden.sm:block
+              %p.text-sm.text-gray-700
+                Showing
+                %span.font-medium all
+                results
