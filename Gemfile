@@ -15,7 +15,7 @@ gem "bootsnap", require: false
 #  * Elasticsearch
 #  * Redis
 gem "pg"
-gem "chewy"
+gem "chewy", "~> 5.0"
 gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
