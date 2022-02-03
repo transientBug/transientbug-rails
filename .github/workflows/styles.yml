@@ -28,15 +28,6 @@ jobs:
           node-version: '16'
           cache: 'yarn'
 
-      - name: Set up Ruby 3.0.1
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 3.0.1
-
-      #- name: Install deps
-        #run: |
-          #gem install rubocop rubocop-rspec rubocop-rails
-
       - name: Run rubocop
         run: |
           rubocop
