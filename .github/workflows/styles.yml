@@ -30,7 +30,7 @@ jobs:
 
       - name: Run rubocop
         run: |
-          rubocop
+          bundle exec rubocop
 
   ESLint:
     runs-on: ubuntu-latest
