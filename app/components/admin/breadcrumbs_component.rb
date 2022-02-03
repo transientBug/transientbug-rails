@@ -7,6 +7,8 @@ class Admin::BreadcrumbsComponent < ViewComponent::Base
     attr_reader :name, :href
 
     def initialize(name:, href:)
+      super
+
       @name = name
       @href = href
     end

@@ -12,7 +12,7 @@
 
       = c.with :body do
         - if bookmark.errors.any?
-          %h2= "#{ pluralize user.errors.count, "error" } prohibited this bookmark from being saved:"
+          %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
           %ul
             - bookmark.errors.full_messages.each do |message|
               %li= message

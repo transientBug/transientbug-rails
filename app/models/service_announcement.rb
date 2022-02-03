@@ -23,5 +23,5 @@ class ServiceAnnouncement < ApplicationRecord
   scope :current, -> { where("(start_at IS NULL OR start_at <= NOW()) AND (end_at IS NULL OR end_at >= NOW())") }
   scope :displayable, -> { active.current }
 
-  validates_presence_of :title, :message
+  validates :title, :message, presence: true
 end

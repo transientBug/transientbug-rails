@@ -5,16 +5,16 @@ class Admin::ServiceAnnouncementsController < AdminController
   # default_form_builder Admin::DefaultFormBuilder
 
   module Filters
-    def self.filter_on_name query, value, filters
+    def self.filter_on_name query, value, _filters
       table = ServiceAnnouncement.arel_table
       query.where(table[:title].matches("%#{ value }%"))
     end
 
-    def self.filter_on_status query, value, filters
+    def self.filter_on_status query, value, _filters
       return query if value.blank?
 
       table = ServiceAnnouncement.arel_table
-      now = Time.now
+      now = Time.zone.now
 
       q = table[:start_at].gteq(now).or(table[:start_at].eq(nil))
         .and(table[:end_at].lteq(now).or(table[:end_at].eq(nil)))
