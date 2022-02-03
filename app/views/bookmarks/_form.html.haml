@@ -1,29 +1,45 @@
-= form_with model: bookmark, class: "ui fluid form", html: { autocomplete: "off" } do |f|
-  - if bookmark.errors.any?
-    .ui.message.error
-      %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
-      %ul
-        - bookmark.errors.full_messages.each do |message|
-          %li= message
+%section( aria-labelledby="bookmark_form" )
+  = form_with model: bookmark, data: { turbo: false }, html: { autocomplete: "off" } do |f|
+    = render CardComponent.new do |c|
+      -#= c.with :header do
+        .ml-4.mt-4
+          %h2#bookmark_form.text-lg.leading-6.font-medium.text-gray-900.truncate
+            - if bookmark.new_record?
+              Create a New Bookmark
+            - else
+              Updating #{bookmark.title}
+          -#%p.mt-1.text-sm.text-gray-500 
 
-  .two.fields
-    .required.field
-      = f.label :uri
-      = f.url_field :uri, aria: { describedby: "Bookmark URL" }, value: bookmark.uri.to_s
+      = c.with :body do
+        - if bookmark.errors.any?
+          %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
+          %ul
+            - bookmark.errors.full_messages.each do |message|
+              %li= message
 
-    .required.field
-      = f.label :title
-      = f.text_field :title, aria: { describedby: "Bookmark title" }
+        .grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :uri, class: "block text-sm font-medium text-gray-700"
+            = f.url_field :uri, class: "mt-1 w-full default-input"
+            -#%p.mt-2.text-sm.text-gray-500
 
-  .field
-    = f.label :tags
-    .ui.multiple.search.selection.dropdown{ data: { behavior: "autocomplete-bookmark-tags" } }
-      = f.text_field :tags, value: bookmark.tags.map(&:label).join(","), autocomplete: "off", data: { behaviour: "init" }, class: "hidden"
-      %i.dropdown.icon
-      .default.text Search Tags
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :title, class: "block text-sm font-medium text-gray-700"
+            = f.text_field :title, class: "mt-1 w-full default-input"
+            -#%p.mt-2.text-sm.text-gray-500
 
-  .field
-    = f.label :description
-    = f.text_area :description, aria: { describedby: "Bookmark description" }
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :tags, class: "block text-sm font-medium text-gray-700"
+            = f.text_field :tags, value: bookmark.tags.map(&:label).join(", "), autocomplete: "off", class: "mt-1 w-full default-input"
+            -#%p.mt-2.text-sm.text-gray-500
 
-  = f.submit "Save", class: "ui positive right floated submit button"
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :description, class: "block text-sm font-medium text-gray-700"
+            = f.text_area :description, class: "mt-1 w-full default-input"
+            -#%p.mt-2.text-sm.text-gray-500
+
+      = c.with :footer do
+        = f.submit class: "btn -primary"

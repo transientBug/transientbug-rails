@@ -1,0 +1,16 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      New User
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Users", href: admin_users_path },
+      { name: "New User", href: new_admin_user_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render "form", user: @user %>

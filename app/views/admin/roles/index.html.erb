@@ -1,0 +1,98 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Roles
+    <% end %>
+
+    <% c.actions do %>
+      <%= link_to "New Role", new_admin_role_path, class: "btn -primary" %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Roles", href: admin_roles_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
+  <div class="field-group">
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :name_type, class: "sr-only" %>
+      <%= f.select :name_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :name_type)}, class: "prefix" %>
+
+      <%= f.text_field :name, value: params.dig(:filter, :name), class: "input" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Filter", class: "btn -secondary" %>
+    <%= link_to "Clear Filters", admin_roles_path, class: "btn -tertiary" %>
+  </div>
+<% end %>
+
+<% if @roles.any? %>
+  <div class="generic-table-wrapper">
+    <table class="generic-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Permissions</th>
+          <th>Created At</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @roles.each do |role| %>
+          <tr>
+            <td>
+              <div class="text-sm font-medium text-gray-900">
+                <%= role.name %>
+              </div>
+            </td>
+            <td class="w-full">
+              <div class="text-sm font-medium text-gray-900 truncate">
+                <%= role.permissions.map { |permission| permission.name }.join ", " %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm text-gray-500">
+                <%= role.created_at.to_s(:short) %>
+              </div>
+            </td>
+            <td class="justify-right">
+              <div class="btn-group">
+                <%= link_to admin_role_path(role), class: "btn -secondary" do %>
+                  <%= inline_svg_pack_tag "feather/maximize-2.svg" %>
+                  <span class="ml-2">View</span>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @roles, views_prefix: "admin" %>
+<% else %>
+  <%= render Admin::ZeroStateComponent.new do |c| %>
+    <% if params[:filter] %>
+       <% c.title do %>
+         Nothing Found
+       <% end %>
+      <% c.actions do %>
+        <p>No roles match the specified filters<p>
+        <%= link_to "Clear Filters", admin_roles_path, class: "btn -secondary" %>
+      <% end %>
+    <% else %>
+      <% c.actions do %>
+        <p>No roles made yet.</p>
+        <%= link_to "Make one?", new_admin_role_path, class: "btn -primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

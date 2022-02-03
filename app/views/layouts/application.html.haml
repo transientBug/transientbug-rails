@@ -4,15 +4,23 @@
     = render "layouts/common/head" do
       %title transientBug #{ content_for :page_title }
 
-      = stylesheet_link_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_pack_tag "application", media: "all", "data-turbo-track": "reload"
+      = javascript_pack_tag "application", "data-turbo-track": "reload", "data-turbo-eval": false
 
-      = stylesheet_pack_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_pack_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+  %body.bg-gray-200.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
+    = render "layouts/common/navbar"
 
-  %body{ class: [  controller_name, action_name ] }
-    = render "layouts/common/store"
+    %main.relative.max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8.flex-grow.w-full.overflow-y-auto.focus:outline-none{:tabindex => "0"}
+      .py-6.space-y-4.-mx-2.sm:mx-0
+        .md:flex.md:items-center.md:justify-between.px-4.sm:px-0
+          .flex-1.min-w-0
+            %h2.text-2xl.font-bold.leading-7.text-gray-900.sm:text-3xl.sm:truncate
+              = content_for :page_title
 
-    = render "layouts/application/body"
+          .mt-4.flex.md:mt-0.md:ml-4.items-baseline.space-x-3
+            = content_for :page_actions
+
+        .w-full.space-y-4
+          = yield
 
     = render "layouts/common/footer"

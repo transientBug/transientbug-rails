@@ -4,15 +4,24 @@
     = render "layouts/common/head" do
       %title transientBug #{ content_for :page_title }
 
-      = stylesheet_link_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_include_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+      = stylesheet_pack_tag "application", media: "all", "data-turbolinks-track": "reload"
+      = javascript_pack_tag "application", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
 
-      = stylesheet_pack_tag "public", media: "all", "data-turbolinks-track": "reload"
-      = javascript_pack_tag "public", "data-turbolinks-track": "reload", "data-turbolinks-eval": false
+  %body.bg-gray-200.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
+    %div
+      .bg-gray-800.pb-32
+        = render "layouts/common/navbar"
 
-  %body{ class: [  controller_name, action_name ] }
-    = render "layouts/common/store"
+        %header.py-10
+          .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
 
-    = render "layouts/page/body"
+            %h1.text-3xl.font-bold.text-white= content_for :page_title
+            - if content_for? :page_subtitle
+              %p.mt-2.max-w-4xl.text-lg.text-gray-300= content_for :page_subtitle
+
+      %main.-mt-32
+        .max-w-7xl.mx-auto.pb-12.px-4.sm:px-6.lg:px-8
+          .bg-white.rounded-lg.shadow.px-5.py-6.sm:px-6.min-h-screen.space-y-3
+            = yield
 
     = render "layouts/common/footer"

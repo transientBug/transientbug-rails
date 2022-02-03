@@ -1,0 +1,16 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Edit Service Announcement
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Service Announcements", href: admin_service_announcements_path },
+      { name: @service_announcement.id, href: admin_service_announcement_path(@service_announcement) }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render "form", service_announcement: @service_announcement %>

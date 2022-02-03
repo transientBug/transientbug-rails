@@ -1,0 +1,26 @@
+<%= default_form_with model: [:admin, @user], url: admin_user_password_index_url(user), data: { turbo: false } do |f| %>
+  <% if @user.errors.any? %>
+    <h2><%= pluralize @user.errors.count, "error" %> prohibited this user from being saved:</h2>
+    <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= f.section title: "Password", subtitle: "" do %>
+    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-3">
+        <%= f.password_field :password %>
+      </div>
+
+      <div class="sm:col-span-3">
+        <%= f.password_field :password_confirmation %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit class: "btn -primary" %>
+  </div>
+<% end %>

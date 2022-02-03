@@ -38,8 +38,6 @@ class Bookmark < ApplicationRecord
 
   delegate :uri, to: :webpage
 
-  update_index("bookmarks#bookmark") { self }
-
   validates :webpage_id, uniqueness: { scope: :user_id }
   validates :webpage_id, presence: true
 

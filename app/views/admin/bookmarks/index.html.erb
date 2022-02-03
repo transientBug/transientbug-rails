@@ -1,0 +1,108 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Bookmarks
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Bookmarks", href: admin_bookmarks_path }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= form_with scope: :filter, method: :get, local: true, class: "filter-form" do |f| %>
+  <div class="field-group">
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+
+    <div class="prefixed">
+      <%= f.label :name_type, class: "sr-only" %>
+      <%= f.select :name_type, [ ["Contains", "contains"], ["Equals", "equals"] ], {selected: params.dig(:filter, :name_type)}, class: "prefix" %>
+
+      <%= f.text_field :name, value: params.dig(:filter, :name), class: "input" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Filter", class: "btn -secondary" %>
+    <%= link_to "Clear Filters", admin_bookmarks_path, class: "btn -tertiary" %>
+  </div>
+<% end %>
+
+<% if @bookmarks.any? %>
+  <div class="generic-table-wrapper">
+    <table class="generic-table">
+      <thead>
+        <tr>
+          <th>URL & Creator</th>
+          <th>Cache Info</th>
+          <th>Created At</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @bookmarks.each do |bookmark| %>
+          <tr>
+            <td class="w-full flex flex-col overflow-hidden">
+              <div class="text-sm font-medium text-gray-900 truncate">
+                <%= bookmark.uri.to_s %>
+              </div>
+              <div class="text-sm text-gray-900">
+                <%= link_to bookmark.user.username, admin_user_path(bookmark.user) %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm font-medium text-gray-900 truncate">
+                <% if bookmark.offline_caches.last %>
+                  <% if bookmark.offline_caches.last.error_messages.length %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-red-200 text-red-800 mx-1">
+                    <%= bookmark.offline_caches.last.error_messages.length %> Errors
+                  </span>
+                <% else %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-green-200 text-green-800 mx-1">
+                    No Errors
+                  </span>
+                <% end %>
+                <% else %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-gray-200 text-gray-800 mx-1">Uncached</span>
+                <% end %>
+              </div>
+            </td>
+            <td>
+              <div class="text-sm text-gray-500">
+                <%= bookmark.created_at.to_s(:short) %>
+              </div>
+            </td>
+            <td class="justify-right">
+              <div class="btn-group">
+                <%= link_to admin_bookmark_path(bookmark), class: "btn -secondary" do %>
+                  <%= inline_svg_pack_tag "feather/maximize-2.svg" %>
+                  <span class="ml-2">View</span>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @bookmarks, views_prefix: "admin" %>
+<% else %>
+  <%= render Admin::ZeroStateComponent.new do |c| %>
+    <% if params[:filter] %>
+       <% c.title do %>
+         Nothing Found
+       <% end %>
+      <% c.actions do %>
+        <p>No bookmarks match the specified filters<p>
+        <%= link_to "Clear Filters", admin_bookmarks_path, class: "btn -secondary" %>
+      <% end %>
+    <% else %>
+      <% c.actions do %>
+        <p>No bookmarks made yet.</p>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

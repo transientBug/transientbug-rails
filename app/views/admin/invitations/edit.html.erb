@@ -1,0 +1,21 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Edit Invitation
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "Edit", "#", class: "tab active" %>
+      <%= link_to "Invited Users", "#", class: "tab" %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Invitations", href: admin_invitations_path },
+      { name: @invitation.id, href: admin_invitation_path(@invitation) }
+    ]) %>
+  <% end %>
+<% end %>
+
+<%= render "form", invitation: @invitation %>

@@ -15,7 +15,7 @@ gem "bootsnap", require: false
 #  * Elasticsearch
 #  * Redis
 gem "pg"
-gem "chewy"
+# gem "pg_search"
 gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
@@ -48,20 +48,14 @@ gem "tzinfo-data"
 # Views
 gem "haml"
 gem "haml-rails"
+gem "view_component", require: "view_component/engine"
+gem "turbo-rails"
 
 gem "inline_svg"
 
 # Javascript and CSS
-gem "sass-rails"#, "~> 5.0"
-gem "uglifier"#, ">= 1.3.0"
 gem "webpacker"#, "~> 4.0"
 gem "turbolinks"#, "~> 5"
-
-gem "semantic-ui-sass"#, "~> 2.2.12.0"
-gem "rails-assets-lodash", source: "https://rails-assets.org"
-gem "jquery-rails"
-gem "react-rails"
-gem "ejs" # javascript templates for things like fancy delete modals
 
 # Better link styling
 gem "active_link_to"
@@ -75,8 +69,11 @@ gem "jbuilder"
 # ActiveJob Worker
 gem "sidekiq"
 
+# Logs
+gem "logster"
+
 # Cron like scheduled/repeating tasks
-gem "clockwork"
+# gem "clockwork"
 
 # Auth
 # Provider
@@ -110,11 +107,6 @@ gem "slack-notifier"
 gem "apitome", github: "jejacks0n/apitome"
 
 gem "annotate"
-
-group :production do
-  # Utils
-  gem "logster"
-end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -180,7 +172,9 @@ group :test do
 
   # Cleanup
   gem "database_cleaner"
+end
 
+group :test, :development, :ci do
   # Check things
   gem "rubocop", require: false
   gem "rubocop-rspec", require: false

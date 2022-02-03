@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Users::PasswordController < AdminController
-  layout "admin-tailwind"
-
   before_action :set_user
 
   # GET /admin/users/1/password

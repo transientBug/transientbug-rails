@@ -1,57 +1,86 @@
 - content_for :page_title do
+  FAQ
+
+- content_for :page_subtitle do
   Frequently Asked Questions and Other Things
 
-%h1.dividing.header FAQ
+%div
+  .max-w-7xl.mx-auth.py-12.px-4.divide-y-2.divide-gray-200.sm:px-6.lg:py-16.lg:px-8
+    %h2.text-3xl.font-extrabold.text-gray-900.sm:text-4xl General
 
-%h2.dividing.header General
-%p
-  %b.question Who are you?
-  .answer
-    I'm just a peep in search of that perfect bookmark.
+    .mt-6
+      %dl.space-y-8.divide-y.divide-gray-200
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            Who are you?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              I'm just a peep in search of that perfect bookmark.
 
-%p
-  %b.question What happens if you're ran over?
-  .answer
-    They tend to be a lot larger than me, so the car/bus/truck is probably going to need to clean their windshield and scrape an arm or leg off of their side mirror. Eventually the server funds will run out and transientBug will be shutdown by some automated billing process which will proceed to gleefully pat itself on the back and continue on with its harrowing existence.
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            What happens if you're ran over?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              They tend to be a lot larger than me, so the car/bus/truck is probably going to need to clean their windshield and scrape an arm or leg off of their side mirror. Eventually the server funds will run out and transientBug will be shutdown by some automated billing process which will proceed to gleefully pat itself on the back and continue on with its harrowing existence.
 
-%p
-  %b.question Can I make suggestions for new features?
-  .answer
-    Yup, you can either make an #{ link_to "issue on Github", "https://github.com/transientBug/transientbug-rails/issues" } with the "suggestion" tag, or send an email to suggestions (at) transientbug.ninja
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            Can I make suggestions for new features?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              Yup, you can either make an #{ link_to "issue on Github", "https://github.com/transientBug/transientbug-rails/issues" } with the "suggestion" tag, or send an email to suggestions (at) transientbug.ninja
 
-%p
-  %b.question How can I report a bug?
-  .answer
-    %p
-      If it is a bug with the website, please create an issue in #{ link_to "this Github Repository", "https://github.com/transientBug/transientbug-rails/issues" }.
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            How can I report a bug?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              If it is a bug with the website, please create an issue in #{ link_to "this Github Repository", "https://github.com/transientBug/transientbug-rails/issues" }.
 
-    %p
-      If the bug is a part of the Firefox extension, please create an issue in #{ link_to "this Github Respository", "https://github.com/transientBug/firefox-extension/issues" }.
+            %p.text-base.text-gray-500
+              If the bug is a part of the Firefox extension, please create an issue in #{ link_to "this Github Respository", "https://github.com/transientBug/firefox-extension/issues" }.
 
-    %p
-      For any issue: please include as much information as you can provide and be detailed in the actions leading to the bug. The more information I've got, the easier it is to track down the bug.
+            %p.text-base.text-gray-500
+              For any issue: please include as much information as you can provide and be detailed in the actions leading to the bug. The more information I've got, the easier it is to track down the bug.
 
-    %p
-      You can also send an email to issues (at) transientbug.ninja
+            %p.text-base.text-gray-500
+              You can also send an email to issues (at) transientbug.ninja
 
-%p
-  %b.question Is there a place I can track what is in progress?
-  .answer
-    Sure is! #{ link_to "Check out this trello board", "https://trello.com/b/rcaslGoe" }. You can also check out the Pull Requests on Github #{ link_to "for current work", "https://github.com/transientBug/transientbug-rails/pulls" }.
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            Is there a place I can track what is in progress?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              Sure is! #{ link_to "Check out this trello board", "https://trello.com/b/rcaslGoe" }. You can also check out the Pull Requests on Github #{ link_to "for current work", "https://github.com/transientBug/transientbug-rails/pulls" }.
 
-%h2.dividing.header Bookmarks
-%p
-  %b.question Why isn't X website caching offline correctly?
-  .answer
-    The offline caching system is pretty rudimentary at the moment. It downloads the original webpage, and attempts to grab all the directly referenced script, css and image tags within that webpage. In the off chance that your bookmarked webpage is to a site that actively tries to prevent crawlers, or a site that is rendered with flash or even JS (looking at you, react rendered blog), transientBug is unable to cache those sites at this time.
+  .max-w-7xl.mx-auth.py-12.px-4.divide-y-2.divide-gray-200.sm:px-6.lg:py-16.lg:px-8
+    %h2.text-3xl.font-extrabold.text-gray-900.sm:text-4xl Bookmarks
 
-%p
-  %b.question Why am I getting an error for some caches?
-  .answer
-    Caching a website turns out to be a difficult problem to solve, and while transientBug is getting smarter and better, sometimes the only thing it can do is complain loudly.
+    .mt-6
+      %dl.space-y-8.divide-y.divide-gray-200
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            Why isn't X website caching offline correctly?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              The offline caching system is pretty rudimentary at the moment. It downloads the original webpage, and attempts to grab all the directly referenced script, css and image tags within that webpage. In the off chance that your bookmarked webpage is to a site that actively tries to prevent crawlers, or a site that is rendered with flash or even JS (looking at you, react rendered blog), transientBug is unable to cache those sites at this time.
 
-%h2.dividing.header Account
-%p
-  %b.question How can I close my account?
-  .answer
-    Send an email to support (at) transienbug.ninja from the email you registered your account with and I'll be happy to close it. This is an un-reversible action and fully destroys your bookmarks, de-authorizes all your applications and destroys any of your developer OAuth applications.
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            Why am I getting an error for some caches?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              Caching a website turns out to be a difficult problem to solve, and while transientBug is getting smarter and better, sometimes the only thing it can do is complain loudly.
+
+  .max-w-7xl.mx-auth.py-12.px-4.divide-y-2.divide-gray-200.sm:px-6.lg:py-16.lg:px-8
+    %h2.text-3xl.font-extrabold.text-gray-900.sm:text-4xl Account
+
+    .mt-6
+      %dl.space-y-8.divide-y.divide-gray-200
+        %div.pt-6.md:grid.md:grid-cols-12.md:gap-8
+          %dt.text-base.font-medium.text-gray-900.md:col-span-5
+            How can I close my account?
+          %dd.mt-2.md:mt-0.md:col-span-7
+            %p.text-base.text-gray-500
+              Eventually this will be automated through a fancy little button in your account settings, but until then: Send an email to support (at) transienbug.ninja from the email you registered your account with and I'll be happy to close it. This is an un-reversible action and fully destroys your bookmarks, de-authorizes all your applications and destroys any of your developer OAuth applications.

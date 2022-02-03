@@ -1,39 +1,55 @@
-= form_for application, url: doorkeeper_submit_path(application), html: { class: "ui fluid form" } do |f|
-  - if application.errors.any?
-    .ui.message.error
-      %h2= "#{ pluralize application.errors.count, "error" } prohibited this application from being saved:"
-      %ul
-        - application.errors.full_messages.each do |message|
-          %li= message
+%section( aria-labelledby="user_contact_settings" )
+  = form_with model: application, url: doorkeeper_submit_path(application), method: :post, data: { turbo: false } do |f|
+    = render CardComponent.new do |c|
+      = c.with :header do
+        .ml-4.mt-4
+          %h2#user_contact_settings.text-lg.leading-6.font-medium.text-gray-900
+            - if application.persisted?
+              Editing App "#{ @application.name }"
+            - else
+              New App
+          -#%p.mt-1.text-sm.text-gray-500 
 
-  .required.field
-    = f.label :name
-    = f.text_field :name, aria: { describedby: "Application Name" }
+      = c.with :body do
+        - if application.errors.any?
+          %h2= "#{ pluralize application.errors.count, "error" } prohibited this application from being saved:"
+          %ul
+            - application.errors.full_messages.each do |message|
+              %li= message
 
-    = doorkeeper_errors_for application, :name
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :name, class: "block text-sm font-medium text-gray-700"
+            = f.text_field :name, class: "mt-1 w-full default-input"
+            %p.mt-2.text-sm.text-gray-500
+              This name will be used to identify your app to users and will be publically listed.
 
-  .required.field
-    = f.label :redirect_uri
-    = f.text_area :redirect_uri, aria: { describedby: "Application Redirect URLs" }
+              = doorkeeper_errors_for application, :name
 
-    = doorkeeper_errors_for application, :redirect_uri
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :redirect_uri, class: "block text-sm font-medium text-gray-700"
+            = f.text_field :redirect_uri, class: "mt-1 w-full default-input"
+            %p.mt-2.text-sm.text-gray-500
+              Use one line per URI.
+              - if Doorkeeper.configuration.native_redirect_uri
+                Use this string to have the authorization token returned in the html document:
+                %code
+                  = Doorkeeper.configuration.native_redirect_uri
 
-    .ui.message
-      %p Use one line per URI
+              = doorkeeper_errors_for application, :redirect_uri
 
-      - if Doorkeeper.configuration.native_redirect_uri
-        %p
-          Use this string for local tests:
-          %code
-            = Doorkeeper.configuration.native_redirect_uri
+        = f.hidden_field :scopes, value: "read write"
+        .mt-6.grid.grid-cols-4.gap-6
+          .col-span-4.sm:col-span-2
+            = f.label :scopes, class: "block text-sm font-medium text-gray-700"
+            = f.text_area :scopes, class: "mt-1 w-full default-input", value: "read write", disabled: true
+            %p.mt-2.text-sm.text-gray-500
+              -#Separate scopes with spaces. Leave blank to use the default scopes.
+              All apps currently get the read and write scopes.
 
-  .field
-    = f.label :scopes
-    = f.text_area :scopes, aria: { describedby: "Application Scopes" }
+              = doorkeeper_errors_for application, :scopes
 
-    = doorkeeper_errors_for application, :scopes
-
-    .ui.message
-      Separate scopes with spaces. Leave blank to use the default scopes.
-
-  = f.submit "Save", class: "ui positive right floated submit button"
+      = c.with :footer do
+        .px-4.py-3.bg-gray-50.text-right.sm:px-6
+          = f.submit class: "btn -primary"

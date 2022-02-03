@@ -1,0 +1,31 @@
+%section( aria-labelledby="user_contact_settings" )
+  = form_with model: @user, url: profile_path, method: :post, data: { turbo: false } do |f|
+    = render CardComponent.new do |c|
+      = c.with :header do
+        .ml-4.mt-4
+          %h2#user_contact_settings.text-lg.leading-6.font-medium.text-gray-900 Contact Details
+          %p.mt-1.text-sm.text-gray-500 Update how we contact you.
+
+        = c.with :body do
+          - if @user.errors.any?
+            %h2= "#{ pluralize user.errors.count, "error" } prohibited this user from being saved:"
+            %ul
+              - user.errors.full_messages.each do |message|
+                %li= message
+
+          .grid.grid-cols-4.gap-6
+            .col-span-4.sm:col-span-2
+              = f.label :username, class: "block text-sm font-medium text-gray-700"
+              = f.text_field :username, class: "mt-1 w-full default-input"
+              %p.mt-2.text-sm.text-gray-500
+                We use this to personalize the site and our communications with you. Your username does not have to be unique.
+
+          .mt-6.grid.grid-cols-4.gap-6
+            .col-span-4.sm:col-span-2
+              = f.label :email, class: "block text-sm font-medium text-gray-700"
+              = f.email_field :email, class: "mt-1 w-full default-input"
+              %p.mt-2.text-sm.text-gray-500
+                We only use this to identify you during login, contact you with important site updates, and to help you recover a lost password. Your email does have to be unique.
+
+        = c.with :footer do
+          = f.submit "Update", class: "btn -secondary"

@@ -1,40 +1,47 @@
 - content_for :page_title do
   Authorized Apps
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %section( aria-labelledby="oauth_table" )
+    = render CardComponent.new do |c|
+      = c.with :header do
+        .ml-4.mt-4
+          %h2#oauth_table.text-lg.leading-6.font-medium.text-gray-900 Authorized Apps
+          .mt-1.text-sm.text-gray-500
+            You've authorized these apps to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
-%h2.ui.dividing.header Authorized Apps
+      = c.with :body do
+        %table.min-w-full.divide-y.divide-gray-200
+          %thead.bg-gray-50
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider( scope="col" ) Name
+              %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider( scope="col" ) Created At
+              -#%th.relative.px-6.py-3( scope="col" )
+                %span.sr-only Actions
 
-.ui.stackable.menu
-  .right.menu
-    = bulk_edit_action "revoke-all", url: oauth_authorized_applications_bulk_revoke_path do
-      %i.trash.icon
-      revoke all
+          %tbody.bg-white.divide-y.divide-gray-200
+            - if @applications.any?
+              - @applications.each do |application|
+                %tr
+                  %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900= application.name
+                  %td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
+                    = render RelativeTimeComponent.new(time: application.created_at)
+                  %td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
+                    = link_to "Revoke", oauth_application_path(application), class: "text-sm font-medium text-gray-400 hover:text-gray-900", method: :delete, data: { confirm: "Are you sure you want to revoke this apps access to your account? You can always reauthorize the app at a later time." }
 
-%table.ui.celled.table
-  %thead
-    %tr
-      %th= select_all_checkbox
-      %th Actions
-      %th Application Name
-      %th Created At (UTC)
-  %tbody
-    - if @applications.any?
-      - @applications.each do |application|
-        %tr
-          %td.collapsing= model_tag application, only: [:id, :name]
-          %td.collapsing
-            .ui.buttons
-              = modal_tag application, :revoke, url: oauth_authorized_application_path(application), class: "ui icon button" do
-                %i.trash.icon
-                revoke
+            - else
+              %tr
+                %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900{ colspan: 3 }
+                  No applications authorized
 
-          %td= application.name
-          %td= application.created_at.to_s(:long)
-
-    - else
-      %tr
-        %td{ colspan: 5 }
-          No applications authorized
-
-= paginate @applications
+      = c.with :footer do
+        - pagination = paginate @applications, theme: "card_footer"
+        - if pagination.present?
+          = pagination
+        - else
+          %nav.py-3.flex.items-center.justify-between( aria-label="Pagination" )
+            .hidden.sm:block
+              %p.text-sm.text-gray-700
+                Showing
+                %span.font-medium all
+                results

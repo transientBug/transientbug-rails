@@ -1,0 +1,15 @@
+.shadow.sm:rounded-md.sm:overflow-hidden
+  .bg-white.py-6.px-4.sm:p-6
+    - if header.present?
+      .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
+        = header
+
+      .mt-6
+        = body
+
+    - else
+      = body
+
+  - if footer.present?
+    .px-4.py-3.bg-gray-50.text-right.sm:px-6
+      = footer

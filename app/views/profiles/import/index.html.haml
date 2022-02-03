@@ -1,28 +1,36 @@
 - content_for :page_title do
   Import
 
-= render partial: "profiles/tabs"
+= render "profiles/tabs" do
+  %section( aria-labelledby="import_intro" )
+    .shadow.sm:rounded-md.sm:overflow-hidden
+      .bg-white.py-6.px-4.sm:p-6
+        %div
+          %h2#import_intro.text-lg.leading-6.font-medium.text-gray-900 Instructions<D-r>
+          -#%p.mt-1.text-sm.text-gray-500
 
-%h2.ui.dividing.header Import
-%p
-  Currently, importing from
-  = link_to "pinboard", "https://pinboard.in/"
-  and
-  = link_to "pocket", "https://getpocket.com/"
-  \.
+        %p
+          Currently, importing from
+          = link_to "pinboard", "https://pinboard.in/"
+          and
+          = link_to "pocket", "https://getpocket.com/"
+          is supported.
 
-%h4.header Pinboard
-%p
-  %ol
-    %li Click "settings"
-    %li Click the "backup" tab
-    %li Click the JSON format version
+        .mt-6.grid.grid-cols-2.sm:grid-cols-4.gap-6
+          .col-span-2
+            %h4.font-bold <D-r>Pinboard
+            %p
+              %ol
+                %li Click "settings"
+                %li Click the "backup" tab
+                %li Click the JSON format version
 
-%h4.header Pocket
-%p
-  %ol
-    %li Click on your username in the upper right hand corner
-    %li Click "Export"
-    %li Click "Export HTML File"
+          .col-span-2
+            %h4.font-bold Pocket
+            %p
+              %ol
+                %li Click on your username in the upper right hand corner
+                %li Click "Export"
+                %li Click "Export HTML File"
 
-= render partial: "form", locals: { user: @user }
+  = render "form"

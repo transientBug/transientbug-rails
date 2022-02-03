@@ -1,20 +1,36 @@
 # frozen_string_literal: true
 
 class Admin::ServiceAnnouncementsController < AdminController
-  before_action :set_count
   before_action :set_service_announcement, only: [:show, :edit, :update, :destroy]
+  # default_form_builder Admin::DefaultFormBuilder
+
+  module Filters
+    def self.filter_on_name query, value, _filters
+      table = ServiceAnnouncement.arel_table
+      query.where(table[:title].matches("%#{ value }%"))
+    end
+
+    def self.filter_on_status query, value, _filters
+      return query if value.blank?
+
+      table = ServiceAnnouncement.arel_table
+      now = Time.zone.now
+
+      q = table[:start_at].gteq(now).or(table[:start_at].eq(nil))
+        .and(table[:end_at].lteq(now).or(table[:end_at].eq(nil)))
+        .and(table[:active].not_eq(false))
+
+      if value == "active"
+        query.where(q)
+      else
+        query.where.not(q)
+      end
+    end
+  end
 
   # GET /service_announcements
   def index
-    service_announcement_table = ServiceAnnouncement.arel_table
-
-    query_param = params[:q]
-    base_where = service_announcement_table[:id].eq(query_param)
-      .or(service_announcement_table[:title].matches("%#{ query_param }%"))
-
-    @service_announcements = ServiceAnnouncement.all
-    @service_announcements = @service_announcements.where(base_where) if query_param.present? && !query_param.empty?
-    @service_announcements = @service_announcements.order(created_at: :desc).page params[:page]
+    @service_announcements = with_filters(ServiceAnnouncement.all).order(created_at: :desc).page params[:page]
   end
 
   # GET /service_announcements/1
@@ -78,20 +94,30 @@ class Admin::ServiceAnnouncementsController < AdminController
     @service_announcement = ServiceAnnouncement.find params[:id]
   end
 
-  def set_count
-    @count = ServiceAnnouncement.displayable.count
-  end
-
   def service_announcement_params
     params.require(:service_announcement).permit(
       :title,
       :message,
-      :color,
-      :icon,
+      :color_text,
+      :icon_text,
       :start_at,
       :end_at,
-      :active,
-      :logged_in_only
+      :logged_in_only,
+      :active
     )
+  end
+
+  def filters() = params.permit(filter: {})[:filter].to_h
+
+  def filter_methods
+    @filter_methods ||= Filters.methods.map { [_1.match(%r{^filter_on_(.*)$})&.captures&.first, _1] }.filter { _1[0] }
+  end
+
+  def with_filters base_query
+    filter_methods.reduce(base_query) do |query, (key, method)|
+      next query unless filters[key]
+
+      Filters.send(method, query, filters[key], filters)
+    end
   end
 end
