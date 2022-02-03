@@ -75,8 +75,8 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t https://ghcr.io/transientbug/transientbug-rails/app:latest \
-            -t https://ghcr.io/transientbug/transientbug-rails/app:${GITHUB_SHA} \
+            -t ghcr.io/transientbug/transientbug-rails/app:latest \
+            -t ghcr.io/transientbug/transientbug-rails/app:${GITHUB_SHA} \
             -f Dockerfile .
 
       - name: Login to GitHub Docker Registry
@@ -84,5 +84,5 @@ jobs:
 
       - name: Push to GitHub Docker Registry
         run: |
-          docker push https://ghcr.io/transientbug/transientbug-rails/app:latest
-          docker push https://ghcr.io/transientbug/transientbug-rails/app:${GITHUB_SHA}
+          docker push ghcr.io/transientbug/transientbug-rails/app:latest
+          docker push ghcr.io/transientbug/transientbug-rails/app:${GITHUB_SHA}
