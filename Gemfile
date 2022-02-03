@@ -172,7 +172,9 @@ group :test do
 
   # Cleanup
   gem "database_cleaner"
+end
 
+group :test, :development, :ci do
   # Check things
   gem "rubocop", require: false
   gem "rubocop-rspec", require: false
