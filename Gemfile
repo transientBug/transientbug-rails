@@ -97,7 +97,7 @@ gem "nokogiri"
 # gem "loofah"
 # gem "ruby-readability"
 # gem "stopwords-filter"
-gem "mimemagic"
+gem "marcel", "~> 1.0"
 gem "parslet"
 
 gem "exception_notification"
