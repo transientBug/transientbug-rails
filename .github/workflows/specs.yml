@@ -12,6 +12,10 @@ jobs:
   RSpec:
     runs-on: ubuntu-latest
 
+    env:
+      RAILS_ENV: test
+      NODE_ENV: test
+
     services:
       postgres:
         image: postgres:10.8
@@ -50,9 +54,14 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
-          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
-          RAILS_ENV: test
-          NODE_ENV: test
+
+      - name: Build Assets
+        run: |
+          bundle exec rake assets:precompile
+        env:
+          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
       - name: Run specs
         run: |
@@ -60,6 +69,3 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
-          ELASTICSEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports['9200'] }}
-          RAILS_ENV: test
-          NODE_ENV: test
