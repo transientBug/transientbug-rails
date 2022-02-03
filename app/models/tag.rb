@@ -34,9 +34,6 @@ class Tag < ApplicationRecord
   has_many :bookmarks_tags
   has_many :bookmarks, through: :bookmarks_tags
 
-  update_index("bookmarks#tag") { self }
-  update_index("bookmarks#bookmark") { bookmarks }
-
   def self.find_or_create_tags tags: []
     tags.map do |tag|
       next tag if tag.is_a? Tag

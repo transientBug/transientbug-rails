@@ -12,13 +12,6 @@ class Api::V1::Bookmarks::CheckController < Api::V1Controller
   protected
 
   def bookmark_found?
-    BookmarksIndex.query(
-      bool: {
-        must: [
-          { term: { uri: params[:url] } },
-          { term: { user_id: current_user.id } }
-        ]
-      }
-    ).any?
+    current_user.bookmarks.where(webpage: { uri: params[:url] }).any?
   end
 end

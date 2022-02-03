@@ -2,7 +2,7 @@
 This is the main server and frontend for the transientBug.ninja bookmarking
 service.
 
-[![Build Status](https://travis-ci.org/transientBug/transientbug-rails.svg?branch=master)](https://travis-ci.org/transientBug/transientbug-rails)
+[![Build](https://github.com/transientBug/transientbug-rails/actions/workflows/build.yml/badge.svg?branch=master&event=check_suite)](https://github.com/transientBug/transientbug-rails/actions/workflows/build.yml)
 
 # Setup
 General principles:
@@ -12,12 +12,11 @@ General principles:
  - Docker for dev/deployments
 
 ### Backend:
- - Ruby on Rails 5.2
-   - Ruby 2.5.1
+ - Ruby on Rails 6.1
+   - Ruby 3.0.1
    - Sidekiq for ActiveJob
-   - Clockwork.rb for periodic tasks
+   - Clockwork.rb for periodic tasks (ot actively used)
  - Postgresql 9.6
- - Elasticsearch 5.6
  - Redis 4
 
 ### Frontend
@@ -25,12 +24,8 @@ General principles:
  - JQuery for basic stuff
  - React for advanced stuff
  - Webpack 4 & Sprockets
-   - Node 8 with the webpacker gem
+   - Node 16 with the webpacker gem
    - Current thoughts are to ditch Sprockets, idk.
-
-~A Paw.app file is provided and I try to keep it up to date with the current
-API.~ Currently the paw file has been removed but I'm working on a better
-replacement.
 
 # Testing
 Chrome headless is being setup for the capybara tests, you should install it
