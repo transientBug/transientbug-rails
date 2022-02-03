@@ -30,8 +30,8 @@ Rails.start()
  * https://github.com/turbolinks/turbolinks/issues/430
  */
 //document.addEventListener("turbolinks:request-start", event => {
-  //const xhr = event.data.xhr
-  //xhr.setRequestHeader("X-Turbolinks-Nonce", Rails.cspNonce())
+//const xhr = event.data.xhr
+//xhr.setRequestHeader("X-Turbolinks-Nonce", Rails.cspNonce())
 //})
 
 import "controllers"
