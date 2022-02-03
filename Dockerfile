@@ -1,5 +1,6 @@
 FROM ruby:3.0.1-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
+org.opencontainers.image.source = &quot;https://github.com/transientBug/transientbug-rails&quot;
 
 WORKDIR /app
 VOLUME ["/dropzone"]
