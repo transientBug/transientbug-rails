@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUNDLE_WITHOUT=production
-      BUNDLER_WITH=ci
+      BUNDLE_WITHOUT: production
+      BUNDLER_WITH: ci
 
     steps:
       - uses: actions/checkout@v2
