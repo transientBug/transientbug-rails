@@ -1,13 +1,10 @@
 source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
+ruby "3.1.0"
 
 # Base Rails stuff
-gem "rails", "~> 6.1"
-gem "rake"
+gem "rails", "~> 7"
 gem "bootsnap", require: false
 
 # Data Stores
@@ -48,14 +45,18 @@ gem "tzinfo-data"
 # Views
 gem "haml"
 gem "haml-rails"
-gem "view_component", require: "view_component/engine"
-gem "turbo-rails"
+gem "view_component"
 
 gem "inline_svg"
 
 # Javascript and CSS
-gem "webpacker"#, "~> 4.0"
-gem "turbolinks"#, "~> 5"
+# gem "webpacker"#, "~> 4.0"
+gem "jsbundling-rails"
+gem "cssbundling-rails"
+
+gem "sprockets-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
 
 # Better link styling
 gem "active_link_to"
@@ -104,7 +105,8 @@ gem "exception_notification"
 gem "slack-notifier"
 
 # API Documentation from RAD
-gem "apitome", github: "jejacks0n/apitome"
+# gem "apitome", github: "jejacks0n/apitome"
+gem "raddocs"
 
 gem "annotate"
 
@@ -113,9 +115,8 @@ group :development do
   gem "web-console"#, ">= 3.3.0"
   gem "listen"#, ">= 3.0.5", "< 3.2"
 
-  gem "better_errors"
-  gem "binding_of_caller"
-
+  # gem "better_errors"
+  # gem "binding_of_caller"
 end
 
 group :development, :test do
@@ -124,11 +125,12 @@ group :development, :test do
   gem "dotenv-rails"
 
   # Better Debugging
-  gem "awesome_print"
-  gem "byebug"
-  gem "pry"
-  gem "pry-byebug"
-  gem "pry-rails"
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  # gem "awesome_print"
+  # gem "byebug"
+  # gem "pry"
+  # gem "pry-byebug"
+  # gem "pry-rails"
 
   # Document everything
   gem "yard"#, ">= 0.9.20"
@@ -156,10 +158,14 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver with headless
   # chrome
-  gem "capybara"#, "~> 2.13"
-  gem "capybara-selenium"
-  gem "selenium-webdriver"
+  # gem "capybara"#, "~> 2.13"
+  # gem "capybara-selenium"
+  # gem "selenium-webdriver"
   # gem "chromedriver-helper"
+
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "webdrivers"
 
   # Test rack things
   gem "rack-test"#, "~> 0.7.0"

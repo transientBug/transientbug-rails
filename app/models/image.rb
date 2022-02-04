@@ -4,23 +4,20 @@
 #
 # Table name: images
 #
-#  id         :bigint           not null, primary key
-#  disabled   :boolean          default(FALSE)
-#  source     :text
-#  tags       :text             default([]), is an Array
+#  id         :integer          not null, primary key
+#  user_id    :integer
 #  title      :text
+#  tags       :text             default("{}"), is an Array
+#  source     :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  user_id    :bigint
+#  disabled   :boolean          default("false")
 #
 # Indexes
 #
 #  index_images_on_user_id  (user_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users.id)
-#
+
 class Image < ApplicationRecord
   belongs_to :user
 

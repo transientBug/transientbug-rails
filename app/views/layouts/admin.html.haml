@@ -4,8 +4,11 @@
     = render "layouts/common/head" do
       %title transientBug Admin #{ content_for :page_title }
 
-      = stylesheet_pack_tag "admin", media: "all", "data-turbo-track": "reload"
-      = javascript_pack_tag "admin", "data-turbo-track": "reload", "data-turbo-eval": false
+      = csrf_meta_tags
+      = csp_meta_tag
+
+      = stylesheet_link_tag "admin", "data-turbo-track": "reload"
+      = javascript_include_tag "admin", "data-turbo-track": "reload", defer: true
 
   %body{ class: [  controller_name, action_name, "relative bg-gray-50" ] }
     = render "layouts/admin/body"

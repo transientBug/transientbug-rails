@@ -4,15 +4,16 @@
 #
 # Table name: clockwork_database_events
 #
-#  id                 :bigint           not null, primary key
-#  at                 :string
-#  frequency_period   :integer
+#  id                 :integer          not null, primary key
 #  frequency_quantity :integer
-#  job_arguments      :jsonb
+#  frequency_period   :integer
+#  at                 :string
 #  job_name           :string
+#  job_arguments      :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
+
 class ClockworkDatabaseEvent < ApplicationRecord
   enum frequency_period: { seconds: 0, minutes: 1, hours: 2, days: 3, weeks: 4, months: 5 }
 

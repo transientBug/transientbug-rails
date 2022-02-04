@@ -55,17 +55,10 @@ jobs:
           DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
 
-      - name: Build Assets
+      - name: Run specs
         run: |
-          bundle exec rake assets:precompile
+          bundle exec rails spec
         env:
           DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
           REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
-      - name: Run specs
-        run: |
-          bundle exec rake
-        env:
-          DATABASE_URL: postgresql://postgres:@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
-          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0

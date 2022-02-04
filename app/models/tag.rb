@@ -4,12 +4,17 @@
 #
 # Table name: tags
 #
-#  id         :bigint           not null, primary key
-#  color      :text
+#  id         :integer          not null, primary key
 #  label      :text
+#  color      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_tags_on_label  (label) UNIQUE
+#
+
 class Tag < ApplicationRecord
   COLORS = [
     :red,

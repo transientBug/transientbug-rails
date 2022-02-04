@@ -9,15 +9,12 @@ Bundler.require(*Rails.groups)
 module TransientBug
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-
-    # Postgres enums don't dump to schema.rb :/
-    config.active_record.schema_format = :sql
 
     config.generators do |g|
       g.assets = false
@@ -27,6 +24,7 @@ module TransientBug
     config.exceptions_app = routes
 
     config.active_storage.draw_routes = false
+    config.action_mailbox.draw_routes = false
 
     config.action_view.form_with_generates_remote_forms = false
   end
