@@ -10,6 +10,8 @@ RUN apk add --no-cache bash build-base gcompat git curl postgresql-dev postgresq
     echo "install: --no-document" > $HOME/.gemrc && \
     echo "update: --no-document" >> $HOME/.gemrc
 
+RUN gem update bundler
+
 COPY . .
 RUN bundle config set without 'development test' && \
     bundle install && \
