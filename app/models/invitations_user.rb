@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: invitations_users
@@ -13,7 +12,7 @@
 # Indexes
 #
 #  index_invitations_users_on_invitation_id  (invitation_id)
-#  index_invitations_users_on_users_id       (user_id)
+#  index_invitations_users_on_user_id        (user_id)
 #
 
 class InvitationsUser < ApplicationRecord

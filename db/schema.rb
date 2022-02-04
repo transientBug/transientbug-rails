@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
   end
 
   create_table "error_messages_import_data", id: false, force: :cascade do |t|
-    t.bigint "import_datum_id", null: false
+    t.bigint "import_data_id", null: false
     t.bigint "error_message_id", null: false
   end
 
@@ -123,9 +123,9 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.text "internal_note"
     t.text "title"
     t.text "description"
+    t.integer "available", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "available", default: 1
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
 
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
-    t.index ["user_id"], name: "index_invitations_users_on_users_id"
+    t.index ["user_id"], name: "index_invitations_users_on_user_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -227,10 +227,6 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["label"], name: "index_tags_on_label", unique: true
-  end
-
-  create_table "task_records", id: false, force: :cascade do |t|
-    t.string "version", null: false
   end
 
   create_table "users", force: :cascade do |t|
