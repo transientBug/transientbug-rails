@@ -10,4 +10,4 @@ if [[ $# -gt 0 ]]; then
   exec bash -c "$@"
 fi
 
-exec bundle exec puma -C config/puma.rb
+exec puma -C config/puma.rb
