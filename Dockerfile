@@ -12,7 +12,7 @@ RUN apk add --no-cache bash build-base gcompat git curl postgresql-dev postgresq
 
 COPY . .
 RUN bundle config set without 'development test' && \
-    bundle install --jobs 4 && \
-    bundle exec rake tmp:create
+    bundle install && \
+    bundle exec rails tmp:create
 
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
