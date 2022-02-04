@@ -1,4 +1,4 @@
-FROM ruby:3.0.1-alpine
+FROM ruby:3.1.0-alpine
 LABEL maintainer="Josh Ashby <me@joshisa.ninja>"
 LABEL org.opencontainers.image.source = "https://github.com/transientBug/transientbug-rails"
 

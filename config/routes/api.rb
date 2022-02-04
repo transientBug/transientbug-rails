@@ -1,5 +1,7 @@
 namespace :api do
   namespace :v1 do
+    mount Raddocs::App => "/docs"
+
     # Disable having to .json the request url but default to JSON. Don't
     # include the new and edit routes that normal html routes expect
     scope format: false, except: [ :new, :edit ], defaults: { format: :jsonapi } do

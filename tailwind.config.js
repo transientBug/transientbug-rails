@@ -3,16 +3,19 @@ const colors = require('tailwindcss/colors')
 // tb green: hsl(80.1, 100%, 35.1%)
 // also known as bg-limegreen-500
 module.exports = {
-  mode: "jit",
-  purge: [
-   './public/**/*.html',
-   './app/**/*.{js,ts,haml,erb,rb}',
+  content: [
+    './app/views/**/*.html.erb',
+    './app/views/**/*.html.haml',
+    './app/components/**/*.html.erb',
+    './app/components/**/*.html.haml',
+    './app/helpers/**/*.rb',
+    './app/javascript/**/*.js'
   ],
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        gray: colors.trueGray,
+        gray: colors.neutral,
         limegreen: {
           '50':  '#fbfbf6',
           '100': '#f9fbdd',

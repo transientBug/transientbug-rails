@@ -12,20 +12,16 @@ General principles:
  - Docker for dev/deployments
 
 ### Backend:
- - Ruby on Rails 6.1
-   - Ruby 3.0.1
+ - Ruby on Rails 7
+   - Ruby 3.1.0
    - Sidekiq for ActiveJob
-   - Clockwork.rb for periodic tasks (ot actively used)
+   - Clockwork.rb for periodic tasks (not actively used)
  - Postgresql 9.6
  - Redis 4
 
 ### Frontend
- - Semantic-UI
- - JQuery for basic stuff
- - React for advanced stuff
- - Webpack 4 & Sprockets
-   - Node 16 with the webpacker gem
-   - Current thoughts are to ditch Sprockets, idk.
+ - TailwindCSS
+ - Stimulus & Turbo via rollup
 
 # Testing
 Chrome headless is being setup for the capybara tests, you should install it
