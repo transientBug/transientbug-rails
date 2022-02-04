@@ -4,19 +4,20 @@
 #
 # Table name: invitations
 #
-#  id            :bigint           not null, primary key
-#  available     :integer          default(1)
+#  id            :integer          not null, primary key
 #  code          :text
-#  description   :text
 #  internal_note :text
 #  title         :text
+#  description   :text
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  available     :integer          default("1")
 #
 # Indexes
 #
 #  index_invitations_on_code  (code) UNIQUE
 #
+
 class Invitation < ApplicationRecord
   has_many :invitations_users
   has_many :users, through: :invitation_users

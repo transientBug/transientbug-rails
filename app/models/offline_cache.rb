@@ -4,22 +4,18 @@
 #
 # Table name: offline_caches
 #
-#  id         :bigint           not null, primary key
+#  id         :integer          not null, primary key
+#  webpage_id :integer
+#  root_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  root_id    :bigint
-#  webpage_id :bigint
 #
 # Indexes
 #
 #  index_offline_caches_on_root_id     (root_id)
 #  index_offline_caches_on_webpage_id  (webpage_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (root_id => active_storage_attachments.id)
-#  fk_rails_...  (webpage_id => webpages.id)
-#
+
 class OfflineCache < ApplicationRecord
   belongs_to :webpage
 

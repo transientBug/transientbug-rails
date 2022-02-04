@@ -4,7 +4,7 @@
 #
 # Table name: webpages
 #
-#  id         :bigint           not null, primary key
+#  id         :integer          not null, primary key
 #  uri        :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -13,6 +13,7 @@
 #
 #  index_webpages_on_uri  (uri) UNIQUE
 #
+
 class Webpage < ApplicationRecord
   has_many :bookmarks
   has_many :offline_caches

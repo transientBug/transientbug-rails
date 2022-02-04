@@ -4,10 +4,11 @@
 #
 # Table name: bookmarks_tags
 #
-#  id          :bigint           not null, primary key
-#  bookmark_id :bigint           not null
-#  tag_id      :bigint           not null
+#  bookmark_id :integer          not null
+#  tag_id      :integer          not null
+#  id          :integer          not null, primary key
 #
+
 class BookmarksTag < ApplicationRecord
   belongs_to :bookmark
   belongs_to :tag

@@ -4,21 +4,18 @@
 #
 # Table name: import_data
 #
-#  id          :bigint           not null, primary key
-#  complete    :boolean          default(FALSE)
+#  id          :integer          not null, primary key
+#  user_id     :integer
 #  import_type :enum
+#  complete    :boolean          default("false")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  user_id     :bigint
 #
 # Indexes
 #
 #  index_import_data_on_user_id  (user_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users.id)
-#
+
 class ImportData < ApplicationRecord
   belongs_to :user
 

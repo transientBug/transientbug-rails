@@ -4,12 +4,12 @@
 #
 # Table name: roles
 #
-#  id              :bigint           not null, primary key
-#  description     :string
+#  id              :integer          not null, primary key
 #  name            :text             not null
-#  permission_keys :string           default([]), not null, is an Array
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  description     :string
+#  permission_keys :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -32,11 +32,7 @@ class Role < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validate :valid_permission_keys
 
-  def permissions
-    permission_keys.map do |key|
-      PERMISSIONS_BY_KEY[key]
-    end
-  end
+  def permissions()= permission_keys.map(&Role::PERMISSIONS_BY_KEY.method(:[])).reject(:nil?)
 
   def permission? key
     fail "Unknown permission_key #{ key }" unless PERMISSIONS_BY_KEY.key? key
@@ -47,7 +43,7 @@ class Role < ApplicationRecord
   protected
 
   def clean_permissions
-    self.permission_keys = permission_keys.reject(&:blank?)
+    self.permission_keys = permission_keys.compact_blank
   end
 
   def valid_permission_keys
