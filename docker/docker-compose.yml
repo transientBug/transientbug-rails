@@ -37,7 +37,7 @@ services:
       #- "postgres"
       #- "redis"
       #- "sidekiq"
-    #command: bundle exec clockwork clock.rb
+    #command: ["bundle exec clockwork clock.rb"]
     #networks:
       #- "services"
     #env_file:
@@ -58,7 +58,7 @@ services:
     env_file:
       - ".env.production"
     healthcheck:
-      test: "curl -f http://localhost:8000/"
+      test: "curl -f http://localhost:3000"
       interval: 1m
       timeout: 10s
       retries: 5
@@ -67,7 +67,7 @@ services:
     #image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     #depends_on:
       #- "redis"
-    #command: bundle exec puma -p 28080 cable/config.ru
+    #command: ["bundle exec puma -p 28080 cable/config.ru"]
     #ports:
       #- "28080:28080"
     ##volumes:
