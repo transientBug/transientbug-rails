@@ -19,7 +19,7 @@ services:
       - "redis:/data"
 
   sidekiq:
-    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "redis"
@@ -32,7 +32,7 @@ services:
       - ".env.production"
 
   #clockwork:
-    #image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    #image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     #depends_on:
       #- "postgres"
       #- "redis"
@@ -44,7 +44,7 @@ services:
       #- ".env.production"
 
   rails:
-    image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "redis"
@@ -64,7 +64,7 @@ services:
       retries: 5
 
   #cable:
-    #image: "docker.pkg.github.com/transientbug/transientbug-rails/app:latest"
+    #image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     #depends_on:
       #- "redis"
     #command: bundle exec puma -p 28080 cable/config.ru

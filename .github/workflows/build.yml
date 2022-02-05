@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - docker-*
 
 jobs:
   DockerBuild:
@@ -70,11 +71,7 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
       - name: Build Image
-        run: |
-          docker build \
-            -t ghcr.io/transientbug/transientbug-rails/app:latest \
-            -t ghcr.io/transientbug/transientbug-rails/app:${GITHUB_SHA} \
-            -f Dockerfile .
+        run: bin/docker-build
 
       - name: Login to GitHub Docker Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
