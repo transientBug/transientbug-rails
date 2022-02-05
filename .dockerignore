@@ -1,9 +1,10 @@
-log/*
-tmp/*
+log
+tmp
 **/*.swp
 **/*.swo
 **/\.*
 !.dockerignore
+!public/assets/.sprockets-manifest-*.json
 **/*.*.*~
 **/*.key
 

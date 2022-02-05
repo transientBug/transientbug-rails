@@ -33,22 +33,22 @@ RUN apt-get update && \
     #npm i npm@latest -g
 
 # Add a slightly less privlaged user to run under
-RUN adduser --shell /bin/bash --uid 1001 --ingroup root --home "${HOME}" --system app-runner && \
+RUN adduser --shell /bin/bash --uid 1001 --ingroup root --home "${HOME}" --system app && \
     chown -R 1001:0 "${HOME}"
 
 WORKDIR ${HOME}
-USER app-runner 
+USER app 
 
-COPY --chown=app-runner:0 Gemfile Gemfile.lock ./
-RUN echo "install: --no-document" > $HOME/.gemrc && \
-    echo "update: --no-document" >> $HOME/.gemrc && \
+COPY --chown=app:0 Gemfile Gemfile.lock ./
+RUN echo "install: --no-document" > "${HOME}/.gemrc" && \
+    echo "update: --no-document" >> "${HOME}/.gemrc" && \
     bundle config set without 'development test' && \
-    bundle install && \
-    bundle exec rails tmp:create
+    bundle install
 
-COPY --chown=app-runner:0 . ./
+COPY --chown=app:0 . ./
 
-RUN chown app-runner -R /app/tmp && \
-    chmod 644 -R /app/tmp
+RUN bundle exec rails tmp:create
+    #chown app:0 -R /app/tmp/ && \
+    #chmod 644 -R /app/tmp/
 
 ENTRYPOINT ["/bin/bash", "docker/entrypoint.sh"]
