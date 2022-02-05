@@ -43,10 +43,10 @@ build_dets () {
 }
 
 function cleanup {
-  rm public/BUILD_DETAILS
+  rm public/build_details.json
 }
 trap cleanup EXIT
-build_dets > public/BUILD_DETAILS
+build_dets > public/build_details.json
 
 docker buildx build --platform linux/amd64 \
   -t "${registry}/${image}:latest" \
