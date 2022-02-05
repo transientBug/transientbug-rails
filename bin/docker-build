@@ -1,0 +1,56 @@
+#!/bin/bash
+set -euo pipefail
+
+env=${1:-"production"}
+
+image="transientbug-rails/app"
+registry="ghcr.io/transientbug"
+
+short_sha=${GITHUB_SHA:-"$(git rev-parse --short HEAD)"}
+
+print_help () {
+  error_message=${1:-}
+  if [[ "$error_message" ]]; then
+    echo "Error: $error_message"
+    echo
+  fi
+
+  cat <<HELP
+$0: builds a deployment image
+Usage: $0 (staging|production)
+HELP
+
+  exit 1
+}
+
+case $env in
+  production)
+    echo "Rails env: production"
+    build_args="--build-arg ENV=production"
+    ;;
+  *)
+    print_help "Invalid environment passed: $env"
+    ;;
+esac
+
+build_dets () {
+  local current_date="$(date -u "+%FT%H%M%S")"
+
+  echo "{}" | jq --exit-status \
+    --arg "short_sha" "${short_sha}" \
+    --arg "built_at" "${current_date}" \
+    '{ version: $short_sha, built_at: $built_at }'
+}
+
+function cleanup {
+  rm public/BUILD_DETAILS
+}
+trap cleanup EXIT
+build_dets > public/BUILD_DETAILS
+
+docker buildx build --platform linux/amd64 \
+  -t "${registry}/${image}:latest" \
+  -t "${registry}/${image}:${short_sha}" \
+  -t "${image}:latest" \
+  $build_args \
+  -f docker/Dockerfile .

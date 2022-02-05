@@ -1,8 +1,5 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 set -euo pipefail
-
-#bundle exec rake db:migrate
 
 # if a command was passed to this script, run it in the environment
 if [[ $# -gt 0 ]]; then
@@ -10,4 +7,8 @@ if [[ $# -gt 0 ]]; then
   exec bash -c "$@"
 fi
 
-exec puma -C config/puma.rb
+echo "Running migrations ..."
+bundle exec rails db:migrate
+
+echo "Starting server ..."
+exec bundle exec puma -C config/puma.rb
