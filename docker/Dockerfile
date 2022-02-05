@@ -12,7 +12,7 @@ ENV RAILS_ENV ${ENV:-production}
 ENV NODE_ENV ${ENV:-production}
 
 ARG PORT
-ENV PORT %{PORT:-3000}
+ENV PORT ${PORT:-3000}
 
 ENV LANG=C.UTF-8
 # Set this so that CTRL+G works properly
@@ -25,7 +25,7 @@ VOLUME ["/dropzone"]
 
 # Install any additional tooling we need to build/compile things
 RUN apt-get update && \
-    apt-get install -y curl imagemagick
+    apt-get install -y curl postgresql-client imagemagick 
 
 # Ensure node is updated to LTS
 #RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
