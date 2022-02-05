@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :bookmark do
     user
-    webpage
+    sequence(:uri) { |n| Addressable::URI.parse("http://#{ n }.example.com") }
 
     title { "test" }
 

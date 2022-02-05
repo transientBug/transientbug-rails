@@ -9,10 +9,8 @@ gem "bootsnap", require: false
 
 # Data Stores
 #  * Postgres
-#  * Elasticsearch
 #  * Redis
 gem "pg"
-# gem "pg_search"
 gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
@@ -46,7 +44,7 @@ gem "tzinfo-data"
 gem "haml"
 gem "haml-rails"
 gem "view_component"
-
+gem "redcarpet"
 gem "inline_svg"
 
 # Javascript and CSS
@@ -99,7 +97,7 @@ gem "nokogiri"
 # gem "ruby-readability"
 # gem "stopwords-filter"
 gem "marcel", "~> 1.0"
-gem "parslet"
+# gem "parslet"
 
 gem "exception_notification"
 gem "slack-notifier"

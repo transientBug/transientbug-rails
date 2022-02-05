@@ -11,8 +11,8 @@ class WebpageCacheService
       @base_uri = base_uri
     end
 
-    def_delegator :@offline_cache, :webpage
-    def_delegator :webpage, :uri
+    def_delegator :@offline_cache, :bookmark
+    def_delegator :bookmark, :uri
 
     def asset? key:
       find_attachment(key: key).present?

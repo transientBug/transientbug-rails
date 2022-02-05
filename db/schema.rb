@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_04_061820) do
+ActiveRecord::Schema.define(version: 2022_02_05_212309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "uri", default: "", null: false
+    t.index ["uri"], name: "index_bookmarks_on_uri"
     t.index ["user_id", "webpage_id"], name: "index_bookmarks_on_user_id_and_webpage_id", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
     t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"
@@ -123,9 +125,9 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.text "internal_note"
     t.text "title"
     t.text "description"
-    t.integer "available", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "available", default: 1
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
 
@@ -135,7 +137,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
-    t.index ["user_id"], name: "index_invitations_users_on_user_id"
+    t.index ["user_id"], name: "index_invitations_users_on_users_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -188,6 +190,8 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
     t.bigint "root_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "bookmark_id"
+    t.index ["bookmark_id"], name: "index_offline_caches_on_bookmark_id"
     t.index ["root_id"], name: "index_offline_caches_on_root_id"
     t.index ["webpage_id"], name: "index_offline_caches_on_webpage_id"
   end
@@ -260,5 +264,6 @@ ActiveRecord::Schema.define(version: 2022_02_04_061820) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "offline_caches", "active_storage_attachments", column: "root_id"
+  add_foreign_key "offline_caches", "bookmarks"
   add_foreign_key "offline_caches", "webpages"
 end

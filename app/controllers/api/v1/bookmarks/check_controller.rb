@@ -12,6 +12,6 @@ class Api::V1::Bookmarks::CheckController < Api::V1Controller
   protected
 
   def bookmark_found?
-    current_user.bookmarks.where(webpage: { uri: params[:url] }).any?
+    current_user.bookmarks.where(uri: params[:url]).any?
   end
 end
