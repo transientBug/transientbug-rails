@@ -32,7 +32,7 @@ class Role < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validate :valid_permission_keys
 
-  def permissions()= permission_keys.map(&Role::PERMISSIONS_BY_KEY.method(:[])).reject(:nil?)
+  def permissions()= permission_keys.map(&Role::PERMISSIONS_BY_KEY.method(:[])).reject(&:nil?)
 
   def permission? key
     fail "Unknown permission_key #{ key }" unless PERMISSIONS_BY_KEY.key? key
