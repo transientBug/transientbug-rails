@@ -8,12 +8,12 @@ class WebpageCacheService
 
     attr_reader :offline_cache
 
-    def initialize webpage:
-      @webpage = webpage
-      @offline_cache = webpage.offline_caches.create
+    def initialize bookmark:
+      @bookmark = bookmark
+      @offline_cache = bookmark.offline_caches.create
     end
 
-    def_delegator :@webpage, :uri
+    def_delegator :@bookmark, :uri
 
     def errors
       offline_cache.error_messages
@@ -155,7 +155,7 @@ class WebpageCacheService
       # header, so we'll first see if the html doctype string is present and
       # guess this is text/html or we'll fallback to assuming its binary
       # https://en.wikipedia.org/wiki/Content_sniffing
-      content_type ||= MimeMagic.by_magic(io_handle)
+      content_type ||= Marcel.by_magic(io_handle)
       content_type ||= "application/octet-stream"
 
       io_handle.rewind

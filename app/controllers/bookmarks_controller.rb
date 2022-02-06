@@ -9,7 +9,6 @@ class BookmarksController < ApplicationController
   def index
     @bookmarks = policy_scope(Bookmark)
       .includes(
-        :webpage,
         :tags,
         :user,
         offline_caches: [
@@ -21,7 +20,6 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/new
   def new
     @bookmark = current_user.bookmarks.new
-    @bookmark.webpage = Webpage.new
 
     authorize @bookmark
   end
@@ -88,7 +86,6 @@ class BookmarksController < ApplicationController
 
   def set_bookmark
     @bookmark = current_user.bookmarks.includes(
-      :webpage,
       :tags,
       :user,
       offline_caches: [
@@ -108,9 +105,7 @@ class BookmarksController < ApplicationController
 
       tags = Tag.find_or_create_tags tags: tag_input
 
-      webpage = Webpage.upsert uri: params.dig(:bookmark, :uri)
-
-      obj.merge!(tags: tags, webpage: webpage)
+      obj.merge!(tags: tags)
     end
   end
 end

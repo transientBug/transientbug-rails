@@ -20,6 +20,6 @@ class BookmarkPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [ :title, :description ]
+    [ :title, :description, :uri ]
   end
 end
