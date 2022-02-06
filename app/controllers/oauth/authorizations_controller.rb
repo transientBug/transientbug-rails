@@ -4,8 +4,10 @@ class Oauth::AuthorizationsController < ApplicationController
   layout "page"
 
   require_login!
+  before_action :authenticate_resource_owner
 
   include Doorkeeper::Helpers::Controller
+
   def new
     if pre_auth.authorizable?
       render_success
@@ -26,7 +28,7 @@ class Oauth::AuthorizationsController < ApplicationController
 
   def render_success
     if skip_authorization? || matching_token?
-      redirect_or_render authorize_response
+      redirect_or_render(authorize_response)
     elsif Doorkeeper.configuration.api_only
       render json: pre_auth
     else
@@ -43,6 +45,8 @@ class Oauth::AuthorizationsController < ApplicationController
     end
   end
 
+  # Active access token issued for the same client and resource owner with
+  # the same set of the scopes exists?
   def matching_token?
     Doorkeeper.config.access_token_model.matching_token_for(
       pre_auth.client,
@@ -68,7 +72,7 @@ class Oauth::AuthorizationsController < ApplicationController
       elsif pre_auth.form_post_response?
         render :form_post
       else
-        redirect_to auth.redirect_uri
+        redirect_to auth.redirect_uri, allow_other_host: true
       end
     else
       render json: auth.body, status: auth.status
@@ -76,7 +80,7 @@ class Oauth::AuthorizationsController < ApplicationController
   end
 
   def pre_auth
-    @pre_auth ||= Doorkeeper::OAuth::PreAuthorization.new(
+    @pre_auth ||= OAuth::PreAuthorization.new(
       Doorkeeper.configuration,
       pre_auth_params,
       current_resource_owner
@@ -108,10 +112,11 @@ class Oauth::AuthorizationsController < ApplicationController
     @strategy ||= server.authorization_request(pre_auth.response_type)
   end
 
-  # rubocop:disable Lint/NoReturnInBeginEndBlocks
   def authorize_response
     @authorize_response ||= begin
+      # rubocop:disable Lint/NoReturnInBeginEndBlocks
       return pre_auth.error_response unless pre_auth.authorizable?
+      # rubocop:enable Lint/NoReturnInBeginEndBlocks
 
       context = build_context(pre_auth: pre_auth)
       before_successful_authorization(context)
@@ -124,7 +129,6 @@ class Oauth::AuthorizationsController < ApplicationController
       auth
     end
   end
-  # rubocop:enable Lint/NoReturnInBeginEndBlocks
 
   def build_context(**attributes)
     Doorkeeper::OAuth::Hooks::Context.new(**attributes)
