@@ -4,13 +4,7 @@
     = render "layouts/common/head" do
       %title transientBug #{ content_for :page_title }
 
-      = csrf_meta_tags
-      = csp_meta_tag
-
-      = stylesheet_link_tag "application", "data-turbo-track": "reload"
-      = javascript_include_tag "application", "data-turbo-track": "reload", defer: true
-
-  %body.bg-gray-200.flex.flex-col.min-h-screen{ class: [  controller_name, action_name ] }
+  %body.bg-gray-200.flex.flex-col.min-h-screen.page{ class: [ controller_name, action_name ] }
     = render ServiceAnnouncementBannerComponent.with_collection(service_announcements)
 
     %div

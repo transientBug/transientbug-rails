@@ -1,4 +1,4 @@
-<%= default_form_with model: [:admin, @application], scope: :appliction, url: admin_application_path, data: { turbo: false } do |f| %>
+<%= default_form_with model: [:admin, @application], scope: :application, url: admin_application_path, data: { turbo: false } do |f| %>
   <% if @application.errors.any? %>
     <h2><%= pluralize @application.errors.count, "error" %> prohibited this application from being saved:</h2>
     <ul>
