@@ -13,7 +13,8 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # POST /api/v1/bookmarks
   def create
-    @bookmark = Bookmark.for(current_user, uri_params)
+    params = bookmark_params.to_h.compact
+    @bookmark = Bookmark.for(current_user, params["uri"])
 
     authorize @bookmark
 
@@ -22,7 +23,7 @@ class Api::V1::BookmarksController < Api::V1Controller
       return
     end
 
-    @bookmark.assign_attributes bookmark_params.to_h.compact
+    @bookmark.assign_attributes params
     @bookmark.tags = @bookmark.tags.to_a.concat(tags_models)
 
     if @bookmark.upsert
@@ -61,15 +62,7 @@ class Api::V1::BookmarksController < Api::V1Controller
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookmark_params
-    params.require(:data).require(:attributes).permit(:title, :description)
-  end
-
-  # Tech Debt: Handle backwards compat where older clients may still be sending
-  # url when the proper field is uri
-  def uri_params
-    url_or_uri = params.require(:data).require(:attributes).permit(:url, :uri)
-
-    url_or_uri[:url] || url_or_uri[:uri]
+    params.require(:data).require(:attributes).permit(:title, :description, :uri)
   end
 
   def tags_params

@@ -32,14 +32,14 @@ RSpec.resource "v1 Bookmarks" do
     end
 
     with_options scope: [ :data, :attributes ] do
-      parameter :url, "Bookmarks URL", required: true
+      parameter :uri, "Bookmarks URI", required: true
       parameter :title, "Title", required: true
       parameter :description, "Description/Note"
       parameter :tags, "Comma separated"
     end
 
     let(:type) { "bookmark" }
-    let(:url) { "https://bookmark.example" }
+    let(:uri) { "https://bookmark.example" }
     let(:title) { "bookmark 1" }
     let(:description) { "Something witty" }
     let(:tags) { ["tag 1", "tag 2", "tag 3" ] }
@@ -82,7 +82,7 @@ RSpec.resource "v1 Bookmarks" do
     end
 
     with_options scope: [ :data, :attributes ] do
-      parameter :url, "Bookmarks URL", required: true
+      parameter :uri, "Bookmarks URI", required: true
       parameter :title, "Title", required: true
       parameter :description, "Description/Note"
       parameter :tags, "Comma separated"
@@ -90,7 +90,7 @@ RSpec.resource "v1 Bookmarks" do
 
     let(:type) { "bookmark" }
     let(:id) { bookmark.id }
-    let(:url) { "https://bookmark.example" }
+    let(:uri) { "https://bookmark.example" }
     let(:title) { "bookmark 1" }
     let(:description) { "Something witty" }
     let(:tags) { ["tag 1", "tag 2", "tag 3" ] }
@@ -118,9 +118,9 @@ RSpec.resource "v1 Bookmarks" do
   end
 
   get "/api/v1/bookmarks/check" do
-    parameter :url, "URL to check", required: true
+    parameter :uri, "URI to check", required: true
 
-    let(:url) { bookmark.uri }
+    let(:uri) { bookmark.uri }
 
     example "Check for an existing bookmark" do
       do_request
@@ -130,9 +130,9 @@ RSpec.resource "v1 Bookmarks" do
   end
 
   get "/api/v1/bookmarks/check" do
-    parameter :url, "URL to check", required: true
+    parameter :uri, "URI to check", required: true
 
-    let(:url) { "http://not.found" }
+    let(:uri) { "http://not.found" }
 
     example "Check for a non-existent bookmark" do
       do_request
@@ -142,7 +142,7 @@ RSpec.resource "v1 Bookmarks" do
   end
 
   get "/api/v1/bookmarks/check" do
-    example "Check with no URL" do
+    example "Check with no URI" do
       do_request
 
       expect(status).to eq(400)
