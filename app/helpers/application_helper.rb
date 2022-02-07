@@ -27,5 +27,8 @@ module ApplicationHelper
 
   def markdown_renderer()= @markdown_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 
-  def markdownify(input)= markdown_renderer.markdown input
+  # rubocop:disable Rails/OutputSafety
+  # yolo
+  def markdownify(input)= markdown_renderer.render(input).html_safe
+  # rubocop:enable Rails/OutputSafety
 end
