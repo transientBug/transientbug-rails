@@ -25,8 +25,7 @@ module ApplicationHelper
     service_announcements
   end
 
-  def markdownify input
-    @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
-    @rendered.markdown input
-  end
+  def markdown_renderer()= @markdown_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+
+  def markdownify(input)= markdown_renderer.markdown input
 end
