@@ -2,7 +2,7 @@
   = @bookmark.title
 
 - content_for :page_actions do
-  = link_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { confirm: "Are you sure?" }
+  = link_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { turbo_confirm: "Are you sure?" }
 
   = link_to "Edit", edit_bookmark_path(@bookmark), class: "btn -secondary"
 

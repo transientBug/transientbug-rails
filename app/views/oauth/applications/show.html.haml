@@ -11,7 +11,7 @@
             -#You've authorized this app to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
         .ml-4.mt-4.flex-shrink-0
-          = link_to oauth_application_path(@application), class: "btn -tertiary", method: :delete, data: { confirm: "Are you sure?" } do
+          = link_to oauth_application_path(@application), class: "btn -tertiary", method: :delete, data: { turbo_confirm: "Are you sure?" } do
             Delete
 
           = link_to "Edit", edit_oauth_application_path(@application), class: "btn -secondary"
