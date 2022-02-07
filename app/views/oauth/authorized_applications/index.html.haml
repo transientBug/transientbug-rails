@@ -4,13 +4,13 @@
 = render "profiles/tabs" do
   %section( aria-labelledby="oauth_table" )
     = render CardComponent.new do |c|
-      = c.with :header do
+      = c.header do
         .ml-4.mt-4
           %h2#oauth_table.text-lg.leading-6.font-medium.text-gray-900 Authorized Apps
           .mt-1.text-sm.text-gray-500
             You've authorized these apps to act on your behalf to interact with the transientBug API and access or modify your bookmark data.
 
-      = c.with :body do
+      = c.body do
         %table.min-w-full.divide-y.divide-gray-200
           %thead.bg-gray-50
             %tr
@@ -34,7 +34,7 @@
                 %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium.text-gray-900{ colspan: 3 }
                   No applications authorized
 
-      = c.with :footer do
+      = c.footer do
         - pagination = paginate @applications, theme: "card_footer"
         - if pagination.present?
           = pagination

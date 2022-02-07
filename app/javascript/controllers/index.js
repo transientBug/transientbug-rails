@@ -4,11 +4,5 @@
 
 import { application } from "./application"
 
-import DropdownController from "./dropdown_controller"
-application.register("dropdown", DropdownController)
-
-import MenuController from "./menu_controller"
-application.register("menu", MenuController)
-
-import SidebarController from "./sidebar_controller"
-application.register("sidebar", SidebarController)
+import ToggleController from "./toggle_controller.js"
+application.register("toggle", ToggleController)

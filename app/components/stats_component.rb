@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class StatsComponent < ViewComponent::Base
-  include ViewComponent::SlotableV2
-
   def initialize title: nil
     @title = title
   end

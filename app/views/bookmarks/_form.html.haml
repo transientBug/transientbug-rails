@@ -1,7 +1,7 @@
 %section( aria-labelledby="bookmark_form" )
   = form_with model: bookmark, data: { turbo: false }, html: { autocomplete: "off" } do |f|
     = render CardComponent.new do |c|
-      -#= c.with :header do
+      -#= c.header do
         .ml-4.mt-4
           %h2#bookmark_form.text-lg.leading-6.font-medium.text-gray-900.truncate
             - if bookmark.new_record?
@@ -10,7 +10,7 @@
               Updating #{bookmark.title}
           -#%p.mt-1.text-sm.text-gray-500 
 
-      = c.with :body do
+      = c.body do
         - if bookmark.errors.any?
           %h2= "#{ pluralize bookmark.errors.count, "error" } prohibited this bookmark from being saved:"
           %ul
@@ -41,5 +41,5 @@
             = f.text_area :description, class: "mt-1 w-full default-input"
             -#%p.mt-2.text-sm.text-gray-500
 
-      = c.with :footer do
+      = c.footer do
         = f.submit class: "btn -primary"

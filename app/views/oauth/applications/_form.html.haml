@@ -1,7 +1,7 @@
 %section( aria-labelledby="user_contact_settings" )
   = form_with model: application, url: doorkeeper_submit_path(application), method: :post, data: { turbo: false } do |f|
     = render CardComponent.new do |c|
-      = c.with :header do
+      = c.header do
         .ml-4.mt-4
           %h2#user_contact_settings.text-lg.leading-6.font-medium.text-gray-900
             - if application.persisted?
@@ -10,7 +10,7 @@
               New App
           -#%p.mt-1.text-sm.text-gray-500 
 
-      = c.with :body do
+      = c.body do
         - if application.errors.any?
           %h2= "#{ pluralize application.errors.count, "error" } prohibited this application from being saved:"
           %ul
@@ -50,6 +50,6 @@
 
               = doorkeeper_errors_for application, :scopes
 
-      = c.with :footer do
+      = c.footer do
         .px-4.py-3.bg-gray-50.text-right.sm:px-6
           = f.submit class: "btn -primary"

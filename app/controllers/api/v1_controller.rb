@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1Controller < ApiController
-  include Pundit
+  include Pundit::Authorization
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
   wrap_parameters format: []

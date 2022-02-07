@@ -19,13 +19,14 @@ module TransientBug
     config.generators do |g|
       g.assets = false
       g.helper = false
+      g.stimulus = true
+      g.template_engine = "erb"
+      g.sidecar = true
     end
 
     config.exceptions_app = routes
 
     config.active_storage.draw_routes = false
     config.action_mailbox.draw_routes = false
-
-    config.action_view.form_with_generates_remote_forms = false
   end
 end
