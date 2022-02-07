@@ -31,9 +31,9 @@ class Bookmarks::CacheController < ApplicationController
   def show
     key = params[:key]
 
-    render(plain: "404 Not Found", status: :not_found) && return unless renderer.asset?(key: key)
+    render(plain: "404 Not Found", status: :not_found) && return unless renderer.asset?(key:)
 
-    send_data renderer.asset(key: key).read, type: renderer.content_type(key: key), disposition: "inline"
+    send_data renderer.asset(key:).read, type: renderer.content_type(key:), disposition: "inline"
   end
 
   private
@@ -43,7 +43,7 @@ class Bookmarks::CacheController < ApplicationController
   end
 
   def renderer
-    @renderer ||= WebpageCacheService::Render.new(offline_cache: @bookmark.current_offline_cache, base_uri: base_uri)
+    @renderer ||= WebpageCacheService::Render.new(offline_cache: @bookmark.current_offline_cache, base_uri:)
   end
 
   def base_uri

@@ -12,7 +12,7 @@ class WebpageCacheJob < ApplicationJob
   end
 
   def perform bookmark:
-    service = WebpageCacheService::Cache.new(bookmark: bookmark).exec
+    service = WebpageCacheService::Cache.new(bookmark:).exec
     bookmark.offline_caches << service.offline_cache
   end
 end

@@ -11,7 +11,7 @@ RSpec.describe Webpage do
   describe "#uri" do
     subject { instance.uri }
 
-    let(:instance) { described_class.create uri: uri }
+    let(:instance) { described_class.create uri: }
 
     context "when setting an addressable uri" do
       let(:uri_string) { "http://test.me" }

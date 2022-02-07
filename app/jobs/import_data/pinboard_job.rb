@@ -23,7 +23,7 @@ class ImportData::PinboardJob < ImportData::BaseJob
       {
         title: entry["description"],
         description: entry["extended"],
-        tags: tags
+        tags:
       },
       created_at
     ]

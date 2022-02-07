@@ -1,0 +1,30 @@
+<div class="text-white"
+     data-service-announcement-banner-component--service-announcement-banner-component-id-value="<%= @service_announcement.id %>"
+     data-service-announcement-banner-component--service-announcement-banner-component-hidden-class="hidden"
+     data-controller="service-announcement-banner-component--service-announcement-banner-component">
+   <div class="bg-limegreen-500" style="background-color: <%= color %>">
+    <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between flex-wrap">
+        <div class="w-0 flex-1 flex items-center">
+          <span class="flex p-2 rounded-lg">
+            <%= helpers.feather_svg icon, class: "h-6 w-6" %>
+          </span>
+          <p class="ml-3 font-medium truncate">
+            <span><%= title %></span>
+          </p>
+        </div>
+
+        <div class="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
+          <a href="#" class="font-bold underline hover:text-gray-300">Read the announcement<span aria-hidden="true">&rarr;</span></a>
+        </div>
+
+        <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
+          <button type="button" class="-mr-1 flex p-2 rounded-md hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2" data-action="service-announcement-banner-component--service-announcement-banner-component#hide">
+            <span class="sr-only">Dismiss</span>
+            <%= helpers.feather_svg "x", class: "h-6 w-6" %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

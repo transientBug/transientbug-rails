@@ -101,14 +101,14 @@ class WebpageCacheService
       binary_temp_file do |temp_file|
         write_body response: response, to: temp_file
 
-        content_type = get_content_type(response: response, io: temp_file)
+        content_type = get_content_type(response:, io: temp_file)
 
         temp_file.rewind
         offline_cache.assets.attach(
           io: temp_file,
           filename: Digest::SHA256.hexdigest(uri.to_s),
-          content_type: content_type,
-          metadata: build_metadata(response: response)
+          content_type:,
+          metadata: build_metadata(response:)
         )
       end
 
