@@ -11,10 +11,10 @@ class Bookmarks::CacheController < ApplicationController
   # rubocop:disable Rails/OutputSafety
   # GET /bookmarks/1/cache
   def index
-    render :unavailable, status: :not_found unless @bookmark.current_offline_cache
+    return render :unavailable, status: :not_found unless @bookmark.current_offline_cache&.root
 
     root_blob = @bookmark.current_offline_cache.root.blob
-    render :unavailable, status: :not_found unless root_blob.service.exist? root_blob.key
+    return render :unavailable, status: :not_found unless root_blob.service.exist? root_blob.key
 
     render html: renderer.render.html_safe
   end
