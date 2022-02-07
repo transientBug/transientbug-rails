@@ -13,10 +13,10 @@ class Admin::Bookmarks::Bulk::DeletesController < AdminController
 
     if all_good
       flash[:info] = "Bulk delete of bookmarks was successful"
-      render json: { bulk_results: bulk_results }, status: :ok
+      render json: { bulk_results: }, status: :ok
     else
       flash[:error] = "Some bookmarks could not be deleted"
-      render json: { bulk_results: bulk_results }, status: :unprocessable_entity
+      render json: { bulk_results: }, status: :unprocessable_entity
     end
   end
 

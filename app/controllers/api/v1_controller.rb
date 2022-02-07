@@ -38,14 +38,14 @@ class Api::V1Controller < ApiController
     return nil unless params[:auth_token]
 
     email, token = params[:auth_token].split(":", 2)
-    User.find_by(email: email)&.token_authenticate token
+    User.find_by(email:)&.token_authenticate token
   end
 
   def basic_auth
     return nil unless request.headers["Authorization"]&.match? %r{^Basic}
 
     authenticate_with_http_basic do |email, password|
-      User.find_by(email: email)&.authenticate password
+      User.find_by(email:)&.authenticate password
     end
   end
 

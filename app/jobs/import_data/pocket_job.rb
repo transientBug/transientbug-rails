@@ -18,7 +18,7 @@ class ImportData::PocketJob < ImportData::BaseJob
       entry["href"],
       {
         title: entry.inner_text,
-        tags: tags
+        tags:
       },
       created_at
     ]

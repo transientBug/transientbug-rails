@@ -4,7 +4,7 @@ RSpec.resource "v1 Bookmarks" do
   let(:user) { create(:user) }
   let(:auth_token) { "#{ user.email }:#{ user.api_token }" }
 
-  let(:bookmark) { create(:bookmark_with_tags, user: user) }
+  let(:bookmark) { create(:bookmark_with_tags, user:) }
 
   # header "Content-Type", "application/vnd.api+json"
   header "Accept", "application/vnd.api+json"

@@ -14,11 +14,11 @@ class Admin::DefaultFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def label method, text=nil, opts={}, &block
+  def label(method, text=nil, opts={}, &)
     default_opts = { class: "block text-sm font-medium text-gray-700" }
     merged_opts = default_opts.merge(opts)
 
-    super(method, text, merged_opts, &block)
+    super(method, text, merged_opts, &)
   end
 
   [

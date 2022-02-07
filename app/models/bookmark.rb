@@ -41,14 +41,14 @@ class Bookmark < ApplicationRecord
 
   # This has potential performance costs if we start retrying lots of times
   def self.for user, uri
-    find_or_initialize_by user: user, uri: uri
+    find_or_initialize_by user:, uri:
   end
 
   def upsert
     save
   rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation
     existing = find_by user: user, uri: uri
-    existing.update attributes.slice("title", "description").merge(tags: tags)
+    existing.update attributes.slice("title", "description").merge(tags:)
     existing
   end
 

@@ -14,10 +14,10 @@ class Admin::ServiceAnnouncements::Bulk::DeactivatesController < AdminController
 
     if all_good
       flash[:info] = "Bulk deactivation of service announcements was successful"
-      render json: { bulk_results: bulk_results }, status: :ok
+      render json: { bulk_results: }, status: :ok
     else
       flash[:error] = "Some service announcements could not be deactivated"
-      render json: { bulk_results: bulk_results }, status: :unprocessable_entity
+      render json: { bulk_results: }, status: :unprocessable_entity
     end
   end
 

@@ -105,7 +105,7 @@ class BookmarksController < ApplicationController
 
       tags = Tag.find_or_create_tags tags: tag_input
 
-      obj.merge!(tags: tags)
+      obj.merge!(tags:)
     end
   end
 end

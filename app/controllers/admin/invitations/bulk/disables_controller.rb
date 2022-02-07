@@ -14,10 +14,10 @@ class Admin::Invitations::Bulk::DisablesController < AdminController
 
     if all_good
       flash[:info] = "Bulk disable of invitations was successful"
-      render json: { bulk_results: bulk_results }, status: :ok
+      render json: { bulk_results: }, status: :ok
     else
       flash[:error] = "Some invitations could not be disabled"
-      render json: { bulk_results: bulk_results }, status: :unprocessable_entity
+      render json: { bulk_results: }, status: :unprocessable_entity
     end
   end
 
