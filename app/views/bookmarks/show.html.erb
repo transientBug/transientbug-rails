@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+  <%= @bookmark.title %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { turbo_confirm: "Are you sure?" } %>
+
+  <%= link_to "Edit", edit_bookmark_path(@bookmark), class: "btn -secondary" %>
+<% end %>
+
+<div class="flex flex-col justify-between lg:flex-row px-4 sm:px-0">
+  <div class="w-full flex flex-col lg:mr-2 sm:mb-2 space-y-3">
+    <%= link_to @bookmark.uri.to_s, @bookmark.uri.to_s %>
+    <%= render RelativeTimeComponent.new(time: @bookmark.created_at) %>
+
+    <div>
+      <%= render TagComponent.with_collection(@bookmark.tags) %>
+    </div>
+  </div>
+
+  <div class="w-full mt-4">
+    <% if @bookmark.description.present? %>
+      <%= markdownify @bookmark.description %>
+    <% else %>
+      <em>No description ...</em>
+    <% end %>
+  </div>
+</div>

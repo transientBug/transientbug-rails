@@ -1,0 +1,51 @@
+<section aria-labelledby="bookmark_form">
+  <%= form_with model: bookmark, html: { autocomplete: "off" } do |f| %>
+    <%= render CardComponent.new do |c| %>
+      <%= c.body do %>
+        <% if bookmark.errors.any? %>
+          <h2>
+            <%= pluralize bookmark.errors.count, "error" %> prohibited this bookmark from being saved:
+          </h2>
+
+          <ul>
+            <% bookmark.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
+
+        <div class="grid grid-cols-4 gap-6">
+          <div class="col-span-4 sm:col-span-2">
+            <%= f.label :uri, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.url_field :uri, class: "mt-1 w-full default-input" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-6">
+          <div class="col-span-4 sm:col-span-2">
+            <%= f.label :title, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_field :title, class: "mt-1 w-full default-input" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-6">
+          <div class="col-span-4 sm:col-span-2">
+            <%= f.label :tags, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_field :tags, value: bookmark.tags.map(&:label).join(", "), autocomplete: "off", class: "mt-1 w-full default-input" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-6">
+          <div class="col-span-4 sm:col-span-2">
+            <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.text_area :description, class: "mt-1 w-full default-input" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= c.footer do %>
+        <%= f.submit class: "btn -primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>

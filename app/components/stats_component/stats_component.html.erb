@@ -1,0 +1,14 @@
+<% if @title %>
+  <div class="px-4 sm:px-0">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      <%= @title %>
+    </h3>
+  </div>
+<% end %>
+<div>
+  <dl class="mt-5 grid grid-cols-1 sm:rounded-md bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-3 md:divide-y-0 md:divide-x">
+    <% stats.each do |stat| %>
+      <%= stat %>
+    <% end %>
+  </dl>
+</div>
