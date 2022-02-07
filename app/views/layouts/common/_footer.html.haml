@@ -9,10 +9,14 @@
               All the Links!
 
             %ul.mt-4.space-y-4
-              %li
-                = link_to "Home", home_path, class: "text-base text-gray-300 hover:text-white"
+              - unless signed_in?
+                %li
+                  = link_to "Home", root_path, class: "text-base text-gray-300 hover:text-white"
 
               - if signed_in?
+                %li
+                  = link_to "Home", home_path, class: "text-base text-gray-300 hover:text-white"
+
                 %li
                   = link_to "Bookmarks", bookmarks_path, class: "text-base text-gray-300 hover:text-white"
 
@@ -21,10 +25,6 @@
 
               %li
                 = link_to "Browser Extension", "https://github.com/transientBug/browser-extension", data: { turbo: false }, class: "text-base text-gray-300 hover:text-white"
-
-              - if Rails.env.development?
-                %li
-                  = link_to "Dev Auth", auth_path(:developer), class: "text-base text-gray-300 hover:text-white"
 
           .mt-12.md:mt-0
             %h3.text-sm.font-semibold.text-gray-400.tracking-wider.uppercase

@@ -4,7 +4,7 @@
 = render "profiles/tabs" do
   %section( aria-labelledby="app_info" )
     = render CardComponent.new do |c|
-      = c.with :header do
+      = c.header do
         .ml-4.mt-4
           %h2#app_info.text-lg.leading-6.font-medium.text-gray-900= @application.name
           .mt-1.text-sm.text-gray-500
@@ -16,7 +16,7 @@
 
           = link_to "Edit", edit_oauth_application_path(@application), class: "btn -secondary"
 
-      = c.with :body do
+      = c.body do
         %dl.grid.grid-cols-1.gap-x-4.gap-y-8.sm:grid-cols-2
           .sm:col-span-2
             %dt.text-sm.font-medium.text-gray-500

@@ -1,4 +1,4 @@
-%header.bg-gray-800( data-controller="sidebar" )
+%header.bg-gray-800( data-controller="toggle" data-toggle-toggle-class="hidden" )
   .max-w-7xl.mx-auto.px-2.sm:px-4.lg:divide-y.lg:divide-gray-700.lg:px-8
     .relative.h-16.flex.justify-between
       .relative.z-10.px-2.flex.lg:px-0
@@ -6,6 +6,7 @@
           = link_to root_path do
             = image_tag "bug_logo.png", class: "block h-8 w-auto", alt: "transient bug"
 
+      / Search bar
       - if signed_in?
         .relative.z-0.flex-1.px-2.flex.items-center.justify-center.sm:absolute.sm:inset-0
           .w-full.sm:max-w-xs
@@ -18,45 +19,34 @@
 
       .relative.z-10.flex.items-center.lg:hidden
         / Mobile menu button
-        %button.rounded-md.p-2.inline-flex.items-center.justify-center.text-gray-400.hover:bg-gray-700.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white( aria-expanded="false" data-action="sidebar#open" )
+        %button.rounded-md.p-2.inline-flex.items-center.justify-center.text-gray-400.hover:bg-gray-700.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white( aria-expanded="false" data-action="toggle#toggle" )
           %span.sr-only Open menu
-          / Icon when menu is closed.
-          /
-            Heroicon name: menu
+          = feather_svg "menu", class: "block h-6 w-6", data: { "toggle-target" => "toggled" }
+          = feather_svg "x", class: "hidden h-6 w-6", data: { "toggle-target" => "toggled" }
 
-            Menu open: "hidden", Menu closed: "block"
-          = feather_svg "menu", class: "block h-6 w-6"
-
-          / Icon when menu is open.
-          /
-            Heroicon name: x
-
-            Menu open: "block", Menu closed: "hidden"
-          = feather_svg "x", class: "hidden h-6 w-6"
-
+      / Non-mobile user & notifications menus
       - if signed_in?
         .hidden.lg:relative.lg:z-10.lg:ml-4.lg:flex.lg:items-center
-          -#%button.bg-gray-800.flex-shrink-0.rounded-full.p-1.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
-            %span.sr-only View notifications
-            = feather_svg "bell", class: "h-6 w-6"
-
-          / Profile dropdown
-          .flex-shrink-0.relative.ml-4( data-controller="dropdown" )
+          .flex-shrink-0.relative.ml-4( data-controller="toggle" data-toggle-toggle-class="hidden" )
             %div
-              %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-limegreen-500{"aria-haspopup" => "true"}( data-action="click->dropdown#toggle" )
+              %button.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-limegreen-500{"aria-haspopup" => "true"}( data-action="toggle#toggle" )
+                %span.sr-only View notifications
+                = feather_svg "bell", class: "h-6 w-6"
+
+              .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.hidden( data-toggle-target="toggled" )
+                .py-1.divide-y.divide-gray-100( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
+                  - service_announcements.each do |sa|
+                    = link_to "#", class: "flex items-center px-4 py-3 -mx-2" do
+                      %p( class="text-gray-600 text-sm mx-2" )
+                        %span( class="font-bold" )= sa.title
+
+          .flex-shrink-0.relative.ml-4( data-controller="toggle" data-toggle-toggle-class="hidden" )
+            %div
+              %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-limegreen-500{"aria-haspopup" => "true"}( data-action="toggle#toggle" )
                 %span.sr-only Open user menu
-                = inline_svg_pack_tag "feather/user.svg", class: "h-6 w-6"
+                = feather_svg "user", class: "h-6 w-6"
 
-              /
-                Dropdown panel, show/hide based on dropdown state.
-
-                Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-              .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-dropdown-target="menu" data-controller="menu" data-menu-hidden-class="hidden" )
+              .origin-top-right.absolute.right-0.mt-2.w-56.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.divide-y.divide-gray-100.hidden( data-toggle-target="toggled" )
                 .px-4.py-3
                   %p.text-sm
                     Signed in as
@@ -65,37 +55,31 @@
 
                 .py-1( role="menu" aria-orientation="vertical" aria-labelledby="options-menu" )
                   = link_to profile_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                    = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    = feather_svg "settings", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     Settings
 
                 - if current_user.permission? "admin.access"
                   .py-1
                     = link_to admin_root_path, class: "group flex items-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900", role: "menuitem" do
-                      = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                      = feather_svg "cloud-lightning", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                       Admin
 
                 .py-1
                   = form_with url: "/logout", method: :delete, local: true do |f|
                     = f.button type: :submit, class: "group flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900", role: "menuitem" do
-                      = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                      = feather_svg "log-out", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                       Log out
 
+      / Non-mobile main nav
     - if signed_in?
       %nav.hidden.lg:py-2.lg:flex.lg:space-x-8( aria-label="Global" )
-        / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-        -#%a.bg-gray-900.text-white.rounded-md.py-2.px-3.inline-flex.items-center.text-sm.font-medium(href="#") Dashboard
         = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
         = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
         = active_link_to "Tags", tags_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
 
-  /
-    Mobile menu, toggle classes based on menu state.
-
-    Menu open: "block", Menu closed: "hidden"
-  %nav.hidden.lg:hidden( aria-label="Global" data-controller="menu" data-sidebar-target="menu" data-menu-hidden-class="hidden" )
+  / Mobile menu
+  %nav.hidden.lg:hidden( aria-label="Global" data-toggle-target="toggled" )
     .pt-2.pb-3.px-2.space-y-1
-      / Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-      -#%a.bg-gray-900.text-white.block.rounded-md.py-2.px-3.text-base.font-medium(href="#") Dashboard
       - if signed_in?
         = active_link_to "Dashboard", home_path, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
         = active_link_to "Bookmarks", bookmarks_path, inclusive: true, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white", class: "block rounded-md py-2 px-3 text-base font-medium"
@@ -105,7 +89,7 @@
       .border-t.border-gray-700.pt-4.pb-3
         .px-4.flex.items-center
           .flex-shrink-0
-            = inline_svg_pack_tag "feather/user.svg", class: "rounded-full h-10 w-10 text-white"
+            = feather_svg "user", class: "rounded-full h-10 w-10 text-white"
 
           .ml-3
             .text-base.font-medium.text-white Signed in as
@@ -117,15 +101,15 @@
 
         .mt-3.px-2.space-y-1
           = link_to profile_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-            = inline_svg_pack_tag "feather/settings.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+            = feather_svg "settings", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
             Settings
 
           - if current_user.permission? "admin.access"
             = link_to admin_root_path, class: "flex rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-              = inline_svg_pack_tag "feather/cloud-lightning.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+              = feather_svg "cloud-lightning", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
               Admin
 
           = form_with url: "/logout", method: :delete, local: true do |f|
             = f.button type: :submit, class: "flex w-full rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white", role: "menuitem" do
-              = inline_svg_pack_tag "feather/log-out.svg", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+              = feather_svg "log-out", class: "mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
               Log out

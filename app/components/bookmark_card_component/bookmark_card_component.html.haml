@@ -1,5 +1,5 @@
 = render CardComponent.new do |c|
-  = c.with :body do
+  = c.body do
     .sm:flex.items-center.justify-between
       %p.font-medium.text-royalblue-700.truncate
         = link_to @bookmark.title, bookmark_path(@bookmark)

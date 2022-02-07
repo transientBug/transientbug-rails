@@ -4,14 +4,17 @@ const colors = require('tailwindcss/colors')
 // also known as bg-limegreen-500
 module.exports = {
   content: [
-    './app/views/**/*.html.erb',
-    './app/views/**/*.html.haml',
-    './app/components/**/*.html.erb',
-    './app/components/**/*.html.haml',
+    './app/**/*.html.erb',
+    './app/**/*.html.haml',
     './app/helpers/**/*.rb',
-    './app/javascript/**/*.js'
+    './app/components/**/*.rb',
+    './app/**/*.js'
   ],
   darkMode: "class", // or 'media' or 'class'
+  plugins: [
+    require('@tailwindcss/forms')
+  ],
+  variants: {},
   theme: {
     extend: {
       colors: {
@@ -139,8 +142,4 @@ module.exports = {
       }
     },
   },
-  variants: {},
-  plugins: [
-    require('@tailwindcss/forms')
-  ],
 }
