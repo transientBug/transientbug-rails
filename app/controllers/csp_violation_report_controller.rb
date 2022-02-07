@@ -15,7 +15,5 @@ class CspViolationReportController < ApplicationController
 
   private
 
-  def csp_report
-    JSON.parse request.body.read
-  end
+  def csp_report()= JSON.parse(request.body.read)
 end
