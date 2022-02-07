@@ -11,6 +11,8 @@
       = javascript_include_tag "application", "data-turbo-track": "reload", defer: true
 
   %body.bg-gray-200{ class: [  controller_name, action_name ] }
+    = render ServiceAnnouncementBannerComponent.with_collection(service_announcements)
+
     = yield
 
     = render "layouts/common/footer"
