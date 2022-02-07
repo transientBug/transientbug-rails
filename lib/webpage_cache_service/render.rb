@@ -15,15 +15,15 @@ class WebpageCacheService
     def_delegator :bookmark, :uri
 
     def asset? key:
-      find_attachment(key: key).present?
+      find_attachment(key:).present?
     end
 
     def asset key:
-      StringIO.new find_attachment(key: key).blob.download
+      StringIO.new find_attachment(key:).blob.download
     end
 
     def content_type key:
-      find_attachment(key: key).blob.content_type
+      find_attachment(key:).blob.content_type
     end
 
     def render

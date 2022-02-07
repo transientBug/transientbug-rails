@@ -5,6 +5,8 @@
       %title transientBug #{ content_for :page_title }
 
   %body.bg-gray-200.blank{ class: [  controller_name, action_name ] }
+    = render ServiceAnnouncementBannerComponent.with_collection(service_announcements)
+
     = yield
 
     = render "layouts/common/footer"

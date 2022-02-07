@@ -5,4 +5,6 @@
       %title transientBug Admin #{ content_for :page_title }
 
   %body.relative.bg-gray-50.admin{ class: [ controller_name, action_name ] }
+    = render ServiceAnnouncementBannerComponent.with_collection(service_announcements)
+
     = render "layouts/admin/body"
