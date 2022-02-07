@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_05_212309) do
+ActiveRecord::Schema.define(version: 2022_02_07_043705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,6 @@ ActiveRecord::Schema.define(version: 2022_02_05_212309) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "offline_caches", "active_storage_attachments", column: "root_id"
-  add_foreign_key "offline_caches", "bookmarks"
+  add_foreign_key "offline_caches", "bookmarks", on_delete: :cascade
   add_foreign_key "offline_caches", "webpages"
 end
