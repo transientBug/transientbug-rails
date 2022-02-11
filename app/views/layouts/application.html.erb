@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "layouts/common/head" do %>
+      <title>transientBug <%= content_for :page_title %></title>
+    <% end %>
+  </head>
+
+  <body class="bg-gray-200 flex flex-col min-h-screen tb-application tb-<%= controller_name %> tb-<%= action_name %>">
+    <%= render ServiceAnnouncementBannerComponent.with_collection(service_announcements) %>
+
+    <%= render "layouts/common/navbar" %>
+
+    <main class="relative max-w-7xl mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8 flex-grow w-full overflow-y-auto focus:outline-none" tabindex="0">
+      <div class="py-6 space-y-4 -mx-2 sm:mx-0">
+        <div class="md:flex md:items-center md:justify-between px-4 sm:px-0">
+          <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+              <%= content_for :page_title %>
+            </h2>
+          </div>
+
+          <div class="mt-4 flex md:mt-0 md:ml-4 items-baseline space-x-3">
+            <%= content_for :page_actions %>
+          </div>
+        </div>
+
+        <div class="w-full space-y-4">
+          <%= yield %>
+        </div>
+      </div>
+    </main>
+
+    <%= render "layouts/common/footer" %>
+
+    <%= turbo_frame_tag :flashes do %>
+      <%= render FlashComponent.with_collection(flash.to_hash.to_a) %>
+    <% end %>
+  </body>
+</html>

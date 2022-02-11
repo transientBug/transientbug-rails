@@ -1,51 +1,57 @@
-<section aria-labelledby="bookmark_form">
-  <%= form_with model: bookmark, html: { autocomplete: "off" } do |f| %>
-    <%= render CardComponent.new do |c| %>
-      <%= c.body do %>
-        <% if bookmark.errors.any? %>
-          <h2>
-            <%= pluralize bookmark.errors.count, "error" %> prohibited this bookmark from being saved:
-          </h2>
+<%= form_with model: bookmark, html: { autocomplete: "off" } do |f| %>
+  <%= render CardComponent.new do |c| %>
+    <%= c.body do %>
+      <% if bookmark.errors.any? %>
+        <h2>
+          <%= pluralize bookmark.errors.count, "error" %> prohibited this bookmark from being saved:
+        </h2>
 
-          <ul>
-            <% bookmark.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        <% end %>
-
-        <div class="grid grid-cols-4 gap-6">
-          <div class="col-span-4 sm:col-span-2">
-            <%= f.label :uri, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.url_field :uri, class: "mt-1 w-full default-input" %>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-4 gap-6">
-          <div class="col-span-4 sm:col-span-2">
-            <%= f.label :title, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.text_field :title, class: "mt-1 w-full default-input" %>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-4 gap-6">
-          <div class="col-span-4 sm:col-span-2">
-            <%= f.label :tags, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.text_field :tags, value: bookmark.tags.map(&:label).join(", "), autocomplete: "off", class: "mt-1 w-full default-input" %>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-4 gap-6">
-          <div class="col-span-4 sm:col-span-2">
-            <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.text_area :description, class: "mt-1 w-full default-input" %>
-          </div>
-        </div>
+        <ul>
+          <% bookmark.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       <% end %>
 
-      <%= c.footer do %>
-        <%= f.submit class: "btn -primary" %>
-      <% end %>
+      <div class="w-full flex flex-col lg:mr-2 sm:mb-2 space-y-3">
+        <div class="grid grid-cols-4 gap-6">
+          <div class="col-span-4 sm:col-span-2">
+            <div>
+              <%= f.label :uri, class: "sr-only block text-sm font-medium text-gray-700" %>
+              <div class="mt-1 border-b border-gray-300 focus-within:border-limegreen-600">
+                <%= f.url_field :uri, class: "block w-full border-0 border-b border-transparent focus:border-limegreen-600 focus:ring-0 sm:text-sm", required: true, placeholder: "URL" %>
+              </div>
+            </div>
+
+            <div>
+              <%= f.label :title, class: "sr-only block text-sm font-medium text-gray-700" %>
+              <div class="mt-1 border-b border-gray-300 focus-within:border-limegreen-600">
+                <%= f.text_field :tags, value: bookmark.tags.map(&:label).join(", "), autocomplete: "off", class: "block w-full border-0 border-b border-transparent focus:border-limegreen-600 focus:ring-0 sm:text-sm", placeholder: "Tags" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <div>
+              <%= f.label :title, class: "sr-only block text-sm font-medium text-gray-700" %>
+              <div class="mt-1 border-b border-gray-300 focus-within:border-limegreen-600">
+                <%= f.text_field :title, class: "block w-full border-0 border-b border-transparent focus:border-limegreen-600 focus:ring-0 sm:text-sm", required: true, placeholder: "Title" %>
+              </div>
+            </div>
+
+            <div>
+              <%= f.label :description, class: "sr-only block text-sm font-medium text-gray-700" %>
+              <div class="mt-1 border-b border-gray-300 focus-within:border-limegreen-600">
+                <%= f.text_area :description, class: "block w-full border-0 border-b border-transparent focus:border-limegreen-600 focus:ring-0 sm:text-sm", placeholder: "Description", rows: 5 %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= c.footer do %>
+      <%= f.submit class: "btn -primary" %>
     <% end %>
   <% end %>
-</section>
+<% end %>

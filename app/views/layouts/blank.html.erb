@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "layouts/common/head" do %>
+      <title>transientBug <%= content_for :page_title %></title>
+    <% end %>
+  </head>
+
+  <body class="relative bg-gray-200 tb-blank tb-<%= controller_name %> tb-<%= action_name %>">
+    <%= render ServiceAnnouncementBannerComponent.with_collection(service_announcements) %>
+
+    <%= yield %>
+
+    <%= render "layouts/common/footer" %>
+  </body>
+</html>

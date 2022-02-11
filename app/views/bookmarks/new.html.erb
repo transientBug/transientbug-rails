@@ -2,4 +2,6 @@
   New Bookmark
 <% end %>
 
-<%= render partial: "form", locals: { bookmark: @bookmark } %>
+<%= turbo_frame_tag "new-bookmark", target: "_top" do %>
+  <%= render partial: "form", locals: { bookmark: @bookmark } %>
+<% end %>

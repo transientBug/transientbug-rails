@@ -5,15 +5,7 @@ class RelativeTimeComponent < ViewComponent::Base
     @time = time
   end
 
-  def relative_word
-    distance_of_time_in_words_to_now @time
-  end
-
-  def human_exact
-    @time.to_s :long_ordinal
-  end
-
-  def machine_exact
-    @time.rfc2822
-  end
+  def relative_word()= distance_of_time_in_words_to_now @time
+  def human_exact()= @time.to_formatted_s :long_ordinal
+  def machine_exact()= @time.rfc2822
 end
