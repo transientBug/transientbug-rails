@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_043705) do
+ActiveRecord::Schema.define(version: 2022_02_07_061616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,11 @@ ActiveRecord::Schema.define(version: 2022_02_07_043705) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "uri", default: "", null: false
+    t.virtual "search_title", type: :tsvector, as: "to_tsvector('english'::regconfig, COALESCE(title, ''::text))", stored: true
+    t.text "uri_breakdowns", default: [], array: true
+    t.index ["search_title"], name: "index_bookmarks_on_search_title", using: :gin
     t.index ["uri"], name: "index_bookmarks_on_uri"
+    t.index ["uri_breakdowns"], name: "index_bookmarks_on_uri_breakdowns", using: :gin
     t.index ["user_id", "webpage_id"], name: "index_bookmarks_on_user_id_and_webpage_id", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
     t.index ["webpage_id"], name: "index_bookmarks_on_webpage_id"

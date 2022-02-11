@@ -51,6 +51,10 @@ Rails.application.routes.draw do
 
   resources :tags, only: [:index, :show]
 
+  namespace :bookmarks do
+    resources :search, only: [:index]
+  end
+
   resources :bookmarks do
     scope module: :bookmarks do
       resources :cache, only: [:index, :create] do
