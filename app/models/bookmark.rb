@@ -31,9 +31,6 @@ class Bookmark < ApplicationRecord
 
   after_create_commit :schedule_cache
 
-  # Serializes and deserializes a string as an Addressable::URI
-  attribute :uri, :addressable_uri
-
   # Temp disable while transitioning the uri to bookmarks from webpages
   # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :uri, presence: true, uniqueness: { scope: :user_id }
@@ -55,6 +52,8 @@ class Bookmark < ApplicationRecord
   def current_offline_cache
     offline_caches.last
   end
+
+  def to_addressable()= Addressable::URI.parse(uri).omit(:fragment)
 
   def schedule_cache
     WebpageCacheJob.perform_later bookmark: self
