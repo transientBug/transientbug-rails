@@ -32,9 +32,5 @@
     </main>
 
     <%= render "layouts/common/footer" %>
-
-    <%= turbo_frame_tag :flashes do %>
-      <%= render FlashComponent.with_collection(flash.to_hash.to_a) %>
-    <% end %>
   </body>
 </html>
