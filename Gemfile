@@ -48,11 +48,9 @@ gem "redcarpet"
 gem "inline_svg"
 
 # Javascript and CSS
-# gem "webpacker"#, "~> 4.0"
-gem "jsbundling-rails"
+gem "propshaft"
 gem "cssbundling-rails"
-
-gem "sprockets-rails"
+gem "jsbundling-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 
@@ -69,7 +67,7 @@ gem "jbuilder"
 gem "sidekiq"
 
 # Logs
-gem "logster"
+gem "logster", github: "discourse/logster", branch: "redis_4_6"
 
 # Cron like scheduled/repeating tasks
 # gem "clockwork"

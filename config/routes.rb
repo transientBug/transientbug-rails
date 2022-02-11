@@ -1,11 +1,6 @@
 require "sidekiq/web"
 require_relative "../lib/permission_constraint"
 
-def draw name
-  path = Rails.root.join "config", "routes", "#{ name }.rb"
-  instance_eval path.read, path.to_s
-end
-
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers(

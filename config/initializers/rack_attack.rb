@@ -21,26 +21,31 @@ class Rack::Attack
   # findtime and bantime could use some better adjusting and is a bit egregious
   # right now but thats okay
   blocklist("fail2ban") do |req|
-    Rack::Attack::Fail2Ban.filter("pentesters-#{ req.ip }", maxretry: 2, findtime: 1.hour, bantime: 12.hours) do
+    # Rack::Attack::Fail2Ban.filter("pentesters-#{ req.ip }", maxretry: 2, findtime: 1.hour, bantime: 12.hours) do
       # The count for the IP is incremented if the return value is truthy
       is_bad = CGI.unescape(req.query_string) =~ %r{/etc/passwd}
 
       is_bad ||= req.path.include?("/etc/passwd")
+      is_bad ||= req.path.include?(".git")
+      is_bad ||= req.path.include?(".env")
+      is_bad ||= req.path.include?("/_")
+      is_bad ||= req.path.include?("/owa")
       is_bad ||= req.path.include?("/vpns/")
       is_bad ||= req.path.include?("/cgi-bin/")
-
-      is_bad ||= req.path.include?("wp-admin")
-      is_bad ||= req.path.include?("wp-content")
-      is_bad ||= req.path.include?("wp-json")
-      is_bad ||= req.path.include?("wp-login")
-      is_bad ||= req.path.include?("wp-config")
-
-      is_bad ||= req.path.end_with?(".php")
+      is_bad ||= req.path.include?("/script/")
+      is_bad ||= req.path.include?("/jenkins/")
+      is_bad ||= req.path.include?("wp-")
+      is_bad ||= req.path.include?("php")
+      is_bad ||= req.path.include?("aspx")
 
       is_bad ||= req.env["HTTP_ACCEPT"]&.include?("../")
+      is_bad ||= req.env["HTTP_ACCEPT"]&.include?("com.")
+      is_bad ||= req.env["HTTP_ACCEPT"]&.include?("jndi")
+
+      is_bad ||= req.request_method =~ %r{PRI}
 
       is_bad
-    end
+    # end
   end
 
   ### Throttle Spammy Clients ###

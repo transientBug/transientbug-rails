@@ -5,7 +5,11 @@
         <%= link_to @bookmark.title, bookmark_path(@bookmark) %>
 
         <small class="text-gray-500 text-sm">
-          (<%= link_to @bookmark.uri.host.to_s, @bookmark.uri.to_s, title: @bookmark.uri.to_s %>)
+          (<%= link_to @bookmark.to_addressable.host.to_s, @bookmark.uri, title: @bookmark.uri %>)
+        </small>
+
+        <small class="text-gray-500 text-xs">
+          <%= link_to "Edit", edit_bookmark_path(@bookmark), title: "Edit" %>
         </small>
       </p>
     </div>

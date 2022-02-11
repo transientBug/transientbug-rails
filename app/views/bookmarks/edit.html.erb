@@ -1,5 +1,13 @@
 <% content_for :page_title do %>
-  Editing Bookmark "<%= @bookmark.title %>"
+  <%= @bookmark.title %> - Editing
 <% end %>
 
-<%= render partial: "form", locals: { bookmark: @bookmark } %>
+<%= turbo_frame_tag @bookmark do %>
+  <% content_for :page_actions do %>
+    <%= button_to "Delete", bookmark_path(@bookmark), method: :delete, class: "btn -tertiary", data: { turbo_confirm: "Are you sure?" } %>
+
+    <%= link_to "Cancel", bookmark_path(@bookmark), class: "btn -secondary" %>
+  <% end %>
+
+  <%= render partial: "form", locals: { bookmark: @bookmark } %>
+<% end %>

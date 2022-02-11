@@ -1,0 +1,14 @@
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<%= csrf_meta_tags %>
+<%= csp_meta_tag %>
+
+<%= action_cable_meta_tag %>
+
+<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+<%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, nonce: true %>
+
+<%= content_for :head %>
+
+<%= yield %>
