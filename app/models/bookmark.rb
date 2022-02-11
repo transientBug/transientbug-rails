@@ -48,8 +48,10 @@ class Bookmark < ApplicationRecord
   scope :tag_search, ->(query) { where(tags: { label: query }) }
   scope :uri_search, ->(query) { where(arel_table[:uri].matches("%#{ query }%")) }
   scope :breakdown_search, lambda { |query|
-                             where(Arel::Nodes.build_quoted(query).eq(Arel::Nodes::NamedFunction.new("ANY", [arel_table[:uri_breakdowns]])))
-                           }
+    any_host = Arel::Nodes::NamedFunction.new("ANY", [arel_table[:uri_breakdowns]])
+    where(Arel::Nodes.build_quoted(query).eq(any_host))
+  }
+
   scope :title_search, ->(query) { where(<<~SQL.squish, { query: }) }
     search_title @@ websearch_to_tsquery(:query)
     OR search_title @@ to_tsquery(
@@ -58,8 +60,8 @@ class Bookmark < ApplicationRecord
   SQL
 
   scope :search, lambda { |query|
-                   joins(:tags).uri_search(query).or(breakdown_search(query)).or(title_search(query)).or(tag_search(query))
-                 }
+    joins(:tags).uri_search(query).or(breakdown_search(query)).or(title_search(query)).or(tag_search(query))
+  }
 
   # This has potential performance costs if we start retrying lots of times
   def self.for user, uri
