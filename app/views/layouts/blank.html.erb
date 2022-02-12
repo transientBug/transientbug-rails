@@ -7,7 +7,7 @@
   </head>
 
   <body class="relative bg-gray-200 tb-blank tb-<%= controller_name %> tb-<%= action_name %>">
-    <%= render ServiceAnnouncementBannerComponent.with_collection(service_announcements) %>
+    <%= render "layouts/common/body_preface" %>
 
     <%= yield %>
 

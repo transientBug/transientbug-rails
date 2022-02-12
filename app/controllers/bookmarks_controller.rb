@@ -54,6 +54,7 @@ class BookmarksController < ApplicationController
   def update
     respond_to do |format|
       if @bookmark.update(bookmark_params)
+        format.turbo_stream { render :show }
         format.html { redirect_to @bookmark, notice: "Bookmark was successfully updated." }
         format.json { render :show, status: :ok, location: @bookmark }
       else

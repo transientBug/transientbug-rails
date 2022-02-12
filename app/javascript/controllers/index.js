@@ -4,5 +4,11 @@
 
 import { application } from "./application"
 
+import DoAfterController from "./do_after_controller.js"
+application.register("do-after", DoAfterController)
+
+import RemoverController from "./remover_controller.js"
+application.register("remover", RemoverController)
+
 import ToggleController from "./toggle_controller.js"
 application.register("toggle", ToggleController)
