@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def auth_path(provider, *args)= [ "auth", provider.to_s, args ].flatten.compact.join("/")
-
   def template_path_for *args
     template_prefix = "public" unless controller_path.start_with? "admin/"
     template_prefix ||= "admin"
