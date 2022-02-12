@@ -12,4 +12,6 @@
   <% end %>
 <% end %>
 
-<iframe src="<%= sidekiq_web_path %>" class="h-full w-full" />
+<% content_for :frame do %>
+  <iframe src="<%= sidekiq_web_path %>" class="h-full w-full" />
+<% end %>
