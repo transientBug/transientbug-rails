@@ -5,6 +5,7 @@ tmp
 **/\.*
 !.dockerignore
 !public/assets/.sprockets-manifest-*.json
+!public/assets/.manifest.json
 **/*.*.*~
 **/*.key
 
