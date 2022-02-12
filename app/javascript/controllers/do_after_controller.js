@@ -6,8 +6,6 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log(this.secondsValue)
-
     setTimeout(() => {
       this.dispatch("trigger")
     }, this.secondsValue * 1000)
