@@ -37,9 +37,6 @@ class Bookmark < ApplicationRecord
 
   before_save :set_uri_breakdowns
 
-  # Serializes and deserializes a string as an Addressable::URI
-  # attribute :uri, :addressable_uri
-
   # Temp disable while transitioning the uri to bookmarks from webpages
   # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :uri, presence: true, uniqueness: { scope: :user_id }
@@ -55,18 +52,22 @@ class Bookmark < ApplicationRecord
   scope :title_search, ->(query) { where(<<~SQL.squish, { query: }) }
     search_title @@ websearch_to_tsquery(:query)
     OR search_title @@ to_tsquery(
-      (select word from ts_stat('select search_title from bookmarks') where similarity(:query, word) > 0.5)
+      (select word
+         from ts_stat('select search_title from bookmarks')
+        where similarity(:query, word) > 0.5)
     )
   SQL
 
   scope :search, lambda { |query|
-    joins(:tags).uri_search(query).or(breakdown_search(query)).or(title_search(query)).or(tag_search(query))
+    joins(:tags)
+      .uri_search(query)
+      .or(breakdown_search(query))
+      .or(title_search(query))
+      .or(tag_search(query))
   }
 
   # This has potential performance costs if we start retrying lots of times
-  def self.for user, uri
-    find_or_initialize_by user:, uri:
-  end
+  def self.for(user, uri)= find_or_initialize_by(user:, uri:)
 
   def upsert
     save
@@ -76,21 +77,15 @@ class Bookmark < ApplicationRecord
     existing
   end
 
-  def current_offline_cache
-    offline_caches.last
-  end
+  def current_offline_cache()= offline_caches.last
 
   def to_addressable()= Addressable::URI.parse(uri).omit(:fragment)
 
   protected
 
-  def schedule_cache
-    WebpageCacheJob.perform_later bookmark: self
-  end
+  def schedule_cache()= WebpageCacheJob.perform_later(bookmark: self)
 
-  def set_uri_breakdowns
-    self.uri_breakdowns = build_uri_iterations
-  end
+  def set_uri_breakdowns()= self.uri_breakdowns = build_uri_iterations
 
   def build_uri_iterations
     host = to_addressable.host
