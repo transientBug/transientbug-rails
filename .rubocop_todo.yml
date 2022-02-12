@@ -34,10 +34,6 @@ Rails/SkipsModelValidations:
     - 'app/models/bookmark.rb'
     - 'app/models/tag.rb'
 
-Metrics/AbcSize:
-  Exclude:
-    - 'app/searchers/query_grammar/transformer.rb'
-
 RSpec/MultipleMemoizedHelpers:
   Exclude:
     - 'spec/controllers/admin/roles_controller_spec.rb'
@@ -50,9 +46,6 @@ Lint/EmptyFile:
     - 'spec/models/error_message_spec.rb'
     - 'spec/models/offline_cache_spec.rb'
     - 'spec/models/tag_spec.rb'
-    - 'spec/policies/bookmarks_searcher_policy_spec.rb'
-    - 'spec/searchers/concerns/active_record_spec.rb'
-    - 'spec/searchers/concerns/pagination_spec.rb'
 
 Lint/EmptyBlock:
   Enabled: true

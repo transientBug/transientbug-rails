@@ -194,7 +194,6 @@ Style/HashTransformKeys:
 Style/HashTransformValues:
   Enabled: true
 
-
 Lint/MissingSuper:
   Exclude:
     - app/components/*
