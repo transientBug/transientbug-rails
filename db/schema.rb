@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_061616) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_12_235420) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.bigint "webpage_id"
     t.text "title"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "uri", default: "", null: false
     t.virtual "search_title", type: :tsvector, as: "to_tsvector('english'::regconfig, COALESCE(title, ''::text))", stored: true
     t.text "uri_breakdowns", default: [], array: true
@@ -83,15 +83,15 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.string "at"
     t.string "job_name"
     t.jsonb "job_arguments"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "error_messages", force: :cascade do |t|
     t.string "key"
     t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "error_messages_import_data", id: false, force: :cascade do |t|
@@ -109,8 +109,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.text "title"
     t.text "tags", default: [], array: true
     t.text "source"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "disabled", default: false
     t.index ["user_id"], name: "index_images_on_user_id"
   end
@@ -119,8 +119,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.bigint "user_id"
     t.enum "import_type", enum_type: "import_type"
     t.boolean "complete", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_import_data_on_user_id"
   end
 
@@ -129,8 +129,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.text "internal_note"
     t.text "title"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "available", default: 1
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
@@ -138,8 +138,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
   create_table "invitations_users", force: :cascade do |t|
     t.bigint "invitation_id", null: false
     t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
     t.index ["user_id"], name: "index_invitations_users_on_users_id"
   end
@@ -150,8 +150,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
     t.string "scopes"
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
@@ -163,8 +163,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
     t.string "scopes"
     t.string "previous_refresh_token", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
@@ -179,8 +179,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.string "secret", null: false
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "owner_id"
     t.string "owner_type"
     t.boolean "official", default: false
@@ -192,8 +192,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
   create_table "offline_caches", force: :cascade do |t|
     t.bigint "webpage_id"
     t.bigint "root_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "bookmark_id"
     t.index ["bookmark_id"], name: "index_offline_caches_on_bookmark_id"
     t.index ["root_id"], name: "index_offline_caches_on_root_id"
@@ -202,8 +202,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
 
   create_table "roles", force: :cascade do |t|
     t.text "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "description"
     t.string "permission_keys", default: [], null: false, array: true
     t.index ["name"], name: "index_roles_on_name", unique: true
@@ -218,10 +218,10 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
     t.text "title"
     t.text "message"
     t.text "color_text"
-    t.datetime "start_at"
-    t.datetime "end_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "start_at", precision: nil
+    t.datetime "end_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "icon_text"
     t.boolean "active", default: true
     t.enum "icon", enum_type: "icon"
@@ -232,15 +232,15 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
   create_table "tags", force: :cascade do |t|
     t.text "label"
     t.text "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["label"], name: "index_tags_on_label", unique: true
   end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "email"
     t.string "password_digest"
     t.text "auth_token"
@@ -250,8 +250,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_061616) do
 
   create_table "webpages", force: :cascade do |t|
     t.text "uri"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["uri"], name: "index_webpages_on_uri", unique: true
   end
 
