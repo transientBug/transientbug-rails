@@ -27,6 +27,8 @@ module TransientBug
     config.exceptions_app = routes
 
     config.active_storage.draw_routes = false
-    config.action_mailbox.draw_routes = false
+
+    config.action_cable.mount_path = "/websocket"
+    config.action_cable.allowed_request_origins = ["https://staging.transientbug.ninja", "https://transientbug.ninja"]
   end
 end
