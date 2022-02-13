@@ -18,18 +18,20 @@
 # end
 
 Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self, :https
-  policy.font_src    :self, :https, :data
-  policy.img_src     :self, :https, :data
-  policy.object_src  :none
-  policy.script_src  :self, :https
-  policy.style_src   :self, :https
+  policy.default_src     :self, :https
+  policy.font_src        :self, :https, :data
+  policy.img_src         :self, :https, :data
+  policy.object_src      :none
+  policy.script_src      :self, :https
+  policy.style_src       :self, :https
+  policy.frame_ancestors :self, :https
 
   if Rails.env.development?
     policy.default_src :self, :https, "http://localhost:*", "ws://localhost:*", "http://localhost:8080"
     policy.script_src  :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_eval, :unsafe_inline
     policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035"
     policy.style_src :self, :https, "http://localhost:*", "http://0.0.0.0:*", :unsafe_inline
+    policy.frame_ancestors :self, :https, "http://localhost:*", "http://0.0.0.0:*"
   end
 
   # Specify URI for violation reports

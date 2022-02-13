@@ -2,4 +2,10 @@
   New Bookmark
 <% end %>
 
-<%= render partial: "form", locals: { bookmark: @bookmark } %>
+<%= turbo_frame_tag :new_modal do %>
+  <%= render SliderOverComponent.new(title: "New Bookmark") do |c| %>
+    <%= c.body do %>
+      <%= render(partial: "form", locals: { bookmark: @bookmark }) %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,52 @@
+<div class="fixed inset-0 overflow-hidden z-20" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" data-controller="remover" data-remover-target="removable" data-action="click@window->remover#removeFromOutside">
+  <div class="absolute inset-0 overflow-hidden">
+    <!-- Background overlay, show/hide based on slide-over state. -->
+    <div class="absolute inset-0" aria-hidden="true">
+      <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16">
+        <!--
+          Slide-over panel, show/hide based on slide-over state.
+
+          Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-full"
+            To: "translate-x-0"
+          Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-0"
+            To: "translate-x-full"
+        -->
+        <div class="w-screen max-w-2xl">
+
+          <form class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
+            <div class="flex-1">
+              <!-- Header -->
+              <div class="px-4 py-6 bg-gray-50 sm:px-6">
+                <div class="flex items-start justify-between space-x-3">
+                  <div class="space-y-1">
+                    <h2 class="text-lg font-medium text-gray-900" id="slide-over-title"><%= title %></h2>
+                    <% if has_subtitle? %>
+                      <p class="text-sm text-gray-500">
+                        <%= subtitle %>
+                      </p>
+                    <% end %>
+                  </div>
+
+                  <div class="h-7 flex items-center">
+                    <button type="button" class="text-gray-400 hover:text-gray-500" data-action="remover#remove">
+                      <span class="sr-only">Close panel</span>
+                      <%= helpers.feather_svg "x", class: "h-6 w-6" %>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <%= body %>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

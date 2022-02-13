@@ -15,6 +15,8 @@ class FrameOption
     status, headers, response = @app.call(env)
 
     headers["X-Frame-Options"] = "SAMEORIGIN"
+    headers["x-frame-options"] = "SAMEORIGIN"
+    headers["X-FRAME-OPTIONS"] = "SAMEORIGIN"
 
     [status, headers, response]
   end
