@@ -43,6 +43,7 @@ module TransientBug
     config.active_storage.draw_routes = false
 
     config.action_cable.mount_path = "/websocket"
+    config.action_cable.url = "/websocket"
     config.action_cable.allowed_request_origins = ["https://staging.transientbug.ninja", "https://transientbug.ninja"]
 
     config.middleware.use FrameOption
