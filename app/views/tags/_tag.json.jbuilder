@@ -1,4 +1,4 @@
-json.label tag
+json.extract! tag, :id, :label
 
-json.url bookmarks_tag_url(tag, format: :json)
-json.view bookmarks_tag_url(tag)
+json.url tag_url(tag, format: :json)
+json.view tag_url(tag)

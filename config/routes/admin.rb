@@ -1,4 +1,13 @@
+require "sidekiq/web"
 require_relative "../../lib/permission_constraint"
+
+constraints PermissionConstraint.new("admin.sidekiq") do
+  mount Sidekiq::Web => "/sidekiq"
+end
+
+constraints PermissionConstraint.new("admin.logs") do
+  mount Logster::Web => "/logs"
+end
 
 namespace :admin, constraints: PermissionConstraint.new("admin.access") do
   root "home#home"
@@ -11,8 +20,8 @@ namespace :admin, constraints: PermissionConstraint.new("admin.access") do
       scope as: :service_announcements do
         collection do
           namespace :bulk do
-            resource :deactivate, only: [:update]
-            resource :delete, only: [:destroy]
+            # resource :deactivate, only: [:update]
+            # resource :delete, only: [:destroy]
           end
         end
       end
@@ -23,8 +32,8 @@ namespace :admin, constraints: PermissionConstraint.new("admin.access") do
     scope module: :invitations, as: :invitations do
       collection do
         namespace :bulk do
-          resource :disable, only: [:destroy]
-          resource :delete, only: [:destroy]
+          # resource :disable, only: [:destroy]
+          # resource :delete, only: [:destroy]
         end
       end
     end
@@ -45,8 +54,8 @@ namespace :admin, constraints: PermissionConstraint.new("admin.access") do
       scope as: :bookmarks do
         collection do
           namespace :bulk do
-            resource :recache, only: [ :create ]
-            resource :delete, only: [ :destroy ]
+            # resource :recache, only: [ :create ]
+            # resource :delete, only: [ :destroy ]
           end
         end
       end

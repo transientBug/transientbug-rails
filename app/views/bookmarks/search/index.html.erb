@@ -1,0 +1,17 @@
+<% content_for :page_title do %>
+  Search Bookmarks
+<% end %>
+
+<% if @bookmarks.any? %>
+  <%= paginate @bookmarks %>
+
+  <div class="space-y-3">
+    <%= render BookmarkCardComponent.with_collection(@bookmarks) %>
+  </div>
+
+  <%= paginate @bookmarks %>
+<% else %>
+  <h1>No bookmarks found for your search <%= params[:q] %>!</h1>
+
+  <p>Maybe <%= link_to "make one?", new_bookmark_path %></p>
+<% end %>

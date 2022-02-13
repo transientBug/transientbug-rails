@@ -6,6 +6,20 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+class FrameOption
+  def initialize app
+    @app = app
+  end
+
+  def call env
+    status, headers, response = @app.call(env)
+
+    headers["X-Frame-Options"] = "SAMEORIGIN"
+
+    [status, headers, response]
+  end
+end
+
 module TransientBug
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -27,6 +41,10 @@ module TransientBug
     config.exceptions_app = routes
 
     config.active_storage.draw_routes = false
-    config.action_mailbox.draw_routes = false
+
+    config.action_cable.mount_path = "/websocket"
+    config.action_cable.allowed_request_origins = ["https://staging.transientbug.ninja", "https://transientbug.ninja"]
+
+    config.middleware.use FrameOption
   end
 end

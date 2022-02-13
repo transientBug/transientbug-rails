@@ -111,9 +111,16 @@
 
   <div class="flex flex-col min-w-0 flex-1 overflow-hidden relative">
     <%= content_for :page_header if content_for? :page_header %>
-    <div class="h-full w-full p-4 overflow-scroll">
-      <%= yield %>
-    </div>
+
+    <% if content_for? :frame %>
+      <div class="h-full w-full overflow-scroll">
+        <%= content_for :frame %>
+      </div>
+    <% else %>
+      <div class="h-full w-full p-4 overflow-scroll">
+        <%= yield %>
+      </div>
+    <% end %>
   </div>
 </div>
 

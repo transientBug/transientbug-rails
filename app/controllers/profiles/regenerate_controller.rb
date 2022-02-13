@@ -4,6 +4,7 @@ class Profiles::RegenerateController < ApplicationController
   require_login!
   before_action :set_user
 
+  # POST /profiles/regenerate
   def create
     respond_to do |format|
       if @user.regenerate_auth_token

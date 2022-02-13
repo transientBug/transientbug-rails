@@ -63,14 +63,13 @@ gem "kaminari"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
 
-# ActiveJob Worker
+# ActiveJob Worker, Cron Schedulers
 gem "sidekiq"
+# gem "good_job"
 
 # Logs
 gem "logster", github: "discourse/logster", branch: "redis_4_6"
 
-# Cron like scheduled/repeating tasks
-# gem "clockwork"
 
 # Auth
 # Provider

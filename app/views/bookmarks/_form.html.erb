@@ -1,4 +1,4 @@
-<%= form_with model: bookmark, html: { autocomplete: "off" } do |f| %>
+<%= form_with model: bookmark, html: { autocomplete: "off", data: { turbo_action: "advance" } } do |f| %>
   <%= render CardComponent.new do |c| %>
     <%= c.body do %>
       <% if bookmark.errors.any? %>

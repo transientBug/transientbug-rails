@@ -1,7 +1,14 @@
-require "sidekiq/web"
-require_relative "../lib/permission_constraint"
-
 Rails.application.routes.draw do
+  # Error pages
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
+
+  resources :csp_violation_report,
+    only: [:create],
+    path: '/csp-violation-report',
+    format: false,
+    defaults: { format: :js }
+
   use_doorkeeper do
     controllers(
       applications: "oauth/applications",
@@ -13,16 +20,10 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#main"
   get "/home", to: "dashboard#index"
-  get "/faq", to: "pages#faq"
-
-  get "/privacy", to: "pages#privacy"
-  get "/tos", to: "pages#tos"
 
   match "/login", to: "sessions#index", via: [:get]
   match "/login", to: "sessions#new", via: [:post]
   match "/logout", to: "sessions#destroy", via: [:delete]
-
-  match "/auth/:provider/callback", to: "sessions#create", via: [:get, :post]
 
   resources :invites, only: [:index, :create, :show, :update]
 
@@ -38,13 +39,13 @@ Rails.application.routes.draw do
   namespace :oauth do
     namespace :applications do
       namespace :bulk do
-        resource :delete, only: [:destroy]
+        # resource :delete, only: [:destroy]
       end
     end
 
     namespace :authorized_applications do
       namespace :bulk do
-        resource :revoke, only: [:destroy]
+        # resource :revoke, only: [:destroy]
       end
     end
   end
@@ -53,6 +54,12 @@ Rails.application.routes.draw do
 
   resources :bookmarks do
     scope module: :bookmarks do
+      collection do
+        scope as: :bookmarks do
+          resources :search, only: [:index]
+        end
+      end
+
       resources :cache, only: [:index, :create] do
         collection do
           match "/*key", to: "cache#show", via: [:get]
@@ -61,20 +68,11 @@ Rails.application.routes.draw do
     end
   end
 
-  draw :admin
   draw :api
+  draw :admin
 
-  # Error pages
-  match "/404", to: "errors#not_found", via: :all
-  match "/500", to: "errors#internal_server_error", via: :all
-
-  resources :csp_violation_report, only: [:create], path: '/csp-violation-report', format: false, defaults: { format: :js }
-
-  constraints PermissionConstraint.new("admin.sidekiq") do
-    mount Sidekiq::Web => "/sidekiq"
-  end
-
-  constraints PermissionConstraint.new("admin.logs") do
-    mount Logster::Web => "/logs"
-  end
+  get "/faq", to: "pages#faq"
+  get "/privacy", to: "pages#privacy"
+  get "/tos", to: "pages#tos"
+  # get "/*", to: "pages#generic"
 end

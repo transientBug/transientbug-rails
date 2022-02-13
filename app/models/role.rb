@@ -42,9 +42,7 @@ class Role < ApplicationRecord
 
   protected
 
-  def clean_permissions
-    self.permission_keys = permission_keys.compact_blank
-  end
+  def clean_permissions()= self.permission_keys = permission_keys.compact_blank
 
   def valid_permission_keys
     permission_keys.each do |key|

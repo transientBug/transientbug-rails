@@ -1,13 +1,5 @@
 {
   "semi": false,
   "arrowParens": "avoid",
-  "trailingComma": "none",
-  "overrides": [
-    {
-      "files": "*.module.scss.d.ts",
-      "options": {
-        "semi": true
-      }
-    }
-  ]
+  "trailingComma": "es5"
 }

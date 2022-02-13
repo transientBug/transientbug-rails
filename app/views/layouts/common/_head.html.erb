@@ -4,6 +4,10 @@
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
 
+<% if signed_in? %>
+  <%= action_cable_meta_tag %>
+<% end %>
+
 <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, nonce: true %>
 

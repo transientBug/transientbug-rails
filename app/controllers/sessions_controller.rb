@@ -26,7 +26,5 @@ class SessionsController < ApplicationController
 
   protected
 
-  def redirect_home
-    redirect_to root_url
-  end
+  def redirect_home()= redirect_to root_url
 end
