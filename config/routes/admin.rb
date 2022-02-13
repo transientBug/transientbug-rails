@@ -49,7 +49,7 @@ namespace :admin, constraints: PermissionConstraint.new("admin.access") do
 
   resources :bookmarks, only: [ :index, :show, :destroy ] do
     scope module: :bookmarks do
-      resources :cache, only: [ :create ]
+      resources :cache, only: [ :show, :create ]
 
       scope as: :bookmarks do
         collection do

@@ -1,0 +1,68 @@
+<% content_for :page_header do %>
+  <%= render Admin::PageHeaderComponent.new do |c| %>
+    <% c.title do %>
+      Viewing Bookmark
+    <% end %>
+
+    <% c.tabs do %>
+      <%= link_to "Cache Details", "#", class: "tab active" %>
+      <%= link_to "Edit", "#", class: "tab" %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::BreadcrumbsComponent.new do |c| %>
+    <% c.crumbs([
+      { name: "Bookmarks", href: admin_bookmarks_path },
+      { name: @bookmark.id, href: admin_bookmark_path(@bookmark) }
+    ]) %>
+  <% end %>
+<% end %>
+
+<% content_for :frame do %>
+  <main class="min-w-0 flex-1 lg:flex h-full">
+    <aside class="hidden lg:block lg:flex-shrink-0 lg:order-first">
+      <div class="h-full relative flex flex-col w-96 border-r border-gray-200 bg-white overflow-y-auto">
+        <ul role="list" class="relative z-0 divide-y divide-gray-200">
+          <% @bookmark.offline_caches.order(created_at: :desc).each do |offline_cache| %>
+            <li class="bg-white">
+              <div class="relative px-6 py-5 flex items-center space-x-3 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-limegreen-500">
+                <div class="flex-shrink-0">
+                  <% if offline_cache.error_messages.none? %>
+                    <span class="h-8 w-8 rounded-full bg-green-400 flex items-center justify-center ring-8 ring-white">
+                      <%= inline_svg_pack_tag "feather/check.svg", class: "h-5 w-5 text-white stroke-current" %>
+                    </span>
+                  <% else %>
+                    <span class="h-8 w-8 rounded-full bg-red-400 flex items-center justify-center ring-8 ring-white">
+                      <%= inline_svg_pack_tag "feather/alert-circle.svg", class: "h-5 w-5 text-white stroke-current" %>
+                    </span>
+                  <% end %>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <%= active_link_to admin_bookmark_cache_path(@bookmark, offline_cache), class: "focus:outline-none", data: { turbo_frame: :cache_details, turbo_action: :advance } do %>
+                    <!-- Extend touch target to entire panel -->
+                    <span class="absolute inset-0" aria-hidden="true"></span>
+                    <date class="text-sm font-medium text-gray-900"><%= offline_cache.created_at.to_formatted_s(:long_ordinal) %></date>
+                    <p class="text-sm text-gray-500 truncate">
+                      <%= offline_cache.assets.length %> <%= "Assets".pluralize offline_cache.assets.length %>
+                      |
+                      <%= offline_cache.error_messages.length %> <%= "Error".pluralize offline_cache.error_messages.length %>
+                    </p>
+                  <% end %>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </aside>
+
+    <section aria-labelledby="primary-heading" class="min-w-0 flex-1 h-full flex flex-col overflow-y-auto p-4">
+      <h1 id="primary-heading" class="sr-only">Cache Details</h1>
+
+      <%= turbo_frame_tag :cache_details do %>
+        <%= render partial: "cache", locals: { bookmark: @bookmark, offline_cache: @offline_cache } %>
+      <% end %>
+    </section>
+  </main>
+<% end %>

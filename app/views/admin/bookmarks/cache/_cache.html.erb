@@ -1,0 +1,35 @@
+<% if offline_cache.error_messages.any? %>
+  <div class="pb-5 border-b border-gray-200">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">Errors (<%= offline_cache.error_messages.length %>)</h3>
+  </div>
+
+  <ul role="list" class="divide-y divide-gray-200">
+    <% offline_cache.error_messages.each do |error| %>
+      <li class="py-4 flex">
+        <div>
+          <p class="text-sm font-medium text-gray-900"><%= error.key %></p>
+          <p class="text-sm text-gray-500"><%= error.message %></p>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<div class="pb-5 border-b border-gray-200">
+  <h3 class="text-lg leading-6 font-medium text-gray-900">Assets (<%= offline_cache.assets.length %>)</h3>
+</div>
+
+<% if offline_cache.assets.any? %>
+  <ul role="list" class="divide-y divide-gray-200">
+    <% offline_cache.assets.each do |asset| %>
+      <li class="py-4 flex">
+        <div>
+          <p class="text-sm font-medium text-gray-900 truncate"><%= asset.metadata[:uri] %></p>
+          <p class="text-sm text-gray-500"><%= asset.content_type %></p>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  No assets were saved for this cache!
+<% end %>
