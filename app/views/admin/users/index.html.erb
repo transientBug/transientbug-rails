@@ -85,7 +85,6 @@
             </td>
             <td>
               <div class="flex">
-                <strong class="mr-1">Roles:</strong>
                 <% user.roles.map(&:name).map(&:humanize).each do |role| %>
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800 mx-1"><%= role %></span>
                 <% end %>
@@ -93,7 +92,7 @@
             </td>
             <td>
               <div class="text-sm text-gray-500">
-                <%= user.created_at.to_s(:short) %>
+                <%= user.created_at.to_formatted_s(:short) %>
               </div>
             </td>
             <td class="justify-right">

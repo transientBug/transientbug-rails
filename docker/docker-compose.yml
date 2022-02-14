@@ -19,14 +19,14 @@ services:
     volumes:
       - "redis:/data"
 
-  sidekiq:
+  worker:
     image: "ghcr.io/transientbug/transientbug-rails/app:latest"
     depends_on:
       - "postgres"
       - "redis"
     volumes:
       - "./storage:/dropzone"
-    command: ["bundle exec sidekiq -C config/sidekiq.yml"]
+    command: ["bundle exec good_job start"]
     networks:
       - "services"
     env_file:
@@ -69,7 +69,6 @@ services:
 
 volumes:
   redis:
-  #postgres:
   postgres_14:
 
 networks:
