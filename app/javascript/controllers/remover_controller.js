@@ -7,4 +7,9 @@ export default class extends Controller {
     event.preventDefault()
     this.removableTargets.forEach(target => target.remove())
   }
+
+  removeFromOutside(event) {
+    if (this.element.contains(event.target)) return
+    this.remove(event)
+  }
 }
