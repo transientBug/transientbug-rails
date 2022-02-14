@@ -4,6 +4,6 @@ class Admin::HomeController < AdminController
   # GET /admin
   def home; end
 
-  def logster; end
-  def sidekiq; end
+  def logs; end
+  def workers; end
 end

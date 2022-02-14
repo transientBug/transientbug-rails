@@ -1,22 +1,22 @@
 <% content_for :page_header do %>
   <%= render Admin::PageHeaderComponent.new do |c| %>
     <% c.title do %>
-      Logs
+      Workers
     <% end %>
 
     <% c.tabs do %>
-      <%= link_to "Embed", admin_logs_path, class: ["tab", "active"] %>
-      <%= link_to "Direct", logster_web_path, class: "tab" %>
+      <%= link_to "Embed", admin_workers_path, class: ["tab", "active"] %>
+      <%= link_to "Direct", good_job_path, class: "tab" %>
     <% end %>
   <% end %>
 
   <%= render Admin::BreadcrumbsComponent.new do |c| %>
     <% c.crumbs([
-      { name: "Logs", href: admin_logs_path }
+      { name: "Workers", href: admin_workers_path }
     ]) %>
   <% end %>
 <% end %>
 
 <% content_for :frame do %>
-  <iframe src="<%= logster_web_path %>" class="h-full w-full" />
+  <iframe src="<%= good_job_path %>" class="h-full w-full" />
 <% end %>
