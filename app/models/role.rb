@@ -22,8 +22,8 @@ class Role < ApplicationRecord
   PERMISSIONS = [
     # Admin
     Permission.new("admin.access", "Access Admin Panel", "Access to the main admin panel"),
-    Permission.new("admin.logs", "Access Admin Logs", "Access the admin logster view"),
-    Permission.new("admin.sidekiq", "Access Admin Sidekiq", "Access the admin sidekiq panel")
+    Permission.new("admin.system.logs", "Access Admin Logs", "Access the admin logster dashboard"),
+    Permission.new("admin.system.workers", "Access Admin Worker Dash", "Access the admin worker dashboard")
   ].freeze
 
   PERMISSIONS_BY_KEY = PERMISSIONS.index_by(&:key).freeze

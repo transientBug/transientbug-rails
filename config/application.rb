@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require 'good_job/engine'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,7 +15,10 @@ class FrameOption
   def call env
     status, headers, response = @app.call(env)
 
+    # YOLO
     headers["X-Frame-Options"] = "SAMEORIGIN"
+    headers["X-FRAME-OPTIONS"] = "SAMEORIGIN"
+    headers["x-frame-options"] = "SAMEORIGIN"
 
     [status, headers, response]
   end
@@ -47,5 +51,10 @@ module TransientBug
     config.action_cable.allowed_request_origins = ["https://staging.transientbug.ninja", "https://transientbug.ninja"]
 
     config.middleware.use FrameOption
+
+    # Enable by setting the env GOOD_JOB_ENABLE_CRON=true
+    config.good_job.cron = {
+      # example: { cron: '0 * * * *', class: 'ExampleJob'  }
+    }
   end
 end

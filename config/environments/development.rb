@@ -56,5 +56,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Run ActiveJobs using sidekiq behind the scenes
-  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_adapter = :good_job
 end

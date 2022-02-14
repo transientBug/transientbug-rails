@@ -23,21 +23,23 @@
   <% end %>
 
   <%= f.section title: "Permissions", subtitle: "" do %>
-    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-      <div class="sm:col-span-4">
-        <%= f.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name do |role_check_box| %>
-          <%= role_check_box.label class: "font-medium text-gray-700" do %>
-            <div class="relative flex items-start">
-              <div class="flex items-center h-5">
-                <%= role_check_box.check_box class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
-              </div>
-              <div class="ml-3 text-sm">
-                <%= role_check_box.text.humanize %>
-              </div>
+    <div class="space-y-5">
+      <%= f.collection_check_boxes :permission_keys, Role::PERMISSIONS, :key, :name do |role_check_box| %>
+        <div>
+        <%= role_check_box.label class: "font-medium text-gray-700" do %>
+          <div class="relative flex items-start">
+            <div class="flex items-center h-5">
+              <%= role_check_box.check_box class: "focus:ring-limegreen-500 h-4 w-4 text-limegreen-600 border-gray-300 rounded" %>
             </div>
-          <% end %>
+
+            <div class="ml-3 text-sm">
+              <span class="font-medium text-gray-700"><%= role_check_box.text.humanize %></span>
+              <p class="text-gray-500"><%= role_check_box.object.description %></p>
+            </div>
+          </div>
         <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 
