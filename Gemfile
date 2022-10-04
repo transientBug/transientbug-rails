@@ -94,6 +94,8 @@ gem "nokogiri"
 gem "marcel", "~> 1.0"
 # gem "parslet"
 
+gem "aws-sdk-s3", require: false
+
 gem "exception_notification"
 gem "slack-notifier"
 

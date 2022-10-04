@@ -37,6 +37,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :dropzone
+  # config.active_storage.service = :digital_ocean
 
   # Mount Action Cable outside main process or domain
   config.action_cable.mount_path = nil
