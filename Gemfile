@@ -14,7 +14,6 @@ gem "pg"
 gem "redis"#, "~> 3.0"
 gem "hiredis"
 gem "connection_pool"
-# gem "active_record_upsert" # Has issues with arel deps wnd the rails 5.2 beta
 
 # Temp for image exports
 # gem "sequel"
@@ -65,11 +64,10 @@ gem "jbuilder"
 
 # ActiveJob Worker, Cron Schedulers
 gem "sidekiq"
-# gem "good_job"
+gem "good_job"
 
 # Logs
 gem "logster", github: "discourse/logster", branch: "redis_4_6"
-
 
 # Auth
 # Provider
@@ -100,18 +98,14 @@ gem "exception_notification"
 gem "slack-notifier"
 
 # API Documentation from RAD
-# gem "apitome", github: "jejacks0n/apitome"
 gem "raddocs"
 
 gem "annotate"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "web-console"#, ">= 3.3.0"
-  gem "listen"#, ">= 3.0.5", "< 3.2"
-
-  # gem "better_errors"
-  # gem "binding_of_caller"
+  gem "web-console"
+  gem "listen"
 end
 
 group :development, :test do
@@ -121,11 +115,6 @@ group :development, :test do
 
   # Better Debugging
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
-  # gem "awesome_print"
-  # gem "byebug"
-  # gem "pry"
-  # gem "pry-byebug"
-  # gem "pry-rails"
 
   # Document everything
   gem "yard"#, ">= 0.9.20"

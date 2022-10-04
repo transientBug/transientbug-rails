@@ -1,19 +1,18 @@
-require "sidekiq/web"
 require_relative "../../lib/permission_constraint"
 
-constraints PermissionConstraint.new("admin.sidekiq") do
-  mount Sidekiq::Web => "/sidekiq"
+constraints PermissionConstraint.new("admin.system.workers") do
+  mount GoodJob::Engine => 'good_job'
 end
 
-constraints PermissionConstraint.new("admin.logs") do
+constraints PermissionConstraint.new("admin.system.logs") do
   mount Logster::Web => "/logs"
 end
 
 namespace :admin, constraints: PermissionConstraint.new("admin.access") do
   root "home#home"
 
-  get "/sidekiq", to: "home#sidekiq"
-  get "/logster", to: "home#logster"
+  get "/workers", to: "home#good_job"
+  get "/logs", to: "home#logster"
 
   resources :service_announcements do
     scope module: :service_announcements do

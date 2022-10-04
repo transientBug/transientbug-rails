@@ -94,17 +94,17 @@
 
     .btn {
       @apply inline-flex cursor-pointer border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium shadow;
+
       &.-primary {
         @apply bg-limegreen-500 hover:bg-limegreen-600 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-limegreen-500;
       }
 
       &.-secondary {
-        @apply bg-gray-500 hover:bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500;
+        @apply bg-gray-500 hover:bg-gray-600 shadow-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500;
       }
 
       &.-tertiary {
-        @apply text-sm font-medium text-gray-400 hover:text-gray-900
-        /*@apply bg-gray-500 hover:bg-limegreen-500 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-limegreen-500;*/
+        @apply text-sm font-medium text-gray-400 bg-white hover:text-gray-900 hover:bg-limegreen-50 hover:shadow-limegreen-400/40;
       }
     }
 
@@ -156,7 +156,7 @@
         }
 
         & .tree-leafs {
-          @apply space-y-1 ml-5 border-l border-dotted border-limegreen-600 pl-2;
+          @apply pt-1 space-y-1 ml-5 border-l border-dotted border-limegreen-600 pl-2;
         }
       }
 

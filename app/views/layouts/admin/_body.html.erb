@@ -35,8 +35,13 @@
                 </summary>
 
                 <div class="tree-leafs" id="sub-menu-4">
-                  <%= active_link_to "Sidekiq", admin_sidekiq_path, class: "item" %>
-                  <%= active_link_to "Logster", admin_logster_path, class: "item" %>
+                  <% if current_user.permission? "admin.system.workers" %>
+                    <%= active_link_to "Workers", admin_workers_path, class: "item" %>
+                  <% end %>
+
+                  <% if current_user.permission? "admin.system.workers" %>
+                    <%= active_link_to "Logs", admin_logs_path, class: "item" %>
+                  <% end %>
                 </div>
               </details>
 
