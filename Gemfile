@@ -63,7 +63,7 @@ gem "kaminari"
 gem "jbuilder"
 
 # ActiveJob Worker, Cron Schedulers
-gem "sidekiq"
+# gem "sidekiq"
 gem "good_job"
 
 # Logs
