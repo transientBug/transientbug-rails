@@ -35,27 +35,27 @@
     <table class="generic-table">
       <thead>
         <tr>
+          <th><span class="sr-only">Actions</span></th>
           <th>URL & Creator</th>
           <th>Cache Info</th>
           <th>Created At</th>
-          <th><span class="sr-only">Actions</span></th>
         </tr>
       </thead>
       <tbody>
         <% @bookmarks.each do |bookmark| %>
           <tr>
-            <td class="w-full flex flex-col overflow-hidden">
-              <div class="text-sm font-medium text-gray-900 truncate">
+            <td class="flex flex-col truncate max-w-lg">
+              <div class="text-sm font-medium text-gray-900">
                 <%= bookmark.uri.to_s %>
               </div>
-              <div class="text-sm text-gray-900">
-                <%= link_to bookmark.user.username, admin_user_path(bookmark.user) %>
+              <div class="text-sm">
+                <%= link_to bookmark.user.username, admin_user_path(bookmark.user), class: "text-royalblue-500 hover:underline" %>
               </div>
             </td>
             <td>
               <div class="text-sm font-medium text-gray-900 truncate">
                 <% if bookmark.offline_caches.last %>
-                  <% if bookmark.offline_caches.last.error_messages.length %>
+                  <% if bookmark.offline_caches.last.error_messages.any? %>
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md bg-red-200 text-red-800 mx-1">
                     <%= bookmark.offline_caches.last.error_messages.length %> Errors
                   </span>
@@ -71,7 +71,7 @@
             </td>
             <td>
               <div class="text-sm text-gray-500">
-                <%= bookmark.created_at.to_s(:short) %>
+                <%= bookmark.created_at.to_formatted_s(:short) %>
               </div>
             </td>
             <td class="justify-right">
