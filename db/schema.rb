@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_05_180755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -78,16 +78,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
     t.bigint "tag_id", null: false
   end
 
-  create_table "clockwork_database_events", force: :cascade do |t|
-    t.integer "frequency_quantity"
-    t.integer "frequency_period"
-    t.string "at"
-    t.string "job_name"
-    t.jsonb "job_arguments"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-  end
-
   create_table "error_messages", force: :cascade do |t|
     t.string "key"
     t.text "message"
@@ -136,17 +126,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-  create_table "images", force: :cascade do |t|
-    t.bigint "user_id"
-    t.text "title"
-    t.text "tags", default: [], array: true
-    t.text "source"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.boolean "disabled", default: false
-    t.index ["user_id"], name: "index_images_on_user_id"
-  end
-
   create_table "import_data", force: :cascade do |t|
     t.bigint "user_id"
     t.enum "import_type", enum_type: "import_type"
@@ -161,9 +140,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
     t.text "internal_note"
     t.text "title"
     t.text "description"
+    t.integer "available", default: 1
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.integer "available", default: 1
     t.index ["code"], name: "index_invitations_on_code", unique: true
   end
 
@@ -173,7 +152,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["invitation_id"], name: "index_invitations_users_on_invitation_id"
-    t.index ["user_id"], name: "index_invitations_users_on_users_id"
+    t.index ["user_id"], name: "index_invitations_users_on_user_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -230,6 +209,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
     t.index ["bookmark_id"], name: "index_offline_caches_on_bookmark_id"
     t.index ["root_id"], name: "index_offline_caches_on_root_id"
     t.index ["webpage_id"], name: "index_offline_caches_on_webpage_id"
+  end
+
+  create_table "questionnaires", force: :cascade do |t|
+    t.bigint "user_id"
+    t.text "title"
+    t.boolean "disabled"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["user_id"], name: "index_questionnaires_on_user_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.bigint "questionnaire_id"
+    t.text "title"
+    t.text "question"
+    t.integer "type"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -291,7 +289,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "bookmarks", "webpages"
-  add_foreign_key "images", "users"
   add_foreign_key "import_data", "users"
   add_foreign_key "invitations_users", "invitations"
   add_foreign_key "invitations_users", "users"
@@ -302,4 +299,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_181452) do
   add_foreign_key "offline_caches", "active_storage_attachments", column: "root_id"
   add_foreign_key "offline_caches", "bookmarks", on_delete: :cascade
   add_foreign_key "offline_caches", "webpages"
+  add_foreign_key "questionnaires", "users"
+  add_foreign_key "questions", "questionnaires"
 end
