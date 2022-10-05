@@ -3,10 +3,10 @@
 app = "transientbug-rails"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = [
-  web = "bin/rails fly:server"
-  worker = "bundle exec good_job start"
-]
+
+[processes]
+web = "bin/rails fly:server"
+worker = "bundle exec good_job start"
 
 [build]
   [build.args]
