@@ -6,11 +6,6 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
-dropzone:
-  service: Disk
-  #root: /dropzone
-  root: <%= Rails.root.join("storage") %>
-
 digitalocean:
   service: S3
   endpoint: https://nyc3.digitaloceanspaces.com
@@ -18,9 +13,3 @@ digitalocean:
   secret_access_key: <%= Rails.application.credentials.dig(:digital_ocean, :secret_access_key) %>
   region: "nyc3"
   bucket: "transientbug-assets"
-
-mirror:
-  service: Mirror
-  primary: local
-  mirrors:
-    - digitalocean
