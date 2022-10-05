@@ -9,12 +9,14 @@ General principles:
  - Try to keep it simple, mkay?
 
 ## Stack:
- - Fly.io for deployments
+ - Fly.io for deployments, see the [Devops](https://github.com/transientBug/devops) repo for additional infastructure
+   resources and tooling.
   - Setup a redis server using `cd redis && fly deploy`
     - you'll need to make a password for redis `fly secrets set REDIS_PASSWORD=mypassword`
   - `fly secrets set REDIS_URL=redis://default:mypassword@hostname.fly.dev:6379/0`
   - `fly secrets set RAILS_MASTER_KEY=(cat config/master.key)`
   - `fly deploy --build-secret RAILS_MASTER_KEY=(cat config/master.key)`
+  - `flyctl proxy 15432:5432 -a transientbug-rails-db`
 
 ### Backend:
  - Ruby on Rails 7

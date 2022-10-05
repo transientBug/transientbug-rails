@@ -24,4 +24,32 @@ namespace :storage do
   task cleanup: :environment do
     ActiveStorage::Blob.unattached.each(&:purge)
   end
+
+  # https://stackoverflow.com/a/70247764/3877528
+  # Usage:
+  #   - rake "remove_orphan_files"
+  #   - rake "remove_orphan_files[false]"
+  desc "Remove files not associated with any blob"
+  task :remove_orphan_files, [:dry_run] => :environment do |_t, args|
+    include ActionView::Helpers::NumberHelper
+    dry_run = true unless args.dry_run == "false"
+
+    puts("[#{Time.now}] Running remove_orphan_files :: INI#{" (dry_run activated)" if dry_run}")
+
+    files = Dir["storage/??/??/*"]
+    orphan_files = files.select do |file|
+      !ActiveStorage::Blob.exists?(key: File.basename(file))
+    end
+
+    sum = 0
+    orphan_files.each do |file|
+      puts("Deleting File: #{file}#{" (dry_run activated)" if dry_run}")
+      sum += File.size(file)
+      FileUtils.remove(file) unless dry_run
+    end
+
+    puts "Size Liberated: #{number_to_human_size(sum)}#{" (dry_run activated)" if dry_run}"
+
+    puts("[#{Time.now}] Running remove_orphan_files :: END#{" (dry_run activated)" if dry_run}")
+  end
 end
