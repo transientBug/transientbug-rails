@@ -8,7 +8,8 @@ test:
 
 dropzone:
   service: Disk
-  root: /dropzone
+  #root: /dropzone
+  root: <%= Rails.root.join("storage") %>
 
 digitalocean:
   service: S3
@@ -17,3 +18,9 @@ digitalocean:
   secret_access_key: <%= Rails.application.credentials.dig(:digital_ocean, :secret_access_key) %>
   region: "nyc3"
   bucket: "transientbug-assets"
+
+mirror:
+  service: Mirror
+  primary: local
+  mirrors:
+    - digitalocean
