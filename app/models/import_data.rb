@@ -25,7 +25,7 @@ class ImportData < ApplicationRecord
 
   enum import_type: {
     pinboard: "pinboard",
-    pocket: "pocket"
+    pocket: "pocket",
   }
 
   after_create_commit :schedule_import

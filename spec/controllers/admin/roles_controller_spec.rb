@@ -31,13 +31,13 @@ RSpec.describe Admin::RolesController, type: :controller do
   # adjust the attributes here as well.
   let(:valid_attributes) do
     {
-      name: "test"
+      name: "test",
     }
   end
 
   let(:invalid_attributes) do
     {
-      name: nil
+      name: nil,
     }
   end
 
@@ -48,7 +48,7 @@ RSpec.describe Admin::RolesController, type: :controller do
   # Admin::RolesController. Be sure to keep this updated too.
   let(:valid_session) do
     {
-      user_id: user.id
+      user_id: user.id,
     }
   end
 
@@ -112,7 +112,7 @@ RSpec.describe Admin::RolesController, type: :controller do
 
       let(:new_attributes) do
         {
-          name: updated_name
+          name: updated_name,
         }
       end
 

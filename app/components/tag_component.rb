@@ -19,7 +19,7 @@ class TagComponent < ViewComponent::Base
       pink: :pink,
       brown: :brown,
       grey: :gray,
-      black: :gray
+      black: :gray,
     }.transform_keys(&:to_s).fetch tag.color, "limegreen"
   end
 end

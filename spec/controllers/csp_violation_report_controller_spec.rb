@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe CspViolationReportController, type: :controller do
   let(:valid_attributes) do
     {
-      "csp-violation": {}
+      "csp-violation": {},
     }
   end
 
