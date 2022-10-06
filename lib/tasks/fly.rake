@@ -3,7 +3,7 @@ namespace :fly do
   #  - changes to the fs make here DO get deployed
   #  - NO access to secrets, volumes, databases
   #  - Failures here prevent deployment
-  task :build => 'assets:precompile'
+  task :build => ['assets:precompile', 'transientBug/terraform']
 
   # RELEASE step:
   #  - changes to the fs make here are DISCARDED
