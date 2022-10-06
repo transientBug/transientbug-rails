@@ -63,7 +63,7 @@ gem "kaminari"
 gem "jbuilder"
 
 # ActiveJob Worker, Cron Schedulers
-gem "sidekiq"
+# gem "sidekiq"
 gem "good_job"
 
 # Logs
@@ -93,6 +93,8 @@ gem "nokogiri"
 # gem "stopwords-filter"
 gem "marcel", "~> 1.0"
 # gem "parslet"
+
+gem "aws-sdk-s3", require: false
 
 gem "exception_notification"
 gem "slack-notifier"
