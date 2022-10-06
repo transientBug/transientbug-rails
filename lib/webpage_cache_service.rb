@@ -4,9 +4,10 @@ require "tempfile"
 
 class WebpageCacheService
   DEFAULT_HEADERS = {
-    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:57.0) Gecko/20100101 Firefox/57.0",
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:106.0) Gecko/20100101 Firefox/106.0",
     accept_language: "en-US,en;q=0.5",
-    accept: "text/html;q=0.9,*/*;q=0.8; charset=utf-8"
+    accept: "text/html;q=0.9,*/*;q=0.8; charset=utf-8",
+    accept_encoding: "gzip, deflate",
   }.freeze
 
   ASSET_XPATHS = [

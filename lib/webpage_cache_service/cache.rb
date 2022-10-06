@@ -45,9 +45,6 @@ class WebpageCacheService
       # Return self since there is an errors object and the offline cache model
       # that people might care about on this object.
       self
-    rescue => e
-      errors.create key: uri, message: e.message
-      self
     end
 
     private
@@ -60,14 +57,18 @@ class WebpageCacheService
         obj.root = @root_attachment
         obj.save
       end
-
-      errors.create key: uri, message: <<~MSG if response.status > 399
-        Got non-okay status back from the server: #{ response.status }
-      MSG
+    rescue => e
+      errors.create key: uri, message: e.message
+      self
     end
 
     def cache_links
-      links.each { |link| get uri: link }
+      links.each do |link|
+        get uri: link
+      rescue => e
+        errors.create key: link, message: e.message
+        self
+      end
     end
 
     # this has some serious memory implications since it reads the whole file
@@ -82,11 +83,27 @@ class WebpageCacheService
         .uniq
         .compact
         .map(&Addressable::URI.method(:parse))
-        .map { |link| uri + link }
+        .map(&method(:derelative))
+        .map(&:to_s)
+    end
+
+    def derelative link
+      return link unless link.relative?
+
+      # YOLO: Addressable has a bug with its parsing heuristics
+      # where a schemaless url is marked as relative. This isn't
+      # a perfect bugfix however and is more of a hack and duct tape
+      # https://github.com/sporkmonger/addressable/issues/265
+      if link.scheme.nil? && link.to_s.start_with?("//")
+        link.scheme = "https"
+        return link
+      end
+
+      Addressable::URI.join(uri, link)
     end
 
     def client
-      @client ||= HTTP.headers(headers).follow
+      @client ||= HTTP.use(:auto_inflate).headers(headers).follow
     end
 
     def get uri:
