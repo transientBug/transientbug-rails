@@ -197,3 +197,6 @@ Style/HashTransformValues:
 Lint/MissingSuper:
   Exclude:
     - app/components/*
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma

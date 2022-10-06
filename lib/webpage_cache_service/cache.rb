@@ -50,7 +50,7 @@ class WebpageCacheService
     private
 
     def cache_root
-      response, root_attachment = get uri: uri
+      _response, root_attachment = get uri: uri
       @root_attachment = root_attachment
 
       offline_cache.tap do |obj|
@@ -158,7 +158,7 @@ class WebpageCacheService
       {
         uri: response.uri.to_s,
         status_code: response.code,
-        headers: response.headers.to_h
+        headers: response.headers.to_h,
       }
     end
 
