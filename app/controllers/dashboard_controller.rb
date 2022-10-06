@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
 
     @stats = {
       total_count: scope.count,
-      untagged_count: scope.left_joins(:tags).where(bookmarks_tags: { id: nil }).count
+      untagged_count: scope.left_joins(:tags).where(bookmarks_tags: { id: nil }).count,
     }
 
     @recent_bookmarks = scope.limit(5).page

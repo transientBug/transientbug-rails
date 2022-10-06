@@ -8,6 +8,10 @@
       <%= link_to "Cache Details", "#", class: "tab active" %>
       <%= link_to "Edit", "#", class: "tab" %>
     <% end %>
+
+    <% c.actions do %>
+      <%= button_to "Recache", admin_bookmark_cache_index_path(@bookmark), class: "btn -tertiary" %>
+    <% end %>
   <% end %>
 
   <%= render Admin::BreadcrumbsComponent.new do |c| %>

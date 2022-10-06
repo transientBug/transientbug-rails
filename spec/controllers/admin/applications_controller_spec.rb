@@ -33,13 +33,13 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
     {
       name: "test",
       redirect_uri: "https://localhost.local",
-      official: false
+      official: false,
     }
   end
 
   let(:invalid_attributes) do
     {
-      redirect_uri: "non-absolute"
+      redirect_uri: "non-absolute",
     }
   end
 
@@ -50,7 +50,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
   # Doorkeeper::ApplicationsController. Be sure to keep this updated too.
   let(:valid_session) do
     {
-      user_id: user.id
+      user_id: user.id,
     }
   end
 
@@ -83,7 +83,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
       let(:new_attributes) do
         {
           name: "fred",
-          official: true
+          official: true,
         }
       end
 

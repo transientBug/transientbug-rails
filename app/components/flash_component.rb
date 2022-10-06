@@ -3,7 +3,7 @@
 class FlashComponent < ViewComponent::Base
   TYPES = {
     notice: "bg-denim-400",
-    alert: "bg-mango-700"
+    alert: "bg-mango-700",
   }.freeze
 
   attr_reader :message
