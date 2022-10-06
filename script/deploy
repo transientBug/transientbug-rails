@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Deploying to Fly.io ..."
+exec fly deploy --build-secret RAILS_MASTER_KEY="$(cat config/master.key)"
