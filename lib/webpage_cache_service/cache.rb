@@ -82,6 +82,7 @@ class WebpageCacheService
         .map(&:to_s)
         .uniq
         .compact
+        .reject { |link| link.start_with? "data:" }
         .map(&Addressable::URI.method(:parse))
         .map(&method(:derelative))
         .map(&:to_s)
