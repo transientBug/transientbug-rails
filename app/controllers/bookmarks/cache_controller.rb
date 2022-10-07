@@ -16,7 +16,12 @@ class Bookmarks::CacheController < ApplicationController
     root_blob = @bookmark.current_offline_cache.root.blob
     return render :unavailable, status: :not_found unless root_blob.service.exist? root_blob.key
 
-    render html: renderer.render.html_safe
+    case renderer.render
+    in [:html, html]
+      render html: html.html_safe
+    in [:binary, content_type, data]
+      send_data data, type: content_type, disposition: "inline"
+    end
   end
   # rubocop:enable Rails/OutputSafety
 
