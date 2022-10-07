@@ -12,4 +12,28 @@
   <% end %>
 <% end %>
 
+<div>
+  <h3 class="text-lg font-medium leading-6 text-gray-900">Last 7 days</h3>
 
+  <dl class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-y-0 md:divide-x">
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal text-gray-900">Total Users</dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-limegreen-600">
+          <%= @users_count %>
+          <span class="ml-2 text-sm font-medium text-gray-500">from <%= @users_7days_ago_count %></span>
+        </div>
+      </dd>
+    </div>
+
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal text-gray-900">Total Bookmarks</dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-limegreen-600">
+          <%= @bookmarks_count %>
+          <span class="ml-2 text-sm font-medium text-gray-500">from <%= @bookmarks_7days_ago_count %></span>
+        </div>
+      </dd>
+    </div>
+  </dl>
+</div>
