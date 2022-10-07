@@ -27,9 +27,13 @@ class WebpageCacheService
     end
 
     def render
-      rewrite_links!
+      if PARSABLE_MIMES.include?(offline_cache.root.content_type)
+        rewrite_links!
 
-      nokogiri.to_html
+        return [:html, nokogiri.to_html]
+      end
+
+      [:binary, offline_cache.root.content_type, offline_cache.root.blob.download]
     end
 
     private
@@ -54,13 +58,16 @@ class WebpageCacheService
 
     def rewrite_asset_link url
       link = uri + Addressable::URI.parse( url )
+      # TODO: This is no longer correct because the URL is getting morphed by
+      # #links in Cache. I'll have to pass along the raw link as well as the
+      # corrected on in order to make this work again
       link_key = Digest::SHA256.hexdigest link.to_s
 
       base_uri + link_key
     end
 
     def rewrite_link url
-      uri + Addressable::URI.parse( url )
+      Addressable::URI.join base_uri, url
     end
 
     def find_attachment key:
