@@ -52,14 +52,19 @@ class Bookmark < ApplicationRecord
   scope :title_search, ->(query) { where(<<~SQL.squish, { query: }) }
     search_title @@ websearch_to_tsquery(:query)
     OR search_title @@ to_tsquery(
-      (select word
-         from ts_stat('select search_title from bookmarks')
-        where similarity(:query, word) > 0.5)
+      (
+        select
+          word
+        from ts_stat('select search_title from bookmarks')
+        where similarity(:query, word) > 0.5
+        order by similarity(:query, word) > 0.5 desc
+        limit 1
+      )
     )
   SQL
 
   scope :search, lambda { |query|
-    joins(:tags)
+    left_joins(:tags)
       .uri_search(query)
       .or(breakdown_search(query))
       .or(title_search(query))
