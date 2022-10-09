@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/discourse/logster.git
-  revision: fbc7cc43e58305d5f46d6fc243091158c57ee814
-  branch: redis_4_6
-  specs:
-    logster (2.11.0)
-
-GIT
   remote: https://github.com/elabs/pundit.git
   revision: 856d74d55d79a87102cbaa2df64d87c94dc7e3bc
   specs:
@@ -135,9 +128,9 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    debug (1.4.0)
+    debug (1.6.2)
       irb (>= 1.3.6)
-      reline (>= 0.2.7)
+      reline (>= 0.3.1)
     diff-lcs (1.5.0)
     docile (1.4.0)
     domain_name (0.5.20190701)
@@ -227,7 +220,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.5.11)
-    irb (1.4.1)
+    irb (1.4.2)
       reline (>= 0.3.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -257,6 +250,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    logster (2.11.3)
     loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -302,6 +296,7 @@ GEM
     parallel (1.21.0)
     parser (3.1.0.0)
       ast (~> 2.4.1)
+    parslet (2.0.0)
     pg (1.3.1)
     propshaft (0.6.1)
       actionpack (>= 7.0.0)
@@ -532,10 +527,11 @@ DEPENDENCIES
   json_matchers
   kaminari
   listen
-  logster!
+  logster
   mailcatcher
   marcel (~> 1.0)
   nokogiri
+  parslet
   pg
   propshaft
   puma
