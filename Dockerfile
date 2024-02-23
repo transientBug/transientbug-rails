@@ -4,7 +4,7 @@ ARG VARIANT=jemalloc-slim
 FROM quay.io/evl.ms/fullstaq-ruby:${RUBY_VERSION}-${VARIANT} as base
 
 ARG NODE_VERSION=16
-ARG BUNDLER_VERSION=2.3.9
+ARG YARN_VERSION=1.22
 
 ARG RAILS_ENV=production
 ENV RAILS_ENV=${RAILS_ENV}
@@ -29,7 +29,7 @@ ENV BASH_ENV ~/.bashrc
 ENV VOLTA_HOME /root/.volta
 ENV PATH $VOLTA_HOME/bin:/usr/local/bin:$PATH
 
-RUN volta install node@${NODE_VERSION} && volta install yarn
+RUN volta install node@${NODE_VERSION} && volta install yarn@${YARN_VERSION}
 
 FROM base as build_deps
 
@@ -44,6 +44,7 @@ RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
 
 FROM build_deps as gems
 
+ARG BUNDLER_VERSION=2.3.9
 RUN gem install -N bundler -v ${BUNDLER_VERSION}
 
 COPY Gemfile* ./

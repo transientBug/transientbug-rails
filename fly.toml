@@ -4,15 +4,20 @@ app = "transientbug-rails"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
+[[vm]]
+size = "shared-cpu-1x"
+memory = "512MB"
+
 [processes]
 web = "bin/rails fly:server"
 worker = "bundle exec good_job start"
 
 [build]
   [build.args]
+    RUBY_VERSION = "3.1.0"
     BUNDLER_VERSION = "2.3.6"
     NODE_VERSION = "16"
-    RUBY_VERSION = "3.1.0"
+    YARN_VERSION = "1.22"
 
 [deploy]
   release_command = "bin/rails fly:release"
