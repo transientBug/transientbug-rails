@@ -13,15 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUNDLE_WITHOUT: production,development,test
+      BUNDLER_WITHOUT: production,development,test
       BUNDLER_WITH: ci
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          cache-version: 1
 
       - name: Run rubocop
         run: bundle exec rubocop
@@ -30,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: '16'
           cache: 'yarn'
