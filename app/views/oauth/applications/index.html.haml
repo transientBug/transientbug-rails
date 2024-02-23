@@ -39,7 +39,7 @@
                   No applications made yet
 
       = c.footer do
-        - pagination = paginate @applications, theme: "card_footer"
+        - pagination = paginate @applications
         - if pagination.present?
           = pagination
         - else
