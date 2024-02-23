@@ -6,13 +6,15 @@ on:
       - master
 
 jobs:
-  Rubocop:
+  FlyioDeploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to fly.io
         env:
-          super_secret: ${{ secrets.RAILS_MASTER_KEY }}
-        run: flyctl deploy
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: ./script/deploy
