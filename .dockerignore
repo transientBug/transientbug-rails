@@ -24,4 +24,4 @@ docker/
 !docker/entrypoint.sh
 
 README.md
-vender/bundle
+vendor/bundle
