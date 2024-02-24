@@ -49,26 +49,30 @@ class Bookmark < ApplicationRecord
     where(Arel::Nodes.build_quoted(query).eq(any_host))
   }
 
+  # Searches the title for the query OR where the query is similar to
+  # words in an existing bookmark's title
   scope :title_search, ->(query) { where(<<~SQL.squish, { query: }) }
     search_title @@ websearch_to_tsquery(:query)
     OR search_title @@ to_tsquery(
-      (
-        select
-          word
-        from ts_stat('select search_title from bookmarks')
-        where similarity(:query, word) > 0.5
-        order by similarity(:query, word) > 0.5 desc
-        limit 1
-      )
+      SELECT
+        word
+      FROM ts_stat('SELECT search_title FROM bookmarks')
+      WHERE similarity(:query, word) > 0.5
+      ORDER BY similarity(:query, word) DESC
+      LIMIT 1
     )
   SQL
 
   scope :search, lambda { |query|
-    left_joins(:tags)
+    joins(:tags)
       .uri_search(query)
       .or(breakdown_search(query))
       .or(title_search(query))
       .or(tag_search(query))
+  }
+
+  scope :advanced_search, lambda { |query|
+    BookmarksSearcher.new.search query
   }
 
   # This has potential performance costs if we start retrying lots of times

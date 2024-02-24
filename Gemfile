@@ -19,7 +19,7 @@ gem "connection_pool"
 # gem "sequel"
 # gem "sqlite3"
 
-# gem "aws-sdk-s3", "~> 1"
+gem "aws-sdk-s3", require: false
 
 # Caching - Rails 5.2 shipped with a redis cache for fragments, but doesn't
 # provide session storage via redis too, which redis-actionpack does.
@@ -34,7 +34,7 @@ gem "rack-attack"
 gem "bcrypt"
 
 # Server
-gem "puma"#, "~> 3.11"
+gem "puma"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -63,11 +63,10 @@ gem "kaminari"
 gem "jbuilder"
 
 # ActiveJob Worker, Cron Schedulers
-# gem "sidekiq"
 gem "good_job"
 
 # Logs
-gem "logster", github: "discourse/logster", branch: "redis_4_6"
+gem "logster"
 
 # Auth
 # Provider
@@ -92,9 +91,7 @@ gem "nokogiri"
 # gem "ruby-readability"
 # gem "stopwords-filter"
 gem "marcel", "~> 1.0"
-# gem "parslet"
-
-gem "aws-sdk-s3", require: false
+gem "parslet"
 
 gem "exception_notification"
 gem "slack-notifier"
