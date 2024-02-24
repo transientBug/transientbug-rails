@@ -1,6 +1,9 @@
 name: Deploy
 
 on:
+  pull_request:
+    branches:
+      - '*'
   push:
     branches:
       - master
@@ -9,9 +12,42 @@ jobs:
   FlyioDeploy:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:14.2
+        ports:
+          - 5432/tcp
+        env:
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "testing"
+          POSTGRES_DATABASE: "transientbug_test"
+
+      redis:
+        image: redis:6.2.6
+        ports:
+          - 6379/tcp
+
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          cache-version: 1
+
+      - name: Setup Database
+        env:
+          DATABASE_URL: postgresql://postgres:testing@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+        run: ./bin/rails db:prepare
+
+      - name: Build API docs
+        env:
+          DATABASE_URL: postgresql://postgres:testing@localhost:${{ job.services.postgres.ports['5432'] }}/transientbug_test
+          REDIS_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/0
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: ./bin/rails docs:generate
 
       - name: Deploy to fly.io
         env:
